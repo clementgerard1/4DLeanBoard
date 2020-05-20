@@ -93,7 +93,7 @@
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("console.log(\"Entry\");\n\n//# sourceURL=webpack:///./src/class/entry.js?");
+eval("var Model = \"\"; // Classes require\n\nwindow.boardClasses = {\n  //Allow tests access classes\n  \"Model\": Model\n};\n\n//# sourceURL=webpack:///./src/class/entry.js?");
 
 /***/ })
 
