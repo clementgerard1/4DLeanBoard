@@ -115,7 +115,7 @@ eval("module.exports = function () {\n  window.addEventListener(\"load\", functi
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("module.exports = function () {\n  window.addEventListener(\"load\", function () {\n    init();\n  });\n};\n\nfunction init() {}\n\n//# sourceURL=webpack:///./test/src/test2/test2.js?");
+eval("module.exports = function () {\n  window.addEventListener(\"load\", function () {\n    init();\n  });\n};\n\nfunction init() {\n  var file = null;\n  Promise.all([Utils.loadFile(\"/test2/Project1.csv\"), Utils.loadFile(\"/test2/Project1.ifc\")]).then(function (files) {\n    return Loader.fromCSVandIFC(files[0], files[1]);\n  }).then(function (model) {//Model Loaded\n  });\n}\n\n//# sourceURL=webpack:///./test/src/test2/test2.js?");
 
 /***/ })
 
