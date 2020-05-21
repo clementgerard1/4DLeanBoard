@@ -1,7 +1,3 @@
-window.console.log = function(m){
-	console.log("bonjour");
-}
-
 const test1 = require("./test1/test1.js");
 const test2 = require("./test2/test2.js");
 

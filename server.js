@@ -1,14 +1,64 @@
 const express = require('express');
 const app = express();
 const fs = require('fs');
+const config = require("./config.js");
+const io = require('socket.io')();
+
+//Hack tablette console
+let logScript = `
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+<script>`;
+	
+	if(config["socketConsoleIP"] == "localhost"){
+		 logScript += "const logSocket = io.connect(window.location.host.replace('3000', " + config["socketConsolePort"] + "));"
+	}else{
+		logScript += "const logSocket = io.connect(window.location.host.replace(" + config["socketConsoleIP"] + ", " + config["socketConsolePort"] + "));"
+	}
+
+  logScript += `
+  const log = console.log.bind(console);
+  console.log = (...args) => {
+    log(...args);
+    sendToServerConsole("log",args);
+  }
+  const error = console.error.bind(console);
+  console.error = (...args) => {
+    error(...args);
+    sendToServerConsole("error", args);
+  }
+  function sendToServerConsole(type, args){
+  	 logSocket.emit("message", {
+  	 		t : type,
+  	 		a : args
+  	 });
+  }
+</script>`;
+if(config["socketConsole"]){
+	io.on("connection", function(client){
+		client.on("message", function(msg){
+			if(msg.t == "log"){
+				console.log(msg.a);
+			}
+			if(msg.t == "error"){
+				console.error(msg.a);
+			}
+		});
+	});
+	io.listen(config["socketConsolePort"]);
+}
+//End hack tablette
+
 
 if(process.argv[2] == "dev"){
  
-
-
 	app.get('/', function(req,res){
-		console.log(res.body);
-		res.sendFile(__dirname + '/public/index.html');
+		if(config["socketConsole"]){
+			fs.readFile(__dirname + '/public/index.html', "utf8", function(err, html){
+				res.send(html.slice(0, html.indexOf("<body>")) + logScript + html.slice(html.indexOf("<body>") + 6));
+			});
+		}else{
+			res.sendFile(__dirname + '/public/index.html');
+		}
 	});
 
 	app.get('/:url',function(req,res){
@@ -30,7 +80,13 @@ if(process.argv[2] == "dev"){
 
 	app.get('/', function(req,res){
 		if(!req.query.test){
-			res.sendFile(__dirname + '/test/public/index.html');
+			if(config["socketConsole"]){
+				fs.readFile(__dirname + '/test/public/index.html', "utf8", function(err, html){
+					res.send(html.slice(0, html.indexOf("<body>")) + logScript + html.slice(html.indexOf("<body>") + 6));
+				});
+			}else{
+				res.sendFile(__dirname + 'test/public/index.html');
+			}
 		}
 	});
 
@@ -49,7 +105,13 @@ if(process.argv[2] == "dev"){
 	app.get('/:url',function(req,res){
 		if(req.params.url != "favicon.ico"){
 			if(fs.existsSync(__dirname + '/test/public/' + req.params.url + "/index.html")){
-				res.sendFile(__dirname + '/test/public/' + req.params.url + "/index.html");
+				if(config["socketConsole"]){
+					fs.readFile(__dirname + '/test/public/' + req.params.url + "/index.html", "utf8", function(err, html){
+						res.send(html.slice(0, html.indexOf("<body>")) + logScript + html.slice(html.indexOf("<body>") + 6));
+					});
+				}else{
+					res.sendFile(__dirname + '/test/public/' + req.params.url + "/index.html");
+				}
 			}else if(fs.existsSync(__dirname + '/test/public/' + req.params.url)){
 	    	res.sendFile(__dirname + '/test/public/' + req.params.url);
 	    }else{

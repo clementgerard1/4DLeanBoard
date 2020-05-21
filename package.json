@@ -9,7 +9,7 @@
     "test": "MODE=test; webpack --config ./webpack.test.js  & node server.js $MODE",
     "doc": "rm -rf ./src/class/doc; ./node_modules/.bin/jsdoc -r ./src/class -d ./src/class/doc",
     "jest": "jest src/class/jest",
-    "commit" : "npm run doc; npm run jest; MODE=prod; cp -r public/* dist; webpack --config ./webpack.prod.js; git add --all; git commit -m "
+    "commit": "npm run doc; npm run jest; MODE=prod; cp -r public/* dist; webpack --config ./webpack.prod.js; git add --all; git commit -m "
   },
   "author": "Clément Gérard",
   "devDependencies": {
@@ -27,6 +27,7 @@
     "webpack-cli": "^3.3.11"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0"
   }
 }
