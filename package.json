@@ -8,7 +8,8 @@
     "dev": "MODE=dev; webpack --config ./webpack.dev.js  & node server.js $MODE",
     "test": "MODE=test; webpack --config ./webpack.test.js  & node server.js $MODE",
     "doc": "rm -rf ./src/class/doc; ./node_modules/.bin/jsdoc -r ./src/class -d ./src/class/doc",
-    "jest": "jest src/class/jest"
+    "jest": "jest src/class/jest",
+    "commit" : "npm run doc; npm run jest; MODE=prod; cp -r public/* dist; webpack --config ./webpack.prod.js; git add --all; git commit -m "
   },
   "author": "Clément Gérard",
   "devDependencies": {
