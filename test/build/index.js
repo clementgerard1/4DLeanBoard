@@ -93,7 +93,7 @@
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("var test1 = __webpack_require__(/*! ./test1/test1.js */ \"./test/src/test1/test1.js\");\n\nvar test2 = __webpack_require__(/*! ./test2/test2.js */ \"./test/src/test2/test2.js\");\n\nfor (var n in window.boardClasses) {\n  eval(\"window.\" + n + \" = window.boardClasses[n];\");\n}\n\nvar str = window.location.href.split(\"/\");\n\nif (str[str.length - 1] != \"\") {\n  eval(str[str.length - 1] + \"()\");\n} else if (str[str.length - 2] != \"\" && str[str.length - 2] != \"localhost:3000\") {\n  eval(str[str.length - 2] + \"()\");\n}\n\n//# sourceURL=webpack:///./test/src/index.js?");
+eval("window.console.log = function (m) {\n  console.log(\"bonjour\");\n};\n\nvar test1 = __webpack_require__(/*! ./test1/test1.js */ \"./test/src/test1/test1.js\");\n\nvar test2 = __webpack_require__(/*! ./test2/test2.js */ \"./test/src/test2/test2.js\");\n\nfor (var n in window.boardClasses) {\n  eval(\"window.\" + n + \" = window.boardClasses[n];\");\n}\n\nvar str = window.location.href.split(\"/\");\n\nif (str[str.length - 1] != \"\") {\n  eval(str[str.length - 1] + \"()\");\n} else if (str[str.length - 2] != \"\" && str[str.length - 2] != \"localhost:3000\") {\n  eval(str[str.length - 2] + \"()\");\n}\n\n//# sourceURL=webpack:///./test/src/index.js?");
 
 /***/ }),
 
@@ -115,7 +115,7 @@ eval("module.exports = function () {\n  window.addEventListener(\"load\", functi
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("module.exports = function () {\n  window.addEventListener(\"load\", function () {\n    init();\n  });\n};\n\nfunction init() {\n  var file = null;\n  Promise.all([Utils.loadFile(\"/test2/Project1.csv\"), Utils.loadFile(\"/test2/Project1.ifc\")]).then(function (files) {\n    return Loader.fromCSVandIFC(files[0], files[1]);\n  }).then(function (model) {//Model Loaded\n  });\n}\n\n//# sourceURL=webpack:///./test/src/test2/test2.js?");
+eval("module.exports = function () {\n  window.addEventListener(\"load\", function () {\n    init();\n  });\n};\n\nfunction init() {\n  var file = null;\n  Promise.all([Utils.loadTextFile(\"/test2/Projsdfect1.csv\"), Utils.loadTextFile(\"/test2/Project1.ifc\")]).then(function (files) {\n    return Loader.fromCSVandIFC(files[0], files[1]);\n  }).then(function (model) {\n    console.log(model); //Model Loaded\n  })[\"catch\"](function (error) {\n    return console.error(error);\n  });\n}\n\n//# sourceURL=webpack:///./test/src/test2/test2.js?");
 
 /***/ })
 

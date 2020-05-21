@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: Utils.class.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,50 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: Utils.class.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>require("regenerator-runtime/runtime");
+
+/**
+ * @class Utils
+ * @classdesc Utils is a static class provide tools.
+ * @hideconstructor
+ */
+class Utils{
+
+	static latestCSVVersion = "0.0";
+
+	/**
+		Load a file
+		@param {string} url of the file.
+		@returns {type} File
+		@static
+	*/
+	static async loadFile(url){
+
+		let toReturn = null;
+		await fetch(url, {
+			method : 'GET',
+		}).then(response => {
+				toReturn = response.text();
+			});
+		return toReturn;
+
+	}
 
 
-    <h3> </h3>
+}
 
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+module.exports = Utils;</code></pre>
+        </article>
+    </section>
 
 
 

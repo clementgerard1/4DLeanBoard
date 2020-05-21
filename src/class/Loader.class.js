@@ -15,15 +15,20 @@ class Loader{
 		@param {string} [csvVersion=latest] Version of csv used.
 		@static
 	*/
-	static fromCSVandIFC(CSVFile, IFCFile, csvVersion){
-		if(typeof version == "undefined"){
-			version = this.latestCSVVersion;
-		}
-		return eval("this._v" + version.replace(".", "_")  + "(CSVFile, IFCFile)");
+	static fromCSVandIFC(CSVFile, IFCFile, csvVersion = this.latestCSVVersion){
+		return eval("this._v" + csvVersion.replace(".", "_")  + "(CSVFile, IFCFile)");
 	}
 
 	//Version CSV 0.1
-	static _v0_1(CSVFile, IFCFile){
+	static _v0_1(CSVFile = null, IFCFile = null){
+
+		//Errors
+		if(CSVFile == null){
+			throw 'CSVFile needed for import model';
+		}
+		if(IFCFile == null){
+			throw 'IFCFile needed for import model';
+		}
 
 		const model = new Model();
 
@@ -32,26 +37,29 @@ class Loader{
 		lines.splice(0,1);
 
 		const parents = {};
+
 		for(let l in lines){
 			if(lines[l] != ""){
-				colones = lines[l].split(",");
+				const columns = lines[l].split(",");
 
 				//4D Object
-				const obj = new Object4D(colones[0], IFCFile);
+				const obj = new Object4D(columns[0], IFCFile);
 				model.addObject4D(obj);
 
 				//Tasks
-				const task = new Task(colones[1], new Date(colones[3]), new Date(colones[4]));
-				if(colones[6] != 0) parents[task] = colones[6];
-				task.setName(colones[2]);
-				obj.addTask(task);
+				const task = new Task(columns[1], new Date(columns[3]), new Date(columns[4]));
+				if(columns[6] != 0) parents[task] = columns[6];
+				task.setName(columns[2]);
+				//obj.addTask(task);
 
 			}
 		}
 		//Task parents
 		for(let t in parents){
-			t.setParent
+			//t.setParent
 		}
+
+		return model;
 
 	}
 
@@ -67,4 +75,4 @@ class Loader{
 
 }
 
-module.exports = Loader;
+export default Loader;

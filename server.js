@@ -4,7 +4,10 @@ const fs = require('fs');
 
 if(process.argv[2] == "dev"){
  
+
+
 	app.get('/', function(req,res){
+		console.log(res.body);
 		res.sendFile(__dirname + '/public/index.html');
 	});
 
@@ -16,7 +19,7 @@ if(process.argv[2] == "dev"){
 	    	res.sendFile(__dirname + '/dev/' + req.params.url);
 	    }
 		}else{
-			res.send(null);
+			res.status(404).send(null);
 		}
 	});
 	 
@@ -53,7 +56,7 @@ if(process.argv[2] == "dev"){
 	    	res.sendFile(__dirname + '/test/' + req.params.url);
 	    }
 		}else{
-			res.send(null);
+			res.status(404).send(null);
 		}
 	});
 
@@ -61,7 +64,7 @@ if(process.argv[2] == "dev"){
 		if(fs.existsSync(__dirname + '/test/public/' + req.params.url + "/" + req.params.file)){
     	res.sendFile(__dirname + '/test/public/' + req.params.url + "/" + req.params.file);
 		}else{
-			res.send(null);
+			res.status(404).send(null);
 		}
 	});
 	 
@@ -79,7 +82,7 @@ if(process.argv[2] == "dev"){
 		if(req.params.url != "favicon.ico"){
 	    res.sendFile(__dirname + '/dist/' + req.params.url);
 		}else{
-			res.send(null);
+			res.status(404).send(null);
 		}
 	});
 	 

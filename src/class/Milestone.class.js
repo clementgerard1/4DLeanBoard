@@ -1,4 +1,4 @@
 class Milestone{
 
 }
-module.exports = Milestone;
+export default Milestone;

@@ -9,7 +9,7 @@ class Task{
 		@param {string} id id of Task.
 		@param {Date} start Date of Start.
 		@param {Date} end Date of End.
-		@param {Array[Task]} [name] parents Task Array.
+		@param {Array} [name] parents Task Array.
 	*/
 	constructor(id, start, end, parents){
 		this.start = start;
@@ -30,7 +30,7 @@ class Task{
 		set the task name
 		@param {string} name new name.
 	 */
-	setName(name){
+	setName(name = ""){
 		this.name = name;
 	}
 
@@ -46,8 +46,12 @@ class Task{
 		add parent Task
 		@param {Task} parent parent Task.
 	 */
-	addParent(parent){
-		this.parents[parent.id] = parent;
+	addParent(parent = null){
+		if(parent == null || !(parent instanceof Task)){
+			console.error("addParent nedd a TaskObject ; provided : " + parent);
+		}else{
+			this.parents[parent.id] = parent;
+		}
 	}
 
 	/**
@@ -67,4 +71,4 @@ class Task{
 	}
 
 }
-module.exports = Task;
+export default Task;

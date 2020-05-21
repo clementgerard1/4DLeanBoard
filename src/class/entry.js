@@ -1,10 +1,10 @@
-const Loader = require("./Loader.class.js");
-const Utils = require("./Utils.class.js");
-const Model = require("./Model.class.js");
-const Object4D = require("./Object4D.class.js");
-const Task = require("./Task.class.js");
-const Phase = require("./Phase.class.js");
-const Milestone = require("./Milestone.class.js");
+import Loader from "./Loader.class.js";
+import Utils from "./Utils.class.js";
+import Model from "./Model.class.js";
+import Object4D from "./Object4D.class.js";
+import Task from "./Task.class.js";
+import Phase from "./Phase.class.js";
+import Milestone from "./Milestone.class.js";
 
 //Allow tests access classes
 window.boardClasses = {

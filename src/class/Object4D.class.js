@@ -22,4 +22,4 @@ class Object4D{
 	}
 
 }
-module.exports = Object4D;
+export default Object4D;

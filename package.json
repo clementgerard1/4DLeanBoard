@@ -7,7 +7,8 @@
     "prod": "MODE=prod; cp -r public/* dist; webpack --config ./webpack.prod.js  & node server.js $MODE",
     "dev": "MODE=dev; webpack --config ./webpack.dev.js  & node server.js $MODE",
     "test": "MODE=test; webpack --config ./webpack.test.js  & node server.js $MODE",
-    "doc": "rm -rf ./src/class/doc; ./node_modules/.bin/jsdoc -r ./src/class -d ./src/class/doc"
+    "doc": "rm -rf ./src/class/doc; ./node_modules/.bin/jsdoc -r ./src/class -d ./src/class/doc",
+    "jest": "jest src/class/jest"
   },
   "author": "Clément Gérard",
   "devDependencies": {
@@ -15,7 +16,10 @@
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/preset-env": "^7.9.6",
     "babel-cli": "^6.26.0",
+    "babel-jest": "^26.0.1",
     "babel-loader": "^8.1.0",
+    "jest": "^26.0.1",
+    "jest-html-reporter": "^3.1.3",
     "jsdoc": "^3.6.4",
     "regenerator-runtime": "^0.13.5",
     "webpack": "^4.43.0",

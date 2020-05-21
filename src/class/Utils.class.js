@@ -1,4 +1,4 @@
-require("regenerator-runtime/runtime");
+import "regenerator-runtime/runtime";
 
 /**
  * @class Utils
@@ -7,22 +7,25 @@ require("regenerator-runtime/runtime");
  */
 class Utils{
 
-	static latestCSVVersion = "0.0";
-
 	/**
-		Load a file
+		Load a text file as string
 		@param {string} url of the file.
-		@returns {type} File
+		@returns {string} string of the file
 		@static
 	*/
-	static async loadFile(url){
+	static async loadTextFile(url){
 
 		let toReturn = null;
 		await fetch(url, {
 			method : 'GET',
 		}).then(response => {
+			 	if(!response.ok) {
+          throw Error(response.statusText);
+        }
 				toReturn = response.text();
-			});
+		}).catch((error) => { 
+			throw 'Error on fetching file : ' + url;
+		});
 		return toReturn;
 
 	}
@@ -30,4 +33,4 @@ class Utils{
 
 }
 
-module.exports = Utils;
+export default Utils;
