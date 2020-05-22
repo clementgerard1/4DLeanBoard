@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Utils</title>
+    <title>JSDoc: Class: OperationUnit</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: Utils</h1>
+    <h1 class="page-title">Class: OperationUnit</h1>
 
     
 
@@ -28,9 +28,9 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>Utils</h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>OperationUnit<span class="signature">()</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">Utils is a static class provide tools.</div>
+            <div class="class-description">OperationUnit represents team  on Phase moment</div>
         
     
 </header>
@@ -39,6 +39,16 @@
     <div class="container-overview">
     
         
+
+    
+    <h2>Constructor</h2>
+    
+
+    
+    <h4 class="name" id="OperationUnit"><span class="type-signature"></span>new OperationUnit<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
 
 
 
@@ -83,7 +93,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Utils.class.js.html">Utils.class.js</a>, <a href="Utils.class.js.html#line3">line 3</a>
+        <a href="OperationUnit.class.js.html">OperationUnit.class.js</a>, <a href="OperationUnit.class.js.html#line3">line 3</a>
     </li></ul></dd>
     
 
@@ -131,15 +141,38 @@
     
 
     
-        <h3 class="subsection-title">Methods</h3>
 
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+
+
+
+<section>
+
+<header>
+    
+        <h2><span class="attribs"><span class="type-signature"></span></span>OperationUnit<span class="signature">(name<span class="signature-attributes">opt</span>, id<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h2>
         
-            
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
 
     
 
     
-    <h4 class="name" id=".getId"><span class="type-signature">(static) </span>getId<span class="signature">(type<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {int}</span></h4>
+    <h4 class="name" id="OperationUnit"><span class="type-signature"></span>new OperationUnit<span class="signature">(name<span class="signature-attributes">opt</span>, id<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
     
 
     
@@ -147,7 +180,7 @@
 
 
 <div class="description">
-    Load a text file as string
+    OperationUnit Constructor
 </div>
 
 
@@ -187,7 +220,7 @@
 
         <tr>
             
-                <td class="name"><code>type</code></td>
+                <td class="name"><code>name</code></td>
             
 
             <td class="type">
@@ -214,171 +247,51 @@
             
                 <td class="default">
                 
-                    "default"
+                    ""
                 
                 </td>
             
 
-            <td class="description last">name of the category of ids</td>
+            <td class="description last">Name of operationUnit.</td>
         </tr>
 
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Utils.class.js.html">Utils.class.js</a>, <a href="Utils.class.js.html#line42">line 42</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    id unique for category
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">int</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".loadTextFile"><span class="type-signature">(async, static) </span>loadTextFile<span class="signature">(url)</span><span class="type-signature"> &rarr; {string}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Load a text file as string
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
     
 
         <tr>
             
-                <td class="name"><code>url</code></td>
+                <td class="name"><code>id</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">int</span>
 
 
             
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
 
+                
+
+                
+                </td>
             
 
-            <td class="description last">of the file.</td>
+            
+                <td class="default">
+                
+                    automaticaly generated
+                
+                </td>
+            
+
+            <td class="description last">id of the requirement operationUnit</td>
         </tr>
 
     
@@ -419,7 +332,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Utils.class.js.html">Utils.class.js</a>, <a href="Utils.class.js.html#line20">line 20</a>
+        <a href="OperationUnit.class.js.html">OperationUnit.class.js</a>, <a href="OperationUnit.class.js.html#line14">line 14</a>
     </li></ul></dd>
     
 
@@ -444,34 +357,28 @@
 
 
 
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    string of the file
-</div>
 
 
 
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">string</span>
 
 
-    </dd>
-</dl>
+    
+    </div>
 
     
 
+    
 
+    
 
+    
 
+    
 
-        
+    
+
+    
+
     
 
     

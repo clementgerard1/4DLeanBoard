@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: Requirement.class.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,36 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: Requirement.class.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Property from './interfaces/Property.class.js';
 
+/**
+ * @class Requirement
+ * @classdesc Requirement represents requirements used in Milestones
+ */
+class Requirement extends Property{
 
-    <h3> </h3>
+	/**
+		Requirement Constructor
+		@param {string} [name=""] Name of requirement.
+		@param {int} [id=automaticaly generated] id of the requirement property
+	*/
+	constructor(name = "", id){
+		super(name, id);
+	}
 
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+}
+export default Requirement;</code></pre>
+        </article>
+    </section>
 
 
 

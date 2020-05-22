@@ -1,5 +1,5 @@
-import Object4D from "./Object4D.class.js";
-import Task from "./Task.class.js";
+import Utils from "./Utils.class.js";
+import Milestone from './Milestone.class.js';
 
 /**
  * @class Model
@@ -9,103 +9,95 @@ class Model{
 
 	/**
 		Model Constructor
-		@param {string} name Name of model.
+		@param {string} [name=""] Name of model.
+		@param {int} [id=automaticaly generated] id of the model.
 	*/
-	constructor(name){
+	constructor(name = "", id = Utils.getId("model")){
+		this.id = id;
 		this.name = name;
-		this.objects = {};
+		this.lastModifiedDate = new Date();
+		this.milestones = [];
 	}
 
 	/**
-		Add a 4DObject to the model
-		@param {object4D} object Object to add.
+		Add a milestone
+		@param {Milestone} [milestone = new Milestone] Milestone to add to the collection
+		@param {uint} [order = lastPlace] order place of the milestone
 	*/
-	addObject4D(object = null){
-		if(object == null || !(object instanceof Object4D)){
-			console.error("addObject4D need an object4D to add; provided : " + object);
+	addMilestone(milestone = new Milestone(), order = this.milestones.length){
+		this.milestones.splice(order, 0, milestone);
+	}
+
+	/**
+		Remove a milestone
+		@param {Milestone} milestone Milestone to remove
+	*/
+	removeMilestone(milestone){
+		if(!(milestone instanceof Milestone)){
+			console.error("removeMilestone(milestone) : milestone " + milestone + " not of type Milestone");
+		}else if(!(this.milestones.includes(milestone))){
+			console.error("removeMilestone(milestone) : milestone " + milestone + " not in the collection");
 		}else{
-			this.objects[object.id] = object;
+			this.milestones.splice(this.milestones.indexOf(milestone), 1);
 		}
 	}
 
 	/**
-		remove a 4DObject to the model
-		@param {object4D} object Objet to remove.
+		Get all milestones
+		@returns {Array} Array of Milestones
 	*/
-	removeObject4D(object = null){
-		if(object == null || !(object instanceof Object4D) || typeof this.objects[object.id] == "undefined"){
-			console.error("Object doesn't exist on collection");
-		}else{
-			delete this.objects[object.id];
-		}
+	getMilestones(){
+		return this.milestones;
 	}
 
 	/**
-		get the collection of Object4D in the model
-		@returns {Array} Array of Object4D
+		Get a milestone by ordernumber
+		@param {uint} order order number of the milestone
+		@returns {Milestone} Milestone corresponding
 	*/
-	getObjects4D(){
-		return this.objects;
-	}
-
-	/**
-		get object4D by its id
-		@param {string} id id of the object.
-		@returns {Object4D} Object4D correponding
-	*/
-	getObject4DById(id = null){
-		if(id == null || typeof this.objects[id] == "undefined"){
-			console.error("Object4D with id " + id + "doesn't exist on collection");
+	getMilestone(order){
+		if(typeof this.milestones[order] == "undefined"){
+			console.error("getMilestone(order) : order " + order + " unknowned on milestones colleciton")
 			return null;
 		}else{
-			return this.objects[id];
+			return this.milestones[order];
 		}
 	}
 
+	/**
+		Get the id of the model
+		@returns {int} id of the model
+	*/
+	getId(){
+		return this.id;
+	}
 
 	/**
-		Add a Task to the model
-		@param {Task} object Task to add.
+		Get the name of the model
+		@returns {string} name of the model
 	*/
-	addTask(task = null){
-		if(task == null || !(task instanceof Task)){
-			console.error("addTask need a task to add; provided :" + task);
+	getName(){
+		return this.name;
+	}	
+
+	/**
+		Get the last modified date of the model
+		@returns {Date} last modified date of the model
+	*/
+	getLastModifiedDate(){
+		return this.lastModifiedDate;
+	}	
+
+	/**
+		Set the last modified date of the model
+		@param {Date} date last modified date
+	*/
+	setLastModifiedDate(date){
+		if(date instanceof Date){
+			this.lastModifiedDate = date;
 		}else{
-			this.tasks[task.id] = task;
-		}
-	}
-
-	/**
-		remove a 4DObject to the model
-		@param {object4D} object Task to remove.
-	*/
-	removeTask(task = null){
-		if(task == null || typeof this.tasks[task.id] == "undefined" || !(task instanceof Task)){
-			console.error("Task doesn't exist on collection");
-		}else{
-			delete this.tasks[task.id];
-		}
-	}
-
-	/**
-		get the collection of Tasks in the model
-		@returns {Array} Array of Task
-	*/
-	getTasks(){
-		return this.objects;
-	}
-
-	/**
-		get task by its id
-		@param {string} id id of the Task.
-		@returns {Task} Task correponding
-	*/
-	getTaskById(id){
-		if(id == null || typeof this.tasks[id] == "undefined"){
-			console.error("Task with id " + id + "doesn't exist on collection");
+			console.error("setLastModifiedDate(date) need a Date object ; provided : " + date);
 			return null;
-		}else{
-			return this.tasks[id];
 		}
 	}
 

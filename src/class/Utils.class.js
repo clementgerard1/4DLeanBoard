@@ -7,6 +7,10 @@ import "regenerator-runtime/runtime";
  */
 class Utils{
 
+	static ids = {
+		"default" : 0
+	}
+
 	/**
 		Load a text file as string
 		@param {string} url of the file.
@@ -27,7 +31,19 @@ class Utils{
 			throw 'Error on fetching file : ' + url;
 		});
 		return toReturn;
+	}
 
+	/**
+		Load a text file as string
+		@param {string} [type="default"] name of the category of ids
+		@returns {int} id unique for category
+		@static
+	*/
+	static getId(type = "default"){
+		if(typeof this.ids[type] == "undefined"){
+			this.ids[type] = 0;
+		}
+		return this.ids[type]++;
 	}
 
 

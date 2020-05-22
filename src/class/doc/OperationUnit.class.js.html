@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: OperationUnit.class.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,36 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: OperationUnit.class.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Team from './interfaces/Team.class.js';
 
+/**
+ * @class OperationUnit
+ * @classdesc OperationUnit represents team  on Phase moment
+ */
+class OperationUnit extends Team{
 
-    <h3> </h3>
+	/**
+		OperationUnit Constructor
+		@param {string} [name=""] Name of operationUnit.
+		@param {int} [id=automaticaly generated] id of the requirement operationUnit
+	*/
+	constructor(name = "", id){
+		super(name, id);
+	}
 
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+}
+export default OperationUnit;</code></pre>
+        </article>
+    </section>
 
 
 

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: interfaces/Team.class.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,55 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: interfaces/Team.class.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Utils from "../Utils.class.js";
+/**
+ * @class Team
+ * @classdesc Team abstract object which represents a generic team
+ */
+class Team{
 
+	/**
+		Team Constructor - For Heritage => Don't instantiate it
+		@param {string} name Name of team
+		@param {int} id id of the team
+	*/
+	constructor(name, id){
+		if(typeof id == "undefined"){
+			id = Utils.getId("team");
+		}
+		this.id = id;
+		this.name = name;
+	}
 
-    <h3> </h3>
+	/**
+		Get the id of the team
+		@returns {int} id of the team
+	*/
+	getId(){
+		return this.id;
+	}
 
+	/**
+		Get the name of the team
+		@returns {string} name of the team
+	*/
+	getName(){
+		return this.name;
+	}	
 
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+}
+export default Team;</code></pre>
+        </article>
+    </section>
 
 
 
