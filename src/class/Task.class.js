@@ -40,6 +40,18 @@ class Task{
 	}	
 
 	/**
+		Set the name of the task
+		@param {string} name new name of the task
+	*/
+	setName(name){
+		if(typeof name != "string"){
+			console.error("setName(name) need a string ; provided : " + name);
+		}else{
+			this.name = name;
+		}
+	}	
+
+	/**
 		Add a following task
 		@param {Task} task task to add to following tasks collection
 	*/

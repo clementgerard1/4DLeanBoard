@@ -102,6 +102,12 @@ if(process.argv[2] == "dev"){
 		}
 	});
 
+	app.get('/entryVue.js', function(req,res){
+		if(!req.query.test){
+			res.sendFile(__dirname + '/test/build/entryVue.js');
+		}
+	});
+
 	app.get('/:url',function(req,res){
 		if(req.params.url != "favicon.ico"){
 			if(fs.existsSync(__dirname + '/test/public/' + req.params.url + "/index.html")){

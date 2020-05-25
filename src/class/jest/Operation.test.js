@@ -20,8 +20,15 @@ test('Operation constructor(name)', () =>{
 	expect(operation.getName()).toBe("hello");
 });
 
-test('Operation constructor(id, name)', () =>{
-	const operation = new Operation("hello", 15);
+test('Operation constructor(name, duration)', () =>{
+	const operation = new Operation("hello", 10);
+	expect(operation.getId()).toBe(0);
+	expect(operation.getName()).toBe("hello");
+	expect(operation.getDuration()).toBe(10);
+});
+
+test('Operation constructor(name, duration, id)', () =>{
+	const operation = new Operation("hello", 10, 15);
 	expect(operation.getId()).toBe(15);
 	expect(operation.getName()).toBe("hello");
 });
@@ -47,4 +54,3 @@ test('removeFollowingOperation(operation)', () => {
 	operation.removeFollowingOperation(operation2);
   expect(Object.keys(operation.getFollowingOperations()).length).toBe(0);
 });
-

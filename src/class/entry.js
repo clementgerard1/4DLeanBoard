@@ -5,6 +5,7 @@ import Object4D from "./Object4D.class.js";
 import Task from "./Task.class.js";
 import Phase from "./Phase.class.js";
 import Milestone from "./Milestone.class.js";
+import Operation from "./Operation.class.js";
 
 //Allow tests access classes
 window.boardClasses = {
@@ -13,5 +14,8 @@ window.boardClasses = {
 	"Model" : Model,
 	"Object4D" : Object4D,
 	"Task" : Task,
-	"Phase" : Phase
+	"Phase" : Phase,
+	"Milestone": Milestone,
+	"Operation": Operation,
+	
 }

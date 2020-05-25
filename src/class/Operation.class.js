@@ -11,13 +11,23 @@ class Operation{
 	/**
 		Operation Constructor
 		@param {string} [name=""] Name of operation.
+		@param {uint} [duration=""] Duration of the operation.
 		@param {int} [id=automaticaly generated] id of the operation
 	*/
-	constructor(name = "", id = Utils.getId("operation")){
+	constructor(name = "", duration = 1, id = Utils.getId("operation")){
 		this.id = id;
 		this.name = name;
 		this.followingOperations = {};
 		this.operationUnit = null;
+		this.duration = duration;
+	}
+
+	/**
+		Get the operation duration
+		@returns {int} operation duration
+	*/
+	getDuration(){
+		return this.duration
 	}
 
 	/**

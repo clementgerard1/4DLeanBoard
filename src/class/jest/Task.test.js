@@ -28,6 +28,18 @@ test('Task constructor(id, name)', () =>{
 	expect(task.getName()).toBe("hello");
 });
 
+test('setName(name)', () =>{
+	const task = new Task("hello", 15);
+	task.setName("bonjour");
+	expect(task.getName()).toBe("bonjour");
+});
+
+test('setName(null)', () =>{
+	const task = new Task("hello", 15);
+	task.setName(null);
+	expect(task.getName()).toBe("hello");
+});
+
 test('addFollowingTask(task)', () => {
 	const task = new Task();
 	const task2 = new Task();

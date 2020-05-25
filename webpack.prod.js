@@ -19,7 +19,15 @@ module.exports = {
 	          plugins: ['@babel/plugin-proposal-class-properties']
 	        }
 	      }
-	    }
+	    },
+	    {
+        test: /\.svg$/,
+        loader: 'svg-inline-loader'
+    	},
+    	{
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
+      },
 	  ]
 	}
 };

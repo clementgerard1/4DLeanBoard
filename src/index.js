@@ -3,5 +3,5 @@ window.addEventListener("DOMContentLoaded", (event) => {
 });
 
 function init(){
-	console.log("HEY");
+	
 }
