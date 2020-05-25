@@ -1,1 +1,27 @@
-console.log("Entry");
+import Loader from "./Loader.class.js";
+import Utils from "./Utils.class.js";
+import Model from "./Model.class.js";
+import Object4D from "./Object4D.class.js";
+import Task from "./Task.class.js";
+import Phase from "./Phase.class.js";
+import Milestone from "./Milestone.class.js";
+import Operation from "./Operation.class.js";
+import TaskTeam from "./TaskTeam.class.js";
+import Level from "./Level.class.js";
+import Zone from "./Zone.class.js";
+
+//Allow tests access classes
+window.boardClasses = {
+	"Loader" : Loader,
+	"Utils" : Utils,
+	"Model" : Model,
+	"Object4D" : Object4D,
+	"Task" : Task,
+	"Phase" : Phase,
+	"Milestone": Milestone,
+	"Operation": Operation,
+	"TaskTeam": TaskTeam,
+	"Level": Level,
+	"Zone": Zone,
+	
+}

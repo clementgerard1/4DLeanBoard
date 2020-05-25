@@ -58,6 +58,6 @@ body{
 	width : 100vw;
 }
 
-body {
+#controls {
 	touch-action : none;
 }

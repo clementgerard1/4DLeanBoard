@@ -5,7 +5,8 @@ module.exports = {
 	watch : true,
   entry: {
   	index : './test/src/index.js',
-  	entry : './src/class/entry.js'
+  	entry : './src/class/entry.js',
+  	entryVue : './src/components/entry.js',
   },
   output: {
     path: path.resolve(__dirname, './test/build'),
@@ -19,10 +20,19 @@ module.exports = {
 	      use: {
 	        loader: 'babel-loader',
 	        options: {
-	          presets: ['@babel/preset-env']
+	          presets: ['@babel/preset-env'],
+	          plugins: ['@babel/plugin-proposal-class-properties']
 	        }
 	      }
-	    }
+	    },
+	    {
+        test: /\.svg$/,
+        loader: 'svg-inline-loader'
+    	},
+    	{
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
+      },
 	  ]
 	}
 };
