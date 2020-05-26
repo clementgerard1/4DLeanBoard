@@ -3,12 +3,18 @@ import Operation from './Operation.class.js';
 import Object4D from './Object4D.class.js';
 import TaskTeam from './TaskTeam.class.js';
 import Property from './interfaces/Property.class.js';
+import Requirement from './Requirement.class.js';
+import Zone from './Zone.class.js';
+import State from './State.class.js';
+import ConstructionType from './ConstructionType.class.js';
+import PlanningObject from "./interfaces/PlanningObject.class";
 
 /**
  * @class Task
+ * @extends PlanningObject
  * @classdesc Task object represents a task of the lean board
  */
-class Task{
+class Task extends PlanningObject{
 
 	/**
 		Task Constructor
@@ -16,53 +22,24 @@ class Task{
 		@param {int} [id=automaticaly generated] id of the task
 	*/
 	constructor(name = "", id = Utils.getId("task")){
-		this.id = id;
-		this.name = name;
-		this.followingTasks = {};
+		super(name, id);
 		this.operations = {};
 		this.object4D = null;
 		this.taskTeams = {};
-		this.properties = {};
-	}
 
-	/**
-		Get the id of the task
-		@returns {int} id of the task
-	*/
-	getId(){
-		return this.id;
-	}
-
-	/**
-		Get the name of the task
-		@returns {string} name of the task
-	*/
-	getName(){
-		return this.name;
-	}	
-
-	/**
-		Set the name of the task
-		@param {string} name new name of the task
-	*/
-	setName(name){
-		if(typeof name != "string"){
-			console.error("setName(name) need a string ; provided : " + name);
-		}else{
-			this.name = name;
+		//LPS Requirement
+		for(let i = 1 ; i <= 7 ; i++){
+			super.addProperty(new Requirement(), "LPSRequirement" + i);
 		}
-	}	
+
+	}
 
 	/**
 		Add a following task
 		@param {Task} task task to add to following tasks collection
 	*/
 	addFollowingTask(task){
-		if(!(task instanceof Task)){
-			console.error("addFollowingTask(task) need Task Object ; prvovided : " + task);
-		}else{
-			this.followingTasks[task.id] = task;
-		}
+		super.addFollowing(task, Task);
 	}
 
 	/**
@@ -70,13 +47,7 @@ class Task{
 		@param {Task} task Task to remove of the following task collection
 	*/
 	removeFollowingTask(task){
-		if(!(task instanceof Task)){
-			console.error("removeFollowingTask(task) : task " + task + " not of type Task");
-		}else if(!(Object.keys(this.followingTasks).includes("" + task.id))){
-			console.error("removeFollowingTask(task) : task " + task + " not in the collection");
-		}else{
-			delete this.followingTasks[task.id];
-		}
+		super.removeFollowing(task, Task);
 	}
 
 	/**
@@ -84,7 +55,7 @@ class Task{
 		@returns {Array} Array of Task
 	*/
 	getFollowingTasks(){
-		return this.followingTasks;
+		return super.getFollowings();
 	}
 
 	/**
@@ -152,50 +123,6 @@ class Task{
 	}
 
 	/**
-		Add a property
-		@param {Property} [property = new Property] Property to add to the collection
-	*/
-	addProperty(property = new Property()){
-		this.properties[property.id] = property;
-	}
-
-	/**
-		Remove a property
-		@param {Property} property Property to remove
-	*/
-	removeProperty(property){
-		if(!(property instanceof Property)){
-			console.error("removeProperty(property) : property " + property + " not of type Property");
-		}else if(!(Object.keys(this.properties).includes("" + property.id))){
-			console.error("removeProperty(property) : property " + property + " not in the collection");
-		}else{
-			delete this.properties[property.id];
-		}
-	}
-
-	/**
-		Get all properties
-		@returns {Array} Array of Property
-	*/
-	getProperties(){
-		return this.properties;
-	}
-
-	/**
-		Get a property
-		@param {int} id idof the property
-		@returns {Property} Property corresponding
-	*/
-	getProperty(id){
-		if(typeof this.properties[id] == "undefined"){
-			console.error("getProperty(id) : id " + id + " unknowned on properties colleciton")
-			return null;
-		}else{
-			return this.properties[id];
-		}
-	}
-
-	/**
 		Add a taskTeam
 		@param {TaskTeam} [taskTeam = new TaskTeam] TaskTeam to add to the collection
 	*/
@@ -213,7 +140,6 @@ class Task{
 		}else if(!(Object.keys(this.taskTeams).includes("" + taskTeam.id))){
 			console.error("removeTaskTeam(taskTeam) : taskTeam " + taskTeam + " not in the collection");
 		}else{
-			console.log("delete");
 			delete this.taskTeams[taskTeam.id];
 		}
 	}
@@ -246,6 +172,75 @@ class Task{
 	*/
 	getDuration(){
 		return this.operations[Object.keys(this.operations)[0]].getDuration();
+	}
+
+	/**
+		Get the zone of the task
+		@returns {Zone} zone of the task
+	*/
+	getZone(){
+		return super.getPropertyByName("zone");
+	}
+
+	/**
+		Set the Zone of the task
+		@param {Zone} zone New zone of the task
+	*/
+	setZone(zone){
+		if(!(zone instanceof Zone)){
+			console.error("setZone(zone) need a Zone object ; provided : " + zone);
+		}else{
+			super.addProperty(zone, "zone");
+		}
+	}
+
+	/**
+		Get the state of the task
+		@returns {State} zone of the task
+	*/
+	getState(){
+		return super.getPropertyByName("state");
+	}
+
+	/**
+		Set the State of the task
+		@param {State} state New state of the task
+	*/
+	setState(state){
+		if(!(state instanceof State)){
+			console.error("setState(state) need a State object ; provided : " + state);
+		}else{
+			super.addProperty(state, "state");
+		}
+	}
+
+	/**
+		Get the constructionType of the task
+		@returns {ConstructionType} constructionType of the task
+	*/
+	getConstructionType(){
+		return super.getPropertyByName("constructionType");
+	}
+
+	/**
+		Set the ConstructionType of the task
+		@param {ConstructionType} constructionType New constructionType of the task
+	*/
+	setConstructionType(constructionType){
+		if(!(constructionType instanceof ConstructionType)){
+			console.error("setConstructionType(constructionType) need a ConstructionType object ; provided : " + constructionType);
+		}else{
+			super.addProperty(constructionType, "constructionType");
+		}
+	}
+
+	/**
+		Get a LPSrequierement of the task
+		@param {int} numero Numero of LPSRequirement 
+		@returns {ConstructionType} constructionType of the task
+	*/
+	getLPSRequirement(i){
+		return super.getPropertyByName("LPSRequirement" + (i+1));
 	}
 
 }

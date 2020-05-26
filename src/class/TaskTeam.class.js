@@ -3,6 +3,7 @@ import OperationUnit from './OperationUnit.class.js';
 
 /**
  * @class TaskTeam
+ * @extends Team
  * @classdesc TaskTeam represents team  on Phase moment
  */
 class TaskTeam extends Team{

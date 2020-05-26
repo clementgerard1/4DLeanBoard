@@ -2,6 +2,7 @@ import Team from './interfaces/Team.class.js';
 
 /**
  * @class OperationUnit
+ * @extends Team
  * @classdesc OperationUnit represents team  on Phase moment
  */
 class OperationUnit extends Team{

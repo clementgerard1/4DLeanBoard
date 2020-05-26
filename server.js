@@ -97,7 +97,7 @@ if(process.argv[2] == "dev"){
 					res.send(html.slice(0, html.indexOf("<body>")) + logScript + html.slice(html.indexOf("<body>") + 6));
 				});
 			}else{
-				res.sendFile(__dirname + 'test/public/index.html');
+				res.sendFile(__dirname + '/test/public/index.html');
 			}
 		}
 	});

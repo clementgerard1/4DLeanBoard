@@ -2,6 +2,7 @@ import Property from './interfaces/Property.class.js';
 
 /**
  * @class Requirement
+ * @extends Property
  * @classdesc Requirement represents requirements used in Milestones
  */
 class Requirement extends Property{
@@ -13,6 +14,23 @@ class Requirement extends Property{
 	*/
 	constructor(name = "", id){
 		super(name, id);
+		this.value = false;
+	}
+
+	/**
+		Get the value of the requierement
+		@returns {bool} 
+	*/
+	getValue(){
+		return this.value;
+	}
+
+	/**
+		Set the value of the requieremnet
+		@param {bool} bool new value of requierement
+	*/
+	setValue(bool){
+		this.value = bool;
 	}
 
 }

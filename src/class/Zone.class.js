@@ -2,6 +2,7 @@ import Property from './interfaces/Property.class.js';
 
 /**
  * @class Zone
+ * @extends Property
  * @classdesc Zone represents zones property used in Tasks
  */
 class Zone extends Property{

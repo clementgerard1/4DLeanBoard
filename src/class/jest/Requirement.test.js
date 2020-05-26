@@ -24,3 +24,10 @@ test('Requirement constructor(id, name)', () =>{
 	expect(requirement.getId()).toBe(15);
 	expect(requirement.getName()).toBe("hello");
 });
+
+test('setValue(bool)', () => {
+	const requirement = new Requirement("hello");
+	expect(requirement.getValue()).toBe(false);
+	requirement.setValue(true);
+	expect(requirement.getValue()).toBe(true);
+});

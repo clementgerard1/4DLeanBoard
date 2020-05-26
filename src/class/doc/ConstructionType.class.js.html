@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: OperationUnit.class.js</title>
+    <title>JSDoc: Source: ConstructionType.class.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: OperationUnit.class.js</h1>
+    <h1 class="page-title">Source: ConstructionType.class.js</h1>
 
     
 
@@ -26,26 +26,48 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import Team from './interfaces/Team.class.js';
+            <pre class="prettyprint source linenums"><code>import Property from './interfaces/Property.class.js';
 
 /**
- * @class OperationUnit
- * @extends Team
- * @classdesc OperationUnit represents team  on Phase moment
+ * @class ConstructionType
+ * @extends Property
+ * @classdesc ConstructionType represents constructionTypes property used in Tasks
  */
-class OperationUnit extends Team{
+class ConstructionType extends Property{
 
 	/**
-		OperationUnit Constructor
-		@param {string} [name=""] Name of operationUnit.
-		@param {int} [id=automaticaly generated] id of the requirement operationUnit
+		ConstructionType Constructor
+		@param {string} [value=""] Value of constructionType.
+		@param {string} [name=""] Name of constructionType.
+		@param {int} [id=automaticaly generated] id of the constructionType property
 	*/
-	constructor(name = "", id){
+	constructor(value = "" ,name = "", id){
 		super(name, id);
+		this.val = value;
+	}
+
+	/**
+		Get the value of the constructionType property
+		@returns {string} value of the constructionType property
+	*/
+	getValue(){
+		return this.val;
+	}
+
+	/**
+		Set the value of the constructionType property
+		@param {string} value of the constructionType property
+	*/
+	setValue(value){
+		if(typeof value == "string"){
+			console.error("setValue(value) need a string ; provided : " + value);
+		}else{
+			this.val = value;
+		}
 	}
 
 }
-export default OperationUnit;</code></pre>
+export default ConstructionType;</code></pre>
         </article>
     </section>
 

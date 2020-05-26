@@ -3,7 +3,9 @@ import TaskTeam from '../TaskTeam.class.js';
 import Operation from '../Operation.class.js';
 import Object4D from '../Object4D.class.js';
 import Utils from '../Utils.class.js';
-import Property from '../interfaces/Property.class.js';
+import ConstructionType from '../ConstructionType.class.js';
+import Zone from '../Zone.class.js';
+import State from '../State.class.js';
 
 beforeEach(() => {
   Utils.ids = {
@@ -86,34 +88,7 @@ test('setObject4D(object4D)', () => {
 	const task = new Task();
 	const object4D = new Object4D();
 	task.setObject4D(object4D);
-	expect(task.getObject4D(object4D.id)).toBe(object4D);
-});
-
-test('addProperty()', () => {
-	const task = new Task();
-	task.addProperty();
-  expect(Object.keys(task.getProperties()).length).toBe(1);
-});
-
-test('addProperty(property)', () => {
-	const task = new Task();
-	const property = new Property();
-	task.addProperty(property);
-  expect(task.getProperty(property.id) instanceof Property).toBe(true);
-});
-
-test('getProperties()', () => {
-	const task = new Task();
-	Array(10).fill().map(() => task.addProperty());
-  expect(Object.keys(task.getProperties()).length).toBe(10);
-});
-
-test('removeProperty(property)', () => {
-	const task = new Task();
-	const property = new Property();
-	task.addProperty(property);
-	task.removeProperty(property);
-  expect(Object.keys(task.getProperties()).length).toBe(0);
+	expect(task.getObject4D()).toBe(object4D);
 });
 
 test('addTaskTeam()', () => {
@@ -142,3 +117,30 @@ test('removeTaskTeam(task)', () => {
 	task.removeTaskTeam(taskTeam);
   	expect(Object.keys(task.getTaskTeams()).length).toBe(0);
 });
+
+test('setZone(zone)', () => {
+	const task = new Task();
+	const zone = new Zone();
+	task.setZone(zone);
+	expect(task.getZone()).toBe(zone);
+});
+
+test('setConstructionType(constructionType)', () => {
+	const task = new Task();
+	const constructionType = new ConstructionType();
+	task.setConstructionType(constructionType);
+	expect(task.getConstructionType()).toBe(constructionType);
+});
+
+test('setState(state)', () => {
+	const task = new Task();
+	const state = new State();
+	task.setState(state);
+	expect(task.getState()).toBe(state);
+});
+
+test('getLPSRequirement(i)', () => {
+	const task = new Task();
+	expect(task.getLPSRequirement(0).getValue()).toBe(false);
+});
+

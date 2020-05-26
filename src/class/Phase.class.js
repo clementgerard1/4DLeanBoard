@@ -3,13 +3,15 @@ import Object4D from "./Object4D.class.js";
 import Task from "./Task.class.js";
 import Delivrable from "./Delivrable.class.js";
 import Contractor from "./Contractor.class.js";
+import PlanningObject from "./interfaces/PlanningObject.class";
 
 
 /**
  * @class Phase
+ * @extends PlanningObject
  * @classdesc Phase object represents a phase of the lean board
  */
-class Phase{
+class Phase extends PlanningObject{
 
 	/**
 		Phase Constructor
@@ -17,12 +19,10 @@ class Phase{
 		@param {int} [id=automaticaly generated] id of the phase
 	*/
 	constructor(name = "", id = Utils.getId("phase")){
-		this.id = id;
-		this.name = name;
+		super(name, id);
 		this.tasks = {};
 		this.objects4D = {};
 		this.delivrables = {};
-		this.followingPhases = {};
 		this.contractor = null;
 	}
 
@@ -45,22 +45,6 @@ class Phase{
 			this.contractor = contractor;
 		}
 	}
-
-	/**
-		Get the id of the phase
-		@returns {int} id of the phase
-	*/
-	getId(){
-		return this.id;
-	}
-
-	/**
-		Get the name of the phase
-		@returns {string} name of the phase
-	*/
-	getName(){
-		return this.name;
-	}	
 
 	/**
 		Add a object4D
@@ -199,11 +183,7 @@ class Phase{
 		@param {Phase} phase phase to add to following phases collection
 	*/
 	addFollowingPhase(phase){
-		if(!(phase instanceof Phase)){
-			console.error("addFollowingPhase(phase) need Phase Object ; prvovided : " + phase);
-		}else{
-			this.followingPhases[phase.id] = phase;
-		}
+		super.addFollowing(phase, Phase);
 	}
 
 	/**
@@ -211,13 +191,7 @@ class Phase{
 		@param {Phase} phase Phase to remove of the following phase collection
 	*/
 	removeFollowingPhase(phase){
-		if(!(phase instanceof Phase)){
-			console.error("removeFollowingPhase(phase) : phase " + phase + " not of type Phase");
-		}else if(!(Object.keys(this.followingPhases).includes("" + phase.id))){
-			console.error("removeFollowingPhase(phase) : phase " + phase + " not in the collection");
-		}else{
-			delete this.followingPhases[phase.id];
-		}
+		super.removeFollowing(phase, Phase);
 	}
 
 	/**
@@ -225,7 +199,7 @@ class Phase{
 		@returns {Array} Array of Phase
 	*/
 	getFollowingPhases(){
-		return this.followingPhases;
+		return super.getFollowings();
 	}
 
 }

@@ -2,6 +2,7 @@ import Property from './interfaces/Property.class.js';
 
 /**
  * @class Level
+ * @extends Property
  * @classdesc Level represents levels property used in Tasks
  */
 class Level extends Property{

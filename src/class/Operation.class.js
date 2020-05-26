@@ -1,12 +1,14 @@
 import Utils from "./Utils.class.js";
 import OperationUnit from "./OperationUnit.class.js";
+import PlanningObject from "./interfaces/PlanningObject.class";
 
 
 /**
  * @class Operation
+ * @extends PlanningObject
  * @classdesc Operation object represents a operation of the lean board
  */
-class Operation{
+class Operation extends PlanningObject{
 
 	/**
 		Operation Constructor
@@ -15,9 +17,7 @@ class Operation{
 		@param {int} [id=automaticaly generated] id of the operation
 	*/
 	constructor(name = "", duration = 1, id = Utils.getId("operation")){
-		this.id = id;
-		this.name = name;
-		this.followingOperations = {};
+		super(name, id);
 		this.operationUnit = null;
 		this.duration = duration;
 	}
@@ -51,30 +51,11 @@ class Operation{
 	}
 
 	/**
-		Get the id of the operation
-		@returns {int} id of the operation
-	*/
-	getId(){
-		return this.id;
-	}
-
-	/**
-		Get the name of the operation
-		@returns {string} name of the operation
-	*/
-	getName(){
-		return this.name;
-	}	
-	/**
 		Add a following operation
 		@param {Operation} operation operation to add to following operations collection
 	*/
 	addFollowingOperation(operation){
-		if(!(operation instanceof Operation)){
-			console.error("addFollowingOperation(operation) need Operation Object ; prvovided : " + operation);
-		}else{
-			this.followingOperations[operation.id] = operation;
-		}
+		super.addFollowing(operation, Operation);
 	}
 
 	/**
@@ -82,13 +63,7 @@ class Operation{
 		@param {Operation} operation Operation to remove of the following operation collection
 	*/
 	removeFollowingOperation(operation){
-		if(!(operation instanceof Operation)){
-			console.error("removeFollowingOperation(operation) : operation " + operation + " not of type Operation");
-		}else if(!(Object.keys(this.followingOperations).includes("" + operation.id))){
-			console.error("removeFollowingOperation(operation) : operation " + operation + " not in the collection");
-		}else{
-			delete this.followingOperations[operation.id];
-		}
+		super.removeFollowing(operation, Operation);
 	}
 
 	/**
@@ -96,7 +71,7 @@ class Operation{
 		@returns {Array} Array of Operation
 	*/
 	getFollowingOperations(){
-		return this.followingOperations;
+		return super.getFollowings();
 	}
 
 }

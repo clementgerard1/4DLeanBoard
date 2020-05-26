@@ -3,6 +3,7 @@ import TaskTeam from './TaskTeam.class.js';
 
 /**
  * @class Contractor
+ * @extends Team
  * @classdesc Contractor represents team  on Phase moment
  */
 class Contractor extends Team{

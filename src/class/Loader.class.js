@@ -79,8 +79,7 @@ class Loader{
 				if(!teams.includes(columns[10])) teams[teams.length] = new TaskTeam(columns[10]);
 				task.addTaskTeam(teams[teams.length - 1]);
 
-				task.addProperty(new Level(columns[8]));
-				task.addProperty(new Zone(columns[9]));
+				task.setZone(new Zone(columns[9]));
 
 				phase.addTask(task);
 				const newDate = new Date(columns[3].slice(6, 10), columns[3].slice(3, 5), columns[3].slice(0, 2));

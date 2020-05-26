@@ -1,12 +1,14 @@
 import Utils from "./Utils.class.js";
 import Phase from "./Phase.class.js";
 import Requirement from "./Requirement.class.js";
+import PlanningObject from "./interfaces/PlanningObject.class";
 
 /**
  * @class Milestone
+ * @extends PlanningObject
  * @classdesc Milestone represents a milestone
  */
-class Milestone{
+class Milestone extends PlanningObject{
 
 	/**
 		Milestone Constructor
@@ -14,11 +16,8 @@ class Milestone{
 		@param {int} [id=automaticaly generated] id of the milestone
 	*/
 	constructor(name = "", id = Utils.getId("milestone")){
-		this.id = id;
-		this.name = name;
+		super(name, id);
 		this.phases = {};
-		this.followingMilestones = [];
-		this.requirements = [];
 	}
 
 	/**
@@ -26,7 +25,7 @@ class Milestone{
 		@param {Requirement} [requirement = new Requirement] Requirement to add to the collection
 	*/
 	addRequirement(requirement = new Requirement()){
-		this.requirements[requirement.id] = requirement;
+		super.addProperty(requirement);
 	}
 
 	/**
@@ -34,13 +33,7 @@ class Milestone{
 		@param {Requirement} requirement Requirement to remove
 	*/
 	removeRequirement(requirement){
-		if(!(requirement instanceof Requirement)){
-			console.error("removeRequirement(requirement) : requirement " + requirement + " not of type Requirement");
-		}else if(!(Object.keys(this.requirements).includes("" + requirement.id))){
-			console.error("removRequirement(requirement) : requirement " + requirement + " not in the collection");
-		}else{
-			delete this.requirements[requirement.id];
-		}
+		super.removeProperty(requirement);
 	}
 
 	/**
@@ -48,7 +41,7 @@ class Milestone{
 		@returns {Array} Array of Requirement
 	*/
 	getRequirements(){
-		return this.requirements;
+		return super.getProperties();
 	}
 
 	/**
@@ -100,11 +93,7 @@ class Milestone{
 		@param {Milestone} milestone milestone to add to following milestones collection
 	*/
 	addFollowingMilestone(milestone){
-		if(!(milestone instanceof Milestone)){
-			console.error("addFollowingMilestone(milestone) need Milestone Object ; prvovided : " + milestone);
-		}else{
-			this.followingMilestones[milestone.id] = milestone;
-		}
+		super.addFollowing(milestone, Milestone);
 	}
 
 	/**
@@ -112,13 +101,7 @@ class Milestone{
 		@param {Milestone} milestone Milestone to remove of the following milestone collection
 	*/
 	removeFollowingMilestone(milestone){
-		if(!(milestone instanceof Milestone)){
-			console.error("removeFollowingMilestone(milestone) : milestone " + milestone + " not of type Milestone");
-		}else if(!(Object.keys(this.followingMilestones).includes("" + milestone.id))){
-			console.error("removeFollowingMilestone(milestone) : milestone " + milestone + " not in the collection");
-		}else{
-			delete this.followingMilestones[milestone.id];
-		}
+		super.removeFollowing(milestone, Milestone);
 	}
 
 	/**
@@ -126,24 +109,8 @@ class Milestone{
 		@returns {Array} Array of Milestone
 	*/
 	getFollowingMilestones(){
-		return this.followingMilestones;
+		return super.getFollowings();
 	}
-
-	/**
-		Get the id of the milestone
-		@returns {int} id of the milestone
-	*/
-	getId(){
-		return this.id;
-	}
-
-	/**
-		Get the name of the milestone
-		@returns {string} name of the milestone
-	*/
-	getName(){
-		return this.name;
-	}	
 
 }
 export default Milestone;
