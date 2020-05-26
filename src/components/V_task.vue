@@ -15,8 +15,20 @@ export default {
 			"r5" : false,
 			"r6" : false,
 			"r7" : false,
-			"notEmpty" : true
 		}
 	},
-	template : '<div class="task">' + taskSVG + '</div>',
+	inject : [
+		'timeline',
+	],
+	props : [
+		"time",
+		"team"
+	],
+	computed: {
+		notEmpty : function(){
+			const task = this.timeline.getTaskByTeam(this.time, this.team);
+			return task != null;
+		}
+	},
+	template : '<div><div class="task">' + taskSVG + '</div></div>',
 }
