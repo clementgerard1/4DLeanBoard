@@ -73,7 +73,7 @@ class Loader{
 					value : columns[7]
 				};
 
-				const operation = new Operation("temp", columns[5]);
+				const operation = new Operation("temp", parseInt(columns[5]));
 				task.addOperation(operation);
 
 				if(!teams.includes(columns[10])) teams[teams.length] = new TaskTeam(columns[10]);

@@ -14,7 +14,6 @@ class Timeline{
 		this.model = model;
 		this.steps = [];
 		this.starts = starts;
-
 		this._constructTimeline();
 	}
 
@@ -26,22 +25,38 @@ class Timeline{
 		}
 	}
 
-	_addTask(task, start, end){
-		for(let i = start; i <= end; i++){
-			this.steps[i] = task;
+	_addTask(task, start, duration){
+		for(let i = start; i < (start + duration); i++){
+			this._initialiseStepArray(i);
+			this.steps[i].tasks.push(task);
 		}
 	}
 
-	_nextNode(from, newStart){
-		const nexts = from.getFollowingTasks();
+	_nextNode(fromTask, newStart){
+		const nexts = fromTask.getFollowingTasks();
 		for(let n in nexts){
-			console.log(nexts[n]);
 			this._addTask(nexts[n], newStart, nexts[n].getDuration());
+			this._nextNode(nexts[n], newStart + nexts[n].getDuration());
 		}
 	}
 
-	getPhaseVue(nb){
+	_initialiseStepArray(t){		
+			if(typeof this.steps[t] == "undefined") this.steps[t] = { 
+				tasks : []
+			};
+	}
 
+
+	isStart(){
+
+	}
+
+	/**
+		Get information on a specific date
+		@param {int} time date of the information (on relative format).
+	*/
+	getValueAtTime(time){
+		return this.steps[time];
 	}
 
 }

@@ -245,7 +245,6 @@ class Task{
 		@returns {int} duration
 	*/
 	getDuration(){
-		console.log("hey", this.operations);
 		return this.operations[Object.keys(this.operations)[0]].getDuration();
 	}
 
