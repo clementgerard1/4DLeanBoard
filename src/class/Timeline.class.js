@@ -71,7 +71,7 @@ class Timeline{
 		Get taskTeams between two moments
 		@param {int} start
 		@param {int} end
-		@returns {Array[TaskTeam]} 
+		@returns {Array(TaskTeam)} 
 	*/
 	getTaskTeamsBetweenTwoDates(start, end){
 		const teams = [];
@@ -93,7 +93,7 @@ class Timeline{
 		Get Phases between two moments
 		@param {int} start
 		@param {int} end
-		@returns {Array[Phase]} 
+		@returns {Array(Phase)} 
 	*/
 	getPhasesBetweenTwoDates(start, end){
 		const toReturn = [];
@@ -132,7 +132,7 @@ class Timeline{
 		@param {Phase} phase
 		@param {int} start
 		@param {int} end
-		@returns {Array[TaskTeam]} 
+		@returns {Array(TaskTeam)} 
 	*/
 	getTaskTeamsBetweenTwoDates(phase, start, end){
 		const teams = phase.getTaskTeams();

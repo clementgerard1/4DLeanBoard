@@ -125,7 +125,7 @@ class Model{
 
 	/**
 		get all contractors of the model
-		@returns {Array[Contractor]} return null if no contractor exist
+		@returns {Array(Contractor)} return null if no contractor exist
 	*/
 	getContractors(){
 		const contractors = [];
