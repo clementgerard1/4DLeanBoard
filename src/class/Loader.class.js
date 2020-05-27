@@ -118,8 +118,6 @@ class Loader{
 
 	}
 
-
-
 	/**
 		Load model from server
 		@param {string} id Identifiant.

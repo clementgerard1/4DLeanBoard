@@ -62,5 +62,7 @@ class TaskTeam extends Team{
 		}
 	}
 
+	
+
 }
 export default TaskTeam;
