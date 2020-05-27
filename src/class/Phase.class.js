@@ -24,6 +24,7 @@ class Phase extends PlanningObject{
 		this.objects4D = {};
 		this.delivrables = {};
 		this.contractor = null;
+		this.colorClass = "defaultcolor";
 	}
 
 	/**
@@ -215,6 +216,22 @@ class Phase extends PlanningObject{
 			if(!toReturn.includes(taskTeam)) toReturn[toReturn.length] = taskTeam;
 		}
 		return toReturn;
+	}
+
+	setColorClass(colorClass){
+		if(typeof colorClass == "undefined"){
+			console.error("setColorClass : need a string ; provided : " + colorClass);
+		}else{
+			this.colorClass = colorClass;
+		}
+	}
+
+	/**
+		Get the color class attribuate to this phase
+		@returns {String} 
+	*/
+	getColorClass(){
+		return this.colorClass;
 	}
 
 }

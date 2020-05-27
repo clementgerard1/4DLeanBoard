@@ -132,7 +132,7 @@ test('removeDelivrable(delivrable)', () => {
   expect(Object.keys(phase.getDelivrables()).length).toBe(0);
 });
 
-test('setContractor(contractor', () => {
+test('setContractor(contractor)', () => {
 	const phase = new Phase();
 	const contractor = new Contractor();
 	phase.setContractor(contractor);
@@ -168,5 +168,11 @@ test('getTaskTeams()', () => {
 	task2.setTaskTeam(taskTeam2);
 	task.setTaskTeam(taskTeam3);
   expect(phase.getTaskTeams().length).toBe(2);
+});
+
+test('setColorClass(color)', () => {
+	const phase = new Phase();
+	phase.setColorClass("orange");
+	expect(phase.getColorClass()).toBe("orange");
 });
 

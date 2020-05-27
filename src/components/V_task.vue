@@ -40,7 +40,14 @@ export default {
 		},
 		taskteam : function(){
 			return this.team.getName();
-		},
+		}/*,
+		phaseColor : function(){
+			if(this.task != null){
+				return this.task.getPhase().getClassColor();
+
+		}*/
 	},
-	template : '<div ><div class="task">' + taskSVG + '</div></div>',
+	template : "<div ><div class='task' >" + taskSVG + "</div></div>",
 }
+
+/*v-bind:class='phaseColor'*/
