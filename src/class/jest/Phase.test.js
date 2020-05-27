@@ -4,6 +4,7 @@ import Task from '../Task.class.js';
 import Delivrable from '../Delivrable.class.js';
 import Object4D from '../Object4D.class.js';
 import Contractor from '../Contractor.class.js';
+import TaskTeam from '../TaskTeam.class.js';
 
 beforeEach(() => {
   Utils.ids = {
@@ -151,5 +152,21 @@ test('removeFollowingPhase(phase)', () => {
 	phase.addFollowingPhase(phase2);
 	phase.removeFollowingPhase(phase2);
   expect(Object.keys(phase.getFollowingPhases()).length).toBe(0);
+});
+
+test('getTaskTeams()', () => {
+	const phase = new Phase();
+	const task = new Task();
+	const task2 = new Task();
+	const taskTeam = new TaskTeam();
+	const taskTeam2 = new TaskTeam();
+	const taskTeam3 = new TaskTeam();
+	phase.addTask(task);
+	task.setTaskTeam(taskTeam);
+	phase.addTask(task2);
+	task2.setTaskTeam(taskTeam3);
+	task2.setTaskTeam(taskTeam2);
+	task.setTaskTeam(taskTeam3);
+  expect(phase.getTaskTeams().length).toBe(2);
 });
 

@@ -4,10 +4,6 @@ import "./V_task.css";
 export default {
 	data : function(){
 		return {
-			"tid" : "TID",
-			"dr" : "DR",
-			"taskName" : "TaskName",
-			"taskTeam" : "TaskTeam",
 			"r1" : false, 
 			"r2" : false,
 			"r3" : false,
@@ -19,16 +15,32 @@ export default {
 	},
 	inject : [
 		'timeline',
+		'model',
 	],
 	props : [
-		"time",
-		"team"
+		"team",
+		'time',
+		'phase'
 	],
 	computed: {
+		task : function(){
+			return this.timeline.getTaskByTeam(this.time, this.team)
+		},
 		notEmpty : function(){
-			const task = this.timeline.getTaskByTeam(this.time, this.team);
-			return task != null;
-		}
+			return this.task != null;
+		},
+		tid : function(){
+			return this.task.getId();
+		},
+		dr : function(){
+			return this.task.getDuration();
+		},
+		taskname : function(){
+			return this.task.getName();
+		},
+		taskteam : function(){
+			return this.team.getName();
+		},
 	},
-	template : '<div><div class="task">' + taskSVG + '</div></div>',
+	template : '<div ><div class="task">' + taskSVG + '</div></div>',
 }

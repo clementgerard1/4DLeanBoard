@@ -1,6 +1,7 @@
 import Task from '../Task.class.js';
 import TaskTeam from '../TaskTeam.class.js';
 import Operation from '../Operation.class.js';
+import Phase from '../Phase.class.js';
 import Object4D from '../Object4D.class.js';
 import Utils from '../Utils.class.js';
 import ConstructionType from '../ConstructionType.class.js';
@@ -91,31 +92,11 @@ test('setObject4D(object4D)', () => {
 	expect(task.getObject4D()).toBe(object4D);
 });
 
-test('addTaskTeam()', () => {
+test('setTaskTeam()', () => {
 	const task = new Task();
-	task.addTaskTeam();
-  expect(Object.keys(task.getTaskTeams()).length).toBe(1);
-});
-
-test('addTaskTeam(task)', () => {
-	const task = new Task();
-	const taskTeam = new TaskTeam();
-	task.addTaskTeam(taskTeam);
-  expect(task.getTaskTeam(taskTeam.id) instanceof TaskTeam).toBe(true);
-});
-
-test('getTaskTeams()', () => {
-	const task = new Task();
-	Array(10).fill().map(() => task.addTaskTeam());
-  expect(Object.keys(task.getTaskTeams()).length).toBe(10);
-});
-
-test('removeTaskTeam(task)', () => {
-	const task = new Task();
-	const taskTeam = new TaskTeam();
-	task.addTaskTeam(taskTeam);
-	task.removeTaskTeam(taskTeam);
-  	expect(Object.keys(task.getTaskTeams()).length).toBe(0);
+	const team = new TaskTeam();
+	task.setTaskTeam(team);
+  expect(task.getTaskTeam()).toBe(team);
 });
 
 test('setZone(zone)', () => {
@@ -144,3 +125,9 @@ test('getLPSRequirement(i)', () => {
 	expect(task.getLPSRequirement(0).getValue()).toBe(false);
 });
 
+test('setParentPhase(phase)', () => {
+	const task = new Task();
+	const phase = new Phase();
+	task.setParentPhase(phase);
+	expect(task.getParentPhase()).toBe(phase);
+});

@@ -1,5 +1,6 @@
 import Utils from "./Utils.class.js";
 import Operation from './Operation.class.js';
+import Phase from './Phase.class.js';
 import Object4D from './Object4D.class.js';
 import TaskTeam from './TaskTeam.class.js';
 import Property from './interfaces/Property.class.js';
@@ -25,7 +26,8 @@ class Task extends PlanningObject{
 		super(name, id);
 		this.operations = {};
 		this.object4D = null;
-		this.taskTeams = {};
+		this.taskTeam = null;
+		this.parentPhase = null;
 
 		//LPS Requirement
 		for(let i = 1 ; i <= 7 ; i++){
@@ -116,54 +118,30 @@ class Task extends PlanningObject{
 	*/
 	setObject4D(object4D){
 		if(!(object4D instanceof Object4D)){
-			console.error("setTaskTeam(taskTeam) need a Object4D object ; provided : " + object4D);
+			console.error("setObject4D(Object4D) need a Object4D object ; provided : " + object4D);
 		}else{
 			this.object4D = object4D;
 		}
 	}
 
 	/**
-		Add a taskTeam
-		@param {TaskTeam} [taskTeam = new TaskTeam] TaskTeam to add to the collection
+		Set the taskTeam
+		@param {TaskTeam} [taskTeam = new TaskTeam] taskTeam
 	*/
-	addTaskTeam(taskTeam = new TaskTeam()){
-		this.taskTeams[taskTeam.id] = taskTeam;
-	}
-
-	/**
-		Remove a taskTeam
-		@param {TaskTeam} taskTeam TaskTeam to remove
-	*/
-	removeTaskTeam(taskTeam){
+	setTaskTeam(taskTeam = new TaskTeam()){
 		if(!(taskTeam instanceof TaskTeam)){
-			console.error("removeTaskTeam(taskTeam) : taskTeam " + taskTeam + " not of type TaskTeam");
-		}else if(!(Object.keys(this.taskTeams).includes("" + taskTeam.id))){
-			console.error("removeTaskTeam(taskTeam) : taskTeam " + taskTeam + " not in the collection");
+			console.error("setTaskTeam(taskTeam) : taskTeam " + taskTeam + " not of type TaskTeam");
 		}else{
-			delete this.taskTeams[taskTeam.id];
+			this.taskTeam = taskTeam;
 		}
 	}
 
 	/**
-		Get all taskTeams
+		Get the taskTeam
 		@returns {Array} Array of TaskTeam
 	*/
-	getTaskTeams(){
-		return this.taskTeams;
-	}
-
-	/**
-		Get a taskTeam by id
-		@param {int} id id of the taskTeam
-		@returns {TaskTeam} TaskTeam corresponding
-	*/
-	getTaskTeam(id){
-		if(typeof this.taskTeams[id] == "undefined"){
-			console.error("getTaskTeam(id) : id " + id + " unknowned on taskTeams collection")
-			return null;
-		}else{
-			return this.taskTeams[id];
-		}
+	getTaskTeam(){
+		return this.taskTeam;
 	}
 
 	/**
@@ -241,6 +219,26 @@ class Task extends PlanningObject{
 	*/
 	getLPSRequirement(i){
 		return super.getPropertyByName("LPSRequirement" + (i+1));
+	}
+
+	/**
+		Set the parentPhase of the task
+		@param {Phase} phase
+	*/
+	setParentPhase(phase){
+		if(!(phase instanceof Phase)){
+			console.error("setParentPhase(phase) need a Phase object ; provided : " + phase);
+		}else{
+			this.parentPhase = phase;
+		}
+	}
+
+	/**
+		Get the parent phase of the task
+		@returns {Phase}
+	*/
+	getParentPhase(){
+		return this.parentPhase;
 	}
 
 }

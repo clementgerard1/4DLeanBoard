@@ -123,5 +123,31 @@ class Model{
 		}
 	}
 
+	/**
+		get all contractors of the model
+		@returns {Array[Contractor]} return null if no contractor exist
+	*/
+	getContractors(){
+		const contractors = [];
+		const phases = [];
+		const milestones = this.getMilestones();
+		for(let m in milestones){
+			const phases = milestones[m].getPhases();
+			for(let p in phases){
+				const contractor = phases[p].getContractor();
+				if(!contractors.includes(contractor)) contractors[contractors.length] = contractor;
+			}
+		}
+		return contractors;
+	}
+
+	/**
+		get duration of the model
+		@returns {int}
+	*/
+	getDuration(){
+		return 24;
+	}
+
 }
 export default Model;

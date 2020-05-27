@@ -8,6 +8,7 @@ import TaskTeam from "./TaskTeam.class.js";
 import Timeline from "./Timeline.class.js";
 import Level from "./Level.class.js";
 import Zone from "./Zone.class.js";
+import Contractor from "./Contractor.class.js";
 
 /**
  * @class Loader
@@ -46,6 +47,9 @@ class Loader{
 		model.addMilestone(milestone);
 		const phase = new Phase();
 		milestone.addPhase(phase);
+
+		const contractor = new Contractor();
+		phase.setContractor(contractor);
 
 		//CSV Informations
 		const lines = CSVFile.split('\n');
@@ -87,9 +91,9 @@ class Loader{
 
 				if(notExist){
 					teams[teams.length] = new TaskTeam(columns[10]);
-					task.addTaskTeam(teams[teams.length - 1]);
+					task.setTaskTeam(teams[teams.length - 1]);
 				}else{
-					task.addTaskTeam(teams[i-1]);
+					task.setTaskTeam(teams[i-1]);
 				}
 
 				task.setZone(new Zone(columns[9]));

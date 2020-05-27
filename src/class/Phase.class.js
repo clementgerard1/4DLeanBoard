@@ -96,6 +96,7 @@ class Phase extends PlanningObject{
 	*/
 	addTask(task = new Task()){
 		this.tasks[task.id] = task;
+		task.setParentPhase(this);
 	}
 
 	/**
@@ -108,6 +109,7 @@ class Phase extends PlanningObject{
 		}else if(!(Object.keys(this.tasks).includes("" + task.id))){
 			console.error("removeTask(task) : phase " + task + " not in the collection");
 		}else{
+			task.setParentPhase(null);
 			delete this.tasks[task.id];
 		}
 	}
@@ -200,6 +202,19 @@ class Phase extends PlanningObject{
 	*/
 	getFollowingPhases(){
 		return super.getFollowings();
+	}
+
+	/**
+		Get all taskTeams of the phase
+		@returns {Array} Array of TaskTeams
+	*/
+	getTaskTeams(){
+		const toReturn = [];
+		for( let t in this.tasks){
+			const taskTeam = this.tasks[t].getTaskTeam();
+			if(!toReturn.includes(taskTeam)) toReturn[toReturn.length] = taskTeam;
+		}
+		return toReturn;
 	}
 
 }

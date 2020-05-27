@@ -1,0 +1,225 @@
+/* OLD FORMAT - CSV
+4DID,TID,Task,Start,End,Duration,Previous,Next,Level,Zone,Team
+101,101,Ground slab pouring,01/02/2021,10/02/2021,10,0,102,0,A,Masons 1
+102,102,Walls cladding,10/02/2021,10/02/2021,1,101,103,0,A,Masons 2
+103,103,Walls cladding,10/02/2021,11/02/2021,2,102,104,0,A,Masons 1
+104,104,Walls cladding,10/02/2021,12/02/2021,3,103,105,0,A,Masons 2
+105,105,Walls cladding,10/02/2021,13/02/2021,4,104,106,0,A,Masons 1
+106,106,Windows installation,13/02/2021,13/02/2021,1,105,107,0,A,Carpenters
+107,107,Doors installation,13/02/2021,13/02/2021,1,106,108,0,A,Carpenters
+108,108,Roof installation,13/02/2021,20/02/2021,8,107,0,1,A,Carpenters
+*/
+
+{
+	"milestones" : {
+
+		"MilestoneID1" : {
+
+			"Name" : "quelquechose",
+
+			"requirements" : {
+				"requirement1" : "quelquechose",
+			},
+			
+			"phases" : {
+
+				"PhaseID1" : {		
+
+					"name" : "quelquechose",	
+					"contractor" : "contractor1",		
+					"color" : "blue",
+					"tasks" : {
+						"101" : {
+
+							"4DID" : 101,
+							"Name" : "Ground slab pouring",
+							"Start" : "01/02/2021",
+							"End" : "10/02/2021",
+							"Duration" : 10,
+							"Previous" : 0,
+							"Next" : 102,
+							"Level" : 0,
+							"Zone" : "A",
+							"Team" : "Masons 1",
+							"operations" : {
+								"operationID1" : {
+									/* ... */
+								},
+								"operationID2" : {
+									/* ... */
+								},
+							}
+
+						},
+						"102" : {
+
+							"4DID" : 102,
+							"Name" : "Walls cladding",
+							"Start" : "10/02/2021",
+							"End" : "10/02/2021",
+							"Duration" : 1,
+							"Previous" : 101,
+							"Next" : 103,
+							"Level" : 0,
+							"Zone" : "A",
+							"Team" : "Masons 2",
+							"operations" : {
+								"operationID1" : {
+									/* ... */
+								},
+								"operationID2" : {
+									/* ... */
+								},
+							}
+
+						},
+						"103" : {
+
+							"4DID" : 103,
+							"Name" : "Walls cladding",
+							"Start" : "10/02/2021",
+							"End" : "10/02/2021",
+							"Duration" : 2,
+							"Previous" : 102,
+							"Next" : 104,
+							"Level" : 0,
+							"Zone" : "A",
+							"Team" : "Masons 1",
+							"operations" : {
+								"operationID1" : {
+									/* ... */
+								},
+								"operationID2" : {
+									/* ... */
+								},
+							}
+
+						},
+						"104" : {
+
+							"4DID" : 104,
+							"Name" : "Walls cladding",
+							"Start" : "10/02/2021",
+							"End" : "10/02/2021",
+							"Duration" : 3,
+							"Previous" : 103,
+							"Next" : 105,
+							"Level" : 0,
+							"Zone" : "A",
+							"Team" : "Masons 2",
+							"operations" : {
+								"operationID1" : {
+									/* ... */
+								},
+								"operationID2" : {
+									/* ... */
+								},
+							}
+
+						},
+						"105" : {
+
+							"4DID" : 105,
+							"Name" : "Walls cladding",
+							"Start" : "10/02/2021",
+							"End" : "10/02/2021",
+							"Duration" : 4,
+							"Previous" : 104,
+							"Next" : 106,
+							"Level" : 0,
+							"Zone" : "A",
+							"Team" : "Masons 1",
+							"operations" : {
+								"operationID1" : {
+									/* ... */
+								},
+								"operationID2" : {
+									/* ... */
+								},
+							}
+
+						},
+						"106" : {
+
+							"4DID" : 106,
+							"Name" : "Windows installation",
+							"Start" : "13/02/2021",
+							"End" : "13/02/2021",
+							"Duration" : 1,
+							"Previous" : 105,
+							"Next" : 107,
+							"Level" : 0,
+							"Zone" : "A",
+							"Team" : "Carpenters",
+							"operations" : {
+								"operationID1" : {
+									/* ... */
+								},
+								"operationID2" : {
+									/* ... */
+								},
+							}
+
+						},
+						"107" : {
+
+							"4DID" : 107,
+							"Name" : "Doors installation",
+							"Start" : "13/02/2021",
+							"End" : "13/02/2021",
+							"Duration" : 1,
+							"Previous" : 106,
+							"Next" : 108,
+							"Level" : 0,
+							"Zone" : "A",
+							"Team" : "Carpenters",
+							"operations" : {
+								"operationID1" : {
+									/* ... */
+								},
+								"operationID2" : {
+									/* ... */
+								},
+							}
+
+						},
+						"108" : {
+
+							"4DID" : 108,
+							"Name" : "Roof installation",
+							"Start" : "13/02/2021",
+							"End" : "20/02/2021",
+							"Duration" : 8,
+							"Previous" : 107,
+							"Next" : 0,
+							"Level" : 1,
+							"Zone" : "A",
+							"Team" : "Carpenters",
+							"operations" : {
+								"operationID1" : {
+									/* ... */
+								},
+								"operationID2" : {
+									/* ... */
+								},
+							}
+
+						},
+					}
+				},
+
+				"PhaseID2" : {		
+					/* IDEM */
+				},
+			}
+		},
+
+		"MilestoneName2" : {
+			/*...*/
+		}
+
+
+	},
+	"startDate" : "01/02/2021",
+	"others" : "...",
+}

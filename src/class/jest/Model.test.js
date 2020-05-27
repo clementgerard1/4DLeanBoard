@@ -1,6 +1,8 @@
 import Model from '../Model.class.js';
 import Utils from '../Utils.class.js';
 import Milestone from '../Milestone.class.js';
+import Phase from '../Phase.class.js';
+import Contractor from '../Contractor.class.js';
 
 beforeEach(() => {
   Utils.ids = {
@@ -71,7 +73,22 @@ test('setLastModifiedDate()', () => {
 test('setStartDate()', () => {
 	const model = new Model();
 	const date = new Date(new Date().setDate(new Date().getDate()-1));
-	console.log(date);
 	model.setStartDate(date);
   	expect(model.getStartDate() === date).toBe(true);
+});
+
+test('getContractors()', () => {
+	const model = new Model();
+	const milestone = new Milestone();
+	model.addMilestone(milestone);
+	const phase = new Phase();
+	const phase2 = new Phase();
+	milestone.addPhase(phase);
+	milestone.addPhase(phase2);
+
+	const contractor = new Contractor();
+	phase.setContractor(contractor);
+	const contractor2 = new Contractor();
+	phase2.setContractor(contractor2);
+  expect(model.getContractors().length).toBe(2);
 });
