@@ -59,6 +59,21 @@ test('removeFollowingTask(task)', () => {
   expect(Object.keys(task.getFollowingTasks()).length).toBe(0);
 });
 
+test('addPreviousTask(task)', () => {
+	const task = new Task();
+	const task2 = new Task();
+	task.addPreviousTask(task2);
+  expect(Object.keys(task.getPreviousTasks()).length).toBe(1);
+});
+
+test('removePreviousTask(task)', () => {
+	const task = new Task();
+	const task2 = new Task();
+	task.addPreviousTask(task2);
+	task.removePreviousTask(task2);
+  expect(Object.keys(task.getPreviousTasks()).length).toBe(0);
+});
+
 test('addOperation()', () => {
 	const task = new Task();
 	task.addOperation();
@@ -130,4 +145,18 @@ test('setParentPhase(phase)', () => {
 	const phase = new Phase();
 	task.setParentPhase(phase);
 	expect(task.getParentPhase()).toBe(phase);
+});
+
+test('setStartDate(date)', () => {
+	const phase = new Phase();
+	const date = new Date();
+	phase.setStartDate(date);
+	expect(phase.getStartDate()).toBe(date);
+});
+
+test('setEndDate(date)', () => {
+	const phase = new Phase();
+	const date = new Date();
+	phase.setEndDate(date);
+	expect(phase.getEndDate()).toBe(date);
 });

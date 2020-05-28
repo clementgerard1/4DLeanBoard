@@ -14,7 +14,11 @@ class PlanningObject{
 	constructor(name, id){
 		this.id = id;
 		this.name = name;
+		this.duration = null;
+		this.startDate = null;
+		this.endDate = null;
 		this.followings = {};
+		this.previous = {};
 		this.properties = {};
 	}
 
@@ -153,9 +157,99 @@ class PlanningObject{
 
 	/**
 		Get duration of the PlanningObject
-		@abstract
 	*/
-	getDuration(){}	
+	getDuration(){
+		return this.duration;
+	}	
+
+	/**
+		Set duration of the PlanningObject
+		@param duration {int}
+	*/
+	setDuration(duration){
+		if(typeof duration == "string") duration = parseInt(duration);
+		if(typeof duration != "number"){
+			console.error("setDuration(duration) need a number ; provided : " + duration);
+		}else{
+			this.duration = duration;
+		}
+	}	
+
+	/**
+		Add a previous element
+		@param {PlanningObject} element element to add to previous collection
+		@param {ObjectClass} type type of the element to add to previous collection
+	*/
+	addPrevious(element, type = PlanningObject){
+		if(!(element instanceof type)){
+			console.error("addPrevious(element) need PlanningObject ; provided : " + element);
+		}else{
+			this.previous[element.id] = element;
+		}
+	}
+
+	/**
+		Remove a previous element
+		@param {PlanningObject} element PlanningObject to remove of the previous collection
+		@param {ObjectClass} type type of the element to add to previous collection
+	*/
+	removePrevious(element, type = PlanningObject){
+		if(!(element instanceof type)){
+			console.error("removePrevious(element) : element " + element + " not of type PlanningObject");
+		}else if(!(Object.keys(this.previous).includes("" + element.id))){
+			console.error("removePrevious(element) : element " + element + " not in the collection");
+		}else{
+			delete this.previous[element.id];
+		}
+	}
+
+	/**
+		Get all previousPlanningObjects
+		@returns {Array} Array of PlanningObject
+	*/
+	getPrevious(){
+		return this.previous;
+	}
+
+	/**
+		Get startDate of the PlanningObject
+		@returns {Date}
+	*/
+	getStartDate(){
+		return this.startDate;
+	}	
+
+	/**
+		Set startDate of the PlanningObject
+		@param date {int}
+	*/
+	setStartDate(date){
+		if(!(date instanceof Date)){
+			console.error("setStartDate(date) need a Date ; provided : " + date);
+		}else{
+			this.startDate = date;
+		}
+	}	
+
+	/**
+		Get endDate of the PlanningObject
+		@returns {Date}
+	*/
+	getEndDate(){
+		return this.endDate;
+	}	
+
+	/**
+		Set endDate of the PlanningObject
+		@param date {int}
+	*/
+	setEndDate(date){
+		if(!(date instanceof Date)){
+			console.error("setEndDate(date) need a Date ; provided : " + date);
+		}else{
+			this.endDate = date;
+		}
+	}	
 
 }
 

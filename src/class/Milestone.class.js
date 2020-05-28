@@ -112,5 +112,29 @@ class Milestone extends PlanningObject{
 		return super.getFollowings();
 	}
 
+	/**
+		Add a previous milestone
+		@param {Milestone} milestone milestone to add to previous milestones collection
+	*/
+	addPreviousMilestone(milestone){
+		super.addPrevious(milestone, Milestone);
+	}
+
+	/**
+		Remove a following milestone
+		@param {Milestone} milestone Milestone to remove of the previous milestone collection
+	*/
+	removePreviousMilestone(milestone){
+		super.removePrevious(milestone, Milestone);
+	}
+
+	/**
+		Get all followingMilestones
+		@returns {Array} Array of Milestone
+	*/
+	getPreviousMilestones(){
+		return super.getPrevious();
+	}
+
 }
 export default Milestone;

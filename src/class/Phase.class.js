@@ -206,6 +206,30 @@ class Phase extends PlanningObject{
 	}
 
 	/**
+		Add a previous phase
+		@param {Phase} phase phase to add to previous phases collection
+	*/
+	addPreviousPhase(phase){
+		super.addPrevious(phase, Phase);
+	}
+
+	/**
+		Remove a previous phase
+		@param {Phase} phase Phase to remove of the previous phase collection
+	*/
+	removePreviousPhase(phase){
+		super.removePrevious(phase, Phase);
+	}
+
+	/**
+		Get all previousPhases
+		@returns {Array} Array of Phase
+	*/
+	getPreviousPhases(){
+		return super.getPrevious();
+	}
+
+	/**
 		Get all taskTeams of the phase
 		@returns {Array} Array of TaskTeams
 	*/

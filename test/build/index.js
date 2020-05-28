@@ -149,7 +149,7 @@ eval("var g;\n\n// This works in non-strict mode\ng = (function() {\n\treturn th
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("var test1 = __webpack_require__(/*! ./test1/test1.js */ \"./test/src/test1/test1.js\");\n\nvar test2 = __webpack_require__(/*! ./test2/test2.js */ \"./test/src/test2/test2.js\");\n\nvar test3 = __webpack_require__(/*! ./test3/test3.js */ \"./test/src/test3/test3.js\");\n\nfor (var n in window.boardClasses) {\n  eval(\"window.\" + n + \" = window.boardClasses[n];\");\n}\n\nfor (var m in window.vueClasses) {\n  eval(\"window.\" + m + \" = window.vueClasses[m];\");\n}\n\nvar str = window.location.href.split(\"/\");\n\nif (str[str.length - 1] != \"\") {\n  eval(str[str.length - 1] + \"()\");\n} else if (str[str.length - 2] != \"\" && str[str.length - 2] != \"localhost:3000\") {\n  eval(str[str.length - 2] + \"()\");\n}\n\n//# sourceURL=webpack:///./test/src/index.js?");
+eval("var test1 = __webpack_require__(/*! ./test1/test1.js */ \"./test/src/test1/test1.js\");\n\nvar test2 = __webpack_require__(/*! ./test2/test2.js */ \"./test/src/test2/test2.js\");\n\nvar test3 = __webpack_require__(/*! ./test3/test3.js */ \"./test/src/test3/test3.js\");\n\nvar test4 = __webpack_require__(/*! ./test4/test4.js */ \"./test/src/test4/test4.js\");\n\nfor (var n in window.boardClasses) {\n  eval(\"window.\" + n + \" = window.boardClasses[n];\");\n}\n\nfor (var m in window.vueClasses) {\n  eval(\"window.\" + m + \" = window.vueClasses[m];\");\n}\n\nvar str = window.location.href.split(\"/\");\n\nif (str[str.length - 1] != \"\") {\n  eval(str[str.length - 1] + \"()\");\n} else if (str[str.length - 2] != \"\" && str[str.length - 2] != \"localhost:3000\") {\n  eval(str[str.length - 2] + \"()\");\n}\n\n//# sourceURL=webpack:///./test/src/index.js?");
 
 /***/ }),
 
@@ -183,6 +183,17 @@ eval("module.exports = function () {\n  window.addEventListener(\"load\", functi
 /***/ (function(module, exports, __webpack_require__) {
 
 eval("var Vue = __webpack_require__(/*! vue/dist/vue.esm.js */ \"./node_modules/vue/dist/vue.esm.js\")[\"default\"];\n\nmodule.exports = function () {\n  window.addEventListener(\"load\", function () {\n    init();\n  });\n};\n\nfunction init() {\n  var app = new Vue({\n    el: '#root',\n    components: {\n      task: V_task\n    },\n    data: {\n      message: \"Voilà le message\"\n    },\n    template: \"\\n \\t\\t<div>\\n \\t\\t\\t<task></task>\\n \\t\\t\\t<p>{{message}}</p>\\n \\t\\t</div>\\n \\t\\t\"\n  });\n}\n\n//# sourceURL=webpack:///./test/src/test3/test3.js?");
+
+/***/ }),
+
+/***/ "./test/src/test4/test4.js":
+/*!*********************************!*\
+  !*** ./test/src/test4/test4.js ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var Vue = __webpack_require__(/*! vue/dist/vue.esm.js */ \"./node_modules/vue/dist/vue.esm.js\")[\"default\"];\n\nmodule.exports = function () {\n  window.addEventListener(\"load\", function () {\n    init();\n  });\n};\n\nfunction init() {\n  var app = new Vue({\n    el: '#root',\n    components: {\n      task: V_task\n    },\n    data: {\n      message: \"Voilà le message\"\n    },\n    template: \"\\n \\t\\t<div>\\n \\t\\t\\t<task></task>\\n \\t\\t\\t<p>{{message}}</p>\\n \\t\\t</div>\\n \\t\\t\"\n  });\n}\n\n//# sourceURL=webpack:///./test/src/test4/test4.js?");
 
 /***/ })
 

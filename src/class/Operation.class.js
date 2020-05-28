@@ -74,5 +74,29 @@ class Operation extends PlanningObject{
 		return super.getFollowings();
 	}
 
+	/**
+		Add a previous operation
+		@param {Operation} operation operation to add to previous operations collection
+	*/
+	addPreviousOperation(operation){
+		super.addPrevious(operation, Operation);
+	}
+
+	/**
+		Remove a previous operation
+		@param {Operation} operation Operation to remove of the previous operation collection
+	*/
+	removePreviousOperation(operation){
+		super.removePrevious(operation, Operation);
+	}
+
+	/**
+		Get all previousOperations
+		@returns {Array} Array of Operation
+	*/
+	getPreviousOperations(){
+		return super.getPrevious();
+	}
+
 }
 export default Operation;

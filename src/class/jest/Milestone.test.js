@@ -69,6 +69,21 @@ test('removeFollowingMilestone(milestone)', () => {
   expect(Object.keys(milestone.getFollowingMilestones()).length).toBe(0);
 });
 
+test('addPreviousMilestone(milestone)', () => {
+	const milestone = new Milestone();
+	const milestone2 = new Milestone();
+	milestone.addPreviousMilestone(milestone2);
+  expect(Object.keys(milestone.getPreviousMilestones()).length).toBe(1);
+});
+
+test('removePreviousMilestone(milestone)', () => {
+	const milestone = new Milestone();
+	const milestone2 = new Milestone();
+	milestone.addPreviousMilestone(milestone2);
+	milestone.removePreviousMilestone(milestone2);
+  expect(Object.keys(milestone.getPreviousMilestones()).length).toBe(0);
+});
+
 test('addRequirement()', () => {
 	const milestone = new Milestone();
 	milestone.addRequirement();
@@ -94,4 +109,18 @@ test('getRequirements()', () => {
 	const milestone = new Milestone();
 	Array(10).fill().map(() => milestone.addRequirement());
   expect(Object.keys(milestone.getRequirements()).length).toBe(10);
+});
+
+test('setStartDate(date)', () => {
+	const milestone = new Milestone();
+	const date = new Date();
+	milestone.setStartDate(date);
+	expect(milestone.getStartDate()).toBe(date);
+});
+
+test('setEndDate(date)', () => {
+	const milestone = new Milestone();
+	const date = new Date();
+	milestone.setEndDate(date);
+	expect(milestone.getEndDate()).toBe(date);
 });

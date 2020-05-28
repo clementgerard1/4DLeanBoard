@@ -154,6 +154,21 @@ test('removeFollowingPhase(phase)', () => {
   expect(Object.keys(phase.getFollowingPhases()).length).toBe(0);
 });
 
+test('addPreviousPhase(phase)', () => {
+	const phase = new Phase();
+	const phase2 = new Phase();
+	phase.addPreviousPhase(phase2);
+  expect(Object.keys(phase.getPreviousPhases()).length).toBe(1);
+});
+
+test('removePreviousPhase(phase)', () => {
+	const phase = new Phase();
+	const phase2 = new Phase();
+	phase.addPreviousPhase(phase2);
+	phase.removePreviousPhase(phase2);
+  expect(Object.keys(phase.getPreviousPhases()).length).toBe(0);
+});
+
 test('getTaskTeams()', () => {
 	const phase = new Phase();
 	const task = new Task();
@@ -174,5 +189,19 @@ test('setColorClass(color)', () => {
 	const phase = new Phase();
 	phase.setColorClass("orange");
 	expect(phase.getColorClass()).toBe("orange");
+});
+
+test('setStartDate(date)', () => {
+	const phase = new Phase();
+	const date = new Date();
+	phase.setStartDate(date);
+	expect(phase.getStartDate()).toBe(date);
+});
+
+test('setEndDate(date)', () => {
+	const phase = new Phase();
+	const date = new Date();
+	phase.setEndDate(date);
+	expect(phase.getEndDate()).toBe(date);
 });
 

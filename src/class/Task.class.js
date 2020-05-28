@@ -61,6 +61,30 @@ class Task extends PlanningObject{
 	}
 
 	/**
+		Add a previous task
+		@param {Task} task task to add to previous tasks collection
+	*/
+	addPreviousTask(task){
+		super.addPrevious(task, Task);
+	}
+
+	/**
+		Remove a previous task
+		@param {Task} task Task to remove of the previous task collection
+	*/
+	removePreviousTask(task){
+		super.removePrevious(task, Task);
+	}
+
+	/**
+		Get all previousTasks
+		@returns {Array} Array of Task
+	*/
+	getPreviousTasks(){
+		return super.getPrevious();
+	}
+
+	/**
 		Add a operation
 		@param {Operation} [operation = new Operation] Operation to add to the collection
 	*/
@@ -226,7 +250,7 @@ class Task extends PlanningObject{
 		@param {Phase} phase
 	*/
 	setParentPhase(phase){
-		if(!(phase instanceof Phase)){
+		if(phase != null && !(phase instanceof Phase)){
 			console.error("setParentPhase(phase) need a Phase object ; provided : " + phase);
 		}else{
 			this.parentPhase = phase;

@@ -54,3 +54,32 @@ test('removeFollowingOperation(operation)', () => {
 	operation.removeFollowingOperation(operation2);
   expect(Object.keys(operation.getFollowingOperations()).length).toBe(0);
 });
+
+test('addPreviousOperation(operation)', () => {
+	const operation = new Operation();
+	const operation2 = new Operation();
+	operation.addPreviousOperation(operation2);
+  expect(Object.keys(operation.getPreviousOperations()).length).toBe(1);
+});
+
+test('removePreviousOperation(operation)', () => {
+	const operation = new Operation();
+	const operation2 = new Operation();
+	operation.addPreviousOperation(operation2);
+	operation.removePreviousOperation(operation2);
+  expect(Object.keys(operation.getPreviousOperations()).length).toBe(0);
+});
+
+test('setStartDate(date)', () => {
+	const operation = new Operation();
+	const date = new Date();
+	operation.setStartDate(date);
+	expect(operation.getStartDate()).toBe(date);
+});
+
+test('setEndDate(date)', () => {
+	const operation = new Operation();
+	const date = new Date();
+	operation.setEndDate(date);
+	expect(operation.getEndDate()).toBe(date);
+});
