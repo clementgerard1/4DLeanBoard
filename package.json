@@ -9,7 +9,8 @@
     "test": "MODE=test; webpack --config ./webpack.test.js  & node server.js $MODE",
     "doc": "rm -rf ./src/class/doc; ./node_modules/.bin/jsdoc -r ./src/class -d ./src/class/doc",
     "jest": "jest src/class/jest --watch",
-    "commit": "npm run doc; npm run jest; MODE=prod; cp -r public/* dist; webpack --config ./webpack.prod.js; git add --all; git commit -m "
+    "commit": "npm run doc; npm run jest; MODE=prod; cp -r public/* dist; webpack --config ./webpack.prod.js; git add --all; git commit -m ",
+    "deploy": "gh-pages -d dist"
   },
   "author": "Clément Gérard",
   "devDependencies": {
@@ -21,6 +22,7 @@
     "babel-jest": "^26.0.1",
     "babel-loader": "^8.1.0",
     "css-loader": "^3.5.3",
+    "gh-pages": "^2.2.0",
     "jest": "^26.0.1",
     "jest-html-reporter": "^3.1.3",
     "jsdoc": "^3.6.4",
