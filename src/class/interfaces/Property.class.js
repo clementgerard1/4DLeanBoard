@@ -1,12 +1,18 @@
 import Utils from "../Utils.class.js";
 /**
- * @class Property
- * @classdesc Property abstract object which represents a generic property
+
  */
 class Property{
 
+	#id;
+	#name;
+
 	/**
-		Property Constructor - For Heritage => Don't instantiate it
+		@class Property
+ 		@classdesc Property abstract object which represents a generic property  - Don't instanciate it !
+
+ 		@constructs 
+ 		
 		@param {string} name Name of property.
 		@param {int} id id of the property
 	*/
@@ -14,8 +20,8 @@ class Property{
 		if(typeof id == "undefined"){
 			id = Utils.getId("property");
 		}
-		this.id = id;
-		this.name = name;
+		this.#id = id;
+		this.#name = name;
 	}
 
 	/**
@@ -23,7 +29,7 @@ class Property{
 		@returns {int} id of the property
 	*/
 	getId(){
-		return this.id;
+		return this.#id;
 	}
 
 	/**
@@ -31,7 +37,7 @@ class Property{
 		@returns {string} name of the property
 	*/
 	getName(){
-		return this.name;
+		return this.#name;
 	}	
 
 }

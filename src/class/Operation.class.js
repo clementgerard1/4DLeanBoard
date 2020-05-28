@@ -2,24 +2,26 @@ import Utils from "./Utils.class.js";
 import OperationUnit from "./OperationUnit.class.js";
 import PlanningObject from "./interfaces/PlanningObject.class";
 
-
-/**
- * @class Operation
- * @extends PlanningObject
- * @classdesc Operation object represents a operation of the lean board
- */
 class Operation extends PlanningObject{
 
+	#operationUnit;
+	#duration;
+
 	/**
-		Operation Constructor
+ 		@class Operation
+ 		@extends PlanningObject
+ 		@classdesc Operation object represents a operation of the lean board
+
+		@constructs
+
 		@param {string} [name=""] Name of operation.
 		@param {uint} [duration=""] Duration of the operation.
 		@param {int} [id=automaticaly generated] id of the operation
 	*/
 	constructor(name = "", duration = 1, id = Utils.getId("operation")){
 		super(name, id);
-		this.operationUnit = null;
-		this.duration = duration;
+		this.#operationUnit = null;
+		this.#duration = duration;
 	}
 
 	/**
@@ -27,7 +29,7 @@ class Operation extends PlanningObject{
 		@returns {int} operation duration
 	*/
 	getDuration(){
-		return this.duration
+		return this.#duration
 	}
 
 	/**
@@ -35,7 +37,7 @@ class Operation extends PlanningObject{
 		@returns {OperationUnit} operationUnit of the operation
 	*/
 	getOperationUnit(){
-		return this.operationUnit
+		return this.#operationUnit
 	}
 
 	/**
@@ -46,7 +48,7 @@ class Operation extends PlanningObject{
 		if(!(operationUnit instanceof OperationUnit)){
 			console.error("setOperationUnit(operationUnit) need a OperationUnit object ; provided : " + operationUnit);
 		}else{
-			this.operationUnit = operationUnit;
+			this.#operationUnit = operationUnit;
 		}
 	}
 

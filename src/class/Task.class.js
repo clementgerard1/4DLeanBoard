@@ -10,24 +10,29 @@ import State from './State.class.js';
 import ConstructionType from './ConstructionType.class.js';
 import PlanningObject from "./interfaces/PlanningObject.class";
 
-/**
- * @class Task
- * @extends PlanningObject
- * @classdesc Task object represents a task of the lean board
- */
 class Task extends PlanningObject{
 
+	#operations;
+	#object4D;
+	#taskTeam;
+	#parentPhase;
+
 	/**
-		Task Constructor
+ 		@class Task
+ 		@extends PlanningObject
+ 		@classdesc Task object represents a task of the lean board
+
+		@constructs
+
 		@param {string} [name=""] Name of task.
 		@param {int} [id=automaticaly generated] id of the task
 	*/
 	constructor(name = "", id = Utils.getId("task")){
 		super(name, id);
-		this.operations = {};
-		this.object4D = null;
-		this.taskTeam = null;
-		this.parentPhase = null;
+		this.#operations = {};
+		this.#object4D = null;
+		this.#taskTeam = null;
+		this.#parentPhase = null;
 
 		//LPS Requirement
 		for(let i = 1 ; i <= 7 ; i++){
@@ -89,7 +94,7 @@ class Task extends PlanningObject{
 		@param {Operation} [operation = new Operation] Operation to add to the collection
 	*/
 	addOperation(operation = new Operation()){
-		this.operations[operation.id] = operation;
+		this.#operations[operation.getId()] = operation;
 	}
 
 	/**
@@ -99,10 +104,10 @@ class Task extends PlanningObject{
 	removeOperation(operation){
 		if(!(operation instanceof Operation)){
 			console.error("removeOperation(operation) : operation " + operation + " not of type Operation");
-		}else if(!(Object.keys(this.operations).includes("" + operation.id))){
+		}else if(!(Object.keys(this.#operations).includes("" + operation.getId()))){
 			console.error("removeOperation(operation) : operation " + operation + " not in the collection");
 		}else{
-			delete this.operations[operation.id];
+			delete this.#operations[operation.getId()];
 		}
 	}
 
@@ -111,7 +116,7 @@ class Task extends PlanningObject{
 		@returns {Array} Array of Operation
 	*/
 	getOperations(){
-		return this.operations;
+		return this.#operations;
 	}
 
 	/**
@@ -120,11 +125,11 @@ class Task extends PlanningObject{
 		@returns {Operation} Operation corresponding
 	*/
 	getOperation(id){
-		if(typeof this.operations[id] == "undefined"){
+		if(typeof this.#operations[id] == "undefined"){
 			console.error("getOperation(id) : id " + id + " unknowned on operations collection")
 			return null;
 		}else{
-			return this.operations[id];
+			return this.#operations[id];
 		}
 	}
 
@@ -133,7 +138,7 @@ class Task extends PlanningObject{
 		@returns {Object4D} object4D of the task
 	*/
 	getObject4D(){
-		return this.object4D;
+		return this.#object4D;
 	}
 
 	/**
@@ -144,7 +149,7 @@ class Task extends PlanningObject{
 		if(!(object4D instanceof Object4D)){
 			console.error("setObject4D(Object4D) need a Object4D object ; provided : " + object4D);
 		}else{
-			this.object4D = object4D;
+			this.#object4D = object4D;
 		}
 	}
 
@@ -156,7 +161,7 @@ class Task extends PlanningObject{
 		if(!(taskTeam instanceof TaskTeam)){
 			console.error("setTaskTeam(taskTeam) : taskTeam " + taskTeam + " not of type TaskTeam");
 		}else{
-			this.taskTeam = taskTeam;
+			this.#taskTeam = taskTeam;
 		}
 	}
 
@@ -165,7 +170,7 @@ class Task extends PlanningObject{
 		@returns {Array} Array of TaskTeam
 	*/
 	getTaskTeam(){
-		return this.taskTeam;
+		return this.#taskTeam;
 	}
 
 	/**
@@ -173,7 +178,7 @@ class Task extends PlanningObject{
 		@returns {int} duration
 	*/
 	getDuration(){
-		return this.operations[Object.keys(this.operations)[0]].getDuration();
+		return this.#operations[Object.keys(this.#operations)[0]].getDuration();
 	}
 
 	/**
@@ -253,7 +258,7 @@ class Task extends PlanningObject{
 		if(phase != null && !(phase instanceof Phase)){
 			console.error("setParentPhase(phase) need a Phase object ; provided : " + phase);
 		}else{
-			this.parentPhase = phase;
+			this.#parentPhase = phase;
 		}
 	}
 
@@ -262,7 +267,7 @@ class Task extends PlanningObject{
 		@returns {Phase}
 	*/
 	getParentPhase(){
-		return this.parentPhase;
+		return this.#parentPhase;
 	}
 
 }

@@ -1,19 +1,22 @@
 import Utils from './Utils.class.js';
 
-/**
- * @class Object3D 
- * @classdesc Object3D
- */
 class Object3D{
 
+	#id;
+	#name;
+
 	/**
-		Object3D Constructor
+	 	@class Object3D 
+	 	@classdesc Object3D
+	 
+		@constructs
+
 		@param {string} [name=""] Name of object3D.
 		@param {int} [id=automaticaly generated] id of the object3D
 	*/
 	constructor(name = "", id = Utils.getId("object3D")){
-		this.id = id;
-		this.name = name;
+		this.#id = id;
+		this.#name = name;
 	}
 
 	/**
@@ -21,7 +24,7 @@ class Object3D{
 		@returns {string} name of the object3D
 	*/
 	getName(){
-		return this.name;
+		return this.#name;
 	}	
 
 	/**
@@ -29,7 +32,7 @@ class Object3D{
 		@returns {string} object3D id
 	*/
 	getId(){
-		return this.id;
+		return this.#id;
 	}
 
 }

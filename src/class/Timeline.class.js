@@ -1,37 +1,40 @@
 import Task from "./Task.class.js";
 
-/**
- * @class Timeline
- * @classdesc Timeline of the planning
- */
 class Timeline{
 
+	#model;
+	#steps;
+	#starts;
 
 	/**
-		Timeline Constructor
+ 		@class Timeline
+		@classdesc Timeline of the planning
+ 
+		@constructs
+
 		@param {Model} [model] Name of model of the timeline.
 		@param {int} [starts] list of start nodes.
 	*/
 	constructor(model, starts = null){
-		this.model = model;
-		this.steps = [];
-		this.starts = starts;
+		this.#model = model;
+		this.#steps = [];
+		this.#starts = starts;
 		this._constructTimeline();
 	}
 
 	_constructTimeline(){
-		for(let s in this.starts){
-			const duration =  this.starts[s].getDuration();
-			this._addTask(this.starts[s], 0, duration);
-			this._nextNode(this.starts[s], duration);
+		for(let s in this.#starts){
+			const duration =  this.#starts[s].getDuration();
+			this._addTask(this.#starts[s], 0, duration);
+			this._nextNode(this.#starts[s], duration);
 		}
 	}
 
 	_addTask(task, start, duration){
 		for(let i = start; i < (start + duration); i++){
 			this._initialiseStepArray(i);
-			this.steps[i].tasks.push(task);
-			this.steps[i].phases.push(task.getParentPhase());
+			this.#steps[i].tasks.push(task);
+			this.#steps[i].phases.push(task.getParentPhase());
 		}
 	}
 
@@ -44,7 +47,7 @@ class Timeline{
 	}
 
 	_initialiseStepArray(t){		
-			if(typeof this.steps[t] == "undefined") this.steps[t] = { 
+			if(typeof this.#steps[t] == "undefined") this.#steps[t] = { 
 				phases : [],
 				tasks : []
 			};
@@ -56,7 +59,7 @@ class Timeline{
 		@returns {Model} 
 	*/
 	getModel(){
-		return this.model;
+		return this.#model;
 	}
 
 	/**
@@ -64,7 +67,7 @@ class Timeline{
 		@param {int} time date of the information (on relative format).
 	*/
 	getValueAtTime(time){
-		return this.steps[time];
+		return this.#steps[time];
 	}
 
 	/**
@@ -76,7 +79,7 @@ class Timeline{
 	getTaskTeamsBetweenTwoDates(start, end){
 		const teams = [];
 		for(let i = start; i <= end ; i++){
-			const tasks = this.steps[i].tasks;
+			const tasks = this.#steps[i].tasks;
 			for(let t in tasks){
 				const tTeams = tasks[t].getTaskTeams();
 				for(let team in tTeams){
@@ -98,7 +101,7 @@ class Timeline{
 	getPhasesBetweenTwoDates(start, end){
 		const toReturn = [];
 		for(let i = start; i <= end ; i++){
-			const phases = this.steps[i].phases;
+			const phases = this.#steps[i].phases;
 			for(let p in phases){
 				if(!toReturn.includes(phases[p])){
 					toReturn.push(phases[p]);
@@ -115,7 +118,7 @@ class Timeline{
 		@returns {Task} return null if no task exist at this moment 
 	*/
 	getTaskByTeam(time, team){
-		const tasks = this.steps[time].tasks;
+		const tasks = this.#steps[time].tasks;
 		for(let t in tasks){
 			if(tasks[t] instanceof Task){
 				let isIn = false;
@@ -139,8 +142,8 @@ class Timeline{
 		const toReturn = [];
 		for(let t in teams){
 			for(let i = start ; i <= end ; i++){
-				for(let tt in this.steps[i].tasks){
-					if(!toReturn.includes(teams[t]) && teams[t].getId() == this.steps[i].tasks[tt].getTaskTeam().getId()) toReturn[toReturn.length] = teams[t];
+				for(let tt in this.#steps[i].tasks){
+					if(!toReturn.includes(teams[t]) && teams[t].getId() == this.#steps[i].tasks[tt].getTaskTeam().getId()) toReturn[toReturn.length] = teams[t];
 				}
 			}
 		}

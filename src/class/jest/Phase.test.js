@@ -40,7 +40,7 @@ test('addTask(task)', () => {
 	const phase = new Phase();
 	const task = new Task();
 	phase.addTask(task);
-  expect(phase.getTask(task.id) instanceof Task).toBe(true);
+  expect(phase.getTask(task.getId()) instanceof Task).toBe(true);
 });
 
 test('getTasks()', () => {
@@ -53,7 +53,7 @@ test('getTask(id)', () => {
 	const phase = new Phase();
 	const task = new Task();
 	phase.addTask(task);
-  expect(phase.getTask(task.id) == task).toBe(true);
+  expect(phase.getTask(task.getId()) == task).toBe(true);
 });
 
 test('removeTask(task)', () => {
@@ -74,7 +74,7 @@ test('addObject4D(object4D)', () => {
 	const phase = new Phase();
 	const object4D = new Object4D();
 	phase.addObject4D(object4D);
-  expect(phase.getObject4D(object4D.id) instanceof Object4D).toBe(true);
+  expect(phase.getObject4D(object4D.getId()) instanceof Object4D).toBe(true);
 });
 
 test('getObjects4D()', () => {
@@ -87,7 +87,7 @@ test('getObject4D(id)', () => {
 	const phase = new Phase();
 	const object4D = new Object4D();
 	phase.addObject4D(object4D);
-  expect(phase.getObject4D(object4D.id) == object4D).toBe(true);
+  expect(phase.getObject4D(object4D.getId()) == object4D).toBe(true);
 });
 
 test('removeObject4D(object4D)', () => {
@@ -108,7 +108,7 @@ test('addDelivrable(delivrable)', () => {
 	const phase = new Phase();
 	const delivrable = new Delivrable();
 	phase.addDelivrable(delivrable);
-  expect(phase.getDelivrable(delivrable.id) instanceof Delivrable).toBe(true);
+  expect(phase.getDelivrable(delivrable.getId()) instanceof Delivrable).toBe(true);
 });
 
 test('getDelivrables()', () => {
@@ -121,7 +121,7 @@ test('getDelivrable(id)', () => {
 	const phase = new Phase();
 	const delivrable = new Delivrable();
 	phase.addDelivrable(delivrable);
-  expect(phase.getDelivrable(delivrable.id) == delivrable).toBe(true);
+  expect(phase.getDelivrable(delivrable.getId()) == delivrable).toBe(true);
 });
 
 test('removeDelivrable(delivrable)', () => {

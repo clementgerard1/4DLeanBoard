@@ -1,21 +1,23 @@
 import Team from './interfaces/Team.class.js';
 import OperationUnit from './OperationUnit.class.js';
 
-/**
- * @class TaskTeam
- * @extends Team
- * @classdesc TaskTeam represents team  on Phase moment
- */
 class TaskTeam extends Team{
 
+	#operationUnits;
+
 	/**
-		TaskTeam Constructor
+ 		@class TaskTeam
+ 		@extends Team
+ 		@classdesc TaskTeam represents team  on Phase moment
+ 		
+		@constructs
+
 		@param {string} [name=""] Name of taskteam.
 		@param {int} [id=automaticaly generated] id of the requirement taskteam
 	*/
 	constructor(name = "", id){
 		super(name, id);
-		this.operationUnits = {};
+		this.#operationUnits = {};
 	}
 
 	/**
@@ -23,7 +25,7 @@ class TaskTeam extends Team{
 		@param {OperationUnit} [operationUnit = new OperationUnit] OperationUnit to add to the collection
 	*/
 	addOperationUnit(operationUnit = new OperationUnit()){
-		this.operationUnits[operationUnit.id] = operationUnit;
+		this.#operationUnits[operationUnit.getId()] = operationUnit;
 	}
 
 	/**
@@ -33,10 +35,10 @@ class TaskTeam extends Team{
 	removeOperationUnit(operationUnit){
 		if(!(operationUnit instanceof OperationUnit)){
 			console.error("removeOperationUnit(operationUnit) : operationUnit " + operationUnit + " not of type OperationUnit");
-		}else if(!(Object.keys(this.operationUnits).includes("" + operationUnit.id))){
+		}else if(!(Object.keys(this.#operationUnits).includes("" + operationUnit.getId()))){
 			console.error("removeOperationUnit(operationUnit) : operationUnit " + operationUnit + " not in the collection");
 		}else{
-			delete this.operationUnits[operationUnit.id];
+			delete this.#operationUnits[operationUnit.getId()];
 		}
 	}
 
@@ -45,7 +47,7 @@ class TaskTeam extends Team{
 		@returns {Array} Array of OperationUnit
 	*/
 	getOperationUnits(){
-		return this.operationUnits;
+		return this.#operationUnits;
 	}
 
 	/**
@@ -54,11 +56,11 @@ class TaskTeam extends Team{
 		@returns {OperationUnit} OperationUnit corresponding
 	*/
 	getOperationUnit(id){
-		if(typeof this.operationUnits[id] == "undefined"){
+		if(typeof this.#operationUnits[id] == "undefined"){
 			console.error("getOperationUnit(id) : id " + id + " unknowned on operationUnits collection")
 			return null;
 		}else{
-			return this.operationUnits[id];
+			return this.#operationUnits[id];
 		}
 	}
 

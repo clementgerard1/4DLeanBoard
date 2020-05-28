@@ -3,21 +3,24 @@ import Phase from "./Phase.class.js";
 import Requirement from "./Requirement.class.js";
 import PlanningObject from "./interfaces/PlanningObject.class";
 
-/**
- * @class Milestone
- * @extends PlanningObject
- * @classdesc Milestone represents a milestone
- */
 class Milestone extends PlanningObject{
 
+	#phases;
+
 	/**
-		Milestone Constructor
+		
+		@class Milestone
+		@extends PlanningObject
+		@classdesc Milestone represents a milestone
+
+ 		@constructs 
+
 		@param {string} [name=""] Name of milestone.
 		@param {int} [id=automaticaly generated] id of the milestone
 	*/
 	constructor(name = "", id = Utils.getId("milestone")){
 		super(name, id);
-		this.phases = {};
+		this.#phases = {};
 	}
 
 	/**
@@ -49,7 +52,7 @@ class Milestone extends PlanningObject{
 		@param {Phase} [phase = new Phase] Phase to add to the collection
 	*/
 	addPhase(phase = new Phase()){
-		this.phases[phase.id] = phase;
+		this.#phases[phase.getId()] = phase;
 	}
 
 	/**
@@ -59,10 +62,10 @@ class Milestone extends PlanningObject{
 	removePhase(phase){
 		if(!(phase instanceof Phase)){
 			console.error("removePhase(phase) : phase " + phase + " not of type Phase");
-		}else if(!(Object.keys(this.phases).includes("" + phase.id))){
+		}else if(!(Object.keys(this.#phases).includes("" + phase.getId()))){
 			console.error("removePhase(phase) : phase " + phase + " not in the collection");
 		}else{
-			delete this.phases[phase.id];
+			delete this.#phases[phase.getId()];
 		}
 	}
 
@@ -71,7 +74,7 @@ class Milestone extends PlanningObject{
 		@returns {Array} Array of Phase
 	*/
 	getPhases(){
-		return this.phases;
+		return this.#phases;
 	}
 
 	/**
@@ -80,11 +83,11 @@ class Milestone extends PlanningObject{
 		@returns {Phase} Phase corresponding
 	*/
 	getPhase(id){
-		if(typeof this.phases[id] == "undefined"){
+		if(typeof this.#phases[id] == "undefined"){
 			console.error("getPhase(id) : id " + id + " unknowned on phases colleciton")
 			return null;
 		}else{
-			return this.phases[id];
+			return this.#phases[id];
 		}
 	}
 

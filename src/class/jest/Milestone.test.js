@@ -37,7 +37,7 @@ test('addPhase(phase)', () => {
 	const milestone = new Milestone();
 	const phase = new Phase();
 	milestone.addPhase(phase);
-  expect(milestone.getPhase(phase.id) instanceof Phase).toBe(true);
+  expect(milestone.getPhase(phase.getId()) instanceof Phase).toBe(true);
 });
 
 test('getPhases()', () => {

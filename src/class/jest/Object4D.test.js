@@ -36,7 +36,7 @@ test('addObject3D(object3D)', () => {
 	const object4D = new Object4D();
 	const object3D = new Object3D();
 	object4D.addObject3D(object3D);
-  expect(object4D.getObject3D(object3D.id) instanceof Object3D).toBe(true);
+  expect(object4D.getObject3D(object3D.getId()) instanceof Object3D).toBe(true);
 });
 
 test('getObjects3D()', () => {
@@ -49,5 +49,5 @@ test('getObject3D(id)', () => {
 	const object4D = new Object4D();
 	const object3D = new Object3D();
 	object4D.addObject3D(object3D);
-  expect(object4D.getObject3D(object3D.id) == object3D).toBe(true);
+  expect(object4D.getObject3D(object3D.getId()) == object3D).toBe(true);
 });

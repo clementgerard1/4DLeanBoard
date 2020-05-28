@@ -1,18 +1,21 @@
 import Utils from "./Utils.class.js";
-/**
- * @class Delivrable
- * @classdesc Delivrable represents a delivrable
- */
+
 class Delivrable{
 
-	/**
-		Delivrable Constructor
+	#id;
+	#name;
+
+	/**	
+		@class Delivrable
+		@classdesc Delivrable represents a delivrable
+		
+		@constructs
 		@param {string} [name=""] Name of Delivrable
 		@param {int} [id=automaticaly generated] id of the Delivrable
 	*/
 	constructor(name = "", id = Utils.getId("delivrable")){
-		this.id = id;
-		this.name = name;
+		this.#id = id;
+		this.#name = name;
 	}
 
 	/**
@@ -20,7 +23,7 @@ class Delivrable{
 		@returns {int} id of the delivrable
 	*/
 	getId(){
-		return this.id;
+		return this.#id;
 	}
 
 	/**
@@ -28,7 +31,7 @@ class Delivrable{
 		@returns {string} name of the delivrable
 	*/
 	getName(){
-		return this.name;
+		return this.#name;
 	}	
 
 }

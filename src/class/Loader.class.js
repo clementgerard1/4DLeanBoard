@@ -18,7 +18,7 @@ import Contractor from "./Contractor.class.js";
 
 class Loader{
 
-	static latestCSVVersion = "0.1";
+	static #latestCSVVersion = "0.1";
 
 	/**
 		Load model from CSV
@@ -27,7 +27,7 @@ class Loader{
 		@param {string} [csvVersion=latest] Version of csv used.
 		@static
 	*/
-	static fromCSVandIFC(CSVFile, IFCFile, csvVersion = this.latestCSVVersion){
+	static fromCSVandIFC(CSVFile, IFCFile, csvVersion = this.#latestCSVVersion){
 		return eval("this._v" + csvVersion.replace(".", "_")  + "(CSVFile, IFCFile)");
 	}
 

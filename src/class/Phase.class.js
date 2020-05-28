@@ -5,26 +5,31 @@ import Delivrable from "./Delivrable.class.js";
 import Contractor from "./Contractor.class.js";
 import PlanningObject from "./interfaces/PlanningObject.class";
 
-
-/**
- * @class Phase
- * @extends PlanningObject
- * @classdesc Phase object represents a phase of the lean board
- */
 class Phase extends PlanningObject{
 
+	#tasks;
+	#objects4D;
+	#delivrables;
+	#contractor;
+	#colorClass;
+
 	/**
-		Phase Constructor
+ 		@class Phase
+ 		@extends PlanningObject
+ 		@classdesc Phase object represents a phase of the lean board
+
+		@constructs 
+
 		@param {string} [name=""] Name of phase.
 		@param {int} [id=automaticaly generated] id of the phase
 	*/
 	constructor(name = "", id = Utils.getId("phase")){
 		super(name, id);
-		this.tasks = {};
-		this.objects4D = {};
-		this.delivrables = {};
-		this.contractor = null;
-		this.colorClass = "defaultcolor";
+		this.#tasks = {};
+		this.#objects4D = {};
+		this.#delivrables = {};
+		this.#contractor = null;
+		this.#colorClass = "defaultcolor";
 	}
 
 	/**
@@ -32,7 +37,7 @@ class Phase extends PlanningObject{
 		@returns {Contractor} contractor of the phase
 	*/
 	getContractor(){
-		return this.contractor
+		return this.#contractor
 	}
 
 	/**
@@ -43,7 +48,7 @@ class Phase extends PlanningObject{
 		if(!(contractor instanceof Contractor)){
 			console.error("setContractor(contractor) need a Contractor object ; provided : " + contractor);
 		}else{
-			this.contractor = contractor;
+			this.#contractor = contractor;
 		}
 	}
 
@@ -52,7 +57,7 @@ class Phase extends PlanningObject{
 		@param {Object4D} [object4D = new Object4D] Object4D to add to the collection
 	*/
 	addObject4D(object4D = new Object4D()){
-		this.objects4D[object4D.id] = object4D;
+		this.#objects4D[object4D.getId()] = object4D;
 	}
 
 	/**
@@ -62,10 +67,10 @@ class Phase extends PlanningObject{
 	removeObject4D(object4D){
 		if(!(object4D instanceof Object4D)){
 			console.error("removeObject4D(object4D) : object4D " + object4D + " not of type Object4D");
-		}else if(!(Object.keys(this.objects4D).includes("" + object4D.id))){
+		}else if(!(Object.keys(this.#objects4D).includes("" + object4D.getId()))){
 			console.error("removeObject4D(object4D) : object4D " + object4D + " not in the collection");
 		}else{
-			delete this.objects4D[object4D.id];
+			delete this.#objects4D[object4D.getId()];
 		}
 	}
 
@@ -74,7 +79,7 @@ class Phase extends PlanningObject{
 		@returns {Array} Array of Object4D
 	*/
 	getObjects4D(){
-		return this.objects4D;
+		return this.#objects4D;
 	}
 
 	/**
@@ -83,11 +88,11 @@ class Phase extends PlanningObject{
 		@returns {Object4D} Object4D corresponding
 	*/
 	getObject4D(id){
-		if(typeof this.objects4D[id] == "undefined"){
-			console.error("getObject4D(id) : id " + id + " unknowned on objects4D collection")
+		if(typeof this.#objects4D[id] == "undefined"){
+			console.error("getObject4D(id) : id " + id + " unknowned in objects4D collection")
 			return null;
 		}else{
-			return this.objects4D[id];
+			return this.#objects4D[id];
 		}
 	}
 
@@ -96,7 +101,7 @@ class Phase extends PlanningObject{
 		@param {Task} [task = new Task] Task to add to the collection
 	*/
 	addTask(task = new Task()){
-		this.tasks[task.id] = task;
+		this.#tasks[task.getId()] = task;
 		task.setParentPhase(this);
 	}
 
@@ -107,11 +112,11 @@ class Phase extends PlanningObject{
 	removeTask(task){
 		if(!(task instanceof Task)){
 			console.error("removeTask(task) : task " + task + " not of type Task");
-		}else if(!(Object.keys(this.tasks).includes("" + task.id))){
+		}else if(!(Object.keys(this.#tasks).includes("" + task.getId()))){
 			console.error("removeTask(task) : phase " + task + " not in the collection");
 		}else{
 			task.setParentPhase(null);
-			delete this.tasks[task.id];
+			delete this.#tasks[task.getId()];
 		}
 	}
 
@@ -120,7 +125,7 @@ class Phase extends PlanningObject{
 		@returns {Array} Array of Task
 	*/
 	getTasks(){
-		return this.tasks;
+		return this.#tasks;
 	}
 
 	/**
@@ -129,11 +134,11 @@ class Phase extends PlanningObject{
 		@returns {Task} Task corresponding
 	*/
 	getTask(id){
-		if(typeof this.tasks[id] == "undefined"){
+		if(typeof this.#tasks[id] == "undefined"){
 			console.error("getTask(id) : id " + id + " unknowned on tasks colleciton")
 			return null;
 		}else{
-			return this.tasks[id];
+			return this.#tasks[id];
 		}
 	}
 
@@ -142,7 +147,7 @@ class Phase extends PlanningObject{
 		@param {Delivrable} [delivrable = new Delivrable] Delivrable to add to the collection
 	*/
 	addDelivrable(delivrable = new Delivrable()){
-		this.delivrables[delivrable.id] = delivrable;
+		this.#delivrables[delivrable.getId()] = delivrable;
 	}
 
 	/**
@@ -152,19 +157,19 @@ class Phase extends PlanningObject{
 	removeDelivrable(delivrable){
 		if(!(delivrable instanceof Delivrable)){
 			console.error("removeDelivrable(delivrable) : delivrable " + delivrable + " not of type Delivrable");
-		}else if(!(Object.keys(this.delivrables).includes("" + delivrable.id))){
+		}else if(!(Object.keys(this.#delivrables).includes("" + delivrable.getId()))){
 			console.error("removeDelivrable(delivrable) : delivrable " + delivrable + " not in the collection");
 		}else{
-			delete this.delivrables[delivrable.id];
+			delete this.#delivrables[delivrable.getId()];
 		}
 	}
 
 	/**
-		Get all delivrables
+		Get all #delivrables
 		@returns {Array} Array of Delivrable
 	*/
 	getDelivrables(){
-		return this.delivrables;
+		return this.#delivrables;
 	}
 
 	/**
@@ -173,11 +178,11 @@ class Phase extends PlanningObject{
 		@returns {Delivrable} Delivrable corresponding
 	*/
 	getDelivrable(id){
-		if(typeof this.delivrables[id] == "undefined"){
+		if(typeof this.#delivrables[id] == "undefined"){
 			console.error("getDelivrable(id) : id " + id + " unknowned on tasks colleciton")
 			return null;
 		}else{
-			return this.delivrables[id];
+			return this.#delivrables[id];
 		}
 	}
 
@@ -235,8 +240,8 @@ class Phase extends PlanningObject{
 	*/
 	getTaskTeams(){
 		const toReturn = [];
-		for( let t in this.tasks){
-			const taskTeam = this.tasks[t].getTaskTeam();
+		for( let t in this.#tasks){
+			const taskTeam = this.#tasks[t].getTaskTeam();
 			if(!toReturn.includes(taskTeam)) toReturn[toReturn.length] = taskTeam;
 		}
 		return toReturn;
@@ -246,7 +251,7 @@ class Phase extends PlanningObject{
 		if(typeof colorClass == "undefined"){
 			console.error("setColorClass : need a string ; provided : " + colorClass);
 		}else{
-			this.colorClass = colorClass;
+			this.#colorClass = colorClass;
 		}
 	}
 
@@ -255,7 +260,7 @@ class Phase extends PlanningObject{
 		@returns {String} 
 	*/
 	getColorClass(){
-		return this.colorClass;
+		return this.#colorClass;
 	}
 
 }

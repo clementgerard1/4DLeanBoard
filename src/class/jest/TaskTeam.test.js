@@ -36,7 +36,7 @@ test('addOperationUnit(operationUnit)', () => {
 	const taskTeam = new TaskTeam();
 	const operationUnit = new OperationUnit();
 	taskTeam.addOperationUnit(operationUnit);
-  expect(taskTeam.getOperationUnit(operationUnit.id) instanceof OperationUnit).toBe(true);
+  expect(taskTeam.getOperationUnit(operationUnit.getId()) instanceof OperationUnit).toBe(true);
 });
 
 test('getOperationUnits()', () => {
@@ -49,7 +49,7 @@ test('getOperationUnit(id)', () => {
 	const taskTeam = new TaskTeam();
 	const operationUnit = new OperationUnit();
 	taskTeam.addOperationUnit(operationUnit);
-  expect(taskTeam.getOperationUnit(operationUnit.id) == operationUnit).toBe(true);
+  expect(taskTeam.getOperationUnit(operationUnit.getId()) == operationUnit).toBe(true);
 });
 
 test('removeOperationUnit(operationUnit)', () => {

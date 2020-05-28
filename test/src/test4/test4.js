@@ -1,5 +1,3 @@
-const Vue = require("vue/dist/vue.esm.js").default;
-
 module.exports = () => {
 
 	window.addEventListener("load", function(){
@@ -9,20 +7,15 @@ module.exports = () => {
 }
 
 function init(){
-	const app = new Vue({
-		el : '#root',
-		components : {
-			task : V_task,
-		},
-		data:{
-			message : "Voilà le message",
- 		},
- 		template : `
- 		<div>
- 			<task></task>
- 			<p>{{message}}</p>
- 		</div>
- 		`
+
+	let file = null;
+	Promise.all([Utils.loadTextFile("/test2/Project1.csv"), Utils.loadTextFile("/test2/Project1.ifc")])
+	.then( files => Loader.fromCSVandIFC(files[0], files[1]))
+	.then( timeline => {
+		console.log(timeline);
+		//Model Loaded
+		console.log(timeline.getModel());
 	})
+	.catch( error => console.error(error));
 
 }

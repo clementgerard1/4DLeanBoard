@@ -1,23 +1,29 @@
 import Utils from "./Utils.class.js";
 import Milestone from './Milestone.class.js';
 
-/**
- * @class Model
- * @classdesc Model represents the root container
- */
 class Model{
 
+	#id;
+	#name;
+	#lastModifiedDate;
+	#milestones;
+	#startDate;
+
 	/**
-		Model Constructor
+		@class Model
+		@classdesc Model represents the root container
+
+		@constructs
+
 		@param {string} [name=""] Name of model.
 		@param {int} [id=automaticaly generated] id of the model.
 	*/
 	constructor(name = "", id = Utils.getId("model")){
-		this.id = id;
-		this.name = name;
-		this.lastModifiedDate = new Date();
-		this.milestones = [];
-		this.startDate = Date.now();
+		this.#id = id;
+		this.#name = name;
+		this.#lastModifiedDate = new Date();
+		this.#milestones = [];
+		this.#startDate = Date.now();
 	}
 
 	/**
@@ -25,8 +31,8 @@ class Model{
 		@param {Milestone} [milestone = new Milestone] Milestone to add to the collection
 		@param {uint} [order = lastPlace] order place of the milestone
 	*/
-	addMilestone(milestone = new Milestone(), order = this.milestones.length){
-		this.milestones.splice(order, 0, milestone);
+	addMilestone(milestone = new Milestone(), order = this.#milestones.length){
+		this.#milestones.splice(order, 0, milestone);
 	}
 
 	/**
@@ -36,10 +42,10 @@ class Model{
 	removeMilestone(milestone){
 		if(!(milestone instanceof Milestone)){
 			console.error("removeMilestone(milestone) : milestone " + milestone + " not of type Milestone");
-		}else if(!(this.milestones.includes(milestone))){
+		}else if(!(this.#milestones.includes(milestone))){
 			console.error("removeMilestone(milestone) : milestone " + milestone + " not in the collection");
 		}else{
-			this.milestones.splice(this.milestones.indexOf(milestone), 1);
+			this.#milestones.splice(this.#milestones.indexOf(milestone), 1);
 		}
 	}
 
@@ -48,7 +54,7 @@ class Model{
 		@returns {Array} Array of Milestones
 	*/
 	getMilestones(){
-		return this.milestones;
+		return this.#milestones;
 	}
 
 	/**
@@ -57,11 +63,11 @@ class Model{
 		@returns {Milestone} Milestone corresponding
 	*/
 	getMilestone(order){
-		if(typeof this.milestones[order] == "undefined"){
+		if(typeof this.#milestones[order] == "undefined"){
 			console.error("getMilestone(order) : order " + order + " unknowned on milestones colleciton")
 			return null;
 		}else{
-			return this.milestones[order];
+			return this.#milestones[order];
 		}
 	}
 
@@ -70,7 +76,7 @@ class Model{
 		@returns {int} id of the model
 	*/
 	getId(){
-		return this.id;
+		return this.#id;
 	}
 
 	/**
@@ -78,7 +84,7 @@ class Model{
 		@returns {string} name of the model
 	*/
 	getName(){
-		return this.name;
+		return this.#name;
 	}	
 
 	/**
@@ -86,7 +92,7 @@ class Model{
 		@returns {Date} last modified date of the model
 	*/
 	getLastModifiedDate(){
-		return this.lastModifiedDate;
+		return this.#lastModifiedDate;
 	}	
 
 	/**
@@ -95,7 +101,7 @@ class Model{
 	*/
 	setLastModifiedDate(date){
 		if(date instanceof Date){
-			this.lastModifiedDate = date;
+			this.#lastModifiedDate = date;
 		}else{
 			console.error("setLastModifiedDate(date) need a Date object ; provided : " + date);
 			return null;
@@ -107,7 +113,7 @@ class Model{
 		@returns {Date} start date of the model
 	*/
 	getStartDate(){
-		return this.startDate;
+		return this.#startDate;
 	}	
 
 	/**
@@ -116,7 +122,7 @@ class Model{
 	*/
 	setStartDate(date){
 		if(date instanceof Date){
-			this.startDate = date;
+			this.#startDate = date;
 		}else{
 			console.error("setStartDate(date) need a Date object ; provided : " + date);
 			return null;

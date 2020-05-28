@@ -171,7 +171,7 @@ eval("module.exports = function () {\n  window.addEventListener(\"load\", functi
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("module.exports = function () {\n  window.addEventListener(\"load\", function () {\n    init();\n  });\n};\n\nfunction init() {\n  var file = null;\n  Promise.all([Utils.loadTextFile(\"/test2/Project1.csv\"), Utils.loadTextFile(\"/test2/Project1.ifc\")]).then(function (files) {\n    return Loader.fromCSVandIFC(files[0], files[1]);\n  }).then(function (model) {\n    console.log(model); //Model Loaded\n  })[\"catch\"](function (error) {\n    return console.error(error);\n  });\n}\n\n//# sourceURL=webpack:///./test/src/test2/test2.js?");
+eval("module.exports = function () {\n  window.addEventListener(\"load\", function () {\n    init();\n  });\n};\n\nfunction init() {\n  var file = null;\n  Promise.all([Utils.loadTextFile(\"/test2/Project1.csv\"), Utils.loadTextFile(\"/test2/Project1.ifc\")]).then(function (files) {\n    return Loader.fromCSVandIFC(files[0], files[1]);\n  }).then(function (timeline) {\n    console.log(timeline.getModel()); //Model Loaded\n  })[\"catch\"](function (error) {\n    return console.error(error);\n  });\n}\n\n//# sourceURL=webpack:///./test/src/test2/test2.js?");
 
 /***/ }),
 
@@ -191,9 +191,9 @@ eval("var Vue = __webpack_require__(/*! vue/dist/vue.esm.js */ \"./node_modules/
   !*** ./test/src/test4/test4.js ***!
   \*********************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-eval("var Vue = __webpack_require__(/*! vue/dist/vue.esm.js */ \"./node_modules/vue/dist/vue.esm.js\")[\"default\"];\n\nmodule.exports = function () {\n  window.addEventListener(\"load\", function () {\n    init();\n  });\n};\n\nfunction init() {\n  var app = new Vue({\n    el: '#root',\n    components: {\n      task: V_task\n    },\n    data: {\n      message: \"Voilà le message\"\n    },\n    template: \"\\n \\t\\t<div>\\n \\t\\t\\t<task></task>\\n \\t\\t\\t<p>{{message}}</p>\\n \\t\\t</div>\\n \\t\\t\"\n  });\n}\n\n//# sourceURL=webpack:///./test/src/test4/test4.js?");
+eval("module.exports = function () {\n  window.addEventListener(\"load\", function () {\n    init();\n  });\n};\n\nfunction init() {\n  var file = null;\n  Promise.all([Utils.loadTextFile(\"/test2/Project1.csv\"), Utils.loadTextFile(\"/test2/Project1.ifc\")]).then(function (files) {\n    return Loader.fromCSVandIFC(files[0], files[1]);\n  }).then(function (timeline) {\n    console.log(timeline); //Model Loaded\n\n    console.log(timeline.getModel());\n  })[\"catch\"](function (error) {\n    return console.error(error);\n  });\n}\n\n//# sourceURL=webpack:///./test/src/test4/test4.js?");
 
 /***/ })
 

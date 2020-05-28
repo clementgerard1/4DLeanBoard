@@ -1,21 +1,23 @@
 import Property from './interfaces/Property.class.js';
 
-/**
- * @class Zone
- * @extends Property
- * @classdesc Zone represents zones property used in Tasks
- */
 class Zone extends Property{
 
+	#val;
+
 	/**
-		Zone Constructor
+	 	@class Zone
+	 	@extends Property
+	 	@classdesc Zone represents zones property used in Tasks
+	 	
+		@constructs
+
 		@param {string} [value=""] Value of zone.
 		@param {string} [name=""] Name of zone.
 		@param {int} [id=automaticaly generated] id of the zone property
 	*/
 	constructor(value = "" ,name = "", id){
 		super(name, id);
-		this.val = value;
+		this.#val = value;
 	}
 
 	/**
@@ -23,7 +25,7 @@ class Zone extends Property{
 		@returns {string} value of the zone property
 	*/
 	getValue(){
-		return this.val;
+		return this.#val;
 	}
 
 	/**
@@ -34,7 +36,7 @@ class Zone extends Property{
 		if(typeof value == "string"){
 			console.error("setValue(value) need a string ; provided : " + value);
 		}else{
-			this.val = value;
+			this.#val = value;
 		}
 	}
 

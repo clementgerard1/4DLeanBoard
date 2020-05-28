@@ -36,7 +36,7 @@ test('addTaskTeam(taskTeam)', () => {
 	const contractor = new Contractor();
 	const taskTeam = new TaskTeam();
 	contractor.addTaskTeam(taskTeam);
-  expect(contractor.getTaskTeam(taskTeam.id) instanceof TaskTeam).toBe(true);
+  expect(contractor.getTaskTeam(taskTeam.getId()) instanceof TaskTeam).toBe(true);
 });
 
 test('getTaskTeams()', () => {
@@ -49,7 +49,7 @@ test('getTaskTeam(id)', () => {
 	const contractor = new Contractor();
 	const taskTeam = new TaskTeam();
 	contractor.addTaskTeam(taskTeam);
-  expect(contractor.getTaskTeam(taskTeam.id) == taskTeam).toBe(true);
+  expect(contractor.getTaskTeam(taskTeam.getId()) == taskTeam).toBe(true);
 });
 
 test('removeTaskTeam(taskTeam)', () => {

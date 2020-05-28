@@ -1,14 +1,14 @@
 import Team from './interfaces/Team.class.js';
 
-/**
- * @class OperationUnit
- * @extends Team
- * @classdesc OperationUnit represents team  on Phase moment
- */
 class OperationUnit extends Team{
 
 	/**
-		OperationUnit Constructor
+ 		@class OperationUnit
+ 		@extends Team
+ 		@classdesc OperationUnit represents team  on Phase moment
+
+		@constructs
+
 		@param {string} [name=""] Name of operationUnit.
 		@param {int} [id=automaticaly generated] id of the requirement operationUnit
 	*/

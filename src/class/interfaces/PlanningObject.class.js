@@ -1,25 +1,34 @@
 import Property from "./Property.class.js";
 
-/**
- * @class PlanningObject
- * @classdesc PlanningObject represents a milestone/phase/task/operation Object, Don't instantiate this class 
- */
 class PlanningObject{
 
+	#id;
+	#name;
+	#duration;
+	#startDate;
+	#endDate;
+	#followings;
+	#previous;
+	#properties;
+
 	/**
-		Constructor of PlanningObject / Only for heritage, don't use it
+		@class PlanningObject
+ 		@classdesc PlanningObject represents a milestone/phase/task/operation Object, Don't instantiate this class  - Don't instanciate it !
+		
+		@constructs
+
 		@param {string} name
 		@param {int} id 
 	*/
 	constructor(name, id){
-		this.id = id;
-		this.name = name;
-		this.duration = null;
-		this.startDate = null;
-		this.endDate = null;
-		this.followings = {};
-		this.previous = {};
-		this.properties = {};
+		this.#id = id;
+		this.#name = name;
+		this.#duration = null;
+		this.#startDate = null;
+		this.#endDate = null;
+		this.#followings = {};
+		this.#previous = {};
+		this.#properties = {};
 	}
 
 	/**
@@ -27,7 +36,7 @@ class PlanningObject{
 		@returns {int} id 
 	*/
 	getId(){
-		return this.id;
+		return this.#id;
 	}
 
 	/**
@@ -35,7 +44,7 @@ class PlanningObject{
 		@returns {string} name 
 	*/
 	getName(){
-		return this.name;
+		return this.#name;
 	}	
 
 	/**
@@ -46,7 +55,7 @@ class PlanningObject{
 		if(typeof name != "string"){
 			console.error("setName(name) need a string ; provided : " + name);
 		}else{
-			this.name = name;
+			this.#name = name;
 		}
 	}	
 
@@ -59,7 +68,7 @@ class PlanningObject{
 		if(!(element instanceof type)){
 			console.error("addFollowing(element) need PlanningObject ; provided : " + element);
 		}else{
-			this.followings[element.id] = element;
+			this.#followings[element.getId()] = element;
 		}
 	}
 
@@ -71,10 +80,10 @@ class PlanningObject{
 	removeFollowing(element, type = PlanningObject){
 		if(!(element instanceof type)){
 			console.error("removeFollowing(element) : element " + element + " not of type PlanningObject");
-		}else if(!(Object.keys(this.followings).includes("" + element.id))){
+		}else if(!(Object.keys(this.#followings).includes("" + element.getId()))){
 			console.error("removeFollowing(element) : element " + element + " not in the collection");
 		}else{
-			delete this.followings[element.id];
+			delete this.#followings[element.getId()];
 		}
 	}
 
@@ -83,15 +92,15 @@ class PlanningObject{
 		@returns {Array} Array of PlanningObject
 	*/
 	getFollowings(){
-		return this.followings;
+		return this.#followings;
 	}
 
 	/**
 		Add a property / If name already exists, function erases it
 		@param {Property} [property = new Property] Property to add to the collection
 	*/
-	addProperty(property, name = property.id){
-		this.properties[name] = property;
+	addProperty(property, name = property.getId()){
+		this.#properties[name] = property;
 	}
 
 	/**
@@ -101,10 +110,10 @@ class PlanningObject{
 	removeProperty(property){
 		if(!(property instanceof Property)){
 			console.error("removeProperty(property) : property " + property + " not of type Property");
-		}else if(!(Object.keys(this.properties).includes("" + property.id))){
+		}else if(!(Object.keys(this.#properties).includes("" + property.getId()))){
 			console.error("removeProperty(property) : property " + property + " not in the collection");
 		}else{
-			delete this.properties[property.id];
+			delete this.#properties[property.getId()];
 		}
 	}
 
@@ -113,10 +122,10 @@ class PlanningObject{
 		@param {String} propertyName Name of the property to remove (the same as addProperty name argument)
 	*/
 	removePropertyByName(propertyName){
-		if(!(Object.keys(this.properties).includes(propertyName))){
+		if(!(Object.keys(this.#properties).includes(propertyName))){
 			console.error("removeProperty(property) : property " + property + " not in the collection");
 		}else{
-			delete this.properties[propertyName];
+			delete this.#properties[propertyName];
 		}
 	}
 
@@ -125,7 +134,7 @@ class PlanningObject{
 		@returns {Array} Array of Property
 	*/
 	getProperties(){
-		return this.properties;
+		return this.#properties;
 	}
 
 	/**
@@ -133,11 +142,11 @@ class PlanningObject{
 		@returns {string} Name of Property (the same as addProperty name argument)
 	*/
 	getPropertyByName(name){
-		if(!(Object.keys(this.properties).includes(name))){
+		if(!(Object.keys(this.#properties).includes(name))){
 			console.error("addPropertyByName(name) : name " + name + " not in the collection");
 			return null;
 		}else{
-			return this.properties[name];
+			return this.#properties[name];
 		}
 	}
 
@@ -147,11 +156,11 @@ class PlanningObject{
 		@returns {Property} Property corresponding
 	*/
 	getProperty(id){
-		if(typeof this.properties[id] == "undefined"){
+		if(typeof this.#properties[id] == "undefined"){
 			console.error("getProperty(id) : id " + id + " unknowned on properties colleciton")
 			return null;
 		}else{
-			return this.properties[id];
+			return this.#properties[id];
 		}
 	}
 
@@ -159,7 +168,7 @@ class PlanningObject{
 		Get duration of the PlanningObject
 	*/
 	getDuration(){
-		return this.duration;
+		return this.#duration;
 	}	
 
 	/**
@@ -171,7 +180,7 @@ class PlanningObject{
 		if(typeof duration != "number"){
 			console.error("setDuration(duration) need a number ; provided : " + duration);
 		}else{
-			this.duration = duration;
+			this.#duration = duration;
 		}
 	}	
 
@@ -184,7 +193,7 @@ class PlanningObject{
 		if(!(element instanceof type)){
 			console.error("addPrevious(element) need PlanningObject ; provided : " + element);
 		}else{
-			this.previous[element.id] = element;
+			this.#previous[element.getId()] = element;
 		}
 	}
 
@@ -196,10 +205,10 @@ class PlanningObject{
 	removePrevious(element, type = PlanningObject){
 		if(!(element instanceof type)){
 			console.error("removePrevious(element) : element " + element + " not of type PlanningObject");
-		}else if(!(Object.keys(this.previous).includes("" + element.id))){
+		}else if(!(Object.keys(this.#previous).includes("" + element.getId()))){
 			console.error("removePrevious(element) : element " + element + " not in the collection");
 		}else{
-			delete this.previous[element.id];
+			delete this.#previous[element.getId()];
 		}
 	}
 
@@ -208,7 +217,7 @@ class PlanningObject{
 		@returns {Array} Array of PlanningObject
 	*/
 	getPrevious(){
-		return this.previous;
+		return this.#previous;
 	}
 
 	/**
@@ -216,7 +225,7 @@ class PlanningObject{
 		@returns {Date}
 	*/
 	getStartDate(){
-		return this.startDate;
+		return this.#startDate;
 	}	
 
 	/**
@@ -227,7 +236,7 @@ class PlanningObject{
 		if(!(date instanceof Date)){
 			console.error("setStartDate(date) need a Date ; provided : " + date);
 		}else{
-			this.startDate = date;
+			this.#startDate = date;
 		}
 	}	
 
@@ -236,7 +245,7 @@ class PlanningObject{
 		@returns {Date}
 	*/
 	getEndDate(){
-		return this.endDate;
+		return this.#endDate;
 	}	
 
 	/**
@@ -247,7 +256,7 @@ class PlanningObject{
 		if(!(date instanceof Date)){
 			console.error("setEndDate(date) need a Date ; provided : " + date);
 		}else{
-			this.endDate = date;
+			this.#endDate = date;
 		}
 	}	
 

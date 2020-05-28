@@ -38,12 +38,6 @@ test('setName(name)', () =>{
 	expect(task.getName()).toBe("bonjour");
 });
 
-test('setName(null)', () =>{
-	const task = new Task("hello", 15);
-	task.setName(null);
-	expect(task.getName()).toBe("hello");
-});
-
 test('addFollowingTask(task)', () => {
 	const task = new Task();
 	const task2 = new Task();
@@ -84,7 +78,7 @@ test('addOperation(operation)', () => {
 	const task = new Task();
 	const operation = new Operation();
 	task.addOperation(operation);
-  expect(task.getOperation(operation.id) instanceof Operation).toBe(true);
+  expect(task.getOperation(operation.getId()) instanceof Operation).toBe(true);
 });
 
 test('getOperations()', () => {
@@ -97,7 +91,7 @@ test('getOperation(id)', () => {
 	const task = new Task();
 	const operation = new Operation();
 	task.addOperation(operation);
-  expect(task.getOperation(operation.id) == operation).toBe(true);
+  expect(task.getOperation(operation.getId()) == operation).toBe(true);
 });
 
 test('setObject4D(object4D)', () => {

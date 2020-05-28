@@ -1,21 +1,23 @@
 import Team from './interfaces/Team.class.js';
 import TaskTeam from './TaskTeam.class.js';
 
-/**
- * @class Contractor
- * @extends Team
- * @classdesc Contractor represents team  on Phase moment
- */
 class Contractor extends Team{
 
+	#taskTeams;
+
 	/**
-		Contractor Constructor
+		@class Contractor
+ 		@extends Team
+ 		@classdesc Contractor represents team  on Phase moment
+
+		@constructs
+
 		@param {string} [name=""] Name of contractor.
 		@param {int} [id=automaticaly generated] id of the requirement contractor
 	*/
 	constructor(name = "", id){
 		super(name, id);
-		this.taskTeams = {};
+		this.#taskTeams = {};
 	}
 
 	/**
@@ -23,7 +25,7 @@ class Contractor extends Team{
 		@param {TaskTeam} [taskTeam = new TaskTeam] TaskTeam to add to the collection
 	*/
 	addTaskTeam(taskTeam = new TaskTeam()){
-		this.taskTeams[taskTeam.id] = taskTeam;
+		this.#taskTeams[taskTeam.getId()] = taskTeam;
 	}
 
 	/**
@@ -33,10 +35,10 @@ class Contractor extends Team{
 	removeTaskTeam(taskTeam){
 		if(!(taskTeam instanceof TaskTeam)){
 			console.error("removeTaskTeam(taskTeam) : taskTeam " + taskTeam + " not of type TaskTeam");
-		}else if(!(Object.keys(this.taskTeams).includes("" + taskTeam.id))){
+		}else if(!(Object.keys(this.#taskTeams).includes("" + taskTeam.getId()))){
 			console.error("removeTaskTeam(taskTeam) : taskTeam " + taskTeam + " not in the collection");
 		}else{
-			delete this.taskTeams[taskTeam.id];
+			delete this.#taskTeams[taskTeam.getId()];
 		}
 	}
 
@@ -45,7 +47,7 @@ class Contractor extends Team{
 		@returns {Array} Array of TaskTeam
 	*/
 	getTaskTeams(){
-		return this.taskTeams;
+		return this.#taskTeams;
 	}
 
 	/**
@@ -54,11 +56,11 @@ class Contractor extends Team{
 		@returns {TaskTeam} TaskTeam corresponding
 	*/
 	getTaskTeam(id){
-		if(typeof this.taskTeams[id] == "undefined"){
+		if(typeof this.#taskTeams[id] == "undefined"){
 			console.error("getTaskTeam(id) : id " + id + " unknowned on taskTeam collection")
 			return null;
 		}else{
-			return this.taskTeams[id];
+			return this.#taskTeams[id];
 		}
 	}
 

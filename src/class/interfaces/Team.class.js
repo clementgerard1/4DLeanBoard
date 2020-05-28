@@ -1,12 +1,16 @@
 import Utils from "../Utils.class.js";
-/**
- * @class Team
- * @classdesc Team abstract object which represents a generic team
- */
+
 class Team{
 
+	#id;
+	#name;
+
 	/**
-		Team Constructor - For Heritage => Don't instantiate it
+		@class Team
+ 		@classdesc Team abstract object which represents a generic team - Don't instanciate it !
+
+ 		@constructs
+ 		
 		@param {string} name Name of team
 		@param {int} id id of the team
 	*/
@@ -14,8 +18,8 @@ class Team{
 		if(typeof id == "undefined"){
 			id = Utils.getId("team");
 		}
-		this.id = id;
-		this.name = name;
+		this.#id = id;
+		this.#name = name;
 	}
 
 	/**
@@ -23,7 +27,7 @@ class Team{
 		@returns {int} id of the team
 	*/
 	getId(){
-		return this.id;
+		return this.#id;
 	}
 
 	/**
@@ -31,7 +35,7 @@ class Team{
 		@returns {string} name of the team
 	*/
 	getName(){
-		return this.name;
+		return this.#name;
 	}	
 
 }
