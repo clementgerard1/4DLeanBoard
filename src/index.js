@@ -10,7 +10,7 @@ window.addEventListener("load", function(){
 
 function init(){
 
-	Promise.all([Utils.loadTextFile("/datas/Project1.csv"), Utils.loadTextFile("/datas/Project1.ifc")])
+	Promise.all([Utils.loadTextFile("datas/Project1.csv"), Utils.loadTextFile("datas/Project1.ifc")])
 	.then( files => Loader.fromCSVandIFC(files[0], files[1]))
 	.then( timeline => {
 		//Model Loaded and Timeline created
