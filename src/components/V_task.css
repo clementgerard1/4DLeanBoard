@@ -6,3 +6,8 @@
 	min-height : 188px;
 	margin-bottom : 5px;
 }
+
+.selected{
+	width : 300px;
+	height : 300px;
+}

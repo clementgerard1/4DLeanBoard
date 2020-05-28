@@ -3,6 +3,7 @@ import Utils from "./class/Utils.class.js";
 import Loader from "./class/Loader.class.js";
 import Timeline from "./class/Timeline.class.js";
 import V_taskTable from "./components/V_taskTable.vue";
+import Hammer from "hammerjs";
 
 window.addEventListener("load", function(){
 	init();
@@ -17,7 +18,19 @@ function init(){
 		const model = timeline.getModel();
 		const taskTableStart = 10;
 		const phase = timeline.getModel().getMilestones()[0].getPhases()[0];
-	  const duration = model.getDuration();
+	  	const duration = model.getDuration();
+
+	  	//Touch gestures
+	  	Vue.directive("tap", {
+			bind: function(el, binding) {
+				if (typeof binding.value === "function") {
+					const mc = new Hammer(el);
+					var tap = new Hammer.Tap();
+					mc.add(tap);
+					mc.on("tap", binding.value);
+				}
+			}
+		});
 
 		const app = new Vue({
 			el : '#content',

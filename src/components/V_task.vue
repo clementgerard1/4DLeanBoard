@@ -11,6 +11,7 @@ export default {
 			"r5" : false,
 			"r6" : false,
 			"r7" : false,
+			"selected" : false,
 		}
 	},
 	inject : [
@@ -47,7 +48,16 @@ export default {
 
 		}*/
 	},
-	template : "<div ><div class='task' >" + taskSVG + "</div></div>",
+	methods:{
+		handleTap: function(event){
+			this.selected = true;
+		}
+	},
+	template : `
+	<div v-tap='handleTap' v-bind:class='[selected ? "selected" : ""]'>
+		<div class='task' >` + taskSVG + `
+		</div>
+	</div>`,
 }
 
 /*v-bind:class='phaseColor'*/

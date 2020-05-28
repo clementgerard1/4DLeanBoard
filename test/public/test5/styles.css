@@ -1,0 +1,13 @@
+#stage{
+	width: 200px;
+	position : absolute;
+	left : 100px;
+	top : 100px;
+	height: 200px;
+	background-color : red;
+}
+
+#stage.selected{
+	width:220px;
+	height:220px;
+}

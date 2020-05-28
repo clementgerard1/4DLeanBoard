@@ -118,16 +118,6 @@ class Loader{
 
 	}
 
-	/**
-		Load model from server
-		@param {string} id Identifiant.
-		@param {string} pwd Password.
-		@static
-	*/
-	static fromServer(id, pwd, version){
-
-	}
-
 }
 
 export default Loader;
