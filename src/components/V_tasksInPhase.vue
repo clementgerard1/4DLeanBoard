@@ -23,10 +23,12 @@ export default {
 		"time",
 		"phase",
 		"tasktablestart",
+		"duration",
 	],
 	computed: {
 		teams : function(){
-			return this.timeline.getTaskTeamsBetweenTwoDates(this.phase, this.tasktablestart, this.tasktablestart + 5);
+			return this.timeline.getTaskTeamsBetweenTwoDates(this.phase, 0, this.duration);
+			//return this.timeline.getTaskTeamsBetweenTwoDates(this.phase, this.tasktablestart, this.tasktablestart + 5);
 		},
 		_time : function(){
 			return this.time;

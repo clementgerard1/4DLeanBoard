@@ -21,7 +21,7 @@ class V_4DUtils{
 			this.viewers[v].clearHighlighting();
 			const objects4D = object4D.getObjects3D();
 			for(let o in objects4D){
-				this.viewers[v].hightlight(objects4D[o]);
+				this.viewers[v].highlight(objects4D[o]);
 			}
 		}
 	}

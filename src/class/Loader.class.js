@@ -3,6 +3,7 @@ import Milestone from "./Milestone.class.js";
 import Phase from "./Phase.class.js";
 import Task from "./Task.class.js";
 import Object4D from "./Object4D.class.js";
+import Object3D from "./Object3D.class.js";
 import Operation from "./Operation.class.js";
 import TaskTeam from "./TaskTeam.class.js";
 import Timeline from "./Timeline.class.js";
@@ -62,15 +63,22 @@ class Loader{
 
 		for(let l in lines){
 			if(lines[l] != ""){
-				const columns = lines[l].split(",");
+				const columns = lines[l].split(";");
 
 				//4D Object
-				const obj = new Object4D("noName", columns[0]);//, IFCFile);
-				phase.addObject4D(obj);
+				const obj4D = new Object4D("noName", columns[0]);//, IFCFile);
+				phase.addObject4D(obj4D);
+
+				const objects3D = columns[11].split(",");
+				for(let o in objects3D){
+					const obj3D = new Object3D("", objects3D[o].replace(" ", ""));
+					obj4D.addObject3D(obj3D);
+
+				}
 
 				//Tasks
 				const task = new Task(columns[2], columns[1]);
-				task.setObject4D(obj);
+				task.setObject4D(obj4D);
 				if(columns[6] == 0) starts[starts.length] = task;
 				if(columns[7] != 0) followings[followings.length] = {
 					t : task,
