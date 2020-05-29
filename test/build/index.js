@@ -215,7 +215,7 @@ eval("module.exports = function () {\n  window.addEventListener(\"load\", functi
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("var Hammer = __webpack_require__(/*! hammerjs */ \"./node_modules/hammerjs/hammer.js\");\n\n__webpack_require__(!(function webpackMissingModule() { var e = new Error(\"Cannot find module 'animate.css'\"); e.code = 'MODULE_NOT_FOUND'; throw e; }()));\n\nmodule.exports = function () {\n  window.addEventListener(\"load\", function () {\n    init();\n  });\n};\n\nfunction init() {\n  // get a reference to an element\n  var stage = document.getElementById('stage'); // create a manager for that element\n\n  var mc = new Hammer.Manager(stage); // create a recognizer\n\n  var tap = new Hammer.Tap(); // add the recognizer\n\n  mc.add(tap); // subscribe to events\n\n  mc.on('tap', function (e) {\n    // do something cool\n    stage.className = 'selected';\n  });\n}\n\n//# sourceURL=webpack:///./test/src/test5/test5.js?");
+eval("var Hammer = __webpack_require__(/*! hammerjs */ \"./node_modules/hammerjs/hammer.js\");\n\nmodule.exports = function () {\n  window.addEventListener(\"load\", function () {\n    init();\n  });\n};\n\nfunction init() {\n  // get a reference to an element\n  var stage = document.getElementById('stage'); // create a manager for that element\n\n  var mc = new Hammer.Manager(stage); // create a recognizer\n\n  var tap = new Hammer.Tap(); // add the recognizer\n\n  mc.add(tap); // subscribe to events\n\n  mc.on('tap', function (e) {\n    // do something cool\n    stage.className = 'selected';\n  });\n}\n\n//# sourceURL=webpack:///./test/src/test5/test5.js?");
 
 /***/ })
 

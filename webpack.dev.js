@@ -2,6 +2,11 @@ const path = require('path');
 
 module.exports = {
 	mode:'development',
+	node: {
+		  fs: 'empty',
+		  net:'empty',
+		  tls: 'empty'
+		},
 	watch : true,
   entry: './src/index.js',
   output: {

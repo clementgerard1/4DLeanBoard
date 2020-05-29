@@ -1,6 +1,4 @@
 const Hammer = require("hammerjs");
-require("animate.css");
-
 module.exports = () => {
 
 	window.addEventListener("load", function(){

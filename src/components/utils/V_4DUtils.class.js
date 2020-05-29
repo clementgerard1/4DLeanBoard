@@ -7,6 +7,7 @@ class V_4DUtils{
 	/**
 		Add ForgeViewer as listener of TaskTable Changement
 		@param {V_forgeViewer} V_forgeViewer which become reactive
+		@static
 	*/
 	static addForgeViewer(viewer){
 		this.viewers.push(viewer);
@@ -15,6 +16,7 @@ class V_4DUtils{
 	/**
 		Highlight Object4D on Forge Viewer
 		@param {Object4D} Object4D to hightlight
+		@static
 	*/
 	static highlightTask(object4D){
 		for(let v in this.viewers){

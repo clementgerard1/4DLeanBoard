@@ -9,6 +9,7 @@ class V_TaskTableUtils{
 	/**
 		Add V_Task as listener of TaskTable Changement
 		@param {V_task} V_task which become reactive
+		@static
 	*/
 	static addTask(task){
 		this.tasks.push(task);
@@ -17,6 +18,7 @@ class V_TaskTableUtils{
 	/**
 		Set the token
 		@param {V_task} obj which ask for the token
+		@static
 	*/
 	static getToken(obj){
 		this.token = {
@@ -36,6 +38,7 @@ class V_TaskTableUtils{
 		Check if the V_task has the toekn
 		@param {V_task} obj which ask 
 		@returns {boolean}
+		@static
 	*/
 	static isTokenOwner(obj){
 		if(this.token != null){

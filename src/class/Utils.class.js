@@ -1,4 +1,5 @@
 import "regenerator-runtime/runtime";
+import ForgeSDK from 'forge-apis';
 
 /**
  * @class Utils
@@ -46,6 +47,63 @@ class Utils{
 		return this.ids[type]++;
 	}
 
+	/**
+		Get Autodesk Auth token
+		@param {string} idClient
+		@param {string} secretClient
+		@returns {string} Autodesk token
+		@static
+	*/
+	static async getAutodeskAuth(idClient, secretClient){
+		const oAuth2TwoLegged = new ForgeSDK.AuthClientTwoLegged(idClient, secretClient, [
+		    'data:read',
+		    'data:write'
+		], true);
+		let token = null;
+		await oAuth2TwoLegged.authenticate().then(function(credentials){
+			token = credentials.access_token;
+		}, function(err){
+		    throw err;
+		});
+		return token;
+
+	}
+
+	/**
+		Create Bucket
+		@param {string} token
+		@returns {string} token
+		@static
+	*/
+	static async createForgeBucket(token){
+		const bucketsApi = new ForgeSDK.BucketsApi();
+
+		let bucket = null;
+		/*console.log("**** Creating Bucket : " + bucketKey);
+		var createBucketJson = {
+			'bucketKey': bucketKey,
+			'policyKey': 'temporary'
+		};
+		return bucketsApi.createBucket(createBucketJson, {}, oAuth2TwoLegged, oAuth2TwoLegged.getCredentials());
+		await bucketsApi.createBucket({
+			'bucketKey' : "4DLeanBoard",
+			'policyKey': 'temporary'
+			).then(function(buck){
+			bucket = buck;
+		});
+		console.log(bucket);*/
+		return token;
+	}
+
+	/**
+		uploadIFCFileToABucket
+		@param {string} token
+		@returns {string} token
+		@static
+	*/
+	static async uploadIFCFileToForge(token){
+
+	}
 
 }
 

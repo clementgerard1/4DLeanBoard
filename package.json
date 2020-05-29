@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "express": "^4.17.1",
+    "forge-apis": "^0.7.3",
     "hammerjs": "^2.0.8",
     "vue": "^2.6.11"
   }
