@@ -15,6 +15,7 @@ export default {
 		'model',
 		'timeline',
 		'tasktablestart',
+		'time',
 		'duration'
 	],
 	provide: function(){
@@ -37,20 +38,15 @@ export default {
 			return infos;
 		},
 		lineplayed : function(){
-			if(this.tasktablestart < 2){
-				return this.tasktablestart;
-			}else if(this.tasktablestart > this.duration - 3){
-				return 5 + -(this.duration - this.tasktablestart);
+			if(this.time < 2){
+				return this.time;
+			}else if(this.time > this.duration - 3){
+				return 5 + -(this.duration - this.time);
 			}else{
 				return 2;
 			}
 		},
 		_tasktablestart: function(){
-			/*if(this.tasktable > 2){
-				return this.tasktablestart - 2;
-			}else{
-				return 0;
-			}*/
 			return this.tasktablestart;	
 		}
 

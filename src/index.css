@@ -1,0 +1,14 @@
+#content{
+	display : flex;
+	height: 100vh;
+	width : 100vw;
+}
+
+#forgeViewer{
+	width : 50%;
+}
+
+#taskTableFrame{
+	border-left : 10px solid black;
+	width : 50%;
+}

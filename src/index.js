@@ -3,7 +3,11 @@ import Utils from "./class/Utils.class.js";
 import Loader from "./class/Loader.class.js";
 import Timeline from "./class/Timeline.class.js";
 import V_taskTable from "./components/V_taskTable.vue";
+import V_taskTableFrame from "./components/V_taskTableFrame.vue";
+import V_forgeViewer from "./components/V_forgeViewer.vue";
 import Hammer from "hammerjs";
+import "./index.css";
+import Config from "../config.js";
 
 window.addEventListener("load", function(){
 	init();
@@ -16,12 +20,12 @@ function init(){
 	.then( timeline => {
 		//Model Loaded and Timeline created
 		const model = timeline.getModel();
-		const taskTableStart = 10;
+		const playerInit = 10;
 		const phase = timeline.getModel().getMilestones()[0].getPhases()[0];
-	  	const duration = model.getDuration();
+	  const duration = model.getDuration();
 
-	  	//Touch gestures
-	  	Vue.directive("tap", {
+	  //Touch gestures
+	  Vue.directive("tap", {
 			bind: function(el, binding) {
 				if (typeof binding.value === "function") {
 					const mc = new Hammer(el);
@@ -32,22 +36,33 @@ function init(){
 			}
 		});
 
+		//Création du viewer
+		let clientId = Config.autoDeskForgeSettings[Config.autoDeskAccount].clientId;
+		let clientSecret = Config.autoDeskForgeSettings[Config.autoDeskAccount].clientSecret;
+		/*
+
+		*/const viewer = null;/*
+
+		*/
+
 		const app = new Vue({
 			el : '#content',
 			components : {
-				tasktable : V_taskTable,
+				forgeviewer : V_forgeViewer,
+				tasktableframe : V_taskTableFrame,
 			},
 			data:{
-				tasktablestart : taskTableStart,
+				playerinit : playerInit,
 				timeline : timeline,
 				model : model,
-				duration : duration
+				duration : duration,
+				viewer : viewer,
 	 		},
 
 	 		template : `
-	 		<div>
-	 			<tasktable v-bind:model="model" v-bind:timeline="timeline" v-bind:tasktablestart="tasktablestart" v-bind:duration="duration"></tasktable>
-	 			<input min=0 v-bind:max="duration" type="number" v-model.number="tasktablestart"/>
+	 		<div id="content">
+	 			<forgeviewer viewer="viewer"></forgeviewer>
+	 			<tasktableframe v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit" v-bind:duration="duration"></tasktableframe>
 	 		</div>
 	 		`
 		});

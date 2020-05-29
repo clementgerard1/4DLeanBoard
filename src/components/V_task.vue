@@ -1,4 +1,6 @@
 import taskSVG from "./assets/task.svg";
+import V_taskTableUtils from "./utils/V_taskTableUtils.class.js";
+import V_4DUtils from "./utils/V_4DUtils.class.js";
 import "./V_task.css";
 
 export default {
@@ -23,6 +25,14 @@ export default {
 		'time',
 		'phase'
 	],
+	created: function(){
+		V_taskTableUtils.addTask(this);
+	},
+	updated: function(){
+		if(this.task != null && this.selected){
+			V_4DUtils.highlightTask(this.task.getObject4D());
+		}
+	},
 	computed: {
 		task : function(){
 			return this.timeline.getTaskByTeam(this.time, this.team)
@@ -41,16 +51,19 @@ export default {
 		},
 		taskteam : function(){
 			return this.team.getName();
-		}/*,
-		phaseColor : function(){
-			if(this.task != null){
-				return this.task.getPhase().getClassColor();
-
-		}*/
+		}
+	},
+	watch:{
+		time : function(){
+			this.selected = V_taskTableUtils.isTokenOwner(this);
+		}
 	},
 	methods:{
 		handleTap: function(event){
-			this.selected = true;
+			V_taskTableUtils.getToken(this);
+		},
+		setSelectedValue(bool){
+			this.selected = bool;
 		}
 	},
 	template : `
