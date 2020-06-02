@@ -40,11 +40,9 @@ function init(){
 		let clientId = Config.autoDeskForgeSettings[Config.autoDeskAccount].clientId;
 		let clientSecret = Config.autoDeskForgeSettings[Config.autoDeskAccount].clientSecret;
 
-		Utils.getAutodeskAuth(clientId, clientSecret).then(Utils.createForgeBucket).then( token => {
-			console.log(token);
-			console.log(window.Autodesk);
-
-			var urn = 'urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6dGVzdF9jb2xsYWJfdjQvUHJvamVjdDEuaWZj'
+		Utils.getAutodeskAuth(clientId, clientSecret).then(Utils.createForgeBucket).then( oAuth => Utils.uploadIFCFileToForge(oAuth, "datas/Project1.ifc")).then( obj => {
+			
+			/*var urn = 'urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6dGVzdF9jb2xsYWJfdjQvUHJvamVjdDEuaWZj'
 
 		    /////////////////////////////////////////////////////////////////
 		    // Initialization Options
@@ -134,7 +132,7 @@ function init(){
 		      function() {
 		        onEnvInitialized ()
 		      }
-			)
+			)*/
 		});
 		/*
 
