@@ -1,4 +1,4 @@
-import "./V_taskTable.css";
+import "./V_taskTable.scss";
 import V_tasksInPhase from "./V_tasksInPhase.vue";
 import Model from "../class/Model.class.js";
 

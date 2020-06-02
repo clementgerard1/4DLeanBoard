@@ -1,7 +1,7 @@
 import taskSVG from "./assets/task.svg";
 import V_taskTableUtils from "./utils/V_taskTableUtils.class.js";
 import V_4DUtils from "./utils/V_4DUtils.class.js";
-import "./V_task.css";
+import "./V_task.scss";
 
 export default {
 	data : function(){

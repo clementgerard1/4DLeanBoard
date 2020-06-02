@@ -1,4 +1,4 @@
-import "./V_taskTableFrame.css";
+import "./V_taskTableFrame.scss";
 import V_taskTable from "./V_taskTable.vue";
 
 export default {

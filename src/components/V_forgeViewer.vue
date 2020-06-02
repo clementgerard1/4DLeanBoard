@@ -1,7 +1,15 @@
 import taskSVG from "./assets/task.svg";
 import V_4DUtils from "./utils/V_4DUtils.class.js";
-import "./V_forgeViewer.css";
+import "./V_forgeViewer.scss";
 
+/**
+	* @vue-prop {Object} manifest forge Manifest
+	* @vue-prop {Object} oauth object contenant l'authentification
+	* @vue-prop {Timeline} timeline - Timeline Object 
+	* @vue-prop {Model} model - Model Object
+	* @vue-event {Number} increment - Emit counter's value after increment
+	* @vue-event {Number} decrement - Emit counter's value after decrement
+*/
 export default {
 	props:[
 		"manifest",
@@ -41,7 +49,7 @@ export default {
 	      viewer.loadModel(doc.getViewablePath(selectedItem))
 		  
 		  viewer.impl.setSelectionColor(new THREE.Color(1,0,0));
-		  viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, ()=>viewer.select(1))
+		  viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, () => viewer.select(1))
 		},
 		onEnvInitialized(that){
 			Autodesk.Viewing.Document.load(

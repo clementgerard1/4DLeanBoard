@@ -1,5 +1,5 @@
 import V_task from "./V_task.vue";
-import "./V_tasksInPhase.css";
+import "./V_tasksInPhase.scss";
 
 export default {
 	data : function(){

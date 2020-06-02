@@ -6,7 +6,7 @@ import V_taskTable from "./components/V_taskTable.vue";
 import V_taskTableFrame from "./components/V_taskTableFrame.vue";
 import V_forgeViewer from "./components/V_forgeViewer.vue";
 import Hammer from "hammerjs";
-import "./index.css";
+import "./index.scss";
 import Config from "../config.js";
 
 window.addEventListener("load", function(){
