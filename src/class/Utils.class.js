@@ -98,13 +98,7 @@ class Utils{
 
 		const derivativesApi = new ForgeSDK.DerivativesApi();
 		const objectsApi2 = new ForgeSDK.ObjectsApi();
-		let toReturn = null;
-
-		await objectsApi2.getObject(Utils.forgeBucketName, Utils.forgeFileName + "rbor", {}, oAuth, oAuth.getCredentials()).then(
-			result => {console.log(result)}
-		).catch(
-			
-		)
+		let manifest = null;
 
 		await Utils.loadTextFile(url).then( file => {
 		  	const objectsApi = new ForgeSDK.ObjectsApi();
@@ -113,7 +107,6 @@ class Utils{
 				response => {
 
 					const urn = this.getEncodedUrn(response.body.objectId).replace("urn:", "");
-
 					
 					//Remove preexisting translation
 					//derivativesApi.deleteManifest(urn, oAuth, oAuth.getCredentials());
@@ -134,7 +127,8 @@ class Utils{
 							]
 						}
 					}
-					return derivativesApi.translate(job , { xAdsForce : true }, oAuth, oAuth.getCredentials());
+
+					return derivativesApi.translate(job , {}, oAuth, oAuth.getCredentials());
 				}
 			).then( 
 				response => {
@@ -142,14 +136,17 @@ class Utils{
 				}
 			).then( 
 				result => {
-					toReturn = result;
+					manifest = result.body;
 				})
 			.catch(
 				error => console.log(error)
 			);
 		});
 
-		console.log(toReturn);
+		return {
+			"manifest" : manifest,
+			"oAuth" : oAuth
+		};
 	}
 
 	/**
