@@ -45,10 +45,6 @@ export default {
 			}else{
 				return 2;
 			}*/
-			console.log("-");
-			console.log(this.tasktablestart);
-			console.log(this.time);
-			console.log(this.time - this.tasktablestart);
 			return this.time - this.tasktablestart;
 		},
 		_tasktablestart: function(){

@@ -55,12 +55,16 @@ export default {
 	},
 	watch:{
 		time : function(){
-			this.selected = V_taskTableUtils.isTokenOwner(this);
+			if(this.task != null){
+				this.selected = V_taskTableUtils.isTokenOwner(this);
+			}
 		}
 	},
 	methods:{
 		handleTap: function(event){
-			V_taskTableUtils.getToken(this);
+			if(this.task != null){
+				V_taskTableUtils.getToken(this);
+			}
 		},
 		setSelectedValue(bool){
 			this.selected = bool;

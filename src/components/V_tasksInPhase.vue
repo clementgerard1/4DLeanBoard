@@ -4,6 +4,7 @@ import "./V_tasksInPhase.scss";
 export default {
 	data : function(){
 		return {
+			"status" : false
 		}
 	},
 	components : {
