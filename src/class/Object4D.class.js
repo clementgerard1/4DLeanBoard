@@ -75,7 +75,7 @@ class Object4D{
 	*/
 	getObject3D(id){
 		if(typeof this.#objects3D[id] == "undefined"){
-			console.error("getObject3D(id) : id " + id + " unknowned on object3D collection")
+			//console.error("getObject3D(id) : id " + id + " unknowned on object3D collection")
 			return null;
 		}else{
 			return this.#objects3D[id];

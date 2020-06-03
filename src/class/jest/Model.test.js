@@ -2,6 +2,8 @@ import Model from '../Model.class.js';
 import Utils from '../Utils.class.js';
 import Milestone from '../Milestone.class.js';
 import Phase from '../Phase.class.js';
+import Object4D from '../Object4D.class.js';
+import Object3D from '../Object3D.class.js';
 import Contractor from '../Contractor.class.js';
 
 beforeEach(() => {
@@ -91,4 +93,30 @@ test('getContractors()', () => {
 	const contractor2 = new Contractor();
 	phase2.setContractor(contractor2);
   expect(model.getContractors().length).toBe(2);
+});
+
+test('getPhases()', () => {
+	const model = new Model();
+	const milestone = new Milestone();
+	const milestone2 = new Milestone();
+	const phase = new Phase();
+	const phase2 = new Phase();
+	model.addMilestone(milestone);
+	model.addMilestone(milestone2);
+	milestone.addPhase(phase);
+	milestone2.addPhase(phase2);
+	expect(model.getPhases()).toStrictEqual([phase, phase2]);
+});
+
+test('get3DObjectById(id)', () => {
+	const model = new Model();
+	const milestone = new Milestone();
+	const phase = new Phase();
+	const obj4D = new Object4D();
+	const obj3D = new Object3D();
+	obj4D.addObject3D(obj3D);
+	phase.addObject4D(obj4D);
+	model.addMilestone(milestone);
+	milestone.addPhase(phase);
+	expect(model.get3DObjectById(obj3D.getId())).toStrictEqual(obj3D);
 });

@@ -6,20 +6,10 @@ export default {
 		tasktable : V_taskTable,
 	},
 	data: function(){
-			let taskTableStart = this.playerinit - 2;
-			if(taskTableStart < 0) taskTableStart = 0;
-			if(taskTableStart > this.duration - 6) taskTableStart = this.duration - 6;
-
-			let time = taskTableStart + 2;
-			if(time < 2){
-				time = this.taskTableStart + time;
-			}
-			if(time > this.duration - 3){
-				time = this.duration - (this.duration- time);
-			}
+			let taskTableStart = Math.trunc(this.playerinit / 6) * 6;
 			return {
 				tasktablestart : taskTableStart,
-				time : time
+				time : this.playerinit
 			};
 	},
 	props:[
@@ -35,10 +25,12 @@ export default {
 	},
 	watch:{
 		time: function(){
+			/*
 			let taskTableStart = this.time - 2;
 			if(taskTableStart < 0) taskTableStart = 0;
 			if(taskTableStart > this.duration - 6) taskTableStart = this.duration - 6;
-			this.tasktablestart = taskTableStart;
+			this.tasktablestart = taskTableStart;*/
+			this.tasktablestart = Math.trunc(this.time / 6) * 6;
 		}
 	},
 	template : `

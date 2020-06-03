@@ -3,8 +3,10 @@ import Phase from '../Phase.class.js';
 import Task from '../Task.class.js';
 import Delivrable from '../Delivrable.class.js';
 import Object4D from '../Object4D.class.js';
+import Object3D from '../Object3D.class.js';
 import Contractor from '../Contractor.class.js';
 import TaskTeam from '../TaskTeam.class.js';
+
 
 beforeEach(() => {
   Utils.ids = {
@@ -203,5 +205,14 @@ test('setEndDate(date)', () => {
 	const date = new Date();
 	phase.setEndDate(date);
 	expect(phase.getEndDate()).toBe(date);
+});
+
+test('get3DObjectById(id)', () => {
+	const phase = new Phase();
+	const obj4D = new Object4D();
+	const obj3D = new Object3D();
+	obj4D.addObject3D(obj3D);
+	phase.addObject4D(obj4D);
+	expect(phase.get3DObjectById(obj3D.getId())).toStrictEqual(obj3D);
 });
 

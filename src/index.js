@@ -46,7 +46,6 @@ function init(){
 
 			//Création du viewer
 
-
 			let clientId = Config.autoDeskForgeSettings[Config.autoDeskAccount].clientId;
 			let clientSecret = Config.autoDeskForgeSettings[Config.autoDeskAccount].clientSecret;
 

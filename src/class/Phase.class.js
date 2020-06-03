@@ -263,5 +263,21 @@ class Phase extends PlanningObject{
 		return this.#colorClass;
 	}
 
+	/*
+		get a 3D object which is included in the phase by its id
+		@param {String} id id (guid) of the object3D
+		@returns {Object3D}
+	*/
+	get3DObjectById(id){
+		const objects4D = this.getObjects4D();
+		for(let o in objects4D){
+			const result = objects4D[o].getObject3D(id);
+			if(result != null){
+				return result;
+			}
+		}
+		return null;
+	}
+
 }
 export default Phase;

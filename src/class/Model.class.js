@@ -155,5 +155,36 @@ class Model{
 		return 29;
 	}
 
+	/*
+		get all phases of the model
+		@returns {Array} Array of phases
+	*/
+	getPhases(){
+		const toReturn = [];
+		for(let m in this.#milestones){
+			const phases = this.#milestones[m].getPhases();
+			for(let p in phases){
+				toReturn.push(phases[p]);
+			}
+		}
+		return toReturn;
+	}
+
+	/*
+		get a 3D object which is included in the model by its id
+		@param {String} id id (guid) of the object3D
+		@returns {Object3D}
+	*/
+	get3DObjectById(id){
+		const phases = this.getPhases();
+		for(let p in phases){
+			const result = phases[p].get3DObjectById(id);
+			if(result != null){
+				return result;
+			}
+		}
+		return null;
+	}
+
 }
 export default Model;

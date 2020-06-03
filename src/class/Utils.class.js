@@ -101,15 +101,12 @@ class Utils{
 		let manifest = null;
 
 		await Utils.loadTextFile(url).then( file => {
-		  	const objectsApi = new ForgeSDK.ObjectsApi();
-				return objectsApi.uploadObject(Utils.forgeBucketName, Utils.forgeFileName, file.length, file, {}, oAuth, oAuth.getCredentials())
+		  const objectsApi = new ForgeSDK.ObjectsApi();
+			return objectsApi.uploadObject(Utils.forgeBucketName, Utils.forgeFileName, file.length, file, {}, oAuth, oAuth.getCredentials())
 			.then(
 				response => {
 
 					const urn = this.getEncodedUrn(response.body.objectId).replace("urn:", "");
-					
-					//Remove preexisting translation
-					//derivativesApi.deleteManifest(urn, oAuth, oAuth.getCredentials());
 
 					const job = {
 						input : 
