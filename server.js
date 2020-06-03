@@ -93,47 +93,47 @@ if(process.argv[2] == "dev"){
 	app.get('/', function(req,res){
 		if(!req.query.test){
 			if(config["socketConsole"]){
-				fs.readFile(__dirname + '/test/public/index.html', "utf8", function(err, html){
+				fs.readFile(__dirname + '/test-pages/public/index.html', "utf8", function(err, html){
 					res.send(html.slice(0, html.indexOf("<body>")) + logScript + html.slice(html.indexOf("<body>") + 6));
 				});
 			}else{
-				res.sendFile(__dirname + '/test/public/index.html');
+				res.sendFile(__dirname + '/test-pages/public/index.html');
 			}
 		}
 	});
 
 	app.get('/index.js', function(req,res){
 		if(!req.query.test){
-			res.sendFile(__dirname + '/test/build/index.js');
+			res.sendFile(__dirname + '/test-pages/build/index.js');
 		}
 	});
 
 	app.get('/entry.js', function(req,res){
 		if(!req.query.test){
-			res.sendFile(__dirname + '/test/build/entry.js');
+			res.sendFile(__dirname + '/test-pages/build/entry.js');
 		}
 	});
 
 	app.get('/entryVue.js', function(req,res){
 		if(!req.query.test){
-			res.sendFile(__dirname + '/test/build/entryVue.js');
+			res.sendFile(__dirname + '/test-pages/build/entryVue.js');
 		}
 	});
 
 	app.get('/:url',function(req,res){
 		if(req.params.url != "favicon.ico"){
-			if(fs.existsSync(__dirname + '/test/public/' + req.params.url + "/index.html")){
+			if(fs.existsSync(__dirname + '/test-pages/public/' + req.params.url + "/index.html")){
 				if(config["socketConsole"]){
-					fs.readFile(__dirname + '/test/public/' + req.params.url + "/index.html", "utf8", function(err, html){
+					fs.readFile(__dirname + '/test-pages/public/' + req.params.url + "/index.html", "utf8", function(err, html){
 						res.send(html.slice(0, html.indexOf("<body>")) + logScript + html.slice(html.indexOf("<body>") + 6));
 					});
 				}else{
-					res.sendFile(__dirname + '/test/public/' + req.params.url + "/index.html");
+					res.sendFile(__dirname + '/test-pages/public/' + req.params.url + "/index.html");
 				}
-			}else if(fs.existsSync(__dirname + '/test/public/' + req.params.url)){
-	    	res.sendFile(__dirname + '/test/public/' + req.params.url);
+			}else if(fs.existsSync(__dirname + '/test-pages/public/' + req.params.url)){
+	    	res.sendFile(__dirname + '/test-pages/public/' + req.params.url);
 	    }else{
-	    	res.sendFile(__dirname + '/test/' + req.params.url);
+	    	res.sendFile(__dirname + '/test-pages/' + req.params.url);
 	    }
 		}else{
 			res.status(404).send(null);
@@ -141,8 +141,8 @@ if(process.argv[2] == "dev"){
 	});
 
 	app.get('/:url/:file',function(req,res){
-		if(fs.existsSync(__dirname + '/test/public/' + req.params.url + "/" + req.params.file)){
-    	res.sendFile(__dirname + '/test/public/' + req.params.url + "/" + req.params.file);
+		if(fs.existsSync(__dirname + '/test-pages/public/' + req.params.url + "/" + req.params.file)){
+    	res.sendFile(__dirname + '/test-pages/public/' + req.params.url + "/" + req.params.file);
 		}else{
 			res.status(404).send(null);
 		}

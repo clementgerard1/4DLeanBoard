@@ -9,12 +9,12 @@ module.exports = {
 		},
 	watch : true,
   entry: {
-  	index : './test/src/index.js',
+  	index : './test-pages/src/index.js',
   	entry : './src/class/entry.js',
   	entryVue : './src/components/entry.js',
   },
   output: {
-    path: path.resolve(__dirname, './test/build'),
+    path: path.resolve(__dirname, './test-pages/build'),
     filename: '[name].js'
   },
   module: {

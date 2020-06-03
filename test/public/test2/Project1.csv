@@ -1,9 +1,0 @@
-﻿4DID,TID,Task,Start,End,Duration,Previous,Next,Level,Zone,Team
-101,101,Ground slab pouring,01/02/2021,10/02/2021,10,0,102,0,A,Masons 1
-102,102,Walls cladding,10/02/2021,10/02/2021,1,101,103,0,A,Masons 2
-103,103,Walls cladding,10/02/2021,11/02/2021,2,102,104,0,A,Masons 1
-104,104,Walls cladding,10/02/2021,12/02/2021,3,103,105,0,A,Masons 2
-105,105,Walls cladding,10/02/2021,13/02/2021,4,104,106,0,A,Masons 1
-106,106,Windows installation,13/02/2021,13/02/2021,1,105,107,0,A,Carpenters
-107,107,Doors installation,13/02/2021,13/02/2021,1,106,108,0,A,Carpenters
-108,108,Roof installation,13/02/2021,20/02/2021,8,107,,1,A,Carpenters

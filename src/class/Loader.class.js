@@ -25,15 +25,17 @@ class Loader{
 		Load model from CSV
 		@param {string} CSVFile csv informations.
 		@param {string} IFCFile IFC file as string
+		@param {string} [delimiterColumn=,]
+		@param {string} [delimiterArray=;]
 		@param {string} [csvVersion=latest] Version of csv used.
 		@static
 	*/
-	static fromCSVandIFC(CSVFile, IFCFile, csvVersion = this.#latestCSVVersion){
-		return eval("this._v" + csvVersion.replace(".", "_")  + "(CSVFile, IFCFile)");
+	static fromCSVandIFC(CSVFile, IFCFile, delimiterColumn = ";", delimiterArray = ",", csvVersion = this.#latestCSVVersion){
+		return eval("this._v" + csvVersion.replace(".", "_")  + "(CSVFile, IFCFile,`" + delimiterColumn + "`,`" + delimiterArray + "`)");
 	}
 
 	//Version CSV 0.1
-	static _v0_1(CSVFile = null, IFCFile = null){
+	static _v0_1(CSVFile = null, IFCFile = null, delimiterColumn=";", delimiterArray=","){
 
 		//Errors
 		if(CSVFile == null){
@@ -63,13 +65,13 @@ class Loader{
 
 		for(let l in lines){
 			if(lines[l] != ""){
-				const columns = lines[l].split(";");
+				const columns = lines[l].split(delimiterColumn);
 
 				//4D Object
 				const obj4D = new Object4D("noName", columns[0]);//, IFCFile);
 				phase.addObject4D(obj4D);
 
-				const objects3D = columns[11].split(",");
+				const objects3D = columns[11].split(delimiterArray);
 				for(let o in objects3D){
 					const obj3D = new Object3D("", objects3D[o].replace(" ", ""));
 					obj4D.addObject3D(obj3D);
