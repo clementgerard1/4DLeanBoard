@@ -1,10 +1,12 @@
 import "./V_taskTable.scss";
 import V_tasksInPhase from "./V_tasksInPhase.vue";
+import V_taskTableHeader from "./V_taskTableHeader.vue";
 import Model from "../class/Model.class.js";
 
 export default {
 	components: {
 		tasksinphase : V_tasksInPhase,
+		tasktableheader : V_taskTableHeader
 	},
 	data : function(){
 		return {
@@ -27,7 +29,12 @@ export default {
 	computed: {
 		phasesInfos: function(){
 			this.tasktablestart = parseInt(this.tasktablestart);
-			const phases = this.timeline.getPhasesBetweenTwoDates(this.tasktablestart, this.tasktablestart + 5);
+			let phases = null;
+			if(this.tasktablestart + 5 <= this.duration){
+				phases = this.timeline.getPhasesBetweenTwoDates(this.tasktablestart, this.tasktablestart + 5);
+			}else{
+				phases = this.timeline.getPhasesBetweenTwoDates(this.tasktablestart, this.duration);
+			}
 			const infos = [];
 			for(let p in phases){
 				infos[infos.length] = {
@@ -58,21 +65,27 @@ export default {
 	template : `
 		<div id="taskTable">
 			<div v-bind:class="[lineplayed == 0 ? 'played' : '', 'column']">
+				<tasktableheader v-bind:time="tasktablestart"></tasktableheader>
 				<tasksinphase v-bind:duration="_duration" v-bind:time="tasktablestart" v-bind:tasktablestart="_tasktablestart" v-for="phase in phasesInfos" :key="phase.id" v-bind:phase="phase.phase"></tasksinphase>
 			</div>
 			<div v-bind:class="[lineplayed == 1 ? 'played' : '', 'column']">
+				<tasktableheader v-bind:time="tasktablestart + 1"></tasktableheader>
 				<tasksinphase v-bind:duration="_duration" v-bind:time="tasktablestart + 1" v-bind:tasktablestart="_tasktablestart" v-for="phase in phasesInfos" :key="phase.id" v-bind:phase="phase.phase"></tasksinphase>
 			</div>
 			<div v-bind:class="[lineplayed == 2 ? 'played' : '', 'column']">
+				<tasktableheader v-bind:time="tasktablestart + 2"></tasktableheader>
 				<tasksinphase v-bind:duration="_duration" v-bind:time="tasktablestart + 2" v-bind:tasktablestart="_tasktablestart" v-for="phase in phasesInfos" :key="phase.id" v-bind:phase="phase.phase"></tasksinphase>
 			</div>
 			<div v-bind:class="[lineplayed == 3 ? 'played' : '', 'column']">
+				<tasktableheader v-bind:time="tasktablestart + 3"></tasktableheader>
 				<tasksinphase v-bind:duration="_duration" v-bind:time="tasktablestart + 3" v-bind:tasktablestart="_tasktablestart" v-for="phase in phasesInfos" :key="phase.id" v-bind:phase="phase.phase"></tasksinphase>
 			</div>
 			<div v-bind:class="[lineplayed == 4 ? 'played' : '', 'column']">
+				<tasktableheader v-bind:time="tasktablestart + 4"></tasktableheader>
 				<tasksinphase v-bind:duration="_duration" v-bind:time="tasktablestart + 4" v-bind:tasktablestart="_tasktablestart" v-for="phase in phasesInfos" :key="phase.id" v-bind:phase="phase.phase"></tasksinphase>
 			</div>
 			<div v-bind:class="[lineplayed == 5 ? 'played' : '', 'column']">
+				<tasktableheader v-bind:time="tasktablestart + 5"></tasktableheader>
 				<tasksinphase v-bind:duration="_duration" v-bind:time="tasktablestart + 5" v-bind:tasktablestart="_tasktablestart" v-for="phase in phasesInfos" :key="phase.id" v-bind:phase="phase.phase"></tasksinphase>
 			</div>
 		</div>

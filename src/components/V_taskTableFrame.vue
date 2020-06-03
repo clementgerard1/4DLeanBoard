@@ -1,9 +1,11 @@
 import "./V_taskTableFrame.scss";
 import V_taskTable from "./V_taskTable.vue";
+import V_taskTablePhaseRow from "./V_taskTablePhaseRow.vue";
 
 export default {
 	components: {
 		tasktable : V_taskTable,
+		tasktablephaserow : V_taskTablePhaseRow,
 	},
 	data: function(){
 			let taskTableStart = Math.trunc(this.playerinit / 6) * 6;
@@ -35,6 +37,7 @@ export default {
 	},
 	template : `
 		<div id="taskTableFrame">
+			<tasktablephaserow></tasktablephaserow>
 			<tasktable v-bind:model="_model" v-bind:timeline="_timeline" v-bind:tasktablestart="tasktablestart" v-bind:time="time" v-bind:duration="_duration"></tasktable>
 	 		<input id="taskTablePlayer" min=0 v-bind:max="_duration" type="number" v-model.number="time"/>
 	 	</div>

@@ -35,7 +35,7 @@ export default {
 	},
 	computed: {
 		task : function(){
-			return this.timeline.getTaskByTeam(this.time, this.team)
+			return this.timeline.getTaskByTeamAndPhase(this.time, this.team, this.phase)
 		},
 		notEmpty : function(){
 			return this.task != null;

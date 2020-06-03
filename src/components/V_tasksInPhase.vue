@@ -28,7 +28,8 @@ export default {
 	],
 	computed: {
 		teams : function(){
-			return this.timeline.getTaskTeamsBetweenTwoDates(this.phase, 0, this.duration);
+			const teams = this.timeline.getTaskTeamsBetweenTwoDatesByPhase(this.phase, 0, this.duration);
+			return teams;
 			//return this.timeline.getTaskTeamsBetweenTwoDates(this.phase, this.tasktablestart, this.tasktablestart + 5);
 		},
 		_time : function(){

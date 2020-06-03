@@ -174,14 +174,6 @@ class Task extends PlanningObject{
 	}
 
 	/**
-		Get duration of the task
-		@returns {int} duration
-	*/
-	getDuration(){
-		return this.#operations[Object.keys(this.#operations)[0]].getDuration();
-	}
-
-	/**
 		Get the zone of the task
 		@returns {Zone} zone of the task
 	*/

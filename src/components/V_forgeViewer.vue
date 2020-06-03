@@ -1,5 +1,6 @@
 import taskSVG from "./assets/task.svg";
 import V_4DUtils from "./utils/V_4DUtils.class.js";
+import Config from "../../config.js"
 import "./V_forgeViewer.scss";
 
 /**
@@ -67,31 +68,26 @@ export default {
 	},
 	created : function(){
 		V_4DUtils.addForgeViewer(this);
-
-		console.log(this.manifest);
-		console.log(this.oauth);
-		console.log(this.model);
-		console.log(this.timeline);
-		console.log("created");
 	},
 	mounted : function(){
-		console.log("mounted");
-		const that = this;
-		console.log("urn:" + this.manifest.urn);
-		const initOptions = {
-		      documentId: "urn:" + this.manifest.urn,
-		      env: 'AutodeskProduction',
-		      getAccessToken: function(onGetAccessToken) {
-		        return that.oauth.credentials.access_token;
-		      }
-		};
+		if(Config["forgeRenderer"]){
+			const that = this;
+			console.log("urn:" + this.manifest.urn);
+			const initOptions = {
+			      documentId: "urn:" + this.manifest.urn,
+			      env: 'AutodeskProduction',
+			      getAccessToken: function(onGetAccessToken) {
+			        return that.oauth.credentials.access_token;
+			      }
+			};
 
-	    Autodesk.Viewing.Initializer(
-	      initOptions,
-	      function() {
-	        that.onEnvInitialized(that)
-	      }
-		)
+		    Autodesk.Viewing.Initializer(
+		      initOptions,
+		      function() {
+		        that.onEnvInitialized(that)
+		      }
+			)
+		}
 	},
 	template : `
 	<div id="forgeViewer">

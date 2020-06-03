@@ -1,10 +1,13 @@
+import Milestone from "./Milestone.class.js";
+import Phase from "./Phase.class.js";
 import Task from "./Task.class.js";
+import Operation from "./Operation.class.js";
 
 class Timeline{
 
 	#model;
 	#steps;
-	#starts;
+	#startDate;
 
 	/**
  		@class Timeline
@@ -13,43 +16,69 @@ class Timeline{
 		@constructs
 
 		@param {Model} [model] Name of model of the timeline.
-		@param {int} [starts] list of start nodes.
 	*/
-	constructor(model, starts = null){
+	constructor(model){
 		this.#model = model;
 		this.#steps = [];
-		this.#starts = starts;
-		this._constructTimeline();
+		this.#startDate = null;
+		this.#constructTimeline();
 	}
 
-	_constructTimeline(){
-		for(let s in this.#starts){
-			const duration =  this.#starts[s].getDuration();
-			this._addTask(this.#starts[s], 0, duration);
-			this._nextNode(this.#starts[s], duration);
+	#constructTimeline(){
+		
+		const milestones = this.#model.getMilestones();
+
+		//Determine startDate
+		this.#startDate = null;
+		for(let m in milestones){
+			const d = milestones[m].getStartDate();
+			if(this.#startDate == null || d < this.#startDate) this.#startDate = d;
+		}
+
+		//Fill timeline
+		for(let m in milestones){
+			this.#fillTimeline(milestones[m]);
+			const phases = milestones[m].getPhases();
+			for(let p in phases){
+				this.#fillTimeline(phases[p]);
+				const tasks = phases[p].getTasks();
+				for(let t in tasks){
+					this.#fillTimeline(tasks[t]);
+					const operations = tasks[t].getOperations();
+					for(let o in operations){
+						this.#fillTimeline(operations[o]);
+					}
+				}
+			}
+		}
+
+	}
+
+	#fillTimeline(object){
+		const startDate = object.getStartDate();
+		const endDate = object.getEndDate();
+		const startStepDate = (startDate.getTime() - this.#startDate.getTime()) / (1000 * 3600 * 24);
+		const length = (endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24);
+		for(let i = startStepDate ; i <= startStepDate + length ; i++){
+			this.#initialiseStepArray(i);
+			if(object instanceof Milestone){
+				this.#steps[i]["milestones"].push(object);
+			}else if(object instanceof Phase){
+				this.#steps[i]["phases"].push(object);
+			}else if(object instanceof Task){
+				this.#steps[i]["tasks"].push(object);
+			}else if(object instanceof Operation){
+				this.#steps[i]["operations"].push(object);
+			}
 		}
 	}
 
-	_addTask(task, start, duration){
-		for(let i = start; i < (start + duration); i++){
-			this._initialiseStepArray(i);
-			this.#steps[i].tasks.push(task);
-			this.#steps[i].phases.push(task.getParentPhase());
-		}
-	}
-
-	_nextNode(fromTask, newStart){
-		const nexts = fromTask.getFollowingTasks();
-		for(let n in nexts){
-			this._addTask(nexts[n], newStart, nexts[n].getDuration());
-			this._nextNode(nexts[n], newStart + nexts[n].getDuration());
-		}
-	}
-
-	_initialiseStepArray(t){		
+	#initialiseStepArray(t){		
 			if(typeof this.#steps[t] == "undefined") this.#steps[t] = { 
+				milestones : [],
 				phases : [],
-				tasks : []
+				tasks : [],
+				operations : []
 			};
 	}
 
@@ -77,6 +106,7 @@ class Timeline{
 		@returns {Array(TaskTeam)} 
 	*/
 	getTaskTeamsBetweenTwoDates(start, end){
+
 		const teams = [];
 		for(let i = start; i <= end ; i++){
 			const tasks = this.#steps[i].tasks;
@@ -112,22 +142,27 @@ class Timeline{
 	}
 
 	/**
-		get task for a team at a moment
+		get task for a team at a moment for a phase
 		@param {int} time
 		@param {Team} team
+		@param {Phase} [phase=null] 
 		@returns {Task} return null if no task exist at this moment 
 	*/
-	getTaskByTeam(time, team){
-		const tasks = this.#steps[time].tasks;
-		for(let t in tasks){
-			if(tasks[t] instanceof Task){
-				let isIn = false;
-				const teamt = tasks[t].getTaskTeam();
-				if(teamt.getId() == team.getId()) isIn = true;
-				if(isIn) return tasks[t];
+	getTaskByTeamAndPhase(time, team, phase = null){
+		if(typeof this.#steps[time] != "undefined"){
+			const tasks = this.#steps[time].tasks;
+			for(let t in tasks){
+				if(tasks[t] instanceof Task && (phase == null || tasks[t].getParentPhase() == phase)){
+					let isIn = false;
+					const teamt = tasks[t].getTaskTeam();
+					if(teamt.getId() == team.getId()) isIn = true;
+					if(isIn) return tasks[t];
+				}
 			}
+			return null;
+		}else{
+			return null;
 		}
-		return null;
 	}
 
 	/**
@@ -137,7 +172,7 @@ class Timeline{
 		@param {int} end
 		@returns {Array(TaskTeam)} 
 	*/
-	getTaskTeamsBetweenTwoDates(phase, start, end){
+	getTaskTeamsBetweenTwoDatesByPhase(phase, start, end){
 		const teams = phase.getTaskTeams();
 		const toReturn = [];
 		for(let t in teams){
@@ -148,6 +183,14 @@ class Timeline{
 			}
 		}
 		return toReturn;
+	}
+
+	/**
+		Get the start date of the model
+		@returns {Date} 
+	*/
+	getStartDate(){
+		return this.#startDate;
 	}
 
 }

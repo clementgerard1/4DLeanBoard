@@ -1,0 +1,31 @@
+import "./V_taskTableHeader.scss";
+import weekNumber from "./assets/WeekNumber.svg";
+import Utils from "../class/Utils.class.js";
+
+export default {
+	props:[
+		'time',
+	],
+	inject : [
+		'timeline',
+		'model',
+	],
+	computed: {
+		firstday : function(){
+			let date = new Date(this.timeline.getStartDate());
+			date.setDate(date.getDate() + (this.time * 7));
+			return date.getDate() + "/" + date.getMonth();
+		},
+		weeknumber : function(){
+			let date = new Date(this.timeline.getStartDate());
+			date.setDate(date.getDate() + (this.time * 7));
+			return Utils.getWeekNumber(date);
+		}
+	},
+	template : `
+
+		<div class="taskTableHeader">
+			` + weekNumber + `
+	 	</div>
+	`,
+}

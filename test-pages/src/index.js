@@ -2,6 +2,7 @@ const dataStructure = require("./dataStructure/dataStructure.js");
 const privatePropertiesAndMethods = require("./privatePropertiesAndMethods/privatePropertiesAndMethods.js");
 const testTouches = require("./testTouches/testTouches.js");
 const touchGestures = require("./touchGestures/touchGestures.js");
+const animateTests = require("./animateTests/animateTests.js");
 
 for( let n in window.boardClasses){
 	eval("window." + n + " = window.boardClasses[n];");

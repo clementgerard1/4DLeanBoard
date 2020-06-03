@@ -152,7 +152,7 @@ class Model{
 		@returns {int}
 	*/
 	getDuration(){
-		return 29;
+		return 19;
 	}
 
 	/*

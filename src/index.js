@@ -13,7 +13,7 @@ window.addEventListener("load", function(){
 	init();
 });
 
-function init(){
+async function init(){
 
 	let model = null;
 	let playerInit = 10;
@@ -22,8 +22,8 @@ function init(){
 	let oAuth = null;
 	let timeline = null;
 
-	Promise.all([Utils.loadTextFile("datas/Project1.csv"), Utils.loadTextFile("datas/Project1.ifc")])
-	.then( files => Loader.fromCSVandIFC(files[0], files[1]))
+	await Utils.loadTextFile("datas/Project1.json")
+	.then( file => Loader.fromJSON(file))
 	.then( tl => {
 			//Model Loaded and Timeline created
 			timeline = tl;
@@ -48,37 +48,43 @@ function init(){
 			let clientId = Config.autoDeskForgeSettings[Config.autoDeskAccount].clientId;
 			let clientSecret = Config.autoDeskForgeSettings[Config.autoDeskAccount].clientSecret;
 
-			return Utils.getAutodeskAuth(clientId, clientSecret);
+			if(Config["forgeRenderer"]){
+				return Utils.getAutodeskAuth(clientId, clientSecret);
+			}else{
+				throw new Error("Not an error, just not rendering forge")
+			}
 		})
-	.then(Utils.createForgeBucket).then( oAuth => Utils.uploadIFCFileToForge(oAuth, "datas/Project1.ifc")).then( datas => {
+	.then(Utils.createForgeBucket)
+	.then( oAuth => Utils.uploadIFCFileToForge(oAuth, "datas/Project1.ifc"))
+	.then( datas => {
 
 		manifest = datas.manifest;
 		oAuth = datas.oAuth;
 
-		const app = new Vue({
-			el : '#content',
-			components : {
-				forgeviewer : V_forgeViewer,
-				tasktableframe : V_taskTableFrame,
-			},
-			data:{
-				playerinit : playerInit,
-				timeline : timeline,
-				model : model,
-				duration : duration,
-				manifest : manifest,
-				oauth : oAuth
-	 		},
-
-	 		template : `
-	 		<div id="content">
-	 			<forgeviewer v-bind:model="model" v-bind:timeline="timeline" v-bind:manifest="manifest" v-bind:oauth="oauth"></forgeviewer>
-	 			<tasktableframe v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit" v-bind:duration="duration"></tasktableframe>
-	 		</div>
-	 		`
-		});
-
 	})
 	.catch( error => console.error(error));
+
+	const app = new Vue({
+		el : '#content',
+		components : {
+			forgeviewer : V_forgeViewer,
+			tasktableframe : V_taskTableFrame,
+		},
+		data:{
+			playerinit : playerInit,
+			timeline : timeline,
+			model : model,
+			duration : duration,
+			manifest : manifest,
+			oauth : oAuth
+ 		},
+
+ 		template : `
+ 		<div id="content">
+ 			<forgeviewer v-bind:model="model" v-bind:timeline="timeline" v-bind:manifest="manifest" v-bind:oauth="oauth"></forgeviewer>
+ 			<tasktableframe v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit" v-bind:duration="duration"></tasktableframe>
+ 		</div>
+ 		`
+	});
 
 }
