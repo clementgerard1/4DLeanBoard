@@ -212,6 +212,22 @@ class Timeline{
 	}
 
 	/**
+		Check if a planningobject is active between two dates
+		@param {PlanningObject} obj
+		@param {int} start
+		@param {int} end
+		@returns {bool} 
+	*/
+	isActiveBetweenTwoDate(obj, start , end){
+		let i = start;
+		while(i <= end){
+			if(this.isActive(obj, i)) return true;
+			i++;
+		}
+		return false;
+	}
+
+	/**
 		Get tasks for a team and a phase between two date
 		@param {Phase} phase
 		@param {Team} team
@@ -233,20 +249,42 @@ class Timeline{
 		return toReturn;
 	}
 
-	getTaskByPhaseTeamTimeAndNth(phase, team, time, nth){
+	/**
+		Get task for a team and a phase and an number of task for the team between two date
+		@param {Phase} phase
+		@param {Team} team
+		@param {int} start
+		@param {int} end
+		@param {int} nth
+ 		@returns {Task} 
+	*/
+	getTaskByPhaseTeamAndNthBetweenTwoDates(phase, team, start, end, nth){
 		const toReturn = [];
-		const tasks = this.#steps[time].tasks;
 		let counter = 0;
-		for(let t in tasks){
-			if(tasks[t].getParentPhase() == phase && tasks[t].getTaskTeam() == team){
-				if(nth == counter){
-					return tasks[t];
-				}else{
-					counter++;
+		let already = [];
+		for(let time = start; time <= end; time++){
+			if(typeof this.#steps[time] != "undefined"){
+				const tasks = this.#steps[time].tasks;
+				for(let t in tasks){
+					if(tasks[t].getParentPhase() == phase && tasks[t].getTaskTeam() == team){
+						if(!already.includes(tasks[t]) && nth == counter){
+							already.push(tasks[t]);
+							return tasks[t];
+						}else{
+							if(!already.includes(tasks[t])){
+								already.push(tasks[t]);
+								counter++;
+							}
+						}
+					}
 				}
 			}
 		}
 		return null;
+	}
+
+	getDateObject(time){
+		return new Date(this.#startDate.getTime() + ( time * 1000 * 3600 * 24));
 	}
 
 }

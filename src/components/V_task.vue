@@ -37,7 +37,7 @@ export default {
 	computed: 
 		{
 		task : function(){
-			return this.timeline.getTaskByPhaseTeamTimeAndNth(this.phase, this.team, this.time, this.nth);
+			return this.timeline.getTaskByPhaseTeamAndNthBetweenTwoDates(this.phase, this.team, (this.time * 7), (this.time * 7) + 6, this.nth);
 		},
 		notEmpty : function(){
 			return this.task != null;
@@ -46,17 +46,35 @@ export default {
 			return this.task.getId();
 		},
 		dr : function(){
-			console.log(this.task);
 			return this.task.getDuration();
 		},
 		taskname : function(){
-			return this.task.getName();
+			const startWeek = this.timeline.getDateObject(this.time * 7);
+			const endWeek = this.timeline.getDateObject(this.time * 7 + 6);
+			const duration = this.task.getDuration();
+			const startTask = this.task.getStartDate();
+			const offset = (startTask.getTime() - startWeek.getTime())  / (1000 * 3600 * 24);
+
+			if(offset >= 0 && (offset + duration) < 7){
+				return this.task.getName();
+			}else{
+				let nbWeeks = null;
+				let index = null;
+				if(offset >= 0){
+					index = 1;
+					nbWeeks = Math.trunc((duration + offset) / 7) + 1;
+				}else{
+					index = Math.ceil(Math.abs(offset) / 7) + 1;
+					nbWeeks = Math.trunc((duration + offset) / 7) + 2;
+				}
+				return "(" + index +  "/" + nbWeeks + ")" + this.task.getName();
+			}
 		},
 		taskteam : function(){
 			return this.task.getTaskTeam().getName();
 		},
 		color: function(){
-			if(this.timeline.isActive(this.phase, this.time)){
+			if(this.timeline.isActiveBetweenTwoDate(this.phase, this.time * 7, this.time * 7 + 6)){
 				return this.phase.getColorClass();
 			}else{
 				return "default";

@@ -88,7 +88,7 @@ class Loader{
 					const task = new Task(tasks[t]["name"], t);
 					const object4D = new Object4D(tasks[t]["4DID"], tasks[t]["4DID"]);
 					task.setObject4D(object4D);
-					task.setDuration(tasks[t]["duration"]);
+					//task.setDuration(tasks[t]["duration"]);
 					const startDate = new Date(tasks[t]["start"].slice(6, 10), parseInt(tasks[t]["start"].slice(3, 5)) - 1, tasks[t]["start"].slice(0, 2));
 					task.setStartDate(startDate);
 					const endDate = new Date(tasks[t]["end"].slice(6, 10), parseInt(tasks[t]["end"].slice(3, 5)) - 1, tasks[t]["end"].slice(0, 2));

@@ -40,7 +40,7 @@ export default {
 			const teams = this.timeline.getTaskTeamsBetweenTwoDatesByPhase(this.phase, 0, this.duration);
 			const toReturn = [];
 			for(let t in teams){
-				const tasks = this.timeline.getTasksByTeamAndPhaseBetweenTwoDates(this.phase, teams[t], this.tasktablestart, this.tasktablestart + 5);
+				const tasks = this.timeline.getTasksByTeamAndPhaseBetweenTwoDates(this.phase, teams[t], this.tasktablestart * 7, (this.tasktablestart + 5) * 7);
 				for(let i = 0 ; i < tasks.length ; i++){
 					toReturn[toReturn.length] = {
 						"taskteam" : teams[t],

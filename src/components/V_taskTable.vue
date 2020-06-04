@@ -30,10 +30,10 @@ export default {
 		phasesInfos: function(){
 			this.tasktablestart = parseInt(this.tasktablestart);
 			let phases = null;
-			if(this.tasktablestart + 5 <= this.duration){
-				phases = this.timeline.getPhasesBetweenTwoDates(this.tasktablestart, this.tasktablestart + 5);
+			if((this.tasktablestart + 5) * 7 <= this.duration){
+				phases = this.timeline.getPhasesBetweenTwoDates(this.tasktablestart * 7, (this.tasktablestart + 5) * 7);
 			}else{
-				phases = this.timeline.getPhasesBetweenTwoDates(this.tasktablestart, this.duration);
+				phases = this.timeline.getPhasesBetweenTwoDates(this.tasktablestart * 7, this.duration );
 			}
 			const infos = [];
 			for(let p in phases){
