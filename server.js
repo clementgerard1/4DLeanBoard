@@ -165,6 +165,14 @@ if(process.argv[2] == "dev"){
 			res.status(404).send(null);
 		}
 	});
+
+	app.get('/*',function(req,res){
+		if(req.params.url != "favicon.ico"){
+	    res.sendFile(__dirname + '/dist' + req.url);
+		}else{
+			res.status(404).send(null);
+		}
+	});
 	 
 	app.listen(80);
 	console.log('\x1b[32m', "SERVER STARTED ON STANDART PORT 80, PROD MODE...", '\x1b[30m');
