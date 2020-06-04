@@ -193,6 +193,24 @@ class Timeline{
 		return this.#startDate;
 	}
 
+	/**
+		Check if a planningobject is active on a specific time
+		@param {PlanningObject} obj
+		@param {int} time
+		@returns {bool} 
+	*/
+	isActive(obj, time){
+		if(obj instanceof Milestone){
+			return typeof this.#steps[time] != "undefined" && this.#steps[time]["milestones"].includes(obj);
+		}else if(obj instanceof Phase){
+			return typeof this.#steps[time] != "undefined" && this.#steps[time]["phases"].includes(obj);
+		}else if(obj instanceof Task){
+			return typeof this.#steps[time] != "undefined" && this.#steps[time]["tasks"].includes(obj);
+		}else if(obj instanceof Operation){
+			return typeof this.#steps[time] != "undefined" && this.#steps[time]["operations"].includes(obj);
+		}
+	}
+
 }
 
 export default Timeline;

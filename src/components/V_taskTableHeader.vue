@@ -14,7 +14,7 @@ export default {
 		firstday : function(){
 			let date = new Date(this.timeline.getStartDate());
 			date.setDate(date.getDate() + (this.time * 7));
-			return date.getDate() + "/" + date.getMonth();
+			return date.getDate() + "/" + (date.getMonth() + 1);
 		},
 		weeknumber : function(){
 			let date = new Date(this.timeline.getStartDate());

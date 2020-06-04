@@ -89,9 +89,9 @@ class Loader{
 					const object4D = new Object4D(tasks[t]["4DID"], tasks[t]["4DID"]);
 					task.setObject4D(object4D);
 					task.setDuration(tasks[t]["duration"]);
-					const startDate = new Date(tasks[t]["start"].slice(6, 10), tasks[t]["start"].slice(3, 5), tasks[t]["start"].slice(0, 2));
+					const startDate = new Date(tasks[t]["start"].slice(6, 10), parseInt(tasks[t]["start"].slice(3, 5)) - 1, tasks[t]["start"].slice(0, 2));
 					task.setStartDate(startDate);
-					const endDate = new Date(tasks[t]["end"].slice(6, 10), tasks[t]["end"].slice(3, 5), tasks[t]["end"].slice(0, 2));
+					const endDate = new Date(tasks[t]["end"].slice(6, 10), parseInt(tasks[t]["end"].slice(3, 5)) - 1, tasks[t]["end"].slice(0, 2));
 					task.setEndDate(endDate);
 
 					if(PstartDate == null || startDate < PstartDate) PstartDate = startDate;
@@ -220,7 +220,7 @@ class Loader{
 				task.setZone(new Zone(columns[9]));
 
 				phase.addTask(task);
-				const newDate = new Date(columns[3].slice(6, 10), columns[3].slice(3, 5), columns[3].slice(0, 2));
+				const newDate = new Date(columns[3].slice(6, 10), parseInt(columns[3].slice(3, 5)) - 1, columns[3].slice(0, 2));
 				if(startDate == null || startDate > newDate){
 					startDate = newDate;
 				}

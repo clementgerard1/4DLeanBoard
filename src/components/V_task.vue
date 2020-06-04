@@ -51,6 +51,13 @@ export default {
 		},
 		taskteam : function(){
 			return this.team.getName();
+		},
+		color: function(){
+			if(this.timeline.isActive(this.phase, this.time)){
+				return this.phase.getColorClass();
+			}else{
+				return "default";
+			}
 		}
 	},
 	watch:{
@@ -72,7 +79,7 @@ export default {
 	},
 	template : `
 	<div v-tap='handleTap' v-bind:class='[selected ? "selected" : ""]'>
-		<div class='task' >` + taskSVG + `
+		<div class='task' v-bind:class="color">` + taskSVG + `
 		</div>
 	</div>`,
 }
