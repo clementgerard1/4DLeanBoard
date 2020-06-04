@@ -16,7 +16,7 @@ window.addEventListener("load", function(){
 async function init(){
 
 	let model = null;
-	let playerInit = 10;
+	let playerInit = 0;
 	let duration = null;
 	let manifest = null;
 	let oAuth = null;
@@ -28,7 +28,7 @@ async function init(){
 			//Model Loaded and Timeline created
 			timeline = tl;
 			model = timeline.getModel();
-			playerInit = 10;
+			playerInit = 0;
 			const phase = timeline.getModel().getMilestones()[0].getPhases()[0];
 		  	duration = model.getDuration();
 

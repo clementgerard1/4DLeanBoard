@@ -27,10 +27,29 @@ export default {
 		"duration",
 	],
 	computed: {
-		teams : function(){
+		/*teams : function(){
 			const teams = this.timeline.getTaskTeamsBetweenTwoDatesByPhase(this.phase, 0, this.duration);
 			return teams;
 			//return this.timeline.getTaskTeamsBetweenTwoDates(this.phase, this.tasktablestart, this.tasktablestart + 5);
+		},
+		tasks : function(){
+			const tasks = this.timeline.getTaskTeamsBetweenTwoDatesByPhase(this.phase, 0, this.duration);
+			return tasks;
+		},*/
+		lines : function(){
+			const teams = this.timeline.getTaskTeamsBetweenTwoDatesByPhase(this.phase, 0, this.duration);
+			const toReturn = [];
+			for(let t in teams){
+				const tasks = this.timeline.getTasksByTeamAndPhaseBetweenTwoDates(this.phase, teams[t], this.tasktablestart, this.tasktablestart + 5);
+				for(let i = 0 ; i < tasks.length ; i++){
+					toReturn[toReturn.length] = {
+						"taskteam" : teams[t],
+						"nth" : i
+					}
+				}
+			}
+			
+			return toReturn;
 		},
 		_time : function(){
 			return this.time;
@@ -41,6 +60,6 @@ export default {
 	},
 	template : `
 		<div>
-			<task v-bind:time="_time" v-bind:phase="_phase" v-for="team in teams" :key="team.id" v-bind:team="team" v-bind:task="team"></task>
+			<task v-bind:time="_time" v-bind:phase="_phase" v-for="line in lines" :key="line.taskteam.getId() + '-' + line.nth" v-bind:team="line.taskteam" v-bind:nth="line.nth"></task>
 		</div>`,
 }

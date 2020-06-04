@@ -148,7 +148,7 @@ class Timeline{
 		@param {Phase} [phase=null] 
 		@returns {Task} return null if no task exist at this moment 
 	*/
-	getTaskByTeamAndPhase(time, team, phase = null){
+	getTaskByTeamAndPhase(time, team, phase = null,){
 		if(typeof this.#steps[time] != "undefined"){
 			const tasks = this.#steps[time].tasks;
 			for(let t in tasks){
@@ -209,6 +209,44 @@ class Timeline{
 		}else if(obj instanceof Operation){
 			return typeof this.#steps[time] != "undefined" && this.#steps[time]["operations"].includes(obj);
 		}
+	}
+
+	/**
+		Get tasks for a team and a phase between two date
+		@param {Phase} phase
+		@param {Team} team
+		@param {int} start
+		@param {int} end
+ 		@returns {Array} 
+	*/
+	getTasksByTeamAndPhaseBetweenTwoDates(phase, team, start, end){
+		const toReturn = [];
+		for(let i = start ; i <= end ; i++){
+			if(typeof this.#steps[i] != "undefined"){
+				const tasks = this.#steps[i].tasks;
+
+				for(let t in tasks){
+					if(!toReturn.includes(tasks[t]) && tasks[t].getParentPhase() == phase && tasks[t].getTaskTeam() == team) toReturn.push(tasks[t]);
+				}
+			}
+		}
+		return toReturn;
+	}
+
+	getTaskByPhaseTeamTimeAndNth(phase, team, time, nth){
+		const toReturn = [];
+		const tasks = this.#steps[time].tasks;
+		let counter = 0;
+		for(let t in tasks){
+			if(tasks[t].getParentPhase() == phase && tasks[t].getTaskTeam() == team){
+				if(nth == counter){
+					return tasks[t];
+				}else{
+					counter++;
+				}
+			}
+		}
+		return null;
 	}
 
 }

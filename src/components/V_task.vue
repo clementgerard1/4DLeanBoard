@@ -22,6 +22,7 @@ export default {
 	],
 	props : [
 		"team",
+		"nth",
 		'time',
 		'phase'
 	],
@@ -33,9 +34,10 @@ export default {
 			V_4DUtils.highlightTask(this.task.getObject4D());
 		}
 	},
-	computed: {
+	computed: 
+		{
 		task : function(){
-			return this.timeline.getTaskByTeamAndPhase(this.time, this.team, this.phase)
+			return this.timeline.getTaskByPhaseTeamTimeAndNth(this.phase, this.team, this.time, this.nth);
 		},
 		notEmpty : function(){
 			return this.task != null;
@@ -44,13 +46,14 @@ export default {
 			return this.task.getId();
 		},
 		dr : function(){
+			console.log(this.task);
 			return this.task.getDuration();
 		},
 		taskname : function(){
 			return this.task.getName();
 		},
 		taskteam : function(){
-			return this.team.getName();
+			return this.task.getTaskTeam().getName();
 		},
 		color: function(){
 			if(this.timeline.isActive(this.phase, this.time)){
