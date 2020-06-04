@@ -48,7 +48,6 @@ export default {
 					}
 				}
 			}
-			
 			return toReturn;
 		},
 		_time : function(){

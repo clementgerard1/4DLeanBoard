@@ -82,6 +82,13 @@ export default {
 			}else{
 				return "default";
 			}
+		},
+		taskId: function(){
+			if(this.task != null){
+				return this.task.getId();
+			}else{
+				return "noTask";
+			}
 		}
 	},
 	watch:{
@@ -93,24 +100,25 @@ export default {
 	},
 	methods:{
 		handleTap: function(event){
-			if(this.task != null){
-				V_taskTableUtils.getToken(this);
-			}
-			console.log("hola " + this.state);
-			if(!this.state){
-				this.state = true;
-				this.stateDiv.classList.add('animate__flipInY');
-				
-			}else{
-				const that = this;
-				this.stateDiv.classList.remove('animate__flipInY');
-				this.stateDiv.classList.add('animate__flipOutY');
-				this.stateDiv.addEventListener('animationend', (e) => {
-						if(e.animationName == "flipOutY"){	
-					  		that.state = false;
-					  		this.stateDiv.classList.remove('animate__flipOutY');
-					  	}
-				});
+			if(this.notEmpty){
+				if(this.task != null){
+					V_taskTableUtils.getToken(this);
+				}
+				if(!this.state){
+					this.state = true;
+					this.stateDiv.classList.add('animate__flipInY');
+					
+				}else{
+					const that = this;
+					this.stateDiv.classList.remove('animate__flipInY');
+					this.stateDiv.classList.add('animate__flipOutY');
+					this.stateDiv.addEventListener('animationend', (e) => {
+							if(e.animationName == "flipOutY"){	
+						  		that.state = false;
+						  		this.stateDiv.classList.remove('animate__flipOutY');
+						  	}
+					});
+				}
 			}
 		},
 		setSelectedValue(bool){
@@ -118,12 +126,14 @@ export default {
 		}
 	},
 	mounted: function(){
-		this.stateDiv = document.getElementById(this.task.getId() + "-" + this.time);
+		if(this.task != null){
+			this.stateDiv = document.getElementById(this.task.getId() + "-" + this.time);
+		}
 	},
 	template : `
-	<div v-tap='handleTap' v-bind:class='[selected ? "selected" : "", "task"]'>
-		<div class='taskclass animate__animated animate__flipInY' v-bind:class="color">` + taskSVG + `</div>
-		<div v-show="state" v-bind:id="task.getId() + '-' + time" class="taskstate animate__animated animate__faster" v-bind:class="color">` + taskStatusSVG + `</div>
+	<div v-tap='handleTap' v-bind:class='[selected ? "selected" : "", "task", color]'>
+		<div v-if="notEmpty" class='taskclass animate__animated animate__flipInY'>` + taskSVG + `</div>
+		<div v-if="notEmpty" v-show="state" v-bind:id="taskId + '-' + time" class="taskstate animate__animated animate__faster">` + taskStatusSVG + `</div>
 	</div>`,
 }
 
