@@ -11,9 +11,11 @@
     "jest": "jest src/class/jest --watch",
     "commit": "npm run doc; npm run jest; MODE=prod; npm run cp -r public/* dist; webpack --config ./webpack.prod.js; git add --all; git commit -m ",
     "deploy": "gh-pages -d dist",
-    "prod:windows": "xcopy public: dist; node server.js prod | webpack --config ./webpack.prod.js",
+    "prod:windows": "xcopy public dist /s /e /c & node server.js prod | webpack --config ./webpack.prod.js",
     "dev:windows": "node server.js dev | webpack --config ./webpack.dev.js",
-    "test:windows": "node server.js test | webpack --config ./webpack.test.js"
+    "test:windows": "node server.js test | webpack --config ./webpack.test.js",
+    "commit:windows": "npm run doc:windows & npm run jest & xcopy public dist /s /e /c & webpack --config ./webpack.prod.js & git add --all & git commit -m ",
+    "doc:windows": "rd /s /q src\\class\\doc & node_modules\\.bin\\jsdoc -r src\\class -d src\\class\\doc"
   },
   "author": "Clément Gérard",
   "devDependencies": {
