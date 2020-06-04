@@ -16,7 +16,7 @@ window.addEventListener("load", function(){
 async function init(){
 
 	let model = null;
-	let playerInit = 0;
+	let playerInit = null;
 	let duration = null;
 	let manifest = null;
 	let oAuth = null;
