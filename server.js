@@ -48,7 +48,6 @@ if(config["socketConsole"]){
 }
 //End hack tablette
 
-
 if(process.argv[2] == "dev"){
  
 	app.get('/', function(req,res){
@@ -86,7 +85,7 @@ if(process.argv[2] == "dev"){
 	});
 	 
 	app.listen(3000);
-	console.log('\x1b[32m', "SERVER STARTED ON PORT 3000, DEV MODE...", '\x1b[30m');
+	console.log('\x1b[32m', "SERVER STARTED ON PORT 3000, DEV MODE...", '\x1b[0m');
 
 }else if(process.argv[2] == "test"){
 
@@ -149,7 +148,7 @@ if(process.argv[2] == "dev"){
 	});
 	 
 	app.listen(3000);
-	console.log('\x1b[32m', "SERVER STARTED ON PORT 3000, DEV MODE...", '\x1b[30m');
+	console.log('\x1b[32m', "SERVER STARTED ON PORT 3000, DEV MODE...", '\x1b[0');
 
 
 }else{
@@ -175,6 +174,6 @@ if(process.argv[2] == "dev"){
 	});
 	 
 	app.listen(80);
-	console.log('\x1b[32m', "SERVER STARTED ON STANDART PORT 80, PROD MODE...", '\x1b[30m');
+	console.log('\x1b[32m', "SERVER STARTED ON STANDART PORT 80, PROD MODE...", '\x1b[0m');
 
 }
