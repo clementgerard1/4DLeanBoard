@@ -1,225 +1,240 @@
-/* OLD FORMAT - CSV
-4DID,TID,Task,Start,End,Duration,Previous,Next,Level,Zone,Team
-101,101,Ground slab pouring,01/02/2021,10/02/2021,10,0,102,0,A,Masons 1
-102,102,Walls cladding,10/02/2021,10/02/2021,1,101,103,0,A,Masons 2
-103,103,Walls cladding,10/02/2021,11/02/2021,2,102,104,0,A,Masons 1
-104,104,Walls cladding,10/02/2021,12/02/2021,3,103,105,0,A,Masons 2
-105,105,Walls cladding,10/02/2021,13/02/2021,4,104,106,0,A,Masons 1
-106,106,Windows installation,13/02/2021,13/02/2021,1,105,107,0,A,Carpenters
-107,107,Doors installation,13/02/2021,13/02/2021,1,106,108,0,A,Carpenters
-108,108,Roof installation,13/02/2021,20/02/2021,8,107,0,1,A,Carpenters
-*/
-
 {
 	"milestones" : {
 
 		"MilestoneID1" : {
 
-			"Name" : "quelquechose",
+			"name" : "quelquechose",
 
 			"requirements" : {
-				"requirement1" : "quelquechose",
+				"requirement1" : "Landpermit obtaind",
+				"requirement2" : "Earthwork finished"
 			},
 			
 			"phases" : {
-
 				"PhaseID1" : {		
 
-					"name" : "quelquechose",	
-					"contractor" : "contractor1",		
+					"name" : "Structure",	
+					"contractor" : "MAP Construction",		
 					"color" : "blue",
 					"tasks" : {
 						"101" : {
 
 							"4DID" : 101,
-							"Name" : "Ground slab pouring",
-							"Start" : "01/02/2021",
-							"End" : "10/02/2021",
-							"Duration" : 10,
-							"Previous" : 0,
-							"Next" : 102,
-							"Level" : 0,
-							"Zone" : "A",
-							"Team" : "Masons 1",
+							"GUID" : [
+								"2XqLaPqlL6pRaKaKWyMH2W"
+							],
+							"name" : "Ground slab pouring",
+							"start" : "01/02/2021",
+							"end" : "10/02/2021",
+							"duration" : 10,
+							"previous" : 0,
+							"next" : 102,
+							"level" : 0,
+							"zone" : "A",
+							"team" : "Masons 1",
 							"operations" : {
 								"operationID1" : {
-									/* ... */
 								},
 								"operationID2" : {
-									/* ... */
-								},
+								}
 							}
 
 						},
 						"102" : {
 
 							"4DID" : 102,
-							"Name" : "Walls cladding",
-							"Start" : "10/02/2021",
-							"End" : "10/02/2021",
-							"Duration" : 1,
-							"Previous" : 101,
-							"Next" : 103,
-							"Level" : 0,
-							"Zone" : "A",
-							"Team" : "Masons 2",
+							"GUID" : [
+								"2XqLaPqlL6pRaKaKWyMH18"
+							],
+							"name" : "Walls cladding",
+							"start" : "10/02/2021",
+							"end" : "10/02/2021",
+							"duration" : 1,
+							"previous" : 101,
+							"next" : 103,
+							"level" : 0,
+							"zone" : "A",
+							"team" : "Masons 2",
 							"operations" : {
 								"operationID1" : {
-									/* ... */
 								},
 								"operationID2" : {
-									/* ... */
-								},
+								}
 							}
 
 						},
 						"103" : {
 
 							"4DID" : 103,
-							"Name" : "Walls cladding",
-							"Start" : "10/02/2021",
-							"End" : "10/02/2021",
-							"Duration" : 2,
-							"Previous" : 102,
-							"Next" : 104,
-							"Level" : 0,
-							"Zone" : "A",
-							"Team" : "Masons 1",
+							"GUID" : [
+								"2XqLaPqlL6pRaKaKWyMH1B"
+							],
+							"name" : "Walls cladding",
+							"start" : "10/02/2021",
+							"end" : "10/02/2021",
+							"duration" : 2,
+							"previous" : 102,
+							"next" : 104,
+							"level" : 0,
+							"zone" : "A",
+							"team" : "Masons 1",
 							"operations" : {
 								"operationID1" : {
-									/* ... */
 								},
 								"operationID2" : {
-									/* ... */
-								},
+								}
 							}
 
 						},
 						"104" : {
 
 							"4DID" : 104,
-							"Name" : "Walls cladding",
-							"Start" : "10/02/2021",
-							"End" : "10/02/2021",
-							"Duration" : 3,
-							"Previous" : 103,
-							"Next" : 105,
-							"Level" : 0,
-							"Zone" : "A",
-							"Team" : "Masons 2",
+							"GUID" : [
+								"2XqLaPqlL6pRaKaKWyMH1A"
+							],
+							"name" : "Walls cladding",
+							"start" : "10/02/2021",
+							"end" : "10/02/2021",
+							"duration" : 3,
+							"previous" : 103,
+							"next" : 105,
+							"level" : 0,
+							"zone" : "A",
+							"team" : "Masons 2",
 							"operations" : {
 								"operationID1" : {
-									/* ... */
 								},
 								"operationID2" : {
-									/* ... */
-								},
+								}
 							}
 
 						},
 						"105" : {
 
 							"4DID" : 105,
-							"Name" : "Walls cladding",
-							"Start" : "10/02/2021",
-							"End" : "10/02/2021",
-							"Duration" : 4,
-							"Previous" : 104,
-							"Next" : 106,
-							"Level" : 0,
-							"Zone" : "A",
-							"Team" : "Masons 1",
+							"GUID" : [
+								"2XqLaPqlL6pRaKaKWyMH19"
+							],
+							"name" : "Walls cladding",
+							"start" : "10/02/2021",
+							"end" : "10/02/2021",
+							"duration" : 4,
+							"previous" : 104,
+							"next" : 106,
+							"level" : 0,
+							"zone" : "A",
+							"team" : "Masons 1",
 							"operations" : {
 								"operationID1" : {
-									/* ... */
 								},
 								"operationID2" : {
-									/* ... */
-								},
+								}
 							}
 
-						},
-						"106" : {
-
-							"4DID" : 106,
-							"Name" : "Windows installation",
-							"Start" : "13/02/2021",
-							"End" : "13/02/2021",
-							"Duration" : 1,
-							"Previous" : 105,
-							"Next" : 107,
-							"Level" : 0,
-							"Zone" : "A",
-							"Team" : "Carpenters",
-							"operations" : {
-								"operationID1" : {
-									/* ... */
-								},
-								"operationID2" : {
-									/* ... */
-								},
-							}
-
-						},
-						"107" : {
-
-							"4DID" : 107,
-							"Name" : "Doors installation",
-							"Start" : "13/02/2021",
-							"End" : "13/02/2021",
-							"Duration" : 1,
-							"Previous" : 106,
-							"Next" : 108,
-							"Level" : 0,
-							"Zone" : "A",
-							"Team" : "Carpenters",
-							"operations" : {
-								"operationID1" : {
-									/* ... */
-								},
-								"operationID2" : {
-									/* ... */
-								},
-							}
-
-						},
-						"108" : {
-
-							"4DID" : 108,
-							"Name" : "Roof installation",
-							"Start" : "13/02/2021",
-							"End" : "20/02/2021",
-							"Duration" : 8,
-							"Previous" : 107,
-							"Next" : 0,
-							"Level" : 1,
-							"Zone" : "A",
-							"Team" : "Carpenters",
-							"operations" : {
-								"operationID1" : {
-									/* ... */
-								},
-								"operationID2" : {
-									/* ... */
-								},
-							}
-
-						},
+						}
 					}
 				},
 
 				"PhaseID2" : {		
-					/* IDEM */
-				},
+					"name" : "Carpentry",	
+					"contractor" : "WoodConstruct",		
+					"color" : "red",
+					"tasks" : {
+					"106" : {
+
+							"4DID" : 106,
+							"GUID" : [
+								"2XqLaPqlL6pRaKaKWyMH4v"
+							],
+							"name" : "Windows installation",
+							"start" : "13/02/2021",
+							"end" : "13/02/2021",
+							"duration" : 1,
+							"previous" : 105,
+							"next" : 107,
+							"level" : 0,
+							"zone" : "A",
+							"team" : "Carpenters",
+							"operations" : {
+								"operationID1" : {
+								},
+								"operationID2" : {
+								}
+							}
+
+						},
+					"107" : {
+
+							"4DID" : 107,
+							"GUID" : [
+								"2XqLaPqlL6pRaKaKWyMH4Y"
+							],
+							"name" : "Doors installation",
+							"start" : "13/02/2021",
+							"end" : "13/02/2021",
+							"duration" : 1,
+							"previous" : 106,
+							"next" : 108,
+							"level" : 0,
+							"zone" : "A",
+							"team" : "Carpenters",
+							"operations" : {
+								"operationID1" : {
+								},
+								"operationID2" : {
+								}
+							}
+						}
+					}
+				}
 			}
 		},
 
-		"MilestoneName2" : {
-			/*...*/
+		"MilestoneID2" : {
+
+			"name" : "Roofing",
+
+			"requirements" : {
+				"requirement1" : "Walls finished",
+				"requirement2" : "Equipment delivered"
+			},
+			
+			"phases" : {
+			  "PhaseID3" : {		
+
+					"name" : "Roofing",	
+					"contractor" : "Roofroof",		
+					"color" : "orange",
+					"tasks" : {
+			      "108" : {
+
+							"4DID" : 108,
+							"GUID" : [
+								"2XqLaPqlL6pRaKaKeyMH3A",
+								"2XqLaPqlL6pRaKaKqyMH3A", 
+								"2XqLaPqlL6pRaKaKmyMH3A", 
+								"2XqLaPqlL6pRaKaKiyMH3A"
+							],
+							"name" : "Roof installation",
+							"start" : "13/02/2021",
+							"end" : "20/02/2021",
+							"duration" : 8,
+							"previous" : 107,
+							"next" : 0,
+							"level" : 1,
+							"zone" : "A",
+							"team" : "Carpenters",
+							"operations" : {
+								"operationID1" : {
+								},
+								"operationID2" : {
+								}
+							}
+
+						}
+					}
+				}
+			}
 		}
-
-
-	},
-	"startDate" : "01/02/2021",
-	"others" : "...",
+	}
 }
