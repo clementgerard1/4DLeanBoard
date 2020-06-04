@@ -8,6 +8,7 @@ import V_forgeViewer from "./components/V_forgeViewer.vue";
 import Hammer from "hammerjs";
 import "./index.scss";
 import Config from "../config.js";
+import "animate.css";
 
 window.addEventListener("load", function(){
 	init();

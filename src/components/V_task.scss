@@ -6,6 +6,7 @@
 	min-height : 188px;
 	max-height : 188px;
 	margin-bottom : 5px;
+	position : relative;
 }
 
 .task svg{
@@ -31,4 +32,10 @@
 
 .task.default{
 	background-color: white;
+}
+
+.taskstate{
+	position : absolute;
+	top:0px;
+	width :100%;
 }

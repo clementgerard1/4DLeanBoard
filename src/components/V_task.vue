@@ -1,4 +1,5 @@
 import taskSVG from "./assets/task.svg";
+import taskStatusSVG from "./assets/taskStatus.svg";
 import V_taskTableUtils from "./utils/V_taskTableUtils.class.js";
 import V_4DUtils from "./utils/V_4DUtils.class.js";
 import "./V_task.scss";
@@ -14,6 +15,8 @@ export default {
 			"r6" : false,
 			"r7" : false,
 			"selected" : false,
+			"state" :false,
+			"stateDiv" : null
 		}
 	},
 	inject : [
@@ -93,15 +96,34 @@ export default {
 			if(this.task != null){
 				V_taskTableUtils.getToken(this);
 			}
+			console.log("hola " + this.state);
+			if(!this.state){
+				this.state = true;
+				this.stateDiv.classList.add('animate__flipInY');
+				
+			}else{
+				const that = this;
+				this.stateDiv.classList.remove('animate__flipInY');
+				this.stateDiv.classList.add('animate__flipOutY');
+				this.stateDiv.addEventListener('animationend', (e) => {
+						if(e.animationName == "flipOutY"){	
+					  		that.state = false;
+					  		this.stateDiv.classList.remove('animate__flipOutY');
+					  	}
+				});
+			}
 		},
 		setSelectedValue(bool){
 			this.selected = bool;
 		}
 	},
+	mounted: function(){
+		this.stateDiv = document.getElementById(this.task.getId() + "-" + this.time);
+	},
 	template : `
-	<div v-tap='handleTap' v-bind:class='[selected ? "selected" : ""]'>
-		<div class='task' v-bind:class="color">` + taskSVG + `
-		</div>
+	<div v-tap='handleTap' v-bind:class='[selected ? "selected" : "", "task"]'>
+		<div class='taskclass animate__animated animate__flipInY' v-bind:class="color">` + taskSVG + `</div>
+		<div v-show="state" v-bind:id="task.getId() + '-' + time" class="taskstate animate__animated animate__faster" v-bind:class="color">` + taskStatusSVG + `</div>
 	</div>`,
 }
 
