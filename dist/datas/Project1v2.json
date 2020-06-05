@@ -9,7 +9,7 @@
             "PhaseID1": {
                "name": "FirstPhase",
                "contractor": "contractor1",
-               "color": "#E7CB00",
+               "color": "Yellowish",
                "tasks": [
                   null,
                   null,

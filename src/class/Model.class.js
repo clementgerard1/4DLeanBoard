@@ -8,6 +8,7 @@ class Model{
 	#lastModifiedDate;
 	#milestones;
 	#startDate;
+	#duration;
 
 	/**
 		@class Model
@@ -24,6 +25,7 @@ class Model{
 		this.#lastModifiedDate = new Date();
 		this.#milestones = [];
 		this.#startDate = Date.now();
+		this.#duration = null;
 	}
 
 	/**
@@ -152,7 +154,26 @@ class Model{
 		@returns {int}
 	*/
 	getDuration(){
-		return 19;
+		if(this.#duration == null){
+			let start = null;
+			let end = null;
+			for(let m in this.#milestones){
+				const startDate = this.#milestones[m].getStartDate();
+				const endDate = this.#milestones[m].getEndDate();
+
+				console.log(start, end);
+				if(start == null || startDate < start) start = startDate;
+				console.log(start);
+				if(end == null || endDate > end) end = endDate;
+				console.log(end);
+			}
+			console.log(start, end);
+
+			this.#duration = Math.ceil(((end.getTime() - start.getTime()) / (1000 * 3600 * 24)) - 1);
+			console.log(this.#duration);
+		}
+
+		return this.#duration;
 	}
 
 	/*

@@ -65,10 +65,10 @@ export default {
 				let index = null;
 				if(offset >= 0){
 					index = 1;
-					nbWeeks = Math.trunc((duration + offset) / 7) + 1;
+					nbWeeks = Math.ceil((duration + offset) / 7);
 				}else{
 					index = Math.ceil(Math.abs(offset) / 7) + 1;
-					nbWeeks = Math.trunc((duration + offset) / 7) + 2;
+					nbWeeks = Math.ceil((duration + offset) / 7) + 1;
 				}
 				return "(" + index +  "/" + nbWeeks + ")" + this.task.getName();
 			}
@@ -78,7 +78,7 @@ export default {
 		},
 		color: function(){
 			if(this.timeline.isActiveBetweenTwoDate(this.phase, this.time * 7, this.time * 7 + 6)){
-				return this.phase.getColorClass();
+				return "BG_" + this.phase.getColorClass();
 			}else{
 				return "default";
 			}
@@ -100,7 +100,6 @@ export default {
 	},
 	methods:{
 		handleTap: function(event){
-			console.log("simple")
 			if(this.notEmpty){
 				if(!this.state){
 					this.state = true;
@@ -120,7 +119,6 @@ export default {
 			}
 		},
 		handleDoubleTap: function(event){
-			console.log("double");
 			if(this.notEmpty){
 				if(this.task != null){
 					V_taskTableUtils.getToken(this);
@@ -137,7 +135,7 @@ export default {
 		}
 	},
 	template : `
-	<div v-tap='handleTap' v-doubletap='handleDoubleTap' v-bind:class='[selected ? "selected" : "", "task", color]'>
+	<div v-tap='handleDoubleTap' v-doubletap='handleTap' v-bind:class='[selected ? "selected" : "", "task", color]'>
 		<div v-if="notEmpty" class='taskclass animate__animated animate__flipInY'>` + taskSVG + `</div>
 		<div v-if="notEmpty" v-show="state" v-bind:id="taskId + '-' + time" class="taskstate animate__animated animate__faster">` + taskStatusSVG + `</div>
 	</div>`,
