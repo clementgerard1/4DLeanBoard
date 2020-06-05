@@ -100,10 +100,8 @@ export default {
 	},
 	methods:{
 		handleTap: function(event){
+			console.log("simple")
 			if(this.notEmpty){
-				if(this.task != null){
-					V_taskTableUtils.getToken(this);
-				}
 				if(!this.state){
 					this.state = true;
 					this.stateDiv.classList.add('animate__flipInY');
@@ -121,6 +119,14 @@ export default {
 				}
 			}
 		},
+		handleDoubleTap: function(event){
+			console.log("double");
+			if(this.notEmpty){
+				if(this.task != null){
+					V_taskTableUtils.getToken(this);
+				}
+			}
+		},
 		setSelectedValue(bool){
 			this.selected = bool;
 		}
@@ -131,7 +137,7 @@ export default {
 		}
 	},
 	template : `
-	<div v-tap='handleTap' v-bind:class='[selected ? "selected" : "", "task", color]'>
+	<div v-tap='handleTap' v-doubletap='handleDoubleTap' v-bind:class='[selected ? "selected" : "", "task", color]'>
 		<div v-if="notEmpty" class='taskclass animate__animated animate__flipInY'>` + taskSVG + `</div>
 		<div v-if="notEmpty" v-show="state" v-bind:id="taskId + '-' + time" class="taskstate animate__animated animate__faster">` + taskStatusSVG + `</div>
 	</div>`,

@@ -161,7 +161,7 @@ eval("var animate = __webpack_require__(/*! animate.css */ \"./node_modules/anim
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("module.exports = function () {\n  window.addEventListener(\"load\", function () {\n    init();\n  });\n};\n\nfunction init() {\n  var file = null;\n  Promise.all([Utils.loadTextFile(\"/datas/Project1.csv\"), Utils.loadTextFile(\"/datas/Project1.ifc\")]).then(function (files) {\n    return Loader.fromCSVandIFC(files[0], files[1], \";\", \",\");\n  }).then(function (timeline) {\n    console.log(timeline);\n    console.log(timeline.getModel()); //Model Loaded\n  })[\"catch\"](function (error) {\n    return console.error(error);\n  });\n}\n\n//# sourceURL=webpack:///./test-pages/src/dataStructure/dataStructure.js?");
+eval("module.exports = function () {\n  window.addEventListener(\"load\", function () {\n    init();\n  });\n};\n\nfunction init() {\n  var file = null;\n  Promise.all([Utils.loadTextFile(\"/datas/Project1.csv\"), Utils.loadTextFile(\"/datas/Project1.ifc\")]).then(function (files) {\n    return Loader.fromCSVandIFC(files[0], files[1], \";\", \",\", \"0.1\");\n  }).then(function (timeline) {\n    console.log(timeline);\n    console.log(timeline.getModel()); //Model Loaded\n  })[\"catch\"](function (error) {\n    return console.error(error);\n  });\n}\n\n//# sourceURL=webpack:///./test-pages/src/dataStructure/dataStructure.js?");
 
 /***/ }),
 
@@ -205,7 +205,7 @@ eval("module.exports = function () {\n  window.addEventListener(\"load\", functi
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("var Hammer = __webpack_require__(/*! hammerjs */ \"./node_modules/hammerjs/hammer.js\");\n\nmodule.exports = function () {\n  window.addEventListener(\"load\", function () {\n    init();\n  });\n};\n\nfunction init() {\n  // get a reference to an element\n  var stage = document.getElementById('stage'); // create a manager for that element\n\n  var mc = new Hammer.Manager(stage); // create a recognizer\n\n  var tap = new Hammer.Tap(); // add the recognizer\n\n  mc.add(tap); // subscribe to events\n\n  mc.on('tap', function (e) {\n    // do something cool\n    stage.className = 'selected';\n  });\n}\n\n//# sourceURL=webpack:///./test-pages/src/touchGestures/touchGestures.js?");
+eval("var Hammer = __webpack_require__(/*! hammerjs */ \"./node_modules/hammerjs/hammer.js\");\n\nmodule.exports = function () {\n  window.addEventListener(\"load\", function () {\n    init();\n  });\n};\n\nfunction init() {\n  // get a reference to an element\n  var stage = document.getElementById('stage'); // create a manager for that element\n\n  var mc = new Hammer.Manager(stage); // create a recognizer\n\n  var tap = new Hammer.Tap({\n    event: \"simpletap\"\n  }); // add the recognizer\n\n  mc.add(tap);\n  console.log(mc); // subscribe to events\n\n  mc.on('simpletap', function (e) {\n    // do something cool\n    stage.className = 'selected';\n  });\n}\n\n//# sourceURL=webpack:///./test-pages/src/touchGestures/touchGestures.js?");
 
 /***/ })
 

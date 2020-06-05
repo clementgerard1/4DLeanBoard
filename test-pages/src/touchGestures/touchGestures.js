@@ -16,15 +16,17 @@ function init(){
 	var mc = new Hammer.Manager(stage);
 	 
 	// create a recognizer
-	var tap = new Hammer.Tap();
+	var tap = new Hammer.Tap({event: "simpletap"});
 	 
 	// add the recognizer
 	mc.add(tap);
-	 
+	
 	// subscribe to events
-	mc.on('tap', function(e) {
+	mc.on('simpletap', function(e) {
 	    // do something cool
 	    stage.className = 'selected'
 	});
+
+	
 
 }

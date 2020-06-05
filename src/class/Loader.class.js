@@ -21,7 +21,7 @@ import Requirement from "./Requirement.class.js";
 class Loader{
 
 	static #latestCSVVersion = "0.1";
-	static #latestJSONVersion = "0.1";
+	static #latestJSONVersion = "0.2";
 
 	/**
 		Load model from CSV
@@ -44,6 +44,108 @@ class Loader{
 	*/
 	static fromJSON(json, jsonVersion = this.#latestJSONVersion){
 		return eval("this.json_v" + jsonVersion.replace(".", "_")  + "(json)");
+	}
+
+	//Version JSON O.1
+	static json_v0_2(json){
+		//Errors
+		if(json == null){
+			throw 'CSVFile needed for import model';
+		}
+
+		const infos = JSON.parse(json);
+
+		const model = new Model();
+
+		const contractors = [];
+		const taskTeams = [];
+		const zones = [];
+
+		const milestones = infos["milestones"];
+		for(let m in milestones){
+			const milestone = new Milestone(milestones[m]["Name"]);
+			model.addMilestone(milestone);
+			for(let r in milestones[m]["requirements"]){
+				const requirement = new Requirement(milestones[m]["requirements"][r]);
+				milestone.addRequirement(requirement);
+			}
+
+			let MstartDate = null;
+			let MendDate = null;
+			const phases = milestones[m]["phases"];
+			for(let p in phases){
+				const phase = new Phase(phases[p]["Name"]);
+				phase.setColorClass(phases[p]["color"]);
+				if(typeof contractors[phases[p]["contractor"]] == "undefined") contractors[phases[p]["contractor"]] = new Contractor(phases[p]["contractor"]);
+				phase.setContractor(contractors[phases[p]["contractor"]]);
+				milestone.addPhase(phase);
+
+				const tasks = phases[p]["tasks"];
+				let PstartDate = null;
+				let PendDate = null;
+				for(let t in tasks){
+					if(tasks[t] != null){
+						const task = new Task(tasks[t]["Name"], t);
+						const object4D = new Object4D(tasks[t]["4DID"], tasks[t]["4DID"]);
+						task.setObject4D(object4D);
+						//task.setDuration(tasks[t]["Duration"]);
+						const startDate = new Date(tasks[t]["Start"].slice(6, 10), parseInt(tasks[t]["Start"].slice(3, 5)) - 1, tasks[t]["Start"].slice(0, 2));
+						task.setStartDate(startDate);
+						const endDate = new Date(tasks[t]["End"].slice(6, 10), parseInt(tasks[t]["End"].slice(3, 5)) - 1, tasks[t]["End"].slice(0, 2));
+						task.setEndDate(endDate);
+
+						if(PstartDate == null || startDate < PstartDate) PstartDate = startDate;
+						if(PendDate == null || endDate > PendDate) PendDate = endDate;
+
+						if(typeof taskTeams[tasks[t]["Team"]] == "undefined") taskTeams[tasks[t]["Team"]] = new TaskTeam(tasks[t]["Team"]);
+						task.setTaskTeam(taskTeams[tasks[t]["Team"]]);
+						if(typeof zones[tasks[t]["Zone"]] == "undefined") zones[tasks[t]["Zone"]] = new Zone(tasks[t]["Zone"]);
+						task.setZone(zones[tasks[t]["Zone"]]);
+
+						for(let o in tasks[t]["GUID"]){
+							const object3D = new Object3D(tasks[t]["GUID"][o], tasks[t]["GUID"][o]);
+							object4D.addObject3D(object3D);
+						}
+
+						phase.addTask(task);
+						task.setParentPhase(phase);
+						phase.addObject4D(object4D);
+					}
+
+				}
+
+				phase.setStartDate(PstartDate);
+				phase.setEndDate(PendDate);
+
+				if(MstartDate == null || PstartDate < MstartDate) MstartDate = PstartDate;
+				if(MendDate == null || PendDate > MendDate) MendDate = PendDate;
+
+			}
+
+			milestone.setStartDate(MstartDate);
+			milestone.setEndDate(MendDate);
+
+		}
+		const phases = model.getPhases();
+		for(let p in phases){
+			const tasks = phases[p]["tasks"];
+			for(let t in tasks){
+				const actualTask = phase.getTask(t);
+
+				const previousTask = phase.getTask(tasks[t]["previous"]);
+				if(nextTask != null) actualTask.addFollowingTask(nextTask);
+
+				const nextTask = phase.getTask(tasks[t]["next"]);
+				if(previousTask != null) actualTask.addPreviousTask(previousTask);
+			}
+		}
+
+
+		model.setStartDate(new Date());
+		const timeline = new Timeline(model);
+
+		return timeline;
+
 	}
 
 	//Version JSON O.1
@@ -84,7 +186,6 @@ class Loader{
 				let PstartDate = null;
 				let PendDate = null;
 				for(let t in tasks){
-
 					const task = new Task(tasks[t]["name"], t);
 					const object4D = new Object4D(tasks[t]["4DID"], tasks[t]["4DID"]);
 					task.setObject4D(object4D);

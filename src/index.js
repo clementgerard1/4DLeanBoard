@@ -9,6 +9,7 @@ import Hammer from "hammerjs";
 import "./index.scss";
 import Config from "../config.js";
 import "animate.css";
+import TouchGesturesUtils from "./components/utils/V_TouchGesturesUtils.class.js";
 
 window.addEventListener("load", function(){
 	init();
@@ -23,7 +24,7 @@ async function init(){
 	let oAuth = null;
 	let timeline = null;
 
-	await Utils.loadTextFile("datas/Project1.json")
+	await Utils.loadTextFile("datas/Project1V2.json")
 	.then( file => Loader.fromJSON(file))
 	.then( tl => {
 			//Model Loaded and Timeline created
@@ -33,14 +34,55 @@ async function init(){
 			const phase = timeline.getModel().getMilestones()[0].getPhases()[0];
 		  	duration = model.getDuration();
 
-		  	//Touch gestures
-		  	Vue.directive("tap", {
-				bind: function(el, binding) {
+	  	//Touch gestures
+	  	Vue.directive("tap", {
+				bind: function(el, binding) 
+				{
+					if(el.getAttribute("hammerid") == null){
+						el.setAttribute("hammerid", Utils.getId("hammer"));
+					}
 					if (typeof binding.value === "function") {
-						const mc = new Hammer(el);
-						var tap = new Hammer.Tap();
-						mc.add(tap);
-						mc.on("tap", binding.value);
+						let hammer = TouchGesturesUtils.getHammer(el);
+
+						if(hammer == null){
+							hammer = new Hammer(el);
+							TouchGesturesUtils.addHammer(el, hammer);
+						} 
+
+						const singleTap = new Hammer.Tap({
+								event: 'tap1'
+						});
+						singleTap.recognizeWith(hammer.recognizers)
+						hammer.add([singleTap]);
+						hammer.on("tap1", function(){binding.value();});
+
+						TouchGesturesUtils.updateHammer(el);
+					}
+				}
+			});
+
+			//Touch gestures
+	  	Vue.directive("doubletap", {
+				bind: function(el, binding) 
+				{
+					if(el.getAttribute("hammerid") == null){
+						el.setAttribute("hammerid", Utils.getId("hammer"));
+					}
+					if (typeof binding.value === "function") {
+						let hammer = TouchGesturesUtils.getHammer(el);
+						if(hammer == null){
+							hammer = new Hammer(el);
+							TouchGesturesUtils.addHammer(el, hammer);
+						} 
+						
+						const doubleTap = new Hammer.Tap(
+							{event: 'tap2', taps: 2, interval: 300 }
+						);
+						doubleTap.recognizeWith(hammer.recognizers)
+						hammer.add(doubleTap);
+						hammer.on("tap2", binding.value);
+
+						TouchGesturesUtils.updateHammer(el);
 					}
 				}
 			});
