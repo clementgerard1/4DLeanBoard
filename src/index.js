@@ -17,6 +17,30 @@ window.addEventListener("load", function(){
 
 async function init(){
 
+	//TEST
+		let fpsLast = null;
+		let fpsTime = 0;
+		let fpsCount = 0;
+		let fpsDisplay = 150;
+		const p = document.getElementById("fps");
+		window.requestAnimationFrame(fps);
+
+		function fps(){
+			const now = new Date().getTime();
+			if(fpsLast != null){
+				fpsTime += (now - fpsLast);
+				fpsCount++;
+				if(fpsTime > fpsDisplay){
+					p.innerHTML = (fpsCount * (1000 / fpsTime)).toFixed(2);
+					fpsTime = 0;
+					fpsCount = 0;
+				}
+			}
+			fpsLast = now;
+			window.requestAnimationFrame(fps);
+		}
+	//TEST
+
 	let model = null;
 	let playerInit = null;
 	let duration = null;
@@ -76,7 +100,7 @@ async function init(){
 						} 
 						
 						const doubleTap = new Hammer.Tap(
-							{event: 'tap2', taps: 2, interval: 300 }
+							{event: 'tap2', taps: 2, interval: 300, posThreshold: 150, threshold: 50 }
 						);
 						doubleTap.recognizeWith(hammer.recognizers)
 						hammer.add(doubleTap);
@@ -106,6 +130,7 @@ async function init(){
 
 	})
 	.catch( error => console.error(error));
+
 
 	const app = new Vue({
 		el : '#content',

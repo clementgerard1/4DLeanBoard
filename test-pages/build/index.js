@@ -165,6 +165,17 @@ eval("module.exports = function () {\n  window.addEventListener(\"load\", functi
 
 /***/ }),
 
+/***/ "./test-pages/src/fpsTest/fpsTest.js":
+/*!*******************************************!*\
+  !*** ./test-pages/src/fpsTest/fpsTest.js ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = function () {\n  window.addEventListener(\"load\", function () {\n    init();\n  });\n};\n\nfunction init() {\n  var fpsLast = null;\n  var fpsTime = 0;\n  var fpsCount = 0;\n  var fpsDisplay = 150;\n  var p = document.getElementById(\"fps\");\n  var vw = document.getElementById(\"viewportW\");\n  var vh = document.getElementById(\"viewportH\");\n  var dw = document.getElementById(\"documentW\");\n  var dh = document.getElementById(\"documentH\");\n  console.log(p, vw, vh, dw, dh);\n  window.requestAnimationFrame(fps);\n\n  function fps() {\n    var now = new Date().getTime();\n\n    if (fpsLast != null) {\n      fpsTime += now - fpsLast;\n      fpsCount++;\n\n      if (fpsTime > fpsDisplay) {\n        p.innerHTML = \"fps = \" + (fpsCount * (1000 / fpsTime)).toFixed(2);\n        fpsTime = 0;\n        fpsCount = 0;\n      }\n    }\n\n    vw.innerHTML = \"window.innerWidth = \" + window.innerWidth;\n    vh.innerHTML = \"window.innerHeight = \" + window.innerHeight;\n    dw.innerHTML = \"document.clientWidth = \" + document.documentElement.clientWidth;\n    dh.innerHTML = \"document.clientHeight = \" + document.documentElement.clientHeight;\n    fpsLast = now;\n    window.requestAnimationFrame(fps);\n  }\n}\n\n//# sourceURL=webpack:///./test-pages/src/fpsTest/fpsTest.js?");
+
+/***/ }),
+
 /***/ "./test-pages/src/index.js":
 /*!*********************************!*\
   !*** ./test-pages/src/index.js ***!
@@ -172,7 +183,7 @@ eval("module.exports = function () {\n  window.addEventListener(\"load\", functi
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("var dataStructure = __webpack_require__(/*! ./dataStructure/dataStructure.js */ \"./test-pages/src/dataStructure/dataStructure.js\");\n\nvar privatePropertiesAndMethods = __webpack_require__(/*! ./privatePropertiesAndMethods/privatePropertiesAndMethods.js */ \"./test-pages/src/privatePropertiesAndMethods/privatePropertiesAndMethods.js\");\n\nvar testTouches = __webpack_require__(/*! ./testTouches/testTouches.js */ \"./test-pages/src/testTouches/testTouches.js\");\n\nvar touchGestures = __webpack_require__(/*! ./touchGestures/touchGestures.js */ \"./test-pages/src/touchGestures/touchGestures.js\");\n\nvar animateTests = __webpack_require__(/*! ./animateTests/animateTests.js */ \"./test-pages/src/animateTests/animateTests.js\");\n\nfor (var n in window.boardClasses) {\n  eval(\"window.\" + n + \" = window.boardClasses[n];\");\n}\n\nfor (var m in window.vueClasses) {\n  eval(\"window.\" + m + \" = window.vueClasses[m];\");\n}\n\nvar str = window.location.href.split(\"/\");\n\nif (str[str.length - 1] != \"\") {\n  eval(str[str.length - 1] + \"()\");\n} else if (str[str.length - 2] != \"\" && str[str.length - 2] != \"localhost:3000\") {\n  eval(str[str.length - 2] + \"()\");\n}\n\n//# sourceURL=webpack:///./test-pages/src/index.js?");
+eval("var dataStructure = __webpack_require__(/*! ./dataStructure/dataStructure.js */ \"./test-pages/src/dataStructure/dataStructure.js\");\n\nvar privatePropertiesAndMethods = __webpack_require__(/*! ./privatePropertiesAndMethods/privatePropertiesAndMethods.js */ \"./test-pages/src/privatePropertiesAndMethods/privatePropertiesAndMethods.js\");\n\nvar testTouches = __webpack_require__(/*! ./testTouches/testTouches.js */ \"./test-pages/src/testTouches/testTouches.js\");\n\nvar touchGestures = __webpack_require__(/*! ./touchGestures/touchGestures.js */ \"./test-pages/src/touchGestures/touchGestures.js\");\n\nvar animateTests = __webpack_require__(/*! ./animateTests/animateTests.js */ \"./test-pages/src/animateTests/animateTests.js\");\n\nvar fpsTest = __webpack_require__(/*! ./fpsTest/fpsTest.js */ \"./test-pages/src/fpsTest/fpsTest.js\");\n\nfor (var n in window.boardClasses) {\n  eval(\"window.\" + n + \" = window.boardClasses[n];\");\n}\n\nfor (var m in window.vueClasses) {\n  eval(\"window.\" + m + \" = window.vueClasses[m];\");\n}\n\nvar str = window.location.href.split(\"/\");\n\nif (str[str.length - 1] != \"\") {\n  eval(str[str.length - 1] + \"()\");\n} else if (str[str.length - 2] != \"\" && str[str.length - 2] != \"localhost:3000\") {\n  eval(str[str.length - 2] + \"()\");\n}\n\n//# sourceURL=webpack:///./test-pages/src/index.js?");
 
 /***/ }),
 
@@ -205,7 +216,7 @@ eval("module.exports = function () {\n  window.addEventListener(\"load\", functi
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("var Hammer = __webpack_require__(/*! hammerjs */ \"./node_modules/hammerjs/hammer.js\");\n\nmodule.exports = function () {\n  window.addEventListener(\"load\", function () {\n    init();\n  });\n};\n\nfunction init() {\n  // get a reference to an element\n  var stage = document.getElementById('stage'); // create a manager for that element\n\n  var mc = new Hammer.Manager(stage); // create a recognizer\n\n  var tap = new Hammer.Tap({\n    event: \"simpletap\"\n  }); // add the recognizer\n\n  mc.add(tap);\n  console.log(mc); // subscribe to events\n\n  mc.on('simpletap', function (e) {\n    // do something cool\n    stage.className = 'selected';\n  });\n}\n\n//# sourceURL=webpack:///./test-pages/src/touchGestures/touchGestures.js?");
+eval("var Hammer = __webpack_require__(/*! hammerjs */ \"./node_modules/hammerjs/hammer.js\");\n\nmodule.exports = function () {\n  window.addEventListener(\"load\", function () {\n    init();\n  });\n};\n\nfunction init() {\n  // get a reference to an element\n  var stage = document.getElementById('stage'); // create a manager for that element\n\n  var mc = new Hammer.Manager(stage); // create a recognizer\n\n  var tap = new Hammer.Tap({\n    event: \"simpletap\"\n  }); // add the recognizer\n\n  mc.add(tap); // subscribe to events\n\n  mc.on('simpletap', function (e) {\n    // do something cool\n    stage.className = 'selected';\n  });\n}\n\n//# sourceURL=webpack:///./test-pages/src/touchGestures/touchGestures.js?");
 
 /***/ })
 
