@@ -2,14 +2,14 @@ import Vue from "vue/dist/vue.esm.js";
 import Utils from "./class/Utils.class.js";
 import Loader from "./class/Loader.class.js";
 import Timeline from "./class/Timeline.class.js";
-import V_player from "./components/V_player.vue";
-import V_taskTableFrame from "./components/V_taskTableFrame.vue";
-import V_forgeViewer from "./components/V_forgeViewer.vue";
+import V_player from "./components/Player/V_player.vue";
+import V_taskTableFrame from "./components/SixWeekView/V_taskTableFrame.vue";
+import V_forgeViewer from "./components/3DViewer/V_forgeViewer.vue";
 import Hammer from "hammerjs";
 import "./index.scss";
 import Config from "../config.js";
 import "animate.css";
-import TouchGesturesUtils from "./components/utils/V_touchGesturesUtils.class.js";
+import TouchGesturesUtils from "./components/Utils/V_touchGesturesUtils.class.js";
 
 window.addEventListener("load", function(){
 	init();
@@ -155,7 +155,7 @@ async function init(){
  				<forgeviewer id="forgeViewer" v-bind:model="model" v-bind:timeline="timeline" v-bind:manifest="manifest" v-bind:oauth="oauth"></forgeviewer>
  				<player id="mainPlayer" v-bind:duration="duration" v-bind:playerinit="playerinit"></player>
  			</div>
- 			<tasktableframe v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit" v-bind:duration="duration"></tasktableframe>
+ 			<tasktableframe id="taskTableFrame" v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit" v-bind:duration="duration"></tasktableframe>
  		</div>
  		`
 	});

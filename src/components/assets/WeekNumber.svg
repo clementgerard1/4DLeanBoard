@@ -1,4 +1,0 @@
-<svg width="180" height="52" viewBox="0 0 180 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-<text fill="black" fill-opacity="0.5" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="14" font-weight="500" letter-spacing="0em"><tspan x="4.53781" y="41.7593">{{firstday}}</tspan></text>
-<text fill="black" fill-opacity="0.5" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="24" font-weight="500" letter-spacing="0em"><tspan x="3" y="25.873">{{weeknumber}}</tspan></text>
-</svg>

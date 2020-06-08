@@ -1,0 +1,23 @@
+@use "assets/variables" as v;
+
+.rowHeader{
+	display : flex;
+	padding : 0px 10px;
+
+	.rowHeaderItem{
+		min-height : v.$tasksize;
+		min-width : v.$tasksize;
+		width : v.$tasksize;
+		height: v.$tasksize;
+		display: flex;
+		justify-content: start;
+		align-items: flex-end;
+
+		svg{
+			width : 100%;
+			height: v.$taskheaderheight;
+		}
+
+	}
+
+}

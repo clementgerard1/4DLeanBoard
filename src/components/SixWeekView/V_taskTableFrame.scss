@@ -1,0 +1,9 @@
+@use "assets/variables" as v;
+
+.taskTableFrame{
+
+	background: v.$light;
+	padding : 0px 15px;
+	position: relative;
+
+}

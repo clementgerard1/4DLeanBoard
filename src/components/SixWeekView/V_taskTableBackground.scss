@@ -1,0 +1,16 @@
+@use "assets/variables" as v;
+
+#taskTableBackground{
+	position: absolute;
+	top : 0px;
+	width : 100%;
+	height: 100%;
+	padding-top : v.$tasksize;
+
+	.backgroundcolumn{
+		width : percentage(1 / 6);
+		height: 10px;
+		background-color : blue;
+	}
+
+}
