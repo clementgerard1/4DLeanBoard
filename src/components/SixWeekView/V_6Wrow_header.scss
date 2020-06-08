@@ -2,20 +2,19 @@
 
 .rowHeader{
 	display : flex;
-	padding : 0px 10px;
+	margin : v.$rowHeaderColumnMargin;
 
 	.rowHeaderItem{
-		min-height : v.$tasksize;
-		min-width : v.$tasksize;
-		width : v.$tasksize;
-		height: v.$tasksize;
+		min-height : v.$taskSize;
+		min-width : v.$taskSize;
 		display: flex;
 		justify-content: start;
 		align-items: flex-end;
+		flex:1;
 
 		svg{
 			width : 100%;
-			height: v.$taskheaderheight;
+			height: v.$taskHeaderHeight;
 		}
 
 	}

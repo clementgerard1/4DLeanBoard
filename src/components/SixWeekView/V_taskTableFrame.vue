@@ -25,6 +25,8 @@ export default {
 				tasktablestart : taskTableStart,
 				time : this.playerinit,
 				phases : this.timeline.getPhasesBetweenTwoDates(0, this.duration),
+				nbopened : 0,
+				nbclosed : 1,
 			};
 	},	
 	provide: function(){
@@ -42,11 +44,11 @@ export default {
 	template : `
 		<div class="taskTableFrame">
 			<!-- core -->
-			<row6wheader v-bind:time="time" ></row6wheader>
+			<row6wheader v-bind:tasktablestart="tasktablestart" v-bind:time="time" ></row6wheader>
 			<row6w v-bind:time="time" v-for="phase in phases" :key="phase.id"></row6w>
 
 			<!-- background -->
-			<tasktablebackground id="taskTableBackground"></tasktablebackground>
+			<tasktablebackground v-bind:tasktablestart="tasktablestart" v-bind:time="time" v-bind:nbopened="nbopened" v-bind:nbclosed="nbclosed" id="taskTableBackground"></tasktablebackground>
 
 	 	</div>
 	`,

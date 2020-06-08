@@ -1,16 +1,53 @@
 @use "assets/variables" as v;
+@use "sass:list";
 
 #taskTableBackground{
 	position: absolute;
 	top : 0px;
+	left : 0px;
 	width : 100%;
 	height: 100%;
-	padding-top : v.$tasksize;
+	padding-left : calc(#{list.nth(v.$taskFramePadding, 2)} + #{list.nth(v.$rowHeaderColumnMargin, 2)});
+	padding-right : calc(#{list.nth(v.$taskFramePadding, 2)} + #{list.nth(v.$rowHeaderColumnMargin, 2)});
+	padding-top : v.$taskSize;
+	display : flex;
 
 	.backgroundcolumn{
-		width : percentage(1 / 6);
-		height: 10px;
-		background-color : blue;
+		min-width : v.$taskSize - list.nth(v.$rowHeaderColumnMargin, 2) * 2;
+		background : v.$white_transparent_reverse;
+		margin-right : list.nth(v.$rowHeaderColumnMargin , 2);
+		flex: 1;
+		border-radius: 10px;
+		position: relative;
+
+		.back{
+			position : relative;
+			z-index: -2;
+		}
+
+	}
+
+	.backgroundcolumn:last-child{
+		margin-right: 0px;
+	}
+
+	.played{
+		border : 5px solid v.$greenbluish_light;
+		position:absolute;
+		z-index:0;
+		top : 0px;
+		height: 100%;
+		width : 100%;
+		border-radius : 10px;
+	}
+
+	#selectedLayer{
+		left : -100%;
+		background : rgba(0, 0, 0 ,0);
+
+		*{
+			position : absolute
+		}
 	}
 
 }

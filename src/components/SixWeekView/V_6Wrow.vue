@@ -11,6 +11,7 @@ export default {
 		"index"
 	],
 	template : `
-	<div>
+	<div class="phaserow">
+		<div class="phaseLine"></div>
 	</div>`,
 }

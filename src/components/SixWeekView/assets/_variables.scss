@@ -88,7 +88,14 @@ $redish : #FF8F80;
 }
 
 /* View information */
-$tasksize: 188px;
+$taskSize: 188px;
+$taskHeightClosedPourcent: 17%;
 
-$taskheaderheight : 52px;
+$taskHeaderHeight : 52px;
+$taskFramePadding : 0px 15px;
+$rowHeaderColumnMargin : 0px 10px;
 
+:export{
+	taskSize : $taskSize;
+	taskHeightClosedPourcent : $taskHeightClosedPourcent;
+}

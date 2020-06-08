@@ -1,0 +1,17 @@
+@use "assets/variables" as v;
+@use "sass:list";
+
+.phaserow{
+	margin-top : 17px;
+
+	.phaseLine{
+		overflow: hidden;
+		height: 30px;
+		background-color : yellow;
+		position : relative;
+		z-index: -1;
+		width : calc(100% + #{list.nth(v.$taskFramePadding, 2) * 2});
+		left : - list.nth(v.$taskFramePadding, 2);
+	}
+
+}

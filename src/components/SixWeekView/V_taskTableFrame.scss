@@ -3,7 +3,8 @@
 .taskTableFrame{
 
 	background: v.$light;
-	padding : 0px 15px;
+	padding : v.$taskFramePadding;
 	position: relative;
+	z-index:-2;
 
 }

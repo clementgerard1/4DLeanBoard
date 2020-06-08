@@ -1,34 +1,33 @@
 import "./V_6Wrow_header.scss";
 import TimelineUtils from "../Utils/V_timelineUtils.class.js";
-import weekNumber from "./assets/WeekNumber.svg";
 import Utils from "../../class/Utils.class.js";
+import V_6Wrow_header_date from "./V_6Wrow_header_date.vue";
 
 export default {
+	components:{
+		"date" : V_6Wrow_header_date
+	},
 	props:[
 		'time',
+		'tasktablestart'
 	],
 	inject : [
 		'timeline',
 		'model',
 	],
+	provide : [
+		'timeline',
+		'model',
+	],
 	computed: {
-		firstday : function(){
-			let date = new Date(this.timeline.getStartDate());
-			date.setDate(date.getDate() + (this.time * 7));
-			return date.getDate() + "/" + (date.getMonth() + 1);
-		},
-		weeknumber : function(){
-			let date = new Date(this.timeline.getStartDate());
-			date.setDate(date.getDate() + (this.time * 7));
-			return Utils.getWeekNumber(date);
+		"_time" : function(){
+			return this.time;
 		}
 	},
 	template : `
 
 		<div class="rowHeader">
-			<div class="rowHeaderItem" v-for="i in 6">
-				` + weekNumber + `
-			</div>
+			<date class="rowHeaderItem" v-for="i in 6" :key="i" v-bind:time="tasktablestart + i"></date>
 	 	</div>
 
 	`,
