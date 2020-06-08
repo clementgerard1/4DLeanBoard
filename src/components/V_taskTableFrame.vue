@@ -1,11 +1,21 @@
 import "./V_taskTableFrame.scss";
 import V_taskTable from "./V_taskTable.vue";
 import V_taskTablePhaseRow from "./V_taskTablePhaseRow.vue";
+import TimelineUtils from "./utils/V_timelineUtils.class.js";
 
 export default {
 	components: {
 		tasktable : V_taskTable,
 		tasktablephaserow : V_taskTablePhaseRow,
+	},
+	methods : {
+		updateTime : function(time){
+			this.time = time;
+			this.tasktablestart = Math.trunc(this.time / 6) * 6;
+		}
+	},
+	created : function(){
+		TimelineUtils.addListener("time", this, this.updateTime);
 	},
 	data: function(){
 			let taskTableStart = Math.trunc(this.playerinit / 6) * 6;
@@ -22,25 +32,16 @@ export default {
 		'duration'
 	],
 	computed:{
+		_time : function(){ 
+			return this.time;
+		},
 		_model : function(){ return this.model; },
 		_timeline : function(){ return this.timeline; },
 		_duration : function(){ return this.duration; }
 	},
-	watch:{
-		time: function(){
-			/*
-			let taskTableStart = this.time - 2;
-			if(taskTableStart < 0) taskTableStart = 0;
-			if(taskTableStart > this.duration - 6) taskTableStart = this.duration - 6;
-			this.tasktablestart = taskTableStart;*/
-			this.tasktablestart = Math.trunc(this.time / 6) * 6;
-		}
-	},
 	template : `
 		<div id="taskTableFrame">
-			<tasktablephaserow></tasktablephaserow>
-			<tasktable v-bind:model="_model" v-bind:timeline="_timeline" v-bind:tasktablestart="tasktablestart" v-bind:time="time" v-bind:duration="_duration"></tasktable>
-	 		<input id="taskTablePlayer" min=0 v-bind:max="maximum" type="number" v-model.number="time"/>
+			<tasktable v-bind:model="_model" v-bind:timeline="_timeline" v-bind:tasktablestart="tasktablestart" v-bind:time="_time" v-bind:duration="_duration"></tasktable>
 	 	</div>
 	`,
 }

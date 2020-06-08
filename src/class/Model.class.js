@@ -161,16 +161,13 @@ class Model{
 				const startDate = this.#milestones[m].getStartDate();
 				const endDate = this.#milestones[m].getEndDate();
 
-				console.log(start, end);
 				if(start == null || startDate < start) start = startDate;
-				console.log(start);
+
 				if(end == null || endDate > end) end = endDate;
-				console.log(end);
+
 			}
-			console.log(start, end);
 
 			this.#duration = Math.ceil(((end.getTime() - start.getTime()) / (1000 * 3600 * 24)) - 1);
-			console.log(this.#duration);
 		}
 
 		return this.#duration;

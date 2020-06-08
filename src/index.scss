@@ -96,14 +96,38 @@ $taskminsize: 188px;
 #content{
 	display : flex;
 	height: 100vh;
+	max-height: 100vh;
 	width : 100vw;
-}
+	max-width: 100vw;
 
-#forgeViewer{
-	width : 25%;
-}
+	*{
+		box-sizing: border-box;
+	}
 
-#taskTableFrame{
-	border-left : 10px solid black;
-	width : 75%;
+	#viewerFrame{
+
+		width : 25%;
+		max-width : 25%;
+		height : 100vh;
+		max-height: 100vh;
+
+
+		#forgeViewer{
+			height : calc(100vh - 30px);
+		}
+
+		#mainPlayer{
+			height : 30px;
+		}
+
+	}
+
+	#taskTableFrame{
+		border-left : 10px solid black;
+		width : 75%;
+		height : 100vh;
+		max-height: 100vh;
+		overflow:scroll;
+	}
+
 }

@@ -2,14 +2,14 @@ import Vue from "vue/dist/vue.esm.js";
 import Utils from "./class/Utils.class.js";
 import Loader from "./class/Loader.class.js";
 import Timeline from "./class/Timeline.class.js";
-import V_taskTable from "./components/V_taskTable.vue";
+import V_player from "./components/V_player.vue";
 import V_taskTableFrame from "./components/V_taskTableFrame.vue";
 import V_forgeViewer from "./components/V_forgeViewer.vue";
 import Hammer from "hammerjs";
 import "./index.scss";
 import Config from "../config.js";
 import "animate.css";
-import TouchGesturesUtils from "./components/utils/V_TouchGesturesUtils.class.js";
+import TouchGesturesUtils from "./components/utils/V_touchGesturesUtils.class.js";
 
 window.addEventListener("load", function(){
 	init();
@@ -17,8 +17,9 @@ window.addEventListener("load", function(){
 
 async function init(){
 
-	//TEST
-		let fpsLast = null;
+	//FPS TEST 
+	//Need add p with fps id on index.html
+	/*	let fpsLast = null;
 		let fpsTime = 0;
 		let fpsCount = 0;
 		let fpsDisplay = 150;
@@ -38,8 +39,8 @@ async function init(){
 			}
 			fpsLast = now;
 			window.requestAnimationFrame(fps);
-		}
-	//TEST
+		}*/
+	//FIN FPS TEST
 
 	let model = null;
 	let playerInit = null;
@@ -137,6 +138,7 @@ async function init(){
 		components : {
 			forgeviewer : V_forgeViewer,
 			tasktableframe : V_taskTableFrame,
+			player : V_player,
 		},
 		data:{
 			playerinit : playerInit,
@@ -149,7 +151,10 @@ async function init(){
 
  		template : `
  		<div id="content">
- 			<forgeviewer v-bind:model="model" v-bind:timeline="timeline" v-bind:manifest="manifest" v-bind:oauth="oauth"></forgeviewer>
+ 			<div id="viewerFrame">
+ 				<forgeviewer id="forgeViewer" v-bind:model="model" v-bind:timeline="timeline" v-bind:manifest="manifest" v-bind:oauth="oauth"></forgeviewer>
+ 				<player id="mainPlayer" v-bind:duration="duration" v-bind:playerinit="playerinit"></player>
+ 			</div>
  			<tasktableframe v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit" v-bind:duration="duration"></tasktableframe>
  		</div>
  		`
