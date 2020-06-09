@@ -7,7 +7,7 @@
 
 	.phaseLine{
 		overflow: hidden;
-		height: 30px;
+		height: v.$phaseHeight;
 		position : relative;
 		z-index: 0;
 		width : calc(100% + #{list.nth(v.$taskFramePadding, 2) * 2});
@@ -39,6 +39,15 @@
 		right:-5px;
 		width : 17px;
 		height: 24px;
+	}
+
+	.tasksWrapper {
+		height: v.$taskSize;
+		background-color: red;
+		margin: 0px 25px;
+		position: relative;		
+		top : - v.$phaseHeight;
+		margin-bottom : - v.$phaseHeight;
 	}
 
 }

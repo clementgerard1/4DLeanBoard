@@ -27,7 +27,7 @@ export default {
 				tasktablestart : taskTableStart,
 				time : this.playerinit,
 				phases : this.timeline.getPhasesBetweenTwoDates(0, this.duration),
-				nbopened : 10, //updated on row6w component
+				nbopened : 0, //updated on row6w component
 				nbclosed : 0,	//updated on row6w component
 			};
 	},	

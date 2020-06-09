@@ -1,12 +1,12 @@
-@import url('https://fonts.googleapis.com/css?family=Oswald');
+@use "assets/variables" as v;
 
 .task{
-	width : 100%;
+	width : calc(100% - 50px);
 	height : 100%;
 	min-height : 188px;
 	max-height : 188px;
-	margin-bottom : 5px;
 	position : relative;
+
 }
 
 .task svg{
