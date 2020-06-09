@@ -19,6 +19,7 @@ class V_4DUtils{
 		@static
 	*/
 	static highlightTask(object4D){
+		console.log(object4D);
 		for(let v in this.viewers){
 			this.viewers[v].clearHighlighting();
 			const objects4D = object4D.getObjects3D();

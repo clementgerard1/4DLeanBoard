@@ -279,5 +279,18 @@ class Phase extends PlanningObject{
 		return null;
 	}
 
+	/*
+		get a collection of task corresponding to a taskTeam
+		@param {TaskTeam} team
+		@returns {Array} Array of Task
+	*/
+	getTasksByTaskTeam(team){
+		const toReturn = [];
+		for(let t in this.#tasks){
+			if(this.#tasks[t].getTaskTeam() == team) toReturn.push(this.#tasks[t]);
+		}
+		return toReturn;
+	}
+
 }
 export default Phase;

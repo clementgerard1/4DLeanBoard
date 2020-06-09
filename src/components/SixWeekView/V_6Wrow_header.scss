@@ -2,8 +2,8 @@
 
 .rowHeader{
 	display : flex;
-	margin : v.$rowHeaderColumnMargin;
-	width: fit-content;
+	padding : 0px 25px;
+	width: 100%;
 
 	.rowHeaderItem{
 		min-height : v.$taskSize;

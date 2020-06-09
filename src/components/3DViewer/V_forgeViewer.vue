@@ -11,6 +11,9 @@ import "./V_forgeViewer.scss";
 	* @vue-event {Number} decrement - Emit counter's value after decrement
 */
 export default {
+	date:{
+		"viewer" : null
+	},
 	props:[
 		"manifest",
 		"oauth",
@@ -42,14 +45,25 @@ export default {
 	      //var viewer = new Autodesk.Viewing.Viewer3D(domContainer)
 
 	      // GUI Version: viewer with controls
-	      var viewer = new Autodesk.Viewing.Private.GuiViewer3D(domContainer)
+	      this.viewer = new Autodesk.Viewing.Private.GuiViewer3D(domContainer)
 
-	      viewer.initialize()
 
-	      viewer.loadModel(doc.getViewablePath(selectedItem))
+	      this.viewer.initialize()
+
+	      this.viewer.loadModel(doc.getViewablePath(selectedItem))
 		  
-		  viewer.impl.setSelectionColor(new THREE.Color(1,0,0));
-		  viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, () => viewer.select(1))
+	      
+
+		  this.viewer.impl.setSelectionColor(new THREE.Color(1,0,0));
+		  this.viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, this.onGeometryLoaded)
+		},
+		onGeometryLoaded(){
+			const that = this;
+			setTimeout(function(){
+
+				console.log(that.viewer.model);
+				console.log(that.viewer.model.getInstanceTree());
+			}, 1000);
 		},
 		onEnvInitialized(that){
 			Autodesk.Viewing.Document.load(

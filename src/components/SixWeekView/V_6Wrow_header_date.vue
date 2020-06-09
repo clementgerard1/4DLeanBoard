@@ -14,12 +14,12 @@ export default {
 		firstday : function(){
 			let date = new Date(this.timeline.getStartDate());
 			date.setDate(date.getDate() + (this.time * 7));
-			return date.getDate() + "/" + (date.getMonth() + 1);
+			return date.getDate() + " " + Utils.getMonthString(date.getMonth() + 1);
 		},
 		weeknumber : function(){
 			let date = new Date(this.timeline.getStartDate());
 			date.setDate(date.getDate() + (this.time * 7));
-			return Utils.getWeekNumber(date);
+			return "WE " + Utils.getWeekNumber(date);
 		}
 	},
 	template : `

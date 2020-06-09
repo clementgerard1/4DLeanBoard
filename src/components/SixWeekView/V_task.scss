@@ -1,41 +1,38 @@
 @use "assets/variables" as v;
+@use "sass:list";
 
-.task{
-	width : calc(100% - 50px);
-	height : 100%;
-	min-height : 188px;
-	max-height : 188px;
-	position : relative;
+.tasksWrapper{
+	.taskWrapper{
+		margin-right : list.nth(v.$rowHeaderColumnMargin , 2);
+		padding-right : list.nth(v.$rowHeaderColumnMargin , 2);
+		padding-left: list.nth(v.$rowHeaderColumnMargin , 2);
+		box-sizing: content-box !important;
 
-}
+		.task{
+			height : 100%;
+			min-height : 188px;
+			max-height : 188px;
+			position : relative;
+		}
 
-.task svg{
-	max-height : 188px;
-	min-height : 188px;
-}
+		.taskclass{
 
-.selected{
-	border : 2px solid green;
-}
+		}
+		
+		svg{
+			max-height : 188px;
+			min-height : 188px;
+		}
 
-.task.blue{
-	background-color: blue;
-}
+		.taskstate{
+			position : absolute;
+			top:0px;
+			width :100%;
+		}
+	}
 
-.task.red{
-	background-color: red;
-}
+	.taskWrapper:last-child{
+		margin-right: 0px;
+	}
 
-.task.orange{
-	background-color: orange;
-}
-
-.task.default{
-	background-color: white;
-}
-
-.taskstate{
-	position : absolute;
-	top:0px;
-	width :100%;
 }

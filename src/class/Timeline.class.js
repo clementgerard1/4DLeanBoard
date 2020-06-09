@@ -283,8 +283,34 @@ class Timeline{
 		return null;
 	}
 
+	/*
+		get date object from time
+		@param {int} time
+		@returns {Date}
+	*/
 	getDateObject(time){
 		return new Date(this.#startDate.getTime() + ( time * 1000 * 3600 * 24));
+	}
+
+	/*
+		get the max number of simultaneous tasks on a phase between two moments
+		@param {Phase} phase
+		@returns {int}
+	*/
+	getMaxSimultaneousTasksByPhaseAndTaskTeamBetweenTwoDates(phase, taskTeam, start, end){
+		const phaseTasks = phase.getTasksByTaskTeam(taskTeam);
+		let max = 0;
+		for(let i = start; i < end ; i++){
+			const tasks = this.#steps[i].tasks;
+			let count = 0;
+			for(let t in tasks){
+				for(let tt in phaseTasks){
+					if(phaseTasks[tt] == tasks[t]) count++;
+				}
+			}
+			if(max < count) max = count;
+		}
+		return max;
 	}
 
 }

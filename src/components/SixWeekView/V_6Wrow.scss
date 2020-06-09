@@ -43,11 +43,17 @@
 
 	.tasksWrapper {
 		height: v.$taskSize;
-		background-color: red;
 		margin: 0px 25px;
 		position: relative;		
 		top : - v.$phaseHeight;
 		margin-bottom : - v.$phaseHeight;
+
+		display : flex;
+
+		.taskWrapper{
+			flex: 1;
+		}
+
 	}
 
 }

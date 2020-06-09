@@ -11,12 +11,22 @@ export default {
 	data : function(){
 		return {
 			"color" : "BG_" + this.phase.getColorClass(),
-			"isOpen" : false, 
+			"isOpen" : true, 
 		}
 	},
 	props :[
 		"time",
-		"phase"
+		"phase",
+		"taskteam",
+		"tasktablestart"
+	],
+	inject :[
+		"timeline",
+		"model"
+	],
+	provide:[
+		"timeline",
+		"model"
 	],
 	computed:{
 		icon : function(){
@@ -25,6 +35,15 @@ export default {
 			}else{
 				return phaseClose;
 			}
+		},
+		_time : function(){
+			return this.time;
+		},
+		_phase : function(){
+			return this.phase;
+		},
+		_team : function(){
+			return this.taskteam;
 		}
 	},
 	watch: {
@@ -47,7 +66,6 @@ export default {
 	},
 	methods: {
 		handleOpenPhase : function(){
-			console.log("HEY");
 			this.isOpen = !this.isOpen;
 		}
 	}
@@ -57,12 +75,16 @@ export default {
 
 		<!-- line -->
 		<div class="phaseLine" v-bind:class="color"></div>
-		<div v-bind:class='[isOpen ? "open" : "close"]' v-tap="handleOpenPhase" v-html="icon" class="phaseButton"></div>
 
 		<!-- tasks -->
 		<div v-if="isOpen" class="tasksWrapper">
-			<task class="task">HEY</task>
+			<task v-bind:team="_team" nth=0 v-bind:phase="_phase" v-for="i in 6" v-bind:time="_time + (i-1)"  ></task>
 		</div>
+
+		<!-- button -->
+		<div v-bind:class='[isOpen ? "open" : "close"]' v-tap="handleOpenPhase" v-html="icon" class="phaseButton"></div>
+
+
 
 	</div>`,
 }
