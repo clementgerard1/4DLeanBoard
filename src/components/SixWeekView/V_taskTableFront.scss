@@ -1,0 +1,37 @@
+@use "assets/variables" as v;
+@use "sass:list";
+
+#taskTableFront{
+	position: absolute;
+	top : 0px;
+	left : 0px;
+	height: fit-content;
+	padding-left : calc(#{list.nth(v.$taskFramePadding, 2)} + #{list.nth(v.$rowHeaderColumnMargin, 2)});
+	padding-right : calc(#{list.nth(v.$taskFramePadding, 2)} + #{list.nth(v.$rowHeaderColumnMargin, 2)});
+	padding-top : v.$taskSize;
+	padding-bottom : v.$taskSize;
+	display : flex;
+	width: 100%;
+
+	.frontcolumn{
+		min-width : v.$taskSize - list.nth(v.$rowHeaderColumnMargin, 2) * 2;
+		background : rgba(0,0,0,0);
+		margin-right : list.nth(v.$rowHeaderColumnMargin , 2);
+		padding-right : list.nth(v.$rowHeaderColumnMargin , 2);
+		box-sizing: content-box;
+		flex: 1;
+		border-radius: 10px;	
+		position : relative;
+		z-index: 1;
+	}
+
+	.frontcolumn:last-child{
+		margin-right: 0px;
+	}
+
+	.played{
+		border : 5px solid v.$greenbluish_light;
+		padding-right : calc( #{list.nth(v.$rowHeaderColumnMargin , 2)} - 5px);
+	}
+
+}

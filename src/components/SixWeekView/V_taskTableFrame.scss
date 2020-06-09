@@ -4,7 +4,14 @@
 
 	background: v.$light;
 	padding : v.$taskFramePadding;
-	position: relative;
 	z-index:-2;
+	overflow: scroll;
+
+
+	.taskTableWrapper{
+		position: relative;
+		width: fit-content;
+	}
 
 }
+

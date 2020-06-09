@@ -6,7 +6,6 @@ export default {
 		return {
 			"heightcolumn" : scssVariables.taskSize,
 			"minheightcolumn" : "calc(100% - " + scssVariables.taskSize.replace("px", "") + "px)",
-			"columnwidth" : scssVariables.taskSize,
 		}
 	},
 	props:[
@@ -26,7 +25,6 @@ export default {
 			const heightOpened = Math.max(((document.getElementById("taskTableFrame").clientWidth - 30) / 6) - 20, scssVariables.taskSize.replace("px", ""));
 			this.heightcolumn =  (this.nbopened * heightOpened + this.nbclosed * (heightOpened * (scssVariables.taskHeightClosedPourcent.replace("%", "") / 100)));
 			this.minheightcolumn = "calc(100% - " + heightOpened + "px)";
-			this.columnwidth = heightOpened;
 
 		}
 	},
@@ -39,11 +37,6 @@ export default {
 	},
 	template : `
 	<div>
-		<div v-for="c in 6" :key="c" class="backgroundcolumn" v-bind:style="{ height : heightcolumn + 'px', 'min-height' : minheightcolumn}">
-			<div class="back"></div>
-		</div>
-		<div id="selectedLayer" v-for="c in 6" :key="c" class="backgroundcolumn" v-bind:style="{ height : heightcolumn + 'px', 'min-height' : minheightcolumn}">
-			<div v-if="lineplayed == c" class="played"></div>
-		</div>
+		<div v-for="c in 6" :key="c" class="backgroundcolumn" v-bind:style="{ height : heightcolumn + 'px', 'min-height' : minheightcolumn}"></div>
 	</div>`,
 }

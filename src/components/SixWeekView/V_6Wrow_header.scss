@@ -3,6 +3,7 @@
 .rowHeader{
 	display : flex;
 	margin : v.$rowHeaderColumnMargin;
+	width: fit-content;
 
 	.rowHeaderItem{
 		min-height : v.$taskSize;
