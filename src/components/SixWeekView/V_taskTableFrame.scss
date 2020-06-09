@@ -6,9 +6,11 @@
 	padding : v.$taskFramePadding;
 	z-index:-2;
 	overflow: scroll;
+	height: 100%;
 
 
 	.taskTableWrapper{
+		height: 100%;
 		position: relative;
 		width: fit-content;
 	}

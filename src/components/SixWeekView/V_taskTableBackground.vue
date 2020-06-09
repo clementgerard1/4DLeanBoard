@@ -24,9 +24,16 @@ export default {
 		handleResize : function(){
 			const heightOpened = Math.max(((document.getElementById("taskTableFrame").clientWidth - 30) / 6) - 20, scssVariables.taskSize.replace("px", ""));
 			this.heightcolumn =  (this.nbopened * heightOpened + this.nbclosed * (heightOpened * (scssVariables.taskHeightClosedPourcent.replace("%", "") / 100)));
-			this.minheightcolumn = "calc(100% - " + heightOpened + "px)";
-
+			this.minheightcolumn = "calc(100vh - " + (2 * heightOpened) + "px)";
 		}
+	},
+	watch:{
+		nbopened : function(){
+			this.handleResize();
+		},
+		nbclosed : function(){
+			this.handleResize();
+		},
 	},
 	mounted: function(){	//Calculate height of task
 		this.handleResize();

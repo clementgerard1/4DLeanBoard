@@ -27,8 +27,8 @@ export default {
 				tasktablestart : taskTableStart,
 				time : this.playerinit,
 				phases : this.timeline.getPhasesBetweenTwoDates(0, this.duration),
-				nbopened : 10,
-				nbclosed : 1,
+				nbopened : 10, //updated on row6w component
+				nbclosed : 0,	//updated on row6w component
 			};
 	},	
 	provide: function(){
@@ -53,7 +53,7 @@ export default {
 
 				<!-- core -->
 				<row6wheader v-bind:tasktablestart="tasktablestart" v-bind:time="time" ></row6wheader>
-				<row6w v-bind:time="time" v-for="phase in phases" :key="phase.id"></row6w>
+				<row6w v-bind:time="time" v-for="phase in phases" :key="phase.id" v-bind:phase="phase"></row6w>
 
 				<!-- front -->
 				<tasktablefront v-bind:tasktablestart="tasktablestart" v-bind:time="time" v-bind:nbopened="nbopened" v-bind:nbclosed="nbclosed" id="taskTableFront"></tasktablefront>
