@@ -114,6 +114,9 @@
                   null,
                   {
                      "4DID": 101,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKWyMH2W"
+                     ],
                      "Name": "Ground slab pouring",
                      "Start": "01/02/2021",
                      "End": "14/02/2021",
@@ -126,6 +129,9 @@
                   },
                   {
                      "4DID": 102,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKWyMH18"
+                     ],
                      "Name": "Walls cladding North",
                      "Start": "14/02/2021",
                      "End": "18/02/2021",
@@ -138,6 +144,9 @@
                   },
                   {
                      "4DID": 103,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKWyMH1B"
+                     ],
                      "Name": "Walls cladding East",
                      "Start": "14/02/2021",
                      "End": "18/02/2021",
@@ -150,6 +159,9 @@
                   },
                   {
                      "4DID": 104,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKWyMH1A"
+                     ],
                      "Name": "Walls cladding South",
                      "Start": "26/02/2021",
                      "End": "02/03/2021",
@@ -162,6 +174,9 @@
                   },
                   {
                      "4DID": 105,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKWyMH19"
+                     ],
                      "Name": "Walls cladding West",
                      "Start": "26/02/2021",
                      "End": "02/03/2021",
@@ -174,6 +189,9 @@
                   },
                   {
                      "4DID": 106,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKWyMH4v"
+                     ],
                      "Name": "Windows installation",
                      "Start": "08/03/2021",
                      "End": "12/03/2021",
@@ -186,6 +204,9 @@
                   },
                   {
                      "4DID": 107,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKWyMH4Y"
+                     ],
                      "Name": "Doors installation",
                      "Start": "16/03/2021",
                      "End": "21/03/2021",
@@ -198,6 +219,12 @@
                   },
                   {
                      "4DID": 108,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKeyMH3A",
+                        "2XqLaPqlL6pRaKaKqyMH3A", 
+                        "2XqLaPqlL6pRaKaKmyMH3A", 
+                        "2XqLaPqlL6pRaKaKiyMH3A"
+                     ],
                      "Name": "Roof installation",
                      "Start": "16/03/2021",
                      "End": "29/03/2021",
@@ -318,6 +345,9 @@
                   null,
                   {
                      "4DID": 101,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKWyMH2W"
+                     ],
                      "Name": "Ground slab pouring",
                      "Start": "01/02/2021",
                      "End": "14/02/2021",
@@ -330,6 +360,9 @@
                   },
                   {
                      "4DID": 102,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKWyMH18"
+                     ],
                      "Name": "Walls cladding North",
                      "Start": "14/02/2021",
                      "End": "18/02/2021",
@@ -342,6 +375,9 @@
                   },
                   {
                      "4DID": 103,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKWyMH1B"
+                     ],
                      "Name": "Walls cladding East",
                      "Start": "14/02/2021",
                      "End": "18/02/2021",
@@ -354,6 +390,9 @@
                   },
                   {
                      "4DID": 104,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKWyMH1A"
+                     ],
                      "Name": "Walls cladding South",
                      "Start": "26/02/2021",
                      "End": "02/03/2021",
@@ -366,6 +405,9 @@
                   },
                   {
                      "4DID": 105,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKWyMH19"
+                     ],
                      "Name": "Walls cladding West",
                      "Start": "26/02/2021",
                      "End": "02/03/2021",
@@ -378,6 +420,9 @@
                   },
                   {
                      "4DID": 106,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKWyMH4v"
+                     ],
                      "Name": "Windows installation",
                      "Start": "08/03/2021",
                      "End": "12/03/2021",
@@ -390,6 +435,9 @@
                   },
                   {
                      "4DID": 107,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKWyMH4Y"
+                     ],
                      "Name": "Doors installation",
                      "Start": "16/03/2021",
                      "End": "21/03/2021",
@@ -402,6 +450,12 @@
                   },
                   {
                      "4DID": 108,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKeyMH3A",
+                        "2XqLaPqlL6pRaKaKqyMH3A", 
+                        "2XqLaPqlL6pRaKaKmyMH3A", 
+                        "2XqLaPqlL6pRaKaKiyMH3A"
+                     ],
                      "Name": "Roof installation",
                      "Start": "16/03/2021",
                      "End": "29/03/2021",

@@ -49,8 +49,10 @@ async function init(){
 	let oAuth = null;
 	let timeline = null;
 
-	await Utils.loadTextFile("datas/Project1v2.json")
-	.then( file => Loader.fromJSON(file))
+	await Promise.all([Utils.loadTextFile("datas/Project1v2.json"), Utils.loadTextFile("datas/Project1.ifc")])
+	.then( files => {
+			return Loader.fromJSONandIFC(files[0], files[1]);
+		})
 	.then( tl => {
 			//Model Loaded and Timeline created
 			timeline = tl;

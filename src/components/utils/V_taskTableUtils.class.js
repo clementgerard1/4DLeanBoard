@@ -21,7 +21,6 @@ class V_TaskTableUtils{
 		@static
 	*/
 	static getToken(obj){
-		console.log(obj);
 		this.token = {
 			time : obj.time,
 			team : obj.team

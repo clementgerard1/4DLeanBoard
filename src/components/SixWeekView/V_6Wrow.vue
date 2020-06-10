@@ -30,6 +30,7 @@ export default {
 	],
 	computed:{
 		icon : function(){
+			console.log(phaseOpen);
 			if(this.isOpen){
 				return phaseOpen;
 			}else{
@@ -38,6 +39,9 @@ export default {
 		},
 		_time : function(){
 			return this.time;
+		},
+		_tasktablestart : function(){
+			return this.tasktablestart;
 		},
 		_phase : function(){
 			return this.phase;
@@ -78,7 +82,7 @@ export default {
 
 		<!-- tasks -->
 		<div v-if="isOpen" class="tasksWrapper">
-			<task v-bind:team="_team" nth=0 v-bind:phase="_phase" v-for="i in 6" v-bind:time="_time + (i-1)"  ></task>
+			<task v-bind:team="_team" nth=0 v-bind:phase="_phase" v-for="i in 6" v-bind:time="_tasktablestart + (i-1)"  ></task>
 		</div>
 
 		<!-- button -->

@@ -1,6 +1,11 @@
 /* APP */
 
 @use "components/SixWeekView/assets/variables";
+
+body{
+	overflow:hidden;
+}
+
 #content{
 	height: 100vh;
 	max-height: 100vh;
@@ -19,9 +24,9 @@
 		height : 100vh;
 		max-height: 100vh;
 
-
 		#forgeViewer{
 			height : calc(100vh - 30px);
+			overflow: hidden;
 		}
 
 		#mainPlayer{

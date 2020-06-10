@@ -12,7 +12,8 @@ import "./V_forgeViewer.scss";
 */
 export default {
 	date:{
-		"viewer" : null
+		"viewer" : null,
+		"tree" : null,
 	},
 	props:[
 		"manifest",
@@ -25,45 +26,43 @@ export default {
 			console.log("CLEAR HIGHLIGHT");
 		},
 		highlight(object3D){
-			console.log("HIGHLIGHT : " + object3D.getId());
+			console.log("HIGHLIGHT : " + object3D.getName());
+			const toNumber = this.tree.nodeAccess.strings.indexOf(object3D.getName() + ":");
+			const index = this.tree.nodeAccess.dbIdToIndex[toNumber]; // Ou inversement
+			console.log(toNumber, index);
+			console.log(this.tree);
+			//Avec ça tu dois pouvoir afficher quelque chose d'interactif je pense
 		},
 		onDocumentLoaded(doc, that){
 
 			var rootItem = doc.getRootItem()
 
-	      // Grab all geometry items
-	      var geometryItems =
-	        Autodesk.Viewing.Document.getSubItemsWithProperties(
-	          rootItem, { 'type': 'geometry' }, true)
+      // Grab all geometry items
+      var geometryItems =
+        Autodesk.Viewing.Document.getSubItemsWithProperties(
+          rootItem, { 'type': 'geometry' }, true)
 
-	      // Pick the first item by default
-	      var selectedItem = geometryItems[0]
+      // Pick the first item by default
+      var selectedItem = geometryItems[0]
 
-	      var domContainer = document.getElementById('forgeV')
+      var domContainer = document.getElementById('forgeV')
 
-	      // UI-less Version: viewer without controls and commands
-	      //var viewer = new Autodesk.Viewing.Viewer3D(domContainer)
+      // UI-less Version: viewer without controls and commands
+      //var viewer = new Autodesk.Viewing.Viewer3D(domContainer)
 
-	      // GUI Version: viewer with controls
-	      this.viewer = new Autodesk.Viewing.Private.GuiViewer3D(domContainer)
+      // GUI Version: viewer with controls
+      this.viewer = new Autodesk.Viewing.Private.GuiViewer3D(domContainer)
 
 
-	      this.viewer.initialize()
+      this.viewer.initialize()
 
-	      this.viewer.loadModel(doc.getViewablePath(selectedItem))
-		  
-	      
+      this.viewer.loadModel(doc.getViewablePath(selectedItem))
 
 		  this.viewer.impl.setSelectionColor(new THREE.Color(1,0,0));
-		  this.viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, this.onGeometryLoaded)
+		  this.viewer.addEventListener(Autodesk.Viewing.OBJECT_TREE_CREATED_EVENT, this.onGeometryLoaded);
 		},
-		onGeometryLoaded(){
-			const that = this;
-			setTimeout(function(){
-
-				console.log(that.viewer.model);
-				console.log(that.viewer.model.getInstanceTree());
-			}, 1000);
+		onGeometryLoaded(that){
+			this.tree = this.viewer.model.getInstanceTree();
 		},
 		onEnvInitialized(that){
 			Autodesk.Viewing.Document.load(
