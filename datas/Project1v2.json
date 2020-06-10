@@ -113,7 +113,11 @@
                   null,
                   null,
                   {
+                     "TID": 101,
                      "4DID": 101,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKWyMH2W"
+                     ],
                      "Name": "Ground slab pouring",
                      "Start": "01/02/2021",
                      "End": "14/02/2021",
@@ -125,7 +129,11 @@
                      "Team": "Masons 1"
                   },
                   {
+                     "TID": 102,
                      "4DID": 102,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKWyMH18"
+                     ],
                      "Name": "Walls cladding North",
                      "Start": "14/02/2021",
                      "End": "18/02/2021",
@@ -137,7 +145,11 @@
                      "Team": "Masons 2"
                   },
                   {
+                     "TID": 103,
                      "4DID": 103,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKWyMH1B"
+                     ],
                      "Name": "Walls cladding East",
                      "Start": "14/02/2021",
                      "End": "18/02/2021",
@@ -149,7 +161,11 @@
                      "Team": "Masons 1"
                   },
                   {
+                     "TID": 104,
                      "4DID": 104,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKWyMH1A"
+                     ],
                      "Name": "Walls cladding South",
                      "Start": "26/02/2021",
                      "End": "02/03/2021",
@@ -161,7 +177,11 @@
                      "Team": "Masons 2"
                   },
                   {
+                     "TID": 105,
                      "4DID": 105,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKWyMH19"
+                     ],
                      "Name": "Walls cladding West",
                      "Start": "26/02/2021",
                      "End": "02/03/2021",
@@ -173,7 +193,11 @@
                      "Team": "Masons 1"
                   },
                   {
+                     "TID": 106,
                      "4DID": 106,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKWyMH4v"
+                     ],
                      "Name": "Windows installation",
                      "Start": "08/03/2021",
                      "End": "12/03/2021",
@@ -185,7 +209,11 @@
                      "Team": "Carpenters 1"
                   },
                   {
+                     "TID": 107,
                      "4DID": 107,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKWyMH4Y"
+                     ],
                      "Name": "Doors installation",
                      "Start": "16/03/2021",
                      "End": "21/03/2021",
@@ -197,12 +225,258 @@
                      "Team": "Carpenters 2"
                   },
                   {
+                     "TID": 108,
                      "4DID": 108,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKeyMH3A",
+                        "2XqLaPqlL6pRaKaKqyMH3A", 
+                        "2XqLaPqlL6pRaKaKmyMH3A", 
+                        "2XqLaPqlL6pRaKaKiyMH3A"
+                     ],
                      "Name": "Roof installation",
                      "Start": "16/03/2021",
                      "End": "29/03/2021",
                      "Duration": 14,
                      "Previous": 107,
+                     "Next": 0,
+                     "Level": 1,
+                     "Zone": "A",
+                     "Team": "Carpenters 1"
+                  }
+               ]
+            },
+            "PhaseID2": {
+               "name": "FirstPhase",
+               "contractor": "contractor1",
+               "color": "Orange",
+               "tasks": [
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  {
+                     "TID": 201,
+                     "4DID": 201,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKWyMH2W"
+                     ],
+                     "Name": "Ground slab pouring",
+                     "Start": "01/02/2021",
+                     "End": "14/02/2021",
+                     "Duration": 14,
+                     "Previous": 0,
+                     "Next": 202,
+                     "Level": 0,
+                     "Zone": "A",
+                     "Team": "Masons 1"
+                  },
+                  {
+                     "TID": 202,
+                     "4DID": 202,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKWyMH18"
+                     ],
+                     "Name": "Walls cladding North",
+                     "Start": "14/02/2021",
+                     "End": "18/02/2021",
+                     "Duration": 5,
+                     "Previous": 201,
+                     "Next": 203,
+                     "Level": 0,
+                     "Zone": "A",
+                     "Team": "Masons 2"
+                  },
+                  {
+                     "TID": 203,
+                     "4DID": 203,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKWyMH1B"
+                     ],
+                     "Name": "Walls cladding East",
+                     "Start": "14/02/2021",
+                     "End": "18/02/2021",
+                     "Duration": 5,
+                     "Previous": 201,
+                     "Next": 204,
+                     "Level": 0,
+                     "Zone": "A",
+                     "Team": "Masons 1"
+                  },
+                  {
+                     "TID": 204,
+                     "4DID": 204,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKWyMH1A"
+                     ],
+                     "Name": "Walls cladding South",
+                     "Start": "26/02/2021",
+                     "End": "02/03/2021",
+                     "Duration": 5,
+                     "Previous": 201,
+                     "Next": 205,
+                     "Level": 0,
+                     "Zone": "A",
+                     "Team": "Masons 2"
+                  },
+                  {
+                     "TID": 205,
+                     "4DID": 205,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKWyMH19"
+                     ],
+                     "Name": "Walls cladding West",
+                     "Start": "26/02/2021",
+                     "End": "02/03/2021",
+                     "Duration": 5,
+                     "Previous": 201,
+                     "Next": 206,
+                     "Level": 0,
+                     "Zone": "A",
+                     "Team": "Masons 1"
+                  },
+                  {
+                     "TID": 206,
+                     "4DID": 206,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKWyMH4v"
+                     ],
+                     "Name": "Windows installation",
+                     "Start": "08/03/2021",
+                     "End": "12/03/2021",
+                     "Duration": 5,
+                     "Previous": 205,
+                     "Next": 207,
+                     "Level": 0,
+                     "Zone": "A",
+                     "Team": "Carpenters 1"
+                  },
+                  {
+                     "TID": 207,
+                     "4DID": 207,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKWyMH4Y"
+                     ],
+                     "Name": "Doors installation",
+                     "Start": "16/03/2021",
+                     "End": "21/03/2021",
+                     "Duration": 6,
+                     "Previous": 206,
+                     "Next": 208,
+                     "Level": 0,
+                     "Zone": "A",
+                     "Team": "Carpenters 2"
+                  },
+                  {
+                     "TID": 208,
+                     "4DID": 208,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKeyMH3A",
+                        "2XqLaPqlL6pRaKaKqyMH3A", 
+                        "2XqLaPqlL6pRaKaKmyMH3A", 
+                        "2XqLaPqlL6pRaKaKiyMH3A"
+                     ],
+                     "Name": "Roof installation",
+                     "Start": "16/03/2021",
+                     "End": "29/03/2021",
+                     "Duration": 14,
+                     "Previous": 207,
                      "Next": 0,
                      "Level": 1,
                      "Zone": "A",
