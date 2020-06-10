@@ -26,6 +26,9 @@ export default {
 			console.log("CLEAR HIGHLIGHT");
 		},
 		highlight(object3D){
+			// ^ peut être ajouter la couleur qu'on veut mettre à l'object3D en paramètre
+			// sous la forme d'un vecteur4 contenant (r, g, b, a)
+
 			console.log("HIGHLIGHT : " + object3D.getName());
 
 			// indexFromId est la clé permettant de trouver l'id pour illuminer l'élément correspondant
@@ -41,8 +44,16 @@ export default {
 			//const prop = this.viewer.model.getProperties(index3, this.propertiesReturn, this.propertiesError);
 			//console.log(prop);
 
+			// dessous les objets principaux pour le changement de couleurs par themingColor
+			const fragList = this.viewer.model.getFragmentList();
+			const colorMap = fragList.db2ThemingColor;
+			console.log(fragList);
+
+			this.viewer.setThemingColor(index3, null);
+
+
 			const color = new THREE.Vector4(0.0, 1.0, 0.0, 0.5);
-			//this.viewer.setThemingColor(index3, color, this.viewer.model);
+			this.viewer.setThemingColor(index3, color, this.viewer.model);
 			
 			//repositionne la caméra
 			this.viewer.fitToView(index3, this.viewer.model);
