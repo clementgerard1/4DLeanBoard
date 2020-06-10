@@ -3,10 +3,12 @@ import TimelineUtils from "../Utils/V_timelineUtils.class.js";
 import phaseOpen from "./assets/phaseOpen.svg";
 import phaseClose from "./assets/phaseClose.svg";
 import V_Task from "./V_task.vue";
+import V_6Wrow_line from "./V_6Wrow_line.vue";
 
 export default {
 	components: {
-		task : V_Task
+		task : V_Task,
+		taskline : V_6Wrow_line
 	},
 	data : function(){
 		return {
@@ -87,11 +89,11 @@ export default {
 	<div class="phaserow">
 
 		<!-- line -->
-		<div class="phaseLine" v-bind:class="color"></div>
+		<taskline class="phaseLine" v-bind:class="color"></taskline>
 
 		<!-- tasks -->
 		<div v-show="isOpen" class="tasksWrapper">
-			<task v-bind:team="_team" nth=0 v-bind:phase="_phase" v-for="(task, i) in tasks" :key="i" v-bind:task="task" v-bind:time="_tasktablestart + i"  ></task>
+			<task v-bind:color="color" v-bind:team="_team" nth=0 v-bind:phase="_phase" v-for="(task, i) in tasks" :key="i" v-bind:task="task" v-bind:time="_tasktablestart + i"  ></task>
 		</div>
 
 		<!-- button -->

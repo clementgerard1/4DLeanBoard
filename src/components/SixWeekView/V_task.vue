@@ -3,6 +3,7 @@ import taskStatusSVG from "./assets/taskStatus.svg";
 import V_taskTableUtils from "../Utils/V_taskTableUtils.class.js";
 import V_4DUtils from "../Utils/V_4DUtils.class.js";
 import "./V_task.scss";
+import scssVariables from "./assets/_variables.scss";
 
 export default {
 	data : function(){
@@ -28,7 +29,8 @@ export default {
 		"nth",
 		'time',
 		'phase',
-		"task"
+		"task",
+		"color"
 	],
 	created: function(){
 		V_taskTableUtils.addTask(this);
@@ -47,6 +49,9 @@ export default {
 		},
 		dr : function(){
 			return this.task.getDuration();
+		},
+		svgcolor : function(){
+			return scssVariables[this.color.replace("BG_", "").toLowerCase()];
 		},
 		taskname : function(){
 			const startWeek = this.timeline.getDateObject(this.time * 7);

@@ -5,7 +5,7 @@
 <path d="M12 4H192V174C192 179.523 187.523 184 182 184H22C16.4772 184 12 179.523 12 174V4Z" fill="white"/>
 </g>
 <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Roboto Condensed" font-size="36" font-style="italic" font-weight="300" letter-spacing="0em"><tspan x="15" y="77.3047">{{taskname.l1}}</tspan><tspan x="15" y="109.305">{{taskname.l2}}</tspan></text>
-<rect x="14.5" y="6.5" width="175" height="27" fill="white" stroke="#E7CB00" stroke-width="5"/>
+<rect x="14.5" y="6.5" width="175" height="27" fill="white" v-bind:stroke="svgcolor" stroke-width="5"/>
 <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="24" font-weight="500" letter-spacing="0em"><tspan x="19" y="30.848">{{tid}}</tspan></text>
 <rect x="145.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
 <rect x="135.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
