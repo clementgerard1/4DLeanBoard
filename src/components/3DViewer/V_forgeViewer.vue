@@ -26,49 +26,109 @@ export default {
 			console.log("CLEAR HIGHLIGHT");
 		},
 		highlight(object3D){
+			// ^ peut être ajouter la couleur qu'on veut mettre à l'object3D en paramètre
+			// sous la forme d'un vecteur4 contenant (r, g, b, a)
+
 			console.log("HIGHLIGHT : " + object3D.getName());
-			const toNumber = this.tree.nodeAccess.strings.indexOf(object3D.getName() + ":");
-			const index1 = this.tree.nodeAccess.dbIdToIndex[toNumber]; // Ou inversement
+
+			// indexFromId est la clé permettant de trouver l'id pour illuminer l'élément correspondant
 			const indexFromId = this.tree.nodeAccess.nameSuffixes.indexOf(object3D.getUniqId());
-			const index2 = this.tree.nodeAccess.dbIdToIndex[indexFromId]; // Ou inversement
+			const index3 = this.getDbId(indexFromId);
+			console.log(indexFromId, index3);
+
+			// sélectionne si pas sélectionner, sinon désélectionne
+			this.viewer.toggleSelect(index3);
+			this.selectionGetProperties();
+			// sensé illuminer un objet avec la couleur (r,g,b,op) passée en paramètre
+
+			//const prop = this.viewer.model.getProperties(index3, this.propertiesReturn, this.propertiesError);
+			//console.log(prop);
+
+			// dessous les objets principaux pour le changement de couleurs par themingColor
+			const fragList = this.viewer.model.getFragmentList();
+			const colorMap = fragList.db2ThemingColor;
+			console.log(fragList);
+
+			this.viewer.setThemingColor(index3, null);
+
+
+			const color = new THREE.Vector4(0.0, 1.0, 0.0, 0.5);
+			this.viewer.setThemingColor(index3, color, this.viewer.model);
+			
+			//repositionne la caméra
+			this.viewer.fitToView(index3, this.viewer.model);
+			// fonction pour cacher les objets passer en paramètre (ids) => hide()
+		},
+		selectionGetProperties() {
+
+			function propCallback(data) {
+				// Check if we got properties.
+				if ((data.properties == null) || (data.properties.length == 0)) {
+					console.log("no properties");
+					return;
+				}
+				// affiche les propriétés de l'objet
+				// pour le changement de couleur les propriétés suivante nous intéressent
+				// data.properties[52-63 + 65] et éventuellement la propriété 64.
+				console.log(data);
+			}
+
+			function propErrorCallback(data) {
+				console.log("error in getProperties().");
+			}
+
+			if (this.viewer.getSelection().length > 0) {
+				var objSelected = this.viewer.getSelection()[0];
+				this.viewer.getProperties(objSelected, propCallback, propErrorCallback);
+			}
+			else {
+				console.log("Please select one element to show properties.");
+			}
+		},
+		getDbId(id){
+			var dbId;
 			const that = this;
-			const index3 = parseInt(Object.keys(this.tree.nodeAccess.dbIdToIndex).filter(function(key) {
-			    return that.tree.nodeAccess.dbIdToIndex[key] == indexFromId;
+			dbId = parseInt(Object.keys(this.tree.nodeAccess.dbIdToIndex).filter(function(key) {
+			    return that.tree.nodeAccess.dbIdToIndex[key] == id;
 			})[0]);
-			console.log(toNumber, index1, indexFromId, index2, index3);
-			this.viewer.select(index3);
-			//Avec ça tu dois pouvoir afficher quelque chose d'interactif je pense
+			return dbId;
 		},
 		onDocumentLoaded(doc, that){
+			var rootItem = doc.getRootItem();
 
-			var rootItem = doc.getRootItem()
+			// Grab all geometry items
+			var geometryItems =
+				Autodesk.Viewing.Document.getSubItemsWithProperties(
+				rootItem, { 'type': 'geometry' }, true)
 
-      // Grab all geometry items
-      var geometryItems =
-        Autodesk.Viewing.Document.getSubItemsWithProperties(
-          rootItem, { 'type': 'geometry' }, true)
+			// Pick the first item by default
+			var selectedItem = geometryItems[0];
 
-      // Pick the first item by default
-      var selectedItem = geometryItems[0]
+			var domContainer = document.getElementById('forgeV');
 
-      var domContainer = document.getElementById('forgeV')
+			// UI-less Version: viewer without controls and commands
+			//var viewer = new Autodesk.Viewing.Viewer3D(domContainer)
 
-      // UI-less Version: viewer without controls and commands
-      //var viewer = new Autodesk.Viewing.Viewer3D(domContainer)
+			// GUI Version: viewer with controls
+			this.viewer = new Autodesk.Viewing.Private.GuiViewer3D(domContainer);
 
-      // GUI Version: viewer with controls
-      this.viewer = new Autodesk.Viewing.Private.GuiViewer3D(domContainer)
+			this.viewer.initialize();
+			this.viewer.loadModel(doc.getViewablePath(selectedItem));
 
+			// this.viewer.impl.setSelectionColor(new THREE.Color(1,0,0));
+			// activés de base (mais importante à reverse):
 
-      this.viewer.initialize()
+			// important selon moi
+			this.viewer.setReverseZoomDirection(true);
 
-      this.viewer.loadModel(doc.getViewablePath(selectedItem))
+			// this.viewer.setBackgroundColor(255,255,0,0,0,0);
+			this.viewer.setLightPreset(12);
 
-		  this.viewer.impl.setSelectionColor(new THREE.Color(1,0,0));
-		  this.viewer.addEventListener(Autodesk.Viewing.OBJECT_TREE_CREATED_EVENT, this.onGeometryLoaded);
+			this.viewer.addEventListener(Autodesk.Viewing.OBJECT_TREE_CREATED_EVENT, this.onGeometryLoaded);
 		},
 		onGeometryLoaded(that){
 			this.tree = this.viewer.model.getInstanceTree();
+			console.log(this.tree);
 		},
 		onEnvInitialized(that){
 			Autodesk.Viewing.Document.load(
