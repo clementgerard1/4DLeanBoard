@@ -28,9 +28,15 @@ export default {
 		highlight(object3D){
 			console.log("HIGHLIGHT : " + object3D.getName());
 			const toNumber = this.tree.nodeAccess.strings.indexOf(object3D.getName() + ":");
-			const index = this.tree.nodeAccess.dbIdToIndex[toNumber]; // Ou inversement
-			console.log(toNumber, index);
-			console.log(this.tree);
+			const index1 = this.tree.nodeAccess.dbIdToIndex[toNumber]; // Ou inversement
+			const indexFromId = this.tree.nodeAccess.nameSuffixes.indexOf(object3D.getUniqId());
+			const index2 = this.tree.nodeAccess.dbIdToIndex[indexFromId]; // Ou inversement
+			const that = this;
+			const index3 = parseInt(Object.keys(this.tree.nodeAccess.dbIdToIndex).filter(function(key) {
+			    return that.tree.nodeAccess.dbIdToIndex[key] == indexFromId;
+			})[0]);
+			console.log(toNumber, index1, indexFromId, index2, index3);
+			this.viewer.select(index3);
 			//Avec ça tu dois pouvoir afficher quelque chose d'interactif je pense
 		},
 		onDocumentLoaded(doc, that){

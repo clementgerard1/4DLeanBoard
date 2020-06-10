@@ -97,7 +97,12 @@ class Loader{
 		for(let l in IFClines){
 			const result = ifcDef.exec(IFClines[l]);
 			if(result != null && this.#ifcBuildingElements.includes(result[1])){
-				obj3Ds[result[2].replace(/['"]/gi, "")] = result[6].replace(/['"]/gi, "");
+				const temp = result[4].split(":");
+				obj3Ds[result[2].replace(/['"]/gi, "")] = 
+					{
+						name : result[6].replace(/['"]/gi, ""),
+						id : temp[temp.length-1].replace(/['"]/gi, "")
+					}
 			}
 		}
 
@@ -133,7 +138,7 @@ class Loader{
 				let PendDate = null;
 				for(let t in tasks){
 					if(tasks[t] != null){
-						const task = new Task(tasks[t]["Name"], t);
+						const task = new Task(tasks[t]["Name"], tasks[t]["TID"]);
 						const object4D = new Object4D(tasks[t]["4DID"], tasks[t]["4DID"]);
 						task.setObject4D(object4D);
 						//task.setDuration(tasks[t]["Duration"]);
@@ -151,7 +156,7 @@ class Loader{
 						task.setZone(zones[tasks[t]["Zone"]]);
 
 						for(let o in tasks[t]["GUID"]){
-							const object3D = new Object3D(obj3Ds[tasks[t]["GUID"][o]], tasks[t]["GUID"][o]);
+							const object3D = new Object3D(obj3Ds[tasks[t]["GUID"][o]].name, parseInt(obj3Ds[tasks[t]["GUID"][o]].id), tasks[t]["GUID"][o]);
 							object4D.addObject3D(object3D);
 						}
 

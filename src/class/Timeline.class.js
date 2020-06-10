@@ -295,6 +295,9 @@ class Timeline{
 	/*
 		get the max number of simultaneous tasks on a phase between two moments
 		@param {Phase} phase
+		@param {TaskTeam} taskTeam
+		@param {uint} start
+		@param {uint} end
 		@returns {int}
 	*/
 	getMaxSimultaneousTasksByPhaseAndTaskTeamBetweenTwoDates(phase, taskTeam, start, end){
@@ -311,6 +314,23 @@ class Timeline{
 			if(max < count) max = count;
 		}
 		return max;
+	}
+
+	/*
+		get the max number of simultaneous tasks on a phase between two moments
+		@param {Phase} phase
+		@param {TaskTeam} taskTeam
+		@param {int} nth id of line for this taskTeam
+		@param {uint} start
+		@param {uint} end
+		@returns {object} array : tasks, count : number of tasks
+	*/
+	getTasksByPhaseTaskTeamAndNthBetweenTwoDates(phase, taskTeam, nth, start, end){
+		console.log(phase, taskTeam, nth, start, end);
+		return {
+			array : Array(6),
+			count : 1
+		}
 	}
 
 }

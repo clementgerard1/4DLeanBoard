@@ -18,7 +18,8 @@ export default {
 		"time",
 		"phase",
 		"taskteam",
-		"tasktablestart"
+		"tasktablestart",
+		"nth"
 	],
 	inject :[
 		"timeline",
@@ -30,12 +31,16 @@ export default {
 	],
 	computed:{
 		icon : function(){
-			console.log(phaseOpen);
 			if(this.isOpen){
 				return phaseOpen;
 			}else{
 				return phaseClose;
 			}
+		},
+		tasks : function(){
+			const tasks = this.timeline.getTasksByPhaseTaskTeamAndNthBetweenTwoDates(this.phase, this.taskteam, this.nth, this.tasktablestart * 7, (this.tasktablestart + 5) * 7);
+			this.isOpen = (tasks.count != 0);
+			return tasks.array;
 		},
 		_time : function(){
 			return this.time;
@@ -82,7 +87,7 @@ export default {
 
 		<!-- tasks -->
 		<div v-if="isOpen" class="tasksWrapper">
-			<task v-bind:team="_team" nth=0 v-bind:phase="_phase" v-for="i in 6" v-bind:time="_tasktablestart + (i-1)"  ></task>
+			<task v-bind:team="_team" nth=0 v-bind:phase="_phase" v-for="(task, i) in tasks" :key="i" v-bind:time="_tasktablestart + i"  ></task>
 		</div>
 
 		<!-- button -->

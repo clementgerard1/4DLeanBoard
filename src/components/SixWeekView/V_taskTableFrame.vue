@@ -67,7 +67,7 @@ export default {
 				<!-- core -->
 				<row6wheader v-bind:tasktablestart="tasktablestart" v-bind:time="time" ></row6wheader>
 				<template v-for="line in lines">
-					<row6w v-bind:tasktablestart="tasktablestart" v-bind:time="time" v-for="i in line.nb" :key="line.phase.getId() + '-' + line.taskteam.getId() + '-' + i" v-bind:taskteam="line.taskteam" v-bind:phase="line.phase"></row6w>
+					<row6w v-bind:tasktablestart="tasktablestart" v-bind:time="time" v-for="i in line.nb" :key="line.phase.getId() + '-' + line.taskteam.getId() + '-' + i" v-bind:taskteam="line.taskteam" v-bind:nth="i-1" v-bind:phase="line.phase"></row6w>
 				</template>
 
 				<!-- front -->
