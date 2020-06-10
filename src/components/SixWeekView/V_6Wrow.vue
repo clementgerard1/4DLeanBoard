@@ -90,7 +90,7 @@ export default {
 		<div class="phaseLine" v-bind:class="color"></div>
 
 		<!-- tasks -->
-		<div v-if="isOpen" class="tasksWrapper">
+		<div v-show="isOpen" class="tasksWrapper">
 			<task v-bind:team="_team" nth=0 v-bind:phase="_phase" v-for="(task, i) in tasks" :key="i" v-bind:task="task" v-bind:time="_tasktablestart + i"  ></task>
 		</div>
 

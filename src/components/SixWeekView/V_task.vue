@@ -88,8 +88,10 @@ export default {
 		time : function(){
 			if(this.task != null){
 				this.selected = V_taskTableUtils.isTokenOwner(this);
+			}else{
+				this.selected = null;
 			}
-		}
+		},
 	},
 	methods:{
 		getTwoLineFormat: function(str){
@@ -130,10 +132,8 @@ export default {
 			}
 		},
 		handleTap: function(event){
-			if(this.notEmpty){
-				if(this.task != null){
-					V_taskTableUtils.getToken(this);
-				}
+			if(this.task != null){
+				V_taskTableUtils.getToken(this.task);
 			}
 		},
 		setSelectedValue(bool){
