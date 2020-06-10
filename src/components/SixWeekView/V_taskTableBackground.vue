@@ -29,6 +29,7 @@ export default {
 	},
 	watch:{
 		nbopened : function(){
+			console.log(this.nbopened);
 			this.handleResize();
 		},
 		nbclosed : function(){

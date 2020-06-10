@@ -1,56 +1,61 @@
-<svg v-if="notEmpty" width="188" height="188" viewBox="0 0 188 188" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="204" height="204" viewBox="10 6 184 186" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+
 <g filter="url(#filter0_d)">
-<path d="M4 32H184V170C184 175.523 179.523 180 174 180H14C8.47716 180 4 175.523 4 170V32Z" fill="white"/>
-<rect x="8.93335" y="35" width="170.133" height="45" rx="3" fill="white"/>
-<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="36" font-weight="500" letter-spacing="0em"><tspan x="10" y="72.272">{{taskname}}</tspan></text>
-<rect x="4" width="180" height="32" fill="#E2D46B"/>
-<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="24" font-weight="300" letter-spacing="0em"><tspan x="11" y="26.848">{{tid}}</tspan></text>
-<rect x="137.5" y="163.5" width="9" height="9" rx="4.5" fill="white" stroke="black"/>
-<rect x="127.5" y="163.5" width="9" height="9" rx="4.5" fill="white" stroke="black"/>
-<rect x="117.5" y="163.5" width="9" height="9" rx="4.5" fill="white" stroke="black"/>
-<rect x="107.5" y="163.5" width="9" height="9" rx="4.5" fill="white" stroke="black"/>
-<rect x="97.5" y="163.5" width="9" height="9" rx="4.5" fill="white" stroke="black"/>
-<rect x="77.5" y="163.5" width="9" height="9" rx="4.5" fill="white" stroke="black"/>
-<rect x="87.5" y="163.5" width="9" height="9" rx="4.5" fill="white" stroke="black"/>
+<path d="M12 4H192V174C192 179.523 187.523 184 182 184H22C16.4772 184 12 179.523 12 174V4Z" fill="white"/>
+</g>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Roboto Condensed" font-size="36" font-style="italic" font-weight="300" letter-spacing="0em"><tspan x="15" y="77.3047">{{taskname.l1}}</tspan><tspan x="15" y="109.305">{{taskname.l2}}</tspan></text>
+<rect x="14.5" y="6.5" width="175" height="27" fill="white" stroke="#E7CB00" stroke-width="5"/>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="24" font-weight="500" letter-spacing="0em"><tspan x="19" y="30.848">{{tid}}</tspan></text>
+<rect x="145.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
+<rect x="135.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
+<rect x="125.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
+<rect x="115.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
+<rect x="105.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
+<rect x="85.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
+<rect x="95.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
 <g filter="url(#filter1_d)">
-<circle cx="163" cy="160" r="14.5" fill="white" stroke="black" stroke-width="3"/>
+<circle cx="171" cy="164" r="16" fill="white"/>
+<circle cx="171" cy="164" r="15" stroke="black" stroke-width="2"/>
 </g>
-<path d="M9 144H41V173C41 174.657 39.6569 176 38 176H12C10.3431 176 9 174.657 9 173V144Z" fill="#6C8CBF"/>
-<path d="M10 146.4L13 144.6C13.0122 144.593 13.0244 144.586 13.0367 144.579C13.4706 144.354 14 144.667 14 145.166L14 145.2L14 148.8L14 148.834C14 149.335 13.4663 149.649 13.0314 149.418C13.0209 149.412 13.0104 149.406 13 149.4L10 147.6C9.54705 147.328 9.54705 146.672 10 146.4Z" fill="white"/>
+<path d="M18 149H48V177C48 178.105 47.1046 179 46 179H20C18.8954 179 18 178.105 18 177V149Z" stroke="url(#paint0_linear)" stroke-width="2"/>
+<rect x="18" y="149" width="30" height="4" fill="white" stroke="#E7CB00" stroke-width="2"/>
 <g filter="url(#filter2_d)">
-<circle cx="25" cy="160" r="12" fill="white"/>
-<circle cx="25" cy="160" r="11.5" stroke="black"/>
+<path d="M35 159L28 166L35 173" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
 </g>
-<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="24" font-weight="300" letter-spacing="0em"><tspan x="145.602" y="26.848">{{dr}}</tspan></text>
-<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="24" font-weight="300" letter-spacing="0em"><tspan x="10" y="109.848">{{taskteam}}</tspan></text>
-</g>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="14" font-weight="500" letter-spacing="0em"><tspan x="92.6797" y="26.328">{{dr}}</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="14" font-weight="500" letter-spacing="0em"><tspan x="162.814" y="26.328">MN</tspan></text>
 <defs>
-<filter id="filter0_d" x="0" y="0" width="188" height="188" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<filter id="filter0_d" x="0" y="0" width="204" height="204" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 <feFlood flood-opacity="0" result="BackgroundImageFix"/>
 <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
-<feOffset dy="4"/>
-<feGaussianBlur stdDeviation="2"/>
-<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+<feOffset dy="8"/>
+<feGaussianBlur stdDeviation="6"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0"/>
 <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
 <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
 </filter>
-<filter id="filter1_d" x="143" y="144" width="40" height="40" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<filter id="filter1_d" x="153" y="148" width="40" height="40" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 <feFlood flood-opacity="0" result="BackgroundImageFix"/>
 <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
-<feOffset dy="4"/>
+<feOffset dx="2" dy="4"/>
 <feGaussianBlur stdDeviation="2"/>
-<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0"/>
 <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
 <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
 </filter>
-<filter id="filter2_d" x="9" y="148" width="32" height="32" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<filter id="filter2_d" x="24" y="157" width="19" height="26" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 <feFlood flood-opacity="0" result="BackgroundImageFix"/>
 <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
-<feOffset dy="4"/>
+<feOffset dx="2" dy="4"/>
 <feGaussianBlur stdDeviation="2"/>
-<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0"/>
 <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
 <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
 </filter>
+<linearGradient id="paint0_linear" x1="33" y1="148" x2="33" y2="180" gradientUnits="userSpaceOnUse">
+<stop stop-color="#D9D9D9"/>
+<stop offset="1" stop-color="#F7F7F7"/>
+</linearGradient>
 </defs>
 </svg>

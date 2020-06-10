@@ -45,8 +45,8 @@
 		height: v.$taskSize;
 		margin: 0px 25px;
 		position: relative;		
-		top : - v.$phaseHeight;
-		margin-bottom : - v.$phaseHeight;
+		top : - (v.$phaseHeight);
+		margin-bottom : - (v.$phaseHeight);
 
 		display : flex;
 

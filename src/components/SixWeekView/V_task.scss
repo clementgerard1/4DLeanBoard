@@ -7,20 +7,21 @@
 		padding-right : list.nth(v.$rowHeaderColumnMargin , 2);
 		padding-left: list.nth(v.$rowHeaderColumnMargin , 2);
 		box-sizing: content-box !important;
+		min-width : 188px;
 
 		.task{
 			height : 100%;
 			min-height : 188px;
 			max-height : 188px;
 			position : relative;
-		}
 
-		.taskclass{
+			.taskclass{
+				height:100%
+			}
 
 		}
 		
 		svg{
-			max-height : 188px;
 			min-height : 188px;
 		}
 

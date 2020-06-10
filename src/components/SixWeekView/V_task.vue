@@ -59,7 +59,7 @@ export default {
 			const offset = (startTask.getTime() - startWeek.getTime())  / (1000 * 3600 * 24);
 
 			if(offset >= 0 && (offset + duration) < 7){
-				return this.task.getName();
+				return this.getTwoLineFormat(this.task.getName());
 			}else{
 				let nbWeeks = null;
 				let index = null;
@@ -70,7 +70,9 @@ export default {
 					index = Math.ceil(Math.abs(offset) / 7) + 1;
 					nbWeeks = Math.ceil((duration + offset) / 7) + 1;
 				}
-				return "(" + index +  "/" + nbWeeks + ")" + this.task.getName();
+
+				return this.getTwoLineFormat("(" + index +  "/" + nbWeeks + ")" + this.task.getName());
+
 			}
 		},
 		taskteam : function(){
@@ -92,6 +94,24 @@ export default {
 		}
 	},
 	methods:{
+		getTwoLineFormat: function(str){
+			if(str.length <= 11){
+				return {
+					l1: str,
+					l2: ""
+				};
+			}else if(str.length <= 22){
+				return {
+					l1: str.slice(0, 11),
+					l2: str.slice(11, 22)
+				};
+			}else{
+				return {
+					l1: str.slice(0, 11),
+					l2: str.slice(11, 20) + "..."
+				};
+			}
+		},
 		handleDoubleTap: function(event){
 			if(this.notEmpty){
 				if(!this.state){
