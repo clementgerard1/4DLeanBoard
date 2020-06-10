@@ -27,7 +27,8 @@ export default {
 		"team",
 		"nth",
 		'time',
-		'phase'
+		'phase',
+		"task"
 	],
 	created: function(){
 		V_taskTableUtils.addTask(this);
@@ -37,11 +38,7 @@ export default {
 			V_4DUtils.highlightTask(this.task.getObject4D());
 		}
 	},
-	computed: 
-		{
-		task : function(){
-			return this.timeline.getTaskByPhaseTeamAndNthBetweenTwoDates(this.phase, this.team, (this.time * 7), (this.time * 7) + 6, this.nth);
-		},
+	computed:{
 		notEmpty : function(){
 			return this.task != null;
 		},
@@ -58,17 +55,18 @@ export default {
 			const startTask = this.task.getStartDate();
 			const offset = (startTask.getTime() - startWeek.getTime())  / (1000 * 3600 * 24);
 
-			if(offset >= 0 && (offset + duration) < 7){
+			if(offset >= 0 && (offset + duration) <= 7){
 				return this.getTwoLineFormat(this.task.getName());
 			}else{
 				let nbWeeks = null;
 				let index = null;
+				const initialOffset = ((offset % 7) + 7) % 7; //https://stackoverflow.com/questions/4467539/javascript-modulo-gives-a-negative-result-for-negative-numbers
 				if(offset >= 0){
 					index = 1;
-					nbWeeks = Math.ceil((duration + offset) / 7);
+					nbWeeks = Math.ceil((duration + initialOffset) / 7);
 				}else{
 					index = Math.ceil(Math.abs(offset) / 7) + 1;
-					nbWeeks = Math.ceil((duration + offset) / 7) + 1;
+					nbWeeks = Math.ceil((duration + initialOffset) / 7);
 				}
 
 				return this.getTwoLineFormat("(" + index +  "/" + nbWeeks + ")" + this.task.getName());

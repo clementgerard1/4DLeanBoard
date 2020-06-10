@@ -38,7 +38,7 @@ export default {
 			}
 		},
 		tasks : function(){
-			const tasks = this.timeline.getTasksByPhaseTaskTeamAndNthBetweenTwoDates(this.phase, this.taskteam, this.nth, this.tasktablestart * 7, (this.tasktablestart + 5) * 7);
+			const tasks = this.timeline.getTasksByPhaseTaskTeamAndNthBetweenTwoDates(this.phase, this.taskteam, this.nth, this.tasktablestart * 7, (this.tasktablestart + 6) * 7 - 1);
 			this.isOpen = (tasks.count != 0);
 			return tasks.array;
 		},
@@ -64,6 +64,10 @@ export default {
 				this.$parent.nbclosed++;
 				this.$parent.nbopened--;
 			}
+		},
+		tasktablestart: function(){
+			const tasks = this.timeline.getTasksByPhaseTaskTeamAndNthBetweenTwoDates(this.phase, this.taskteam, this.nth, this.tasktablestart * 7, (this.tasktablestart + 6) * 7 - 1);
+			this.isOpen = (tasks.count != 0);
 		}
 	},
 	created: function(){
@@ -87,7 +91,7 @@ export default {
 
 		<!-- tasks -->
 		<div v-if="isOpen" class="tasksWrapper">
-			<task v-bind:team="_team" nth=0 v-bind:phase="_phase" v-for="(task, i) in tasks" :key="i" v-bind:time="_tasktablestart + i"  ></task>
+			<task v-bind:team="_team" nth=0 v-bind:phase="_phase" v-for="(task, i) in tasks" :key="i" v-bind:task="task" v-bind:time="_tasktablestart + i"  ></task>
 		</div>
 
 		<!-- button -->

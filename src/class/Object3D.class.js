@@ -30,6 +30,10 @@ class Object3D{
 		return this.#name;
 	}	
 
+	/**
+		Get the uniqId of the object3D
+		@returns {string} name of the object3D
+	*/
 	getUniqId(){
 		return this.#objId;
 	}

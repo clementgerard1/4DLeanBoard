@@ -167,7 +167,7 @@ class Model{
 
 			}
 
-			this.#duration = Math.ceil(((end.getTime() - start.getTime()) / (1000 * 3600 * 24)) - 1);
+			this.#duration = Math.ceil(((end.getTime() - start.getTime()) / (1000 * 3600 * 24)) + 1);
 		}
 
 		return this.#duration;

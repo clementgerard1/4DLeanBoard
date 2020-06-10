@@ -57,9 +57,10 @@ class Timeline{
 	#fillTimeline(object){
 		const startDate = object.getStartDate();
 		const endDate = object.getEndDate();
-		const startStepDate = (startDate.getTime() - this.#startDate.getTime()) / (1000 * 3600 * 24);
-		const length = (endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24);
+		const startStepDate = this.getTime(startDate);
+		const length = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
 		for(let i = startStepDate ; i <= startStepDate + length ; i++){
+
 			this.#initialiseStepArray(i);
 			if(object instanceof Milestone){
 				this.#steps[i]["milestones"].push(object);
@@ -326,11 +327,41 @@ class Timeline{
 		@returns {object} array : tasks, count : number of tasks
 	*/
 	getTasksByPhaseTaskTeamAndNthBetweenTwoDates(phase, taskTeam, nth, start, end){
-		console.log(phase, taskTeam, nth, start, end);
-		return {
-			array : Array(6),
-			count : 1
+
+		const arrayReturn = Array(6);
+		let count = 0;
+
+		for(let i = 1 ; i <= 6 ; i++){
+
+			const tasks = this.getTasksByTeamAndPhaseBetweenTwoDates(phase, taskTeam, start+ (((end - start + 1) / 6) * (i - 1)), start + (((end - start + 1) / 6) * i) - 1);			
+			
+			for(let t in tasks){
+				const originNth = this.getOriginNth(phase, taskTeam, tasks[t]);
+				if(originNth == nth){
+					arrayReturn[i-1] = tasks[t];
+					count++;
+					break;
+				}else{
+					arrayReturn[i-1] = null;
+				}
+			}
+
 		}
+		return {
+			array : arrayReturn,
+			count : count
+		}
+	}
+
+	getTime(date){
+		return (date.getTime() - this.#startDate.getTime()) / (1000 * 3600 * 24);
+	}
+
+	getOriginNth(phase, taskTeam, task){
+		const time = this.getTime(task.getStartDate());
+		const startWeekTime = Math.trunc(time / 7) * 7;
+		const tasks = this.getTasksByTeamAndPhaseBetweenTwoDates(phase, taskTeam, startWeekTime, startWeekTime + 6);
+		return tasks.indexOf(task);
 	}
 
 }
