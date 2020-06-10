@@ -3,6 +3,7 @@ import taskStatusSVG from "./assets/taskStatus.svg";
 import V_taskTableUtils from "../Utils/V_taskTableUtils.class.js";
 import V_4DUtils from "../Utils/V_4DUtils.class.js";
 import "./V_task.scss";
+import scssVariables from "./assets/_variables.scss";
 
 export default {
 	data : function(){
@@ -27,7 +28,9 @@ export default {
 		"team",
 		"nth",
 		'time',
-		'phase'
+		'phase',
+		"task",
+		"color"
 	],
 	created: function(){
 		V_taskTableUtils.addTask(this);
@@ -37,11 +40,7 @@ export default {
 			V_4DUtils.highlightTask(this.task.getObject4D());
 		}
 	},
-	computed: 
-		{
-		task : function(){
-			return this.timeline.getTaskByPhaseTeamAndNthBetweenTwoDates(this.phase, this.team, (this.time * 7), (this.time * 7) + 6, this.nth);
-		},
+	computed:{
 		notEmpty : function(){
 			return this.task != null;
 		},
@@ -51,6 +50,9 @@ export default {
 		dr : function(){
 			return this.task.getDuration();
 		},
+		svgcolor : function(){
+			return scssVariables[this.color.replace("BG_", "").toLowerCase()];
+		},
 		taskname : function(){
 			const startWeek = this.timeline.getDateObject(this.time * 7);
 			const endWeek = this.timeline.getDateObject(this.time * 7 + 6);
@@ -58,17 +60,18 @@ export default {
 			const startTask = this.task.getStartDate();
 			const offset = (startTask.getTime() - startWeek.getTime())  / (1000 * 3600 * 24);
 
-			if(offset >= 0 && (offset + duration) < 7){
+			if(offset >= 0 && (offset + duration) <= 7){
 				return this.getTwoLineFormat(this.task.getName());
 			}else{
 				let nbWeeks = null;
 				let index = null;
+				const initialOffset = ((offset % 7) + 7) % 7; //https://stackoverflow.com/questions/4467539/javascript-modulo-gives-a-negative-result-for-negative-numbers
 				if(offset >= 0){
 					index = 1;
-					nbWeeks = Math.ceil((duration + offset) / 7);
+					nbWeeks = Math.ceil((duration + initialOffset) / 7);
 				}else{
 					index = Math.ceil(Math.abs(offset) / 7) + 1;
-					nbWeeks = Math.ceil((duration + offset) / 7) + 1;
+					nbWeeks = Math.ceil((duration + initialOffset) / 7);
 				}
 
 				return this.getTwoLineFormat("(" + index +  "/" + nbWeeks + ")" + this.task.getName());
@@ -90,8 +93,10 @@ export default {
 		time : function(){
 			if(this.task != null){
 				this.selected = V_taskTableUtils.isTokenOwner(this);
+			}else{
+				this.selected = null;
 			}
-		}
+		},
 	},
 	methods:{
 		getTwoLineFormat: function(str){
@@ -132,10 +137,8 @@ export default {
 			}
 		},
 		handleTap: function(event){
-			if(this.notEmpty){
-				if(this.task != null){
-					V_taskTableUtils.getToken(this);
-				}
+			if(this.task != null){
+				V_taskTableUtils.getToken(this.task);
 			}
 		},
 		setSelectedValue(bool){

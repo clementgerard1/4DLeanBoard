@@ -171,7 +171,7 @@ class PlanningObject{
 		const startDate = this.#startDate;
 		const endDate = this.#endDate;
 		const length = (endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24);
-		return length + 1;
+		return Math.round(length + 1);
 		//return this.#duration;
 	}	
 

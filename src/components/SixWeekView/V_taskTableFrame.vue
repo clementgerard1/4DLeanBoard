@@ -24,7 +24,7 @@ export default {
 	},
 	data: function(){
 			let taskTableStart = Math.trunc(this.playerinit / 6) * 6;
-			const phases = this.timeline.getPhasesBetweenTwoDates(0, this.duration);
+			const phases = this.timeline.getPhasesBetweenTwoDates(0, this.duration - 1);
 			const lines = [];
 			for(let p in phases){
 				const taskTeams = phases[p].getTaskTeams();
@@ -32,7 +32,7 @@ export default {
 					lines[lines.length] = {
 						phase : phases[p],
 						taskteam : taskTeams[t],
-						nb : this.timeline.getMaxSimultaneousTasksByPhaseAndTaskTeamBetweenTwoDates(phases[p], taskTeams[t], 0, this.duration)
+						nb : this.timeline.getMaxSimultaneousTasksByPhaseAndTaskTeamBetweenTwoDates(phases[p], taskTeams[t], 0, this.duration - 1)
 					}
 				}
 			}

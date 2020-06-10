@@ -27,7 +27,7 @@ export default {
 	template : `
 
 		<div class="rowHeader">
-			<date class="rowHeaderItem" v-for="i in 6" :key="i" v-bind:time="tasktablestart + i"></date>
+			<date class="rowHeaderItem" v-for="i in 6" :key="i" v-bind:time="tasktablestart + (i-1)"></date>
 	 	</div>
 
 	`,

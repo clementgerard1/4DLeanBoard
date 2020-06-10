@@ -1,8 +1,7 @@
 class V_TaskTableUtils{
 
 	static token = {
-		time : null,
-		team : null,
+		taskId : null
 	};
 	static tasks = [];
 
@@ -20,17 +19,17 @@ class V_TaskTableUtils{
 		@param {V_task} obj which ask for the token
 		@static
 	*/
-	static getToken(obj){
+	static getToken(task){
 		this.token = {
-			time : obj.time,
-			team : obj.team
+			taskId : task.getId(),
 		};
 		for(let t in this.tasks){
-			if(this.tasks[t] != obj){
+			if(this.tasks[t].task != task){
 				this.tasks[t].setSelectedValue(false);
+			}else{
+				this.tasks[t].setSelectedValue(true);
 			}
 		}
-		obj.setSelectedValue(true);
 		return true;
 	}	
 
@@ -42,7 +41,7 @@ class V_TaskTableUtils{
 	*/
 	static isTokenOwner(obj){
 		if(this.token != null){
-			return (this.token.time == obj.time && this.token.team == obj.team);
+			return (this.token.taskId == obj.task.getId());
 		}else{
 			return false;
 		}
