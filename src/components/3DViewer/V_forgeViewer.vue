@@ -29,51 +29,39 @@ export default {
 		},
 		highlight(object3D){
 			if(this.viewer != null){
+				// ^ peut être ajouter la couleur qu'on veut mettre à l'object3D en paramètre
+				// sous la forme d'un vecteur4 contenant (r, g, b, a)
+
 				console.log("HIGHLIGHT : " + object3D.getName());
-				const toNumber = this.tree.nodeAccess.strings.indexOf(object3D.getName() + ":");
-				const index1 = this.tree.nodeAccess.dbIdToIndex[toNumber]; // Ou inversement
+
+				// indexFromId est la clé permettant de trouver l'id pour illuminer l'élément correspondant
 				const indexFromId = this.tree.nodeAccess.nameSuffixes.indexOf(object3D.getUniqId());
-				const index2 = this.tree.nodeAccess.dbIdToIndex[indexFromId]; // Ou inversement
-				const that = this;
-				const index3 = parseInt(Object.keys(this.tree.nodeAccess.dbIdToIndex).filter(function(key) {
-				    return that.tree.nodeAccess.dbIdToIndex[key] == indexFromId;
-				})[0]);
-				console.log(toNumber, index1, indexFromId, index2, index3);
-				this.viewer.select(index3);
-				//Avec ça tu dois pouvoir afficher quelque chose d'interactif je pense
+				const index3 = this.getDbId(indexFromId);
+				console.log(indexFromId, index3);
+
+				// sélectionne si pas sélectionner, sinon désélectionne
+				this.viewer.toggleSelect(index3);
+				this.selectionGetProperties();
+				// sensé illuminer un objet avec la couleur (r,g,b,op) passée en paramètre
+
+				//const prop = this.viewer.model.getProperties(index3, this.propertiesReturn, this.propertiesError);
+				//console.log(prop);
+
+				// dessous les objets principaux pour le changement de couleurs par themingColor
+				const fragList = this.viewer.model.getFragmentList();
+				const colorMap = fragList.db2ThemingColor;
+				console.log(fragList);
+
+				this.viewer.setThemingColor(index3, null);
+
+
+				const color = new THREE.Vector4(0.0, 1.0, 0.0, 0.5);
+				this.viewer.setThemingColor(index3, color, this.viewer.model);
+				
+				//repositionne la caméra
+				this.viewer.fitToView(index3, this.viewer.model);
+				// fonction pour cacher les objets passer en paramètre (ids) => hide()
 			}
-			// ^ peut être ajouter la couleur qu'on veut mettre à l'object3D en paramètre
-			// sous la forme d'un vecteur4 contenant (r, g, b, a)
-
-			console.log("HIGHLIGHT : " + object3D.getName());
-
-			// indexFromId est la clé permettant de trouver l'id pour illuminer l'élément correspondant
-			const indexFromId = this.tree.nodeAccess.nameSuffixes.indexOf(object3D.getUniqId());
-			const index3 = this.getDbId(indexFromId);
-			console.log(indexFromId, index3);
-
-			// sélectionne si pas sélectionner, sinon désélectionne
-			this.viewer.toggleSelect(index3);
-			this.selectionGetProperties();
-			// sensé illuminer un objet avec la couleur (r,g,b,op) passée en paramètre
-
-			//const prop = this.viewer.model.getProperties(index3, this.propertiesReturn, this.propertiesError);
-			//console.log(prop);
-
-			// dessous les objets principaux pour le changement de couleurs par themingColor
-			const fragList = this.viewer.model.getFragmentList();
-			const colorMap = fragList.db2ThemingColor;
-			console.log(fragList);
-
-			this.viewer.setThemingColor(index3, null);
-
-
-			const color = new THREE.Vector4(0.0, 1.0, 0.0, 0.5);
-			this.viewer.setThemingColor(index3, color, this.viewer.model);
-			
-			//repositionne la caméra
-			this.viewer.fitToView(index3, this.viewer.model);
-			// fonction pour cacher les objets passer en paramètre (ids) => hide()
 		},
 		selectionGetProperties() {
 
@@ -108,7 +96,6 @@ export default {
 			    return that.tree.nodeAccess.dbIdToIndex[key] == id;
 			})[0]);
 			return dbId;
->>>>>>> 677a082b50402289d22845b50b9408631df24a63
 		},
 		onDocumentLoaded(doc, that){
 			var rootItem = doc.getRootItem();

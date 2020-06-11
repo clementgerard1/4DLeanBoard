@@ -32,6 +32,9 @@ export default {
 		"task",
 		"color"
 	],
+	mounted: function(){
+		this.updateStateDiv();
+	},
 	created: function(){
 		V_taskTableUtils.addTask(this);
 	},
@@ -39,6 +42,7 @@ export default {
 		if(this.task != null && this.selected){
 			V_4DUtils.highlightTask(this.task.getObject4D());
 		}
+		this.updateStateDiv();
 	},
 	computed:{
 		notEmpty : function(){
@@ -99,6 +103,11 @@ export default {
 		},
 	},
 	methods:{
+		updateStateDiv: function(){
+			if(this.task != null){
+				this.stateDiv = document.getElementById(this.task.getId() + "-" + this.time);
+			}
+		},
 		getTwoLineFormat: function(str){
 			if(str.length <= 11){
 				return {
@@ -143,11 +152,6 @@ export default {
 		},
 		setSelectedValue(bool){
 			this.selected = bool;
-		}
-	},
-	mounted: function(){
-		if(this.task != null){
-			this.stateDiv = document.getElementById(this.task.getId() + "-" + this.time);
 		}
 	},
 	template : `

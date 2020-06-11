@@ -3,6 +3,7 @@ import Utils from "./class/Utils.class.js";
 import Loader from "./class/Loader.class.js";
 import Timeline from "./class/Timeline.class.js";
 import V_player from "./components/Player/V_player.vue";
+import V_svgDefs from "./components/SixWeekView/V_SvgDefs.vue";
 import V_taskTableFrame from "./components/SixWeekView/V_taskTableFrame.vue";
 import V_forgeViewer from "./components/3DViewer/V_forgeViewer.vue";
 import Hammer from "hammerjs";
@@ -141,6 +142,7 @@ async function init(){
 			forgeviewer : V_forgeViewer,
 			tasktableframe : V_taskTableFrame,
 			player : V_player,
+			svgdefs : V_svgDefs,
 		},
 		data:{
 			playerinit : playerInit,
@@ -152,13 +154,16 @@ async function init(){
  		},
 
  		template : `
- 		<div id="content">
- 			<div id="viewerFrame">
- 				<forgeviewer id="forgeViewer" v-bind:model="model" v-bind:timeline="timeline" v-bind:manifest="manifest" v-bind:oauth="oauth"></forgeviewer>
- 				<player id="mainPlayer" v-bind:duration="duration" v-bind:playerinit="playerinit"></player>
- 			</div>
- 			<tasktableframe id="taskTableFrame" v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit" v-bind:duration="duration"></tasktableframe>
- 		</div>
+ 		<div>
+	 		<div id="content">
+	 			<div id="viewerFrame">
+	 				<forgeviewer id="forgeViewer" v-bind:model="model" v-bind:timeline="timeline" v-bind:manifest="manifest" v-bind:oauth="oauth"></forgeviewer>
+	 				<player id="mainPlayer" v-bind:duration="duration" v-bind:playerinit="playerinit"></player>
+	 			</div>
+	 			<tasktableframe id="taskTableFrame" v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit" v-bind:duration="duration"></tasktableframe>
+	 		</div>
+	 		<svgdefs style="width : 0px; height: 0px;"></svgdefs>
+	 	</div>
  		`
 	});
 
