@@ -2,7 +2,7 @@
    "milestones": {
       "MilestoneID1": {
          "Name": "ConstructionStart",
-         "requirements": {
+         "Requirements": {
             "requirement1": "LandRightsDelivered"
          },
          "phases": {
@@ -115,9 +115,19 @@
                   {
                      "TID": 101,
                      "4DID": 101,
+                     "Workers": 4,
                      "GUID" : [
                         "2XqLaPqlL6pRaKaKWyMH2W"
                      ],
+                     "Requirements" : {
+                        "Constraint" : false,
+                        "Information" : true,
+                        "Materials" : false,
+                        "Manpower" : true,
+                        "Equipement" : true,
+                        "Safety" : false,
+                        "Space" : true
+                     },
                      "Name": "Ground slab pouring",
                      "Start": "01/02/2021",
                      "End": "14/02/2021",
@@ -131,9 +141,19 @@
                   {
                      "TID": 102,
                      "4DID": 102,
+                     "Workers": 4,
                      "GUID" : [
                         "2XqLaPqlL6pRaKaKWyMH18"
                      ],
+                     "Requirements" : {
+                        "Constraint" : true,
+                        "Information" : true,
+                        "Materials" : true,
+                        "Manpower" : true,
+                        "Equipement" : true,
+                        "Safety" : true,
+                        "Space" : true
+                     },
                      "Name": "Walls cladding North",
                      "Start": "14/02/2021",
                      "End": "18/02/2021",
@@ -147,9 +167,19 @@
                   {
                      "TID": 103,
                      "4DID": 103,
+                     "Workers": 4,
                      "GUID" : [
                         "2XqLaPqlL6pRaKaKWyMH1B"
                      ],
+                     "Requirements" : {
+                        "Constraint" : false,
+                        "Information" : false,
+                        "Materials" : false,
+                        "Manpower" : true,
+                        "Equipement" : true,
+                        "Safety" : false,
+                        "Space" : false
+                     },
                      "Name": "Walls cladding East",
                      "Start": "14/02/2021",
                      "End": "18/02/2021",
@@ -163,14 +193,24 @@
                   {
                      "TID": 104,
                      "4DID": 104,
+                     "Workers": 4,
                      "GUID" : [
                         "2XqLaPqlL6pRaKaKWyMH1A"
                      ],
+                     "Requirements" : {
+                        "Constraint" : true,
+                        "Information" : true,
+                        "Materials" : true,
+                        "Manpower" : true,
+                        "Equipement" : true,
+                        "Safety" : true,
+                        "Space" : true
+                     },
                      "Name": "Walls cladding South",
                      "Start": "26/02/2021",
                      "End": "02/03/2021",
                      "Duration": 5,
-                     "Previous": 101,
+                     "Previous": 102,
                      "Next": 105,
                      "Level": 0,
                      "Zone": "A",
@@ -179,9 +219,19 @@
                   {
                      "TID": 105,
                      "4DID": 105,
+                     "Workers": 4,
                      "GUID" : [
                         "2XqLaPqlL6pRaKaKWyMH19"
                      ],
+                     "Requirements" : {
+                        "Constraint" : false,
+                        "Information" : true,
+                        "Materials" : false,
+                        "Manpower" : true,
+                        "Equipement" : true,
+                        "Safety" : true,
+                        "Space" : true
+                     },
                      "Name": "Walls cladding West",
                      "Start": "26/02/2021",
                      "End": "02/03/2021",
@@ -195,9 +245,19 @@
                   {
                      "TID": 106,
                      "4DID": 106,
+                     "Workers": 4,
                      "GUID" : [
                         "2XqLaPqlL6pRaKaKWyMH4v"
                      ],
+                     "Requirements" : {
+                        "Constraint" : true,
+                        "Information" : true,
+                        "Materials" : false,
+                        "Manpower" : true,
+                        "Equipement" : true,
+                        "Safety" : false,
+                        "Space" : true
+                     },
                      "Name": "Windows installation",
                      "Start": "08/03/2021",
                      "End": "12/03/2021",
@@ -211,9 +271,19 @@
                   {
                      "TID": 107,
                      "4DID": 107,
+                     "Workers": 4,
                      "GUID" : [
                         "2XqLaPqlL6pRaKaKWyMH4Y"
                      ],
+                     "Requirements" : {
+                        "Constraint" : false,
+                        "Information" : false,
+                        "Materials" : false,
+                        "Manpower" : true,
+                        "Equipement" : true,
+                        "Safety" : false,
+                        "Space" : true
+                     },
                      "Name": "Doors installation",
                      "Start": "16/03/2021",
                      "End": "21/03/2021",
@@ -227,12 +297,22 @@
                   {
                      "TID": 108,
                      "4DID": 108,
+                     "Workers": 4,
                      "GUID" : [
                         "2XqLaPqlL6pRaKaKeyMH3A",
                         "2XqLaPqlL6pRaKaKqyMH3A", 
                         "2XqLaPqlL6pRaKaKmyMH3A", 
                         "2XqLaPqlL6pRaKaKiyMH3A"
                      ],
+                     "Requirements" : {
+                        "Constraint" : false,
+                        "Information" : false,
+                        "Materials" : false,
+                        "Manpower" : true,
+                        "Equipement" : true,
+                        "Safety" : true,
+                        "Space" : true
+                     },
                      "Name": "Roof installation",
                      "Start": "16/03/2021",
                      "End": "29/03/2021",
@@ -357,10 +437,20 @@
                      "GUID" : [
                         "2XqLaPqlL6pRaKaKWyMH2W"
                      ],
+                     "Requirements" : {
+                        "Constraint" : false,
+                        "Information" : false,
+                        "Materials" : false,
+                        "Manpower" : true,
+                        "Equipement" : false,
+                        "Safety" : false,
+                        "Space" : true
+                     },
                      "Name": "Ground slab pouring",
                      "Start": "01/02/2021",
                      "End": "14/02/2021",
                      "Duration": 14,
+                     "Workers": 4,
                      "Previous": 0,
                      "Next": 202,
                      "Level": 0,
@@ -373,12 +463,22 @@
                      "GUID" : [
                         "2XqLaPqlL6pRaKaKWyMH18"
                      ],
+                     "Requirements" : {
+                        "Constraint" : false,
+                        "Information" : true,
+                        "Materials" : false,
+                        "Manpower" : true,
+                        "Equipement" : false,
+                        "Safety" : false,
+                        "Space" : true
+                     },
                      "Name": "Walls cladding North",
                      "Start": "14/02/2021",
                      "End": "18/02/2021",
+                     "Workers": 4,
                      "Duration": 5,
-                     "Previous": 201,
-                     "Next": 203,
+                     "Previous": 101,
+                     "Next": 103,
                      "Level": 0,
                      "Zone": "A",
                      "Team": "Masons 2"
@@ -386,15 +486,25 @@
                   {
                      "TID": 203,
                      "4DID": 203,
+                     "Workers": 4,
                      "GUID" : [
                         "2XqLaPqlL6pRaKaKWyMH1B"
                      ],
+                     "Requirements" : {
+                        "Constraint" : false,
+                        "Information" : false,
+                        "Materials" : false,
+                        "Manpower" : true,
+                        "Equipement" : true,
+                        "Safety" : true,
+                        "Space" : true
+                     },
                      "Name": "Walls cladding East",
                      "Start": "14/02/2021",
                      "End": "18/02/2021",
                      "Duration": 5,
-                     "Previous": 201,
-                     "Next": 204,
+                     "Previous": 101,
+                     "Next": 104,
                      "Level": 0,
                      "Zone": "A",
                      "Team": "Masons 1"
@@ -402,9 +512,19 @@
                   {
                      "TID": 204,
                      "4DID": 204,
+                     "Workers": 4,
                      "GUID" : [
                         "2XqLaPqlL6pRaKaKWyMH1A"
                      ],
+                     "Requirements" : {
+                        "Constraint" : false,
+                        "Information" : false,
+                        "Materials" : false,
+                        "Manpower" : false,
+                        "Equipement" : false,
+                        "Safety" : false,
+                        "Space" : false
+                     },
                      "Name": "Walls cladding South",
                      "Start": "26/02/2021",
                      "End": "02/03/2021",
@@ -418,9 +538,19 @@
                   {
                      "TID": 205,
                      "4DID": 205,
+                     "Workers": 4,
                      "GUID" : [
                         "2XqLaPqlL6pRaKaKWyMH19"
                      ],
+                     "Requirements" : {
+                        "Constraint" : false,
+                        "Information" : false,
+                        "Materials" : false,
+                        "Manpower" : true,
+                        "Equipement" : true,
+                        "Safety" : false,
+                        "Space" : true
+                     },
                      "Name": "Walls cladding West",
                      "Start": "26/02/2021",
                      "End": "02/03/2021",
@@ -434,9 +564,19 @@
                   {
                      "TID": 206,
                      "4DID": 206,
+                     "Workers": 4,
                      "GUID" : [
                         "2XqLaPqlL6pRaKaKWyMH4v"
                      ],
+                     "Requirements" : {
+                        "Constraint" : true,
+                        "Information" : true,
+                        "Materials" : true,
+                        "Manpower" : true,
+                        "Equipement" : true,
+                        "Safety" : true,
+                        "Space" : true
+                     },
                      "Name": "Windows installation",
                      "Start": "08/03/2021",
                      "End": "12/03/2021",
@@ -450,9 +590,19 @@
                   {
                      "TID": 207,
                      "4DID": 207,
+                     "Workers": 4,
                      "GUID" : [
                         "2XqLaPqlL6pRaKaKWyMH4Y"
                      ],
+                     "Requirements" : {
+                        "Constraint" : true,
+                        "Information" : true,
+                        "Materials" : false,
+                        "Manpower" : true,
+                        "Equipement" : false,
+                        "Safety" : false,
+                        "Space" : true
+                     },
                      "Name": "Doors installation",
                      "Start": "16/03/2021",
                      "End": "21/03/2021",
@@ -466,12 +616,22 @@
                   {
                      "TID": 208,
                      "4DID": 208,
+                     "Workers": 4,
                      "GUID" : [
                         "2XqLaPqlL6pRaKaKeyMH3A",
                         "2XqLaPqlL6pRaKaKqyMH3A", 
                         "2XqLaPqlL6pRaKaKmyMH3A", 
                         "2XqLaPqlL6pRaKaKiyMH3A"
                      ],
+                     "Requirements" : {
+                        "Constraint" : true,
+                        "Information" : true,
+                        "Materials" : false,
+                        "Manpower" : true,
+                        "Equipement" : false,
+                        "Safety" : false,
+                        "Space" : true
+                     },
                      "Name": "Roof installation",
                      "Start": "16/03/2021",
                      "End": "29/03/2021",
