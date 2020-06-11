@@ -4,6 +4,7 @@ import OperationUnit from './OperationUnit.class.js';
 class TaskTeam extends Team{
 
 	#operationUnits;
+	#workers;
 
 	/**
  		@class TaskTeam
@@ -18,6 +19,7 @@ class TaskTeam extends Team{
 	constructor(name = "", id){
 		super(name, id);
 		this.#operationUnits = {};
+		this.#workers = null;
 	}
 
 	/**
@@ -65,6 +67,25 @@ class TaskTeam extends Team{
 	}
 
 	
+	/**
+		Set the number of worker of the task
+		@param {int} nb
+	*/
+	setWorkers(nb){
+		if(typeof nb != "number"){
+			console.error("setWorkers(nb) need a number ; provided : " + nb);
+		}else{
+			this.#workers = nb;
+		}
+	}
+
+	/**
+		Get the number of workers
+		@returns {int}
+	*/
+	getWorkers(){
+		return this.#workers;
+	}	
 
 }
 export default TaskTeam;

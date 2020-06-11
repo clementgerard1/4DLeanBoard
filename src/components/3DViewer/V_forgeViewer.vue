@@ -14,6 +14,7 @@ export default {
 	date:{
 		"viewer" : null,
 		"tree" : null,
+		"selected" : []
 	},
 	props:[
 		"manifest",
@@ -22,9 +23,16 @@ export default {
 		"model"
 	],
 	methods:{
+		clearSelected(){
+			for(let i in this.selected){
+				this.viewer.toggleSelect(this.selected[i]);
+			}
+			this.selected = [];
+		},
 		clearHighlighting(){
 			if(this.viewer != null){
 				console.log("CLEAR HIGHLIGHT");
+				this.clearSelected();
 			}
 		},
 		highlight(object3D){
@@ -35,12 +43,21 @@ export default {
 				console.log("HIGHLIGHT : " + object3D.getName());
 
 				// indexFromId est la clé permettant de trouver l'id pour illuminer l'élément correspondant
-				const indexFromId = this.tree.nodeAccess.nameSuffixes.indexOf(object3D.getUniqId());
-				const index3 = this.getDbId(indexFromId);
-				console.log(indexFromId, index3);
+				for(let s in this.tree.nodeAccess.nameSuffixes){
+					if(this.tree.nodeAccess.nameSuffixes[s] == object3D.getUniqId()){
+						const index = this.getDbId(s);
+						if(!this.selected.includes(index)){
+							this.selected.push(index);
+							this.viewer.toggleSelect(index);
+							this.viewer.setThemingColor(index, null);
+							const color = new THREE.Vector4(0.0, 1.0, 0.0, 0.5);
+							this.viewer.setThemingColor(index, color, this.viewer.model);
+							this.viewer.fitToView(index[0], this.viewer.model);
+						}
+					}
+				}
 
 				// sélectionne si pas sélectionner, sinon désélectionne
-				this.viewer.toggleSelect(index3);
 				this.selectionGetProperties();
 				// sensé illuminer un objet avec la couleur (r,g,b,op) passée en paramètre
 
@@ -50,16 +67,11 @@ export default {
 				// dessous les objets principaux pour le changement de couleurs par themingColor
 				const fragList = this.viewer.model.getFragmentList();
 				const colorMap = fragList.db2ThemingColor;
-				console.log(fragList);
-
-				this.viewer.setThemingColor(index3, null);
 
 
-				const color = new THREE.Vector4(0.0, 1.0, 0.0, 0.5);
-				this.viewer.setThemingColor(index3, color, this.viewer.model);
+
 				
 				//repositionne la caméra
-				this.viewer.fitToView(index3, this.viewer.model);
 				// fonction pour cacher les objets passer en paramètre (ids) => hide()
 			}
 		},
@@ -74,7 +86,6 @@ export default {
 				// affiche les propriétés de l'objet
 				// pour le changement de couleur les propriétés suivante nous intéressent
 				// data.properties[52-63 + 65] et éventuellement la propriété 64.
-				console.log(data);
 			}
 
 			function propErrorCallback(data) {
@@ -132,7 +143,6 @@ export default {
 		},
 		onGeometryLoaded(that){
 			this.tree = this.viewer.model.getInstanceTree();
-			console.log(this.tree);
 		},
 		onEnvInitialized(that){
 			Autodesk.Viewing.Document.load(
@@ -154,7 +164,6 @@ export default {
 	mounted : function(){
 		if(Config["forgeRenderer"]){
 			const that = this;
-			console.log("urn:" + this.manifest.urn);
 			const initOptions = {
 			      documentId: "urn:" + this.manifest.urn,
 			      env: 'AutodeskProduction',

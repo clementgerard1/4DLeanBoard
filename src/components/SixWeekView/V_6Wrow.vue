@@ -14,6 +14,7 @@ export default {
 		return {
 			"color" : "BG_" + this.phase.getColorClass(),
 			"isOpen" : true, 
+			"maxheight" : "init"
 		}
 	},
 	props :[
@@ -62,9 +63,11 @@ export default {
 			if(this.isOpen){
 				this.$parent.nbopened++;
 				this.$parent.nbclosed--;
+				this.maxheight = "initial";
 			}else{
 				this.$parent.nbclosed++;
 				this.$parent.nbopened--;
+				this.maxheight = "30px";
 			}
 		},
 		tasktablestart: function(){
@@ -92,8 +95,8 @@ export default {
 		<taskline class="phaseLine" v-bind:class="color"></taskline>
 
 		<!-- tasks -->
-		<div v-show="isOpen" class="tasksWrapper">
-			<task v-bind:color="color" v-bind:team="_team" nth=0 v-bind:phase="_phase" v-for="(task, i) in tasks" :key="i" v-bind:task="task" v-bind:time="_tasktablestart + i"  ></task>
+		<div v-bind:style="{maxHeight : maxheight}" class="tasksWrapper">
+			<task v-bind:color="color" v-bind:team="_team" nth=0 v-bind:phase="_phase" v-for="(task, i) in tasks" :key="i" v-bind:task="task" v-bind:isOpen="isOpen" v-bind:time="_tasktablestart + i"  ></task>
 		</div>
 
 		<!-- button -->

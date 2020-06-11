@@ -7,6 +7,7 @@ import Utils from '../Utils.class.js';
 import ConstructionType from '../ConstructionType.class.js';
 import Zone from '../Zone.class.js';
 import State from '../State.class.js';
+import Requirement from '../Requirement.class.js';
 
 beforeEach(() => {
   Utils.ids = {
@@ -129,9 +130,12 @@ test('setState(state)', () => {
 	expect(task.getState()).toBe(state);
 });
 
-test('getLPSRequirement(i)', () => {
+test('getRequirement(name)', () => {
 	const task = new Task();
-	expect(task.getLPSRequirement(0).getValue()).toBe(false);
+	const requirement = new Requirement("constraint");
+	requirement.setValue(true);
+	task.addRequirement("constraint", requirement);
+	expect(task.getRequirement("constraint").getValue()).toBe(true);
 });
 
 test('setParentPhase(phase)', () => {
@@ -142,15 +146,23 @@ test('setParentPhase(phase)', () => {
 });
 
 test('setStartDate(date)', () => {
-	const phase = new Phase();
+	const task = new Task();
 	const date = new Date();
-	phase.setStartDate(date);
-	expect(phase.getStartDate()).toBe(date);
+	task.setStartDate(date);
+	expect(task.getStartDate()).toBe(date);
 });
 
 test('setEndDate(date)', () => {
-	const phase = new Phase();
+	const task = new Task();
 	const date = new Date();
-	phase.setEndDate(date);
-	expect(phase.getEndDate()).toBe(date);
+	task.setEndDate(date);
+	expect(task.getEndDate()).toBe(date);
+});
+
+test('isReady()', () => {
+	const task = new Task();
+	const req1 = new Requirement("req1");
+	req1.setValue(true);
+	task.addRequirement("req1", req1);
+	expect(task.isReady()).toBe(true);
 });

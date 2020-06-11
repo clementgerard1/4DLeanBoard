@@ -1,28 +1,50 @@
 <svg width="204" height="204" viewBox="10 6 184 186" fill="none" xmlns="http://www.w3.org/2000/svg">
 
 
-<g filter="url(#filter0_d_task)">
+<g v-show="isOpen" filter="url(#filter0_d_task)">
 <path d="M12 4H192V174C192 179.523 187.523 184 182 184H22C16.4772 184 12 179.523 12 174V4Z" fill="white"/>
 </g>
-<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Roboto Condensed" font-size="36" font-style="italic" font-weight="300" letter-spacing="0em"><tspan x="15" y="77.3047">{{taskname.l1}}</tspan><tspan x="15" y="109.305">{{taskname.l2}}</tspan></text>
+<text v-show="isOpen" fill="black" xml:space="preserve" style="white-space: pre" font-family="Roboto Condensed" font-size="36" font-style="italic" font-weight="300" letter-spacing="0em"><tspan x="15" y="77.3047">{{taskname.l1}}</tspan><tspan x="15" y="109.305">{{taskname.l2}}</tspan></text>
 <rect x="14.5" y="6.5" width="175" height="27" fill="white" v-bind:stroke="svgcolor" stroke-width="5"/>
 <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="24" font-weight="500" letter-spacing="0em"><tspan x="19" y="30.848">{{tid}}</tspan></text>
-<rect x="145.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
-<rect x="135.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
-<rect x="125.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
-<rect x="115.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
-<rect x="105.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
-<rect x="85.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
-<rect x="95.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
-<g filter="url(#filter1_d_task)">
-<circle cx="171" cy="164" r="16" fill="white"/>
-<circle cx="171" cy="164" r="15" stroke="black" stroke-width="2"/>
+
+<g v-show="isOpen" v-html="readytaskface"></g>
+<text v-show="isOpen && ready"fill="white" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="14" font-weight="500" letter-spacing="0em"><tspan x="162.435" y="170.328">7/7</tspan></text>
+
+<g v-show="isOpen">
+	<rect v-if="space" x="145" y="167" width="10" height="10" rx="5"  fill="black"/>
+	<rect v-else="space" x="145.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
+
+	<rect v-if="safety" x="135" y="167" width="10" height="10" rx="5" fill="black"/>
+	<rect v-else="safety" x="135.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
+
+	<rect v-if="equipement" x="125" y="167" width="10" height="10" rx="5" fill="black"/>
+	<rect v-else="equipement" x="125.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
+
+	<rect v-if="manpower" x="115" y="167" width="10" height="10" rx="5" fill="black"/>
+	<rect v-else="manpower" x="115.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
+
+	<rect v-if="materials" x="105" y="167" width="10" height="10" rx="5" fill="black"/>
+	<rect v-else="materials" x="105.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
+
+	<rect v-if="constraint" x="85" y="167" width="10" height="10" rx="5" fill="black"/>
+	<rect v-else="constraint" x="85.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
+
+	<rect v-if="information" x="95" y="167" width="10" height="10" rx="5" fill="black"/>
+	<rect v-else="information" x="95.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
 </g>
-<path d="M18 149H48V177C48 178.105 47.1046 179 46 179H20C18.8954 179 18 178.105 18 177V149Z" stroke="url(#paint0_linear)" stroke-width="2"/>
-<rect x="18" y="149" width="30" height="4" fill="white" stroke="#E7CB00" stroke-width="2"/>
-<g filter="url(#filter2_d_task)">
+
+<path v-show="isOpen && (previousTask != null)" d="M18 149H48V177C48 178.105 47.1046 179 46 179H20C18.8954 179 18 178.105 18 177V149Z" stroke="url(#paint0_linear)" stroke-width="2"/>
+
+<g v-show="isOpen">
+	<rect v-if="previousready" x="18" y="149" width="30" height="4" v-bind:fill="previouscolor" v-bind:stroke="previouscolor" stroke-width="2"/>
+	<rect v-else="previousready" x="18" y="149" width="30" height="4" fill="white" v-bind:stroke="previouscolor" stroke-width="2"/>
+</g>
+
+
+<g v-show="isOpen && (previousTask != null)" filter="url(#filter2_d_task)">
 <path d="M35 159L28 166L35 173" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
 </g>
 <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="14" font-weight="500" letter-spacing="0em"><tspan x="92.6797" y="26.328">{{dr}}</tspan></text>
-<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="14" font-weight="500" letter-spacing="0em"><tspan x="162.814" y="26.328">MN</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="14" font-weight="500" letter-spacing="0em"><tspan x="162.814" y="26.328">{{mn}}</tspan></text>
 </svg>

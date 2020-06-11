@@ -59,3 +59,9 @@ test('removeOperationUnit(operationUnit)', () => {
 	taskTeam.removeOperationUnit(operationUnit);
   expect(Object.keys(taskTeam.getOperationUnits()).length).toBe(0);
 });
+
+test('setWorkers(nb)', () => {
+	const taskTeam = new TaskTeam();
+	taskTeam.setWorkers(10);
+	expect(taskTeam.getWorkers()).toBe(10);
+});

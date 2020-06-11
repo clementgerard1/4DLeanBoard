@@ -7,17 +7,12 @@ import scssVariables from "./assets/_variables.scss";
 
 export default {
 	data : function(){
+		const previousTask = null;
 		return {
-			"r1" : false, 
-			"r2" : false,
-			"r3" : false,
-			"r4" : false,
-			"r5" : false,
-			"r6" : false,
-			"r7" : false,
 			"selected" : false,
 			"state" :false,
-			"stateDiv" : null
+			"stateDiv" : null,
+			"readytaskface" : null,
 		}
 	},
 	inject : [
@@ -30,10 +25,12 @@ export default {
 		'time',
 		'phase',
 		"task",
-		"color"
+		"color",
+		"isOpen"
 	],
 	mounted: function(){
 		this.updateStateDiv();
+		this.updateStateButtons();
 	},
 	created: function(){
 		V_taskTableUtils.addTask(this);
@@ -45,6 +42,69 @@ export default {
 		this.updateStateDiv();
 	},
 	computed:{
+		previousTask : function(){
+			if(this.task != null){
+				const previous = this.task.getPreviousTasks()[Object.keys(this.task.getPreviousTasks())[0]];
+				if(typeof previous != "undefined"){
+					return previous;
+				}else{
+					return null;
+				}
+			}else{
+				return null;
+			}
+		},
+		constraint : function(){
+			if(this.task != null){
+				return this.task.getRequirement("constraint").getValue();
+			}
+		}, 
+		previousready : function(){
+			if(this.previousTask != null){
+				console.log(this.previousTask.isReady());
+				return this.previousTask.isReady();
+			}
+		},
+		previouscolor : function(){
+			if(this.previousTask != null){
+				return scssVariables[this.previousTask.getParentPhase().getColorClass().replace("BG_", "").toLowerCase()];
+			}
+		},
+		information : function(){
+			if(this.task != null){
+				return this.task.getRequirement("information").getValue();
+			}
+		}, 
+		materials : function(){
+			if(this.task != null){
+				return this.task.getRequirement("materials").getValue();
+			}
+		}, 
+		manpower : function(){
+			if(this.task != null){
+				return this.task.getRequirement("manpower").getValue();
+			}
+		}, 
+		equipement : function(){
+			if(this.task != null){
+				return this.task.getRequirement("equipement").getValue();
+			}
+		}, 
+		safety : function(){
+			if(this.task != null){
+				return this.task.getRequirement("safety").getValue();
+			}
+		}, 
+		space : function(){
+			if(this.task != null){
+				return this.task.getRequirement("space").getValue();
+			}
+		}, 
+		ready : function(){
+			if(this.task != null){
+				return this.task.isReady();
+			}
+		},
 		notEmpty : function(){
 			return this.task != null;
 		},
@@ -56,6 +116,9 @@ export default {
 		},
 		svgcolor : function(){
 			return scssVariables[this.color.replace("BG_", "").toLowerCase()];
+		},
+		mn : function(){
+			return this.task.getTaskTeam().getWorkers();
 		},
 		taskname : function(){
 			const startWeek = this.timeline.getDateObject(this.time * 7);
@@ -91,7 +154,8 @@ export default {
 			}else{
 				return "noTask";
 			}
-		}
+		},
+
 	},
 	watch:{
 		time : function(){
@@ -101,8 +165,18 @@ export default {
 				this.selected = null;
 			}
 		},
+		ready : function(){
+			this.updateStateButtons();
+		}
 	},
 	methods:{
+		updateStateButtons: function(){
+			if(!this.ready){
+				this.readytaskface = '<g filter="url(#filter1_d_task)"><circle cx="171" cy="164" r="16" fill="white"></circle><circle cx="171" cy="164" r="15" stroke="black" stroke-width="2"></circle></g>';
+			}else{
+				this.readytaskface = '<g filter="url(#filter1_d_taskfaceready)"><circle cx="171" cy="164" r="16" fill="black"/></g>';
+			}
+		},
 		updateStateDiv: function(){
 			if(this.task != null){
 				this.stateDiv = document.getElementById(this.task.getId() + "-" + this.time);

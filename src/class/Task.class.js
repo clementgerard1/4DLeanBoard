@@ -33,12 +33,6 @@ class Task extends PlanningObject{
 		this.#object4D = null;
 		this.#taskTeam = null;
 		this.#parentPhase = null;
-
-		//LPS Requirement
-		for(let i = 1 ; i <= 7 ; i++){
-			super.addProperty(new Requirement(), "LPSRequirement" + i);
-		}
-
 	}
 
 	/**
@@ -234,12 +228,21 @@ class Task extends PlanningObject{
 	}
 
 	/**
-		Get a LPSrequierement of the task
-		@param {int} numero Numero of LPSRequirement 
+		Get a requierement of the task
+		@param {string} name Name of LPSRequirement 
 		@returns {ConstructionType} constructionType of the task
 	*/
-	getLPSRequirement(i){
-		return super.getPropertyByName("LPSRequirement" + (i+1));
+	getRequirement(name){
+		return super.getPropertyByName(name);
+	}
+
+	/**
+		Add a requirement to the task
+		@param {string} name Name of Requirement 
+		@param {Requirement} requirement
+	*/
+	addRequirement(name, requirement){
+		super.addProperty(requirement, name);
 	}
 
 	/**
@@ -260,6 +263,17 @@ class Task extends PlanningObject{
 	*/
 	getParentPhase(){
 		return this.#parentPhase;
+	}
+
+	/** verify if all requirements are true
+		@returns {bool}
+	*/
+	isReady(){
+		const properties = super.getProperties();
+		for(let p in properties){
+			if(!properties[p].getValue()) return false;
+		}
+		return true;
 	}
 
 }
