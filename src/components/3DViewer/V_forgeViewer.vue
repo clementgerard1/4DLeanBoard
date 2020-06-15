@@ -74,11 +74,28 @@ export default {
 					const colorMap = fragList.db2ThemingColor;
 
 				}
-
 				
 				//repositionne la caméra
 				// fonction pour cacher les objets passer en paramètre (ids) => hide()
 			}
+		},
+		highlightTask() {
+			var selection = this.viewer.getSelection();
+			console.log(selection);
+			var interId = [];
+			for(let i in selection) {
+				interId.push(this.getUniqueId(selection[i]));
+			}
+			var uniqId = [];
+			for(let j in interId) {
+				console.log(interId[j]);
+				for(let k in this.tree.nodeAccess.nameSuffixes) {
+					if(k == interId[j]) {
+						uniqId.push(this.tree.nodeAccess.nameSuffixes[k]);
+					}
+				}
+			}
+			console.log(uniqId);
 		},
 		selectionGetProperties() {
 
@@ -113,6 +130,14 @@ export default {
 			})[0]);
 			return dbId;
 		},
+		getUniqueId(dbid){
+			var UId;
+			const that = this;
+			UId = parseInt(Object.keys(this.tree.nodeAccess.dbIdToIndex).filter(function(key) {
+			    return that.tree.nodeAccess.dbIdToIndex[dbid] == key;
+			})[0]);
+			return UId;
+		},
 		onDocumentLoaded(doc, that){
 			var rootItem = doc.getRootItem();
 
@@ -144,7 +169,13 @@ export default {
 			// this.viewer.setBackgroundColor(255,255,0,0,0,0);
 			this.viewer.setLightPreset(12);
 
+			/*this.getAllLeafComponents(this.viewer, function (dbIds) {
+				console.log('Found ' + dbIds.length + ' leaf nodes');
+				console.log(dbIds);
+			});*/
+
 			this.viewer.addEventListener(Autodesk.Viewing.OBJECT_TREE_CREATED_EVENT, this.onGeometryLoaded);
+			this.viewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, this.highlightTask);
 		},
 		onGeometryLoaded(that){
 			this.tree = this.viewer.model.getInstanceTree();
@@ -161,7 +192,28 @@ export default {
 		},
 		onLoadError(errCode, that){
 	      console.log('Error loading document: ' + errCode)
-		}
+		}/* ,
+		getAllLeafComponents(viewer, callback) {
+			var cbCount = 0; // count pending callbacks
+			var components = []; // store the results
+			var tree; // the instance tree
+
+			function getLeafComponentsRec(parent) {
+				cbCount++;
+				if (tree.getChildCount(parent) != 0) {
+					tree.enumNodeChildren(parent, function (children) {
+						getLeafComponentsRec(children);
+					}, false);
+				} else {
+					components.push(parent);
+				}
+				if (--cbCount == 0) callback(components);
+			}
+			viewer.getObjectTree(function (objectTree) {
+				tree = objectTree;
+				var allLeafComponents = getLeafComponentsRec(tree.getRootId());
+			});
+		}*/
 	},
 	created : function(){
 		V_4DUtils.addForgeViewer(this);
