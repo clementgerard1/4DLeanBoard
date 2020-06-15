@@ -187,7 +187,6 @@ export default {
 	},
 	template : `
 	<div id="forgeViewer">
-		<p>FORGE VIEWER</p>
 		<!-- forgeViewer -->
 		<div id="forgeV"></div>
 	</div>`,

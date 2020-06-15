@@ -61,7 +61,6 @@ export default {
 		}, 
 		previousready : function(){
 			if(this.previousTask != null){
-				console.log(this.previousTask.isReady());
 				return this.previousTask.isReady();
 			}
 		},

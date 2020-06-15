@@ -10,7 +10,7 @@ import V_forgeViewer from "./components/3DViewer/V_forgeViewer.vue";
 //Hammer si already on viewer3D.min.js loaded on index.html
 //import Hammer from "hammerjs";
 
-import "./index.scss";
+import "./index3D.scss";
 import Config from "../config.js";
 import "animate.css";
 import TouchGesturesUtils from "./components/Utils/V_touchGesturesUtils.class.js";
