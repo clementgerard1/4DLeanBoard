@@ -24,6 +24,7 @@ class V_4DUtils{
 		@static
 	*/
 	static highlightObject4D(object4D){
+		if(this.viewer != null){
 		//for(let v in this.viewers){
 			//this.viewers[v].clearHighlighting();
 			this.viewer.clearHighlighting();
@@ -33,6 +34,7 @@ class V_4DUtils{
 			this.viewer.highlight(object4D);
 			//}
 		//}
+		}
 	}
 
 	/**
@@ -41,7 +43,7 @@ class V_4DUtils{
 		@static
 	*/
 	static highlightObject4DById(object4Did){
-		const object4D = this.viewer.model.getObject4DById(object4Did);
+		const object4D = this.viewer.model.get4DObjectById(object4Did);
 		this.highlightObject4D(object4D);
 	}
 

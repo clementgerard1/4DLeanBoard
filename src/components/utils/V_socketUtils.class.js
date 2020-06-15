@@ -17,6 +17,7 @@ class V_socketUtils{
 
 	static initSocket(){
 		this.socket.on("highlightObject4D", (datas) => {
+			console.log(datas);
 			V_4DUtils.highlightObject4DById(datas.id);
 		});
 	}

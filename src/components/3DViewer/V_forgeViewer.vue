@@ -115,12 +115,8 @@ export default {
 			return dbId;
 		},
 		onDocumentLoaded(doc, that){
-			var rootItem = doc.getRootItem();
-
 			// Grab all geometry items
-			var geometryItems =
-				Autodesk.Viewing.Document.getSubItemsWithProperties(
-				rootItem, { 'type': 'geometry' }, true)
+			var geometryItems = doc.getRoot().search({ 'type': 'geometry' });
 
 			// Pick the first item by default
 			var selectedItem = geometryItems[0];
@@ -131,7 +127,16 @@ export default {
 			//var viewer = new Autodesk.Viewing.Viewer3D(domContainer)
 
 			// GUI Version: viewer with controls
-			this.viewer = new Autodesk.Viewing.Private.GuiViewer3D(domContainer);
+
+			const opt = {
+			   profileSettings: {
+			       ambientShadows: false
+			   }
+			}
+
+			console.log(Autodesk.Viewing);
+			this.viewer = new Autodesk.Viewing.GuiViewer3D(domContainer, opt);
+			//console.log(this.viewer);
 
 			this.viewer.initialize();
 			this.viewer.loadModel(doc.getViewablePath(selectedItem));

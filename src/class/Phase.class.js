@@ -280,6 +280,19 @@ class Phase extends PlanningObject{
 	}
 
 	/*
+		get a 3D object which is included in the phase by its id
+		@param {String} id id (guid) of the object3D
+		@returns {Object3D}
+	*/
+	get4DObjectById(id){
+		const objects4D = this.getObjects4D();
+		for(let o in objects4D){
+			if(objects4D[o].getId() == id) return objects4D[o];
+		}
+		return null;
+	}
+
+	/*
 		get a collection of task corresponding to a taskTeam
 		@param {TaskTeam} team
 		@returns {Array} Array of Task

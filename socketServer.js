@@ -10,6 +10,7 @@ const w6s = [];
 
 io.on("connection", function(client){
 
+
     client.on("addViewer", () => {
         viewers.push(client);
     });

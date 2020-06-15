@@ -21,6 +21,7 @@ let logScript = `
     log(...args);
     sendToServerConsole("log",args);
   }
+
   const error = console.error.bind(console);
   console.error = (...args) => {
     error(...args);
@@ -32,6 +33,12 @@ let logScript = `
   	 		a : args
   	 });
   }
+  window.onerror = function(message, url, lineNumber) {  
+		//save error and send to server for example.
+		sendToServerConsole("error", message + " " + url + " " + lineNumber);
+		console.error(message, url, lineNumber);
+		return true;
+	};  
 </script>`;
 if(config["socketConsole"]){
 	io.on("connection", function(client){
