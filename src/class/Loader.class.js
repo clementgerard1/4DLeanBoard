@@ -289,6 +289,7 @@ class Loader{
 						task.setZone(zones[tasks[t]["Zone"]]);
 
 						for(let o in tasks[t]["GUID"]){
+							console.log("connard");
 							const object3D = new Object3D(tasks[t]["GUID"][o], tasks[t]["GUID"][o]);
 							object4D.addObject3D(object3D);
 							object3D.setParent(object4D);

@@ -14,7 +14,8 @@ export default {
 	date:{
 		"viewer" : null,
 		"tree" : null,
-		"selected" : []
+		"selected" : [],
+		"map" : []
 	},
 	props:[
 		"manifest",
@@ -79,14 +80,60 @@ export default {
 				// fonction pour cacher les objets passer en paramètre (ids) => hide()
 			}
 		},
+		map3DObjs(map) {
+			// tableau clé valeur avec en clé l'id de l'objet et en valeur l'objet
+			let rep = false;
+			var mils = this.model.getMilestones();
+			for(let i in mils) {
+				var phs = mils[i].getPhases();
+				for(let j in phs){
+					var o4D = phs[j].getObjects4D();
+					for(let k in o4D){
+						console.log(o4D[k]);
+						var o3D = o4D[k].getObjects3D();
+						for(let l in o3D) {
+							map.set(o3D[l].getId(), o3D[l]);
+						}
+					}
+				}
+			}
+		},
+		getPropertie(res) {
+			console.log(res);
+			let foundGuid = false;
+			for(let i in res.properties) {
+				if(this.map.has(res.properties[i].displayValue)) {
+					foundGuid = true;
+					// object 3D séléctionné
+					var obj = this.map.get(res.properties[i].displayValue);
+					console.log(obj);
+					// illumine la tâche asssocié au parent 
+					V_4DUtils.highlightTask(obj.getParent())
+				}
+			}
+			if(!foundGuid) {
+				for(let i in res.properties) {
+					if(res.properties[i].displayName == "parent") {
+						this.viewer.getProperties(res.properties[i].displayValue, this.getPropertie);
+					}
+				}
+			}
+		},
 		highlightTask() {
+			console.log(this.tree);
+
+			this.map = new Map();
+			this.map3DObjs(this.map);
+			console.log(this.map);
+
 			var selection = this.viewer.getSelection();
-			console.log(selection);
 			var interId = [];
+
 			for(let i in selection) {
 				interId.push(this.getUniqueId(selection[i]));
+				this.viewer.getProperties(selection[i], this.getPropertie);
 			}
-			var uniqId = [];
+			/*var uniqId = [];
 			for(let j in interId) {
 				console.log(interId[j]);
 				for(let k in this.tree.nodeAccess.nameSuffixes) {
@@ -95,7 +142,7 @@ export default {
 					}
 				}
 			}
-			console.log(uniqId);
+			console.log(uniqId);*/
 		},
 		selectionGetProperties() {
 
