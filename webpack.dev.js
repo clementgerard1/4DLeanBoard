@@ -8,10 +8,14 @@ module.exports = {
 		  tls: 'empty'
 		},
 	watch : true,
-  entry: './src/index.js',
+	entry: {
+  	bundle : './src/index.js',
+  	bundle3D : './src/index3D.js',
+  	bundleW6 : './src/indexW6.js',
+  },
   output: {
     path: path.resolve(__dirname, 'dev'),
-    filename: 'bundle.js'
+    filename: '[name].js'
   },
   module: {
 	  rules: [

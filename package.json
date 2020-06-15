@@ -4,16 +4,17 @@
   "description": "4D Lean Board",
   "private": true,
   "scripts": {
-    "prod": "MODE=prod; cp -r public/* dist; webpack --config ./webpack.prod.js  & node server.js $MODE",
-    "dev": "MODE=dev; webpack --config ./webpack.dev.js  & node server.js $MODE",
-    "test": "MODE=test; webpack --config ./webpack.test.js  & node server.js $MODE",
+    "prod": "MODE=prod; cp -r public/* dist; webpack --config ./webpack.prod.js  & node htmlServer.js $MODE",
+    "dev": "MODE=dev; webpack --config ./webpack.dev.js  & node htmlServer.js $MODE",
+    "test": "MODE=test; webpack --config ./webpack.test.js  & node htmlServer.js $MODE",
     "doc": "rm -rf ./src/class/doc; ./node_modules/.bin/jsdoc -r ./src/class -d ./src/class/doc",
     "jest": "jest src/class/jest --watch",
     "commit": "npm run doc; npm run jest; MODE=prod; cp -r public/* dist; webpack --config ./webpack.prod.js; git add --all; git commit -m ",
     "deploy": "gh-pages -d dist",
-    "prod:windows": "xcopy public dist /s /e /c & node server.js prod | webpack --config ./webpack.prod.js",
-    "dev:windows": "node server.js dev | webpack --config ./webpack.dev.js",
-    "test:windows": "node server.js test | webpack --config ./webpack.test.js",
+    "socket": "node socketServer.js",
+    "prod:windows": "xcopy public dist /s /e /c & node htmlServer.js prod | webpack --config ./webpack.prod.js",
+    "dev:windows": "node htmlServer.js dev | webpack --config ./webpack.dev.js",
+    "test:windows": "node htmlServer.js test | webpack --config ./webpack.test.js",
     "commit:windows": "npm run doc:windows & npm run jest & xcopy public dist /s /e /c & webpack --config ./webpack.prod.js & git add --all & git commit -m ",
     "doc:windows": "rd /s /q src\\class\\doc & node_modules\\.bin\\jsdoc -r src\\class -d src\\class\\doc"
   },
@@ -47,6 +48,7 @@
     "express": "^4.17.1",
     "forge-apis": "^0.7.3",
     "hammerjs": "^2.0.8",
+    "socket.io-client": "^2.3.0",
     "vue": "^2.6.11"
   }
 }

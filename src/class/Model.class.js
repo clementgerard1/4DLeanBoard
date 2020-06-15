@@ -204,5 +204,22 @@ class Model{
 		return null;
 	}
 
+	/*
+		get a 4DObject
+		@param {String} id 
+		@returns {Object4D}
+	*/
+	get4DObjectById(id){
+		const phases = this.getPhases();
+		for(let p in phases){
+			const obj = phases[p].get4DObjectById(id);
+			console.log(obj)
+			if(obj != null){
+				return obj;
+			}
+		}
+		return null;
+	}
+
 }
 export default Model;

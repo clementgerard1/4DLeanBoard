@@ -2,6 +2,7 @@ import taskSVG from "./assets/task.svg";
 import taskStatusSVG from "./assets/taskStatus.svg";
 import V_taskTableUtils from "../Utils/V_taskTableUtils.class.js";
 import V_4DUtils from "../Utils/V_4DUtils.class.js";
+import V_socketUtils from "../Utils/V_socketUtils.class.js";
 import "./V_task.scss";
 import scssVariables from "./assets/_variables.scss";
 
@@ -37,7 +38,7 @@ export default {
 	},
 	updated: function(){
 		if(this.task != null && this.selected){
-			V_4DUtils.highlightObject4D(this.task.getObject4D());
+			V_socketUtils.highlightObject4D(this.task.getObject4D());
 		}
 		this.updateStateDiv();
 	},
@@ -61,7 +62,6 @@ export default {
 		}, 
 		previousready : function(){
 			if(this.previousTask != null){
-				console.log(this.previousTask.isReady());
 				return this.previousTask.isReady();
 			}
 		},
@@ -221,7 +221,7 @@ export default {
 		},
 		handleTap: function(event){
 			if(this.task != null){
-				V_taskTableUtils.getToken(this.task);
+				V_taskTableUtils.setToken(this.task);
 			}
 		},
 		setSelectedValue(bool){

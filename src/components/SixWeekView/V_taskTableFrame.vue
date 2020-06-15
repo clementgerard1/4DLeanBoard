@@ -4,6 +4,7 @@ import V_6Wrow_header from "./V_6Wrow_header.vue";
 import V_taskTableBackground from "./V_taskTableBackground.vue";
 import V_taskTableFront from "./V_taskTableFront.vue";
 import TimelineUtils from "../Utils/V_timelineUtils.class.js";
+import V_socketUtils from "../Utils/V_socketUtils.class.js";
 
 
 export default {
@@ -21,6 +22,7 @@ export default {
 	},
 	created : function(){
 		TimelineUtils.addListener("time", this, this.updateTime);
+		V_socketUtils.addW6();
 	},
 	data: function(){
 			let taskTableStart = Math.trunc(this.playerinit / 6) * 6;

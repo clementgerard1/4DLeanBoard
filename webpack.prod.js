@@ -2,15 +2,19 @@ const path = require('path');
 
 module.exports = {
 	mode:'production',
-  entry: './src/index.js',
 	node: {
 		  fs: 'empty',
 		  net:'empty',
 		  tls: 'empty'
 		},
+	entry: {
+  	bundle : './src/index.js',
+  	bundle3D : './src/index3D.js',
+  	bundleW6 : './src/indexW6.js',
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js'
+    filename: '[name].js'
   },
   module: {
 	  rules: [
