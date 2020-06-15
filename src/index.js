@@ -6,7 +6,10 @@ import V_player from "./components/Player/V_player.vue";
 import V_svgDefs from "./components/SixWeekView/V_SvgDefs.vue";
 import V_taskTableFrame from "./components/SixWeekView/V_taskTableFrame.vue";
 import V_forgeViewer from "./components/3DViewer/V_forgeViewer.vue";
-import Hammer from "hammerjs";
+
+//Hammer si already on viewer3D.min.js loaded on index.html
+//import Hammer from "hammerjs";
+
 import "./index.scss";
 import Config from "../config.js";
 import "animate.css";
