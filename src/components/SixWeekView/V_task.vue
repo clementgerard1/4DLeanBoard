@@ -37,7 +37,7 @@ export default {
 	},
 	updated: function(){
 		if(this.task != null && this.selected){
-			V_4DUtils.highlightTask(this.task.getObject4D());
+			V_4DUtils.highlightObject4D(this.task.getObject4D());
 		}
 		this.updateStateDiv();
 	},

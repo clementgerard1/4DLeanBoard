@@ -1,10 +1,12 @@
 import Utils from './Utils.class.js';
+import Object4D from './Object4D.class.js';
 
 class Object3D{
 
 	#id;
 	#name;
 	#objId;
+	#parentObject4D;
 
 	/**
 	 	@class Object3D 
@@ -20,6 +22,7 @@ class Object3D{
 		this.#id = id;
 		this.#name = name;
 		this.#objId = objId;
+		this.#parentObject4D = null;
 	}
 
 	/**
@@ -44,6 +47,26 @@ class Object3D{
 	*/
 	getId(){
 		return this.#id;
+	}
+
+	/**
+		Get the parent object4D
+		@returns {Object4D} 
+	*/
+	getParent(){
+		return this.#parentObject4D;
+	}
+
+	/**
+		Set the parent object4D
+		@param {Object4D} obj
+	*/
+	setParent(obj){
+		if(!(obj instanceof Object4D)){
+			console.error("setParent(obj) need a Object4D ; provided : ", obj);
+		}else{
+			this.#parentObject4D = obj;
+		}
 	}
 
 }

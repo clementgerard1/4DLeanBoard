@@ -1,5 +1,7 @@
 import Object4D from '../Object4D.class.js';
 import Object3D from '../Object3D.class.js';
+import Phase from '../Phase.class.js';
+import Task from '../Task.class.js';
 import Utils from '../Utils.class.js';
 
 beforeEach(() => {
@@ -50,4 +52,33 @@ test('getObject3D(id)', () => {
 	const object3D = new Object3D();
 	object4D.addObject3D(object3D);
   expect(object4D.getObject3D(object3D.getId()) == object3D).toBe(true);
+});
+
+test('setPhase(phase)', () => {
+	const object4D = new Object4D();
+	const phase = new Phase();
+	object4D.setPhase(phase);
+	expect(object4D.getPhase()).toBe(phase);
+});
+
+test('setTask(task)', () => {
+	const object4D = new Object4D();
+	const task = new Task();
+	object4D.setTask(task);
+	expect(object4D.getTask()).toBe(task);
+});
+
+test('includes(obj3D)', () => {
+	const object4D = new Object4D();
+	const obj3D = new Object3D();
+	object4D.addObject3D(obj3D);
+	expect(object4D.includes(obj3D)).toBe(true);
+});
+
+test('includes(obj3D)', () => {
+	const object4D = new Object4D();
+	const obj3D = new Object3D();
+	const obj3D2 = new Object3D();
+	object4D.addObject3D(obj3D);
+	expect(object4D.includes(obj3D2)).toBe(false);
 });

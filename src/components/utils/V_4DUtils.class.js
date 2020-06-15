@@ -1,3 +1,5 @@
+import V_taskTableUtils from "./V_taskTableUtils.class.js";
+
 class V_4DUtils{
 
 
@@ -18,7 +20,7 @@ class V_4DUtils{
 		@param {Object4D} Object4D to hightlight
 		@static
 	*/
-	static highlightTask(object4D){
+	static highlightObject4D(object4D){
 		for(let v in this.viewers){
 			this.viewers[v].clearHighlighting();
 			//const objects3D = object4D.getObjects3D();
@@ -26,6 +28,15 @@ class V_4DUtils{
 			this.viewers[v].highlight(object4D);
 			//}
 		}
+	}
+
+	/**
+		Highlight Task on 6W Planning
+		@param {Object4D} Object4D to hightlight
+		@static
+	*/
+	static highlightTask(object4D){
+		V_taskTableUtils.getToken(object4D.getTask());
 	}
 
 
