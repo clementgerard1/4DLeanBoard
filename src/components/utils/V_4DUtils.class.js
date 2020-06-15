@@ -21,11 +21,10 @@ class V_4DUtils{
 	static highlightTask(object4D){
 		for(let v in this.viewers){
 			this.viewers[v].clearHighlighting();
-			console.log("bang");
-			const objects4D = object4D.getObjects3D();
-			for(let o in objects4D){
-				this.viewers[v].highlight(objects4D[o]);
-			}
+			//const objects3D = object4D.getObjects3D();
+			//for(let o in objects3D){
+			this.viewers[v].highlight(object4D);
+			//}
 		}
 	}
 

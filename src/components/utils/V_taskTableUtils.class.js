@@ -46,5 +46,14 @@ class V_TaskTableUtils{
 			return false;
 		}
 	}
+
+	/**
+		Attribute token from the 4DObject
+		@param {Object4D} obj
+		@static
+	*/
+	static highlightTask(obj){
+		
+	}
 }
 export default V_TaskTableUtils;
