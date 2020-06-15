@@ -175,7 +175,15 @@ if(process.argv[2] == "dev"){
 
 	app.get('/', function (req, res) {
 	  res.sendFile(__dirname + "/dist/index.html");
-	})
+	});
+
+	app.get('/3D', function(req,res){
+		res.sendFile(__dirname + '/dist/3D.html');
+	});
+
+	app.get('/W6', function(req,res){
+		res.sendFile(__dirname + '/dist/W6.html');
+	});
 
 	app.get('/:url',function(req,res){
 		if(req.params.url != "favicon.ico"){

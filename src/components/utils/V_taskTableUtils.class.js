@@ -19,7 +19,7 @@ class V_TaskTableUtils{
 		@param {V_task} obj which ask for the token
 		@static
 	*/
-	static getToken(task){
+	static setToken(task){
 		this.token = {
 			taskId : task.getId(),
 		};

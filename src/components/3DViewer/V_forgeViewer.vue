@@ -1,4 +1,5 @@
 import V_4DUtils from "../Utils/V_4DUtils.class.js";
+import V_socketUtils from "../Utils/V_socketUtils.class.js";
 import Config from "../../../config.js"
 import "./V_forgeViewer.scss";
 
@@ -164,7 +165,8 @@ export default {
 		}
 	},
 	created : function(){
-		V_4DUtils.addForgeViewer(this);
+		V_4DUtils.setForgeViewer(this);
+		V_socketUtils.addViewer();
 	},
 	mounted : function(){
 		if(Config["forgeRenderer"]){

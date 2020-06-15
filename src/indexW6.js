@@ -5,6 +5,7 @@ import Timeline from "./class/Timeline.class.js";
 import V_player from "./components/Player/V_player.vue";
 import V_svgDefs from "./components/SixWeekView/V_SvgDefs.vue";
 import V_taskTableFrame from "./components/SixWeekView/V_taskTableFrame.vue";
+import openSocket from "socket.io-client";
 
 //Hammer si already on viewer3D.min.js loaded on index.html
 import Hammer from "hammerjs";
@@ -13,6 +14,7 @@ import "./indexW6.scss";
 import Config from "../config.js";
 import "animate.css";
 import TouchGesturesUtils from "./components/Utils/V_touchGesturesUtils.class.js";
+import V_socketUtils from "./components/Utils/V_socketUtils.class.js";
 
 window.addEventListener("load", function(){
 	init();
@@ -51,6 +53,10 @@ async function init(){
 	let manifest = null;
 	let oAuth = null;
 	let timeline = null;
+
+	//Socket Server Connexion
+	const socket = openSocket(window.location.host.replace("3000", "3001"));
+	V_socketUtils.setSocket(socket);
 
 	await Promise.all([Utils.loadTextFile("datas/Project1v2.json"), Utils.loadTextFile("datas/Project1.ifc")])
 	.then( files => {
