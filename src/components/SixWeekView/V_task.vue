@@ -8,12 +8,87 @@ import scssVariables from "./assets/_variables.scss";
 
 export default {
 	data : function(){
-		const previousTask = null;
+
+		let previousTask = null;
+		if(this.task != null){
+			const previous = this.task.getPreviousTasks()[Object.keys(this.task.getPreviousTasks())[0]];
+			if(typeof previous != "undefined"){
+				previousTask = previous;
+			}else{
+				previousTask = null;
+			}
+		}else{
+			previousTask =  null;
+		}
+
+		let constraint = false;
+		if(this.task != null){
+			constraint = this.task.getRequirement("constraint").getValue();
+		}
+
+		let information = false;
+		if(this.task != null){
+			information = this.task.getRequirement("information").getValue();
+		}
+
+		let materials = false;
+		if(this.task != null){
+			materials = this.task.getRequirement("materials").getValue();
+		}		
+
+		let manpower = false;
+		if(this.task != null){
+			manpower = this.task.getRequirement("manpower").getValue();
+		}		
+
+		let equipement = false;
+		if(this.task != null){
+			equipement = this.task.getRequirement("equipement").getValue();
+		}		
+
+		let safety = false;
+		if(this.task != null){
+			safety = this.task.getRequirement("safety").getValue();
+		}		
+
+		let space = false;
+		if(this.task != null){
+			space = this.task.getRequirement("space").getValue();
+		}		
+
+		let previousColor = null;
+		if(previousTask != null){
+			previousColor =  scssVariables[previousTask.getParentPhase().getColorClass().replace("BG_", "").toLowerCase()];
+		}
+
+		let ready = false
+		if(this.task != null){
+			ready = this.task.isReady();
+		}
+
+		let previousready = false;
+		if(previousTask != null){
+			previousready = previousTask.isReady();
+		}
+
+
 		return {
 			"selected" : false,
 			"state" :false,
 			"stateDiv" : null,
 			"readytaskface" : null,
+			"highlighted" : false,
+			constraint : constraint, 
+			information : information, 
+			materials : materials, 
+			manpower : manpower, 
+			equipement : equipement, 
+			safety : safety, 
+			space : space,
+			ready : ready,
+			previousready : previousready,
+			previousTask : previousTask,
+			previouscolor : previousColor
 		}
 	},
 	inject : [
@@ -40,68 +115,6 @@ export default {
 		this.updateStateDiv();
 	},
 	computed:{
-		previousTask : function(){
-			if(this.task != null){
-				const previous = this.task.getPreviousTasks()[Object.keys(this.task.getPreviousTasks())[0]];
-				if(typeof previous != "undefined"){
-					return previous;
-				}else{
-					return null;
-				}
-			}else{
-				return null;
-			}
-		},
-		constraint : function(){
-			if(this.task != null){
-				return this.task.getRequirement("constraint").getValue();
-			}
-		}, 
-		previousready : function(){
-			if(this.previousTask != null){
-				return this.previousTask.isReady();
-			}
-		},
-		previouscolor : function(){
-			if(this.previousTask != null){
-				return scssVariables[this.previousTask.getParentPhase().getColorClass().replace("BG_", "").toLowerCase()];
-			}
-		},
-		information : function(){
-			if(this.task != null){
-				return this.task.getRequirement("information").getValue();
-			}
-		}, 
-		materials : function(){
-			if(this.task != null){
-				return this.task.getRequirement("materials").getValue();
-			}
-		}, 
-		manpower : function(){
-			if(this.task != null){
-				return this.task.getRequirement("manpower").getValue();
-			}
-		}, 
-		equipement : function(){
-			if(this.task != null){
-				return this.task.getRequirement("equipement").getValue();
-			}
-		}, 
-		safety : function(){
-			if(this.task != null){
-				return this.task.getRequirement("safety").getValue();
-			}
-		}, 
-		space : function(){
-			if(this.task != null){
-				return this.task.getRequirement("space").getValue();
-			}
-		}, 
-		ready : function(){
-			if(this.task != null){
-				return this.task.isReady();
-			}
-		},
 		notEmpty : function(){
 			return this.task != null;
 		},
@@ -165,9 +178,15 @@ export default {
 		},
 		ready : function(){
 			this.updateStateButtons();
+		},
+		isOpen : function(){
+			if(!this.isOpen) this.state = false;
 		}
 	},
 	methods:{
+		hightlight: function(bool){
+			this.highlighted = bool;
+		},
 		updateStateButtons: function(){
 			if(!this.ready){
 				this.readytaskface = '<g filter="url(#filter1_d_task)"><circle cx="171" cy="164" r="16" fill="white"></circle><circle cx="171" cy="164" r="15" stroke="black" stroke-width="2"></circle></g>';
@@ -217,18 +236,69 @@ export default {
 				}
 			}
 		},
+		handlePress : function(event){
+			const display = event.type == "press";
+			const tasks = this.task.getPreviousTasks();
+			for(let t  in tasks){
+				V_taskTableUtils.highlightTask(tasks[t] , display);
+			}
+
+		},
 		handleTap: function(event){
 			if(this.task != null){
 				V_taskTableUtils.setToken(this.task);
 			}
 			V_socketUtils.highlightObject4D(this.task.getObject4D());
 		},
+		handleConstraintChange : function(event){
+			switch(event.target.id){
+				case "constraintTap": this.task.getRequirement("constraint").setValue(!this.task.getRequirement("constraint").getValue()); break;
+				case "informationTap": this.task.getRequirement("information").setValue(!this.task.getRequirement("information").getValue()); break;
+				case "materialsTap": this.task.getRequirement("materials").setValue(!this.task.getRequirement("materials").getValue()); break;
+				case "manpowerTap": this.task.getRequirement("manpower").setValue(!this.task.getRequirement("manpower").getValue()); break;
+				case "equipementTap": this.task.getRequirement("equipement").setValue(!this.task.getRequirement("equipement").getValue()); break;
+				case "safetyTap": this.task.getRequirement("safety").setValue(!this.task.getRequirement("safety").getValue()); break;
+				case "spaceTap": this.task.getRequirement("space").setValue(!this.task.getRequirement("space").getValue()); break;
+			}
+			event.srcEvent.stopPropagation();
+			V_taskTableUtils.updateRequirements(this.task);
+		},
+		updateRequirements(){
+			let previousReady = this.ready;
+			let constraint = false;
+			if(this.task != null){
+				this.constraint = this.task.getRequirement("constraint").getValue();
+				this.information = this.task.getRequirement("information").getValue();
+				this.materials = this.task.getRequirement("materials").getValue();
+				this.manpower = this.task.getRequirement("manpower").getValue();
+				this.equipement = this.task.getRequirement("equipement").getValue();
+				this.safety = this.task.getRequirement("safety").getValue();
+				this.space = this.task.getRequirement("space").getValue();
+				this.ready = this.task.isReady();
+			}		
+
+			if(this.ready != previousReady){
+				V_taskTableUtils.updatePrevious(this.task);
+			}
+
+		},
+		updatePrevious(){
+
+			if(this.previousTask != null){
+				this.previousColor =  scssVariables[this.previousTask.getParentPhase().getColorClass().replace("BG_", "").toLowerCase()];
+			}
+
+			if(this.previousTask != null){
+				this.previousready = this.previousTask.isReady();
+			}
+
+		},
 		setSelectedValue(bool){
 			this.selected = bool;
 		}
 	},
 	template : `
-	<div class="taskWrapper">
+	<div class="taskWrapper" v-bind:class='[highlighted ? "highlighted" : ""]'>
 		<div v-tap='handleTap' v-doubletap='handleDoubleTap' v-bind:class='[selected ? "selected" : "", "task"]'>
 			<div v-if="notEmpty" class='taskclass animate__animated animate__flipInY'>` + taskSVG + `</div>
 			<div v-if="notEmpty" v-show="state" v-bind:id="taskId + '-' + time" class="taskstate animate__animated animate__faster">` + taskStatusSVG + `</div>

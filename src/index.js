@@ -92,14 +92,13 @@ async function init(){
 						});
 						singleTap.recognizeWith(hammer.recognizers)
 						hammer.add([singleTap]);
-						hammer.on("tap1", function(){binding.value();});
+						hammer.on("tap1", binding.value);
 
 						TouchGesturesUtils.updateHammer(el);
 					}
 				}
 			});
 
-			//Touch gestures
 	  	Vue.directive("doubletap", {
 				bind: function(el, binding) 
 				{
@@ -119,6 +118,27 @@ async function init(){
 						doubleTap.recognizeWith(hammer.recognizers)
 						hammer.add(doubleTap);
 						hammer.on("tap2", binding.value);
+
+						TouchGesturesUtils.updateHammer(el);
+					}
+				}
+			});
+
+			Vue.directive("press", {
+				bind: function(el, binding) 
+				{
+					if(el.getAttribute("hammerid") == null){
+						el.setAttribute("hammerid", Utils.getId("hammer"));
+					}
+					if (typeof binding.value === "function") {
+						let hammer = TouchGesturesUtils.getHammer(el);
+						if(hammer == null){
+							hammer = new Hammer(el);
+							TouchGesturesUtils.addHammer(el, hammer);
+						} 
+		
+						hammer.on("press", binding.value);
+						hammer.on("pressup", binding.value);
 
 						TouchGesturesUtils.updateHammer(el);
 					}

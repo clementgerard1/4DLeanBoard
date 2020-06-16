@@ -47,5 +47,34 @@ class V_TaskTableUtils{
 		}
 	}
 
+	/**
+		Highlight a task with bool
+		@param {Task} task
+		@param {bool} bool
+		@static
+	*/
+	static highlightTask(task, bool){
+		for( let t in this.tasks){
+			if(this.tasks[t].task == task) this.tasks[t].hightlight(bool);
+		}
+	}
+
+	static updateRequirements(task){
+		for( let t in this.tasks){
+			if(this.tasks[t].task == task) this.tasks[t].updateRequirements();
+		}
+	}
+
+	static updatePrevious(task){
+		for( let t in this.tasks){
+			if(this.tasks[t].task != null){
+				const previous = this.tasks[t].task.getPreviousTasks();
+				for(let p in previous){
+					if(previous[p] == task) this.tasks[t].updatePrevious();
+				}
+			}
+		}
+	}
+
 }
 export default V_TaskTableUtils;

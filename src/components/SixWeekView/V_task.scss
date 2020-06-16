@@ -2,6 +2,12 @@
 @use "sass:list";
 
 .tasksWrapper{
+
+	.highlighted{
+		border: 2px solid red;
+    border-radius: 10px;
+	}
+
 	.taskWrapper{
 		margin-right : list.nth(v.$rowHeaderColumnMargin , 2);
 		padding-right : list.nth(v.$rowHeaderColumnMargin , 2);

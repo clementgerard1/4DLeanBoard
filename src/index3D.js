@@ -89,7 +89,7 @@ async function init(){
 						});
 						singleTap.recognizeWith(hammer.recognizers)
 						hammer.add([singleTap]);
-						hammer.on("tap1", function(){binding.value();});
+						hammer.on("tap1", binding.value);
 
 						TouchGesturesUtils.updateHammer(el);
 					}

@@ -24,6 +24,7 @@ class V_4DUtils{
 		@static
 	*/
 	static highlightObject4D(object4D){
+
 		if(this.viewer != null){
 		//for(let v in this.viewers){
 			//this.viewers[v].clearHighlighting();
@@ -53,7 +54,8 @@ class V_4DUtils{
 		@static
 	*/
 	static highlightTask(object4D){
-		console.log(object4D.getTask().getId());
+		
+		console.log("hey");
 		V_taskTableUtils.setToken(object4D.getTask());
 	}
 

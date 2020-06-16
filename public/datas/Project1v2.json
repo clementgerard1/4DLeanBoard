@@ -120,12 +120,12 @@
                         "2XqLaPqlL6pRaKaKWyMH2W"
                      ],
                      "Requirements" : {
-                        "Constraint" : false,
+                        "Constraint" : true,
                         "Information" : true,
-                        "Materials" : false,
+                        "Materials" : true,
                         "Manpower" : true,
                         "Equipement" : true,
-                        "Safety" : false,
+                        "Safety" : true,
                         "Space" : true
                      },
                      "Name": "Ground slab pouring",
