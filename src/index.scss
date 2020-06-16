@@ -30,14 +30,15 @@ body{
 			height : 30px;
 		}
 
+		box-sizing: border-box;
+
 	}
 
 	#taskTableFrame{
-
+		box-sizing: border-box;
 		*{
 			box-sizing: border-box;
 		}
-
 		float:right;
 	 	min-height: 0px;
 
