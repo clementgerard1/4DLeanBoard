@@ -37,9 +37,6 @@ export default {
 		V_taskTableUtils.addTask(this);
 	},
 	updated: function(){
-		if(this.task != null && this.selected){
-			V_socketUtils.highlightObject4D(this.task.getObject4D());
-		}
 		this.updateStateDiv();
 	},
 	computed:{
@@ -164,6 +161,7 @@ export default {
 			}else{
 				this.selected = null;
 			}
+			V_socketUtils.highlightObject4D(this.task.getObject4D());
 		},
 		ready : function(){
 			this.updateStateButtons();
@@ -223,6 +221,7 @@ export default {
 			if(this.task != null){
 				V_taskTableUtils.setToken(this.task);
 			}
+			V_socketUtils.highlightObject4D(this.task.getObject4D());
 		},
 		setSelectedValue(bool){
 			this.selected = bool;

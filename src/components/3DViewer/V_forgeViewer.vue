@@ -90,7 +90,6 @@ export default {
 				for(let j in phs){
 					var o4D = phs[j].getObjects4D();
 					for(let k in o4D){
-						console.log(o4D[k]);
 						var o3D = o4D[k].getObjects3D();
 						for(let l in o3D) {
 							map.set(o3D[l].getId(), o3D[l]);
@@ -100,14 +99,12 @@ export default {
 			}
 		},
 		getPropertie(res) {
-			console.log(res);
 			let foundGuid = false;
 			for(let i in res.properties) {
 				if(this.map.has(res.properties[i].displayValue)) {
 					foundGuid = true;
 					// object 3D séléctionné
 					var obj = this.map.get(res.properties[i].displayValue);
-					console.log(obj);
 					// illumine la tâche asssocié au parent 
 					V_4DUtils.highlightTask(obj.getParent())
 				}
@@ -121,11 +118,9 @@ export default {
 			}
 		},
 		highlightTask() {
-			console.log(this.tree);
 
 			this.map = new Map();
 			this.map3DObjs(this.map);
-			console.log(this.map);
 
 			var selection = this.viewer.getSelection();
 			var interId = [];
@@ -206,7 +201,6 @@ export default {
 			   }
 			}
 
-			console.log(Autodesk.Viewing);
 			this.viewer = new Autodesk.Viewing.GuiViewer3D(domContainer, opt);
 			//console.log(this.viewer);
 

@@ -53,7 +53,7 @@ class V_4DUtils{
 		@static
 	*/
 	static highlightTask(object4D){
-		console.log(object4D);
+		console.log(object4D.getTask().getId());
 		V_taskTableUtils.setToken(object4D.getTask());
 	}
 

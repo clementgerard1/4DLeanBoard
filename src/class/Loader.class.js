@@ -145,6 +145,7 @@ class Loader{
 						const task = new Task(tasks[t]["Name"], tasks[t]["TID"]);
 						const object4D = new Object4D(tasks[t]["4DID"], tasks[t]["4DID"]);
 						task.setObject4D(object4D);
+						object4D.setTask(task);
 						//task.setDuration(tasks[t]["Duration"]);
 						const startDate = new Date(tasks[t]["Start"].slice(6, 10), parseInt(tasks[t]["Start"].slice(3, 5)) - 1, tasks[t]["Start"].slice(0, 2));
 						task.setStartDate(startDate);
@@ -186,11 +187,13 @@ class Loader{
 						for(let o in tasks[t]["GUID"]){
 							const object3D = new Object3D(obj3Ds[tasks[t]["GUID"][o]].name, parseInt(obj3Ds[tasks[t]["GUID"][o]].id), tasks[t]["GUID"][o]);
 							object4D.addObject3D(object3D);
+							object3D.setParent(object4D);
 						}
 
 						phase.addTask(task);
 						task.setParentPhase(phase);
 						phase.addObject4D(object4D);
+						object4D.setPhase(phase);
 						tasksForPreviousNext[task.getId()] = {
 							"previous" : tasks[t]["Previous"],
 							"next" : tasks[t]["Next"]
