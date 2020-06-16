@@ -15,7 +15,8 @@ export default {
 	date:{
 		"viewer" : null,
 		"tree" : null,
-		"selected" : []
+		"selected" : [],
+		"map" : []
 	},
 	props:[
 		"manifest",
@@ -75,11 +76,74 @@ export default {
 					const colorMap = fragList.db2ThemingColor;
 
 				}
-
 				
 				//repositionne la caméra
 				// fonction pour cacher les objets passer en paramètre (ids) => hide()
 			}
+		},
+		map3DObjs(map) {
+			// tableau clé valeur avec en clé l'id de l'objet et en valeur l'objet
+			let rep = false;
+			var mils = this.model.getMilestones();
+			for(let i in mils) {
+				var phs = mils[i].getPhases();
+				for(let j in phs){
+					var o4D = phs[j].getObjects4D();
+					for(let k in o4D){
+						console.log(o4D[k]);
+						var o3D = o4D[k].getObjects3D();
+						for(let l in o3D) {
+							map.set(o3D[l].getId(), o3D[l]);
+						}
+					}
+				}
+			}
+		},
+		getPropertie(res) {
+			console.log(res);
+			let foundGuid = false;
+			for(let i in res.properties) {
+				if(this.map.has(res.properties[i].displayValue)) {
+					foundGuid = true;
+					// object 3D séléctionné
+					var obj = this.map.get(res.properties[i].displayValue);
+					console.log(obj);
+					// illumine la tâche asssocié au parent 
+					V_4DUtils.highlightTask(obj.getParent())
+				}
+			}
+			if(!foundGuid) {
+				for(let i in res.properties) {
+					if(res.properties[i].displayName == "parent") {
+						this.viewer.getProperties(res.properties[i].displayValue, this.getPropertie);
+					}
+				}
+			}
+		},
+		highlightTask() {
+			console.log(this.tree);
+
+			this.map = new Map();
+			this.map3DObjs(this.map);
+			console.log(this.map);
+
+			var selection = this.viewer.getSelection();
+			var interId = [];
+
+			for(let i in selection) {
+				interId.push(this.getUniqueId(selection[i]));
+				this.viewer.getProperties(selection[i], this.getPropertie);
+			}
+			/*var uniqId = [];
+			for(let j in interId) {
+				console.log(interId[j]);
+				for(let k in this.tree.nodeAccess.nameSuffixes) {
+					if(k == interId[j]) {
+						uniqId.push(this.tree.nodeAccess.nameSuffixes[k]);
+					}
+				}
+			}
+			console.log(uniqId);*/
 		},
 		selectionGetProperties() {
 
@@ -113,6 +177,14 @@ export default {
 			    return that.tree.nodeAccess.dbIdToIndex[key] == id;
 			})[0]);
 			return dbId;
+		},
+		getUniqueId(dbid){
+			var UId;
+			const that = this;
+			UId = parseInt(Object.keys(this.tree.nodeAccess.dbIdToIndex).filter(function(key) {
+			    return that.tree.nodeAccess.dbIdToIndex[dbid] == key;
+			})[0]);
+			return UId;
 		},
 		onDocumentLoaded(doc, that){
 			// Grab all geometry items
@@ -150,7 +222,13 @@ export default {
 			// this.viewer.setBackgroundColor(255,255,0,0,0,0);
 			this.viewer.setLightPreset(12);
 
+			/*this.getAllLeafComponents(this.viewer, function (dbIds) {
+				console.log('Found ' + dbIds.length + ' leaf nodes');
+				console.log(dbIds);
+			});*/
+
 			this.viewer.addEventListener(Autodesk.Viewing.OBJECT_TREE_CREATED_EVENT, this.onGeometryLoaded);
+			this.viewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, this.highlightTask);
 		},
 		onGeometryLoaded(that){
 			this.tree = this.viewer.model.getInstanceTree();
@@ -167,7 +245,28 @@ export default {
 		},
 		onLoadError(errCode, that){
 	      console.log('Error loading document: ' + errCode)
-		}
+		}/* ,
+		getAllLeafComponents(viewer, callback) {
+			var cbCount = 0; // count pending callbacks
+			var components = []; // store the results
+			var tree; // the instance tree
+
+			function getLeafComponentsRec(parent) {
+				cbCount++;
+				if (tree.getChildCount(parent) != 0) {
+					tree.enumNodeChildren(parent, function (children) {
+						getLeafComponentsRec(children);
+					}, false);
+				} else {
+					components.push(parent);
+				}
+				if (--cbCount == 0) callback(components);
+			}
+			viewer.getObjectTree(function (objectTree) {
+				tree = objectTree;
+				var allLeafComponents = getLeafComponentsRec(tree.getRootId());
+			});
+		}*/
 	},
 	created : function(){
 		V_4DUtils.setForgeViewer(this);
