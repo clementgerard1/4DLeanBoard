@@ -22,17 +22,25 @@ test('Object3D constructor(name)', () =>{
 	expect(object3D.getName()).toBe("hello");
 });
 
-test('Object3D constructor(id, objId)', () =>{
+test('Object3D constructor(name, objId)', () =>{
 	const object3D = new Object3D("hello", 10);
 	expect(object3D.getId()).toBe(0);
 	expect(object3D.getUniqId()).toBe(10);
 	expect(object3D.getName()).toBe("hello");
 });
 
+test('Object3D constructor(name, objId, ifcId)', () =>{
+	const object3D = new Object3D("hello", 10, 15);
+	expect(object3D.getId()).toBe(0);
+	expect(object3D.getIFCId()).toBe(15);
+	expect(object3D.getName()).toBe("hello");
+	expect(object3D.getUniqId()).toBe(10);
+});
 
 test('Object3D constructor(id, objId, name)', () =>{
-	const object3D = new Object3D("hello", 10, 15);
-	expect(object3D.getId()).toBe(15);
+	const object3D = new Object3D("hello", 10, 15, 10);
+	expect(object3D.getId()).toBe(10);
+	expect(object3D.getIFCId()).toBe(15);
 	expect(object3D.getName()).toBe("hello");
 	expect(object3D.getUniqId()).toBe(10);
 });

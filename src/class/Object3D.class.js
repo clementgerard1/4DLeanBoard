@@ -7,6 +7,7 @@ class Object3D{
 	#name;
 	#objId;
 	#parentObject4D;
+	#ifcId;
 
 	/**
 	 	@class Object3D 
@@ -18,11 +19,12 @@ class Object3D{
 		@param {int} [objId=""] Id of object3D (:34...).
 		@param {int} [id=automaticaly generated] id of the object3D
 	*/
-	constructor(name = "", objId ="", id = Utils.getId("object3D")){
+	constructor(name = "", objId ="", ifcId="", id = Utils.getId("object3D")){
 		this.#id = id;
 		this.#name = name;
 		this.#objId = objId;
 		this.#parentObject4D = null;
+		this.#ifcId = ifcId;
 	}
 
 	/**
@@ -35,10 +37,18 @@ class Object3D{
 
 	/**
 		Get the uniqId of the object3D
-		@returns {string} name of the object3D
+		@returns {string} uniqId of the object3D
 	*/
 	getUniqId(){
 		return this.#objId;
+	}
+
+	/**
+		Get the ifcId of the object3D
+		@returns {string} ifcId of the object3D
+	*/
+	getIFCId(){
+		return this.#ifcId;
 	}
 
 	/**
