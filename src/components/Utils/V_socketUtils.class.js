@@ -22,7 +22,6 @@ class V_socketUtils{
 		});
 
 		this.socket.on("highlightTask", (datas) => {
-			console.log(datas);
 			V_taskTableUtils.highlightTaskById(datas.id);
 		});
 	}

@@ -2,25 +2,25 @@
 <g filter="url(#filter0_d_taskstatus)">
 <path d="M2 0H182V175C182 177.761 179.761 180 177 180H7C4.23858 180 2 177.761 2 175V0Z" fill="white"/>
 </g>
-<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="14" font-weight="500" letter-spacing="0em"><tspan x="81.998" y="166.328">Not Ready</tspan></text>
+<text fill="black" v-bind:fill-opacity="[!ready ? 1 : 0.5]" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="14" font-weight="500" letter-spacing="0em"><tspan x="81.998" y="166.328">Not Ready</tspan></text>
 <g filter="url(#filter1_d_taskstatus)">
-<circle cx="160" cy="160" r="16" fill="white"/>
-<circle cx="160" cy="160" r="15" stroke="black" stroke-width="2"/>
+<circle cx="160" cy="160" r="16" fill="white" v-bind:fill-opacity="[!ready ? 1 : 0.5]"/>
+<circle cx="160" cy="160" r="15" fill="white" stroke="black" stroke-width="2" v-bind:fill-opacity="[!ready ? 1 : 0.5]"/>
 </g>
-<text fill="black" fill-opacity="0.5" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="14" font-weight="500" letter-spacing="0em"><tspan x="98.2949" y="129.328">Paused</tspan></text>
+<text fill="black" v-bind:stroke-opacity="[!ready ? 1 : 0.5]" v-bind:fill-opacity="[ready && paused ? 1 : 0.5]" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="14" font-weight="500" letter-spacing="0em"><tspan x="98.2949" y="129.328">Paused</tspan></text>
 <g filter="url(#filter2_d_taskstatus)">
-<circle cx="160" cy="123" r="16" fill="black" fill-opacity="0.5"/>
+<circle cx="160" cy="123" r="16" fill="black" v-bind:fill-opacity="[ready && paused ? 1 : 0.5]"/>
 </g>
 <rect x="154" y="114" width="4" height="17" fill="white"/>
 <rect x="163" y="114" width="4" height="17" fill="white"/>
-<text fill="black" fill-opacity="0.5" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="14" font-weight="500" letter-spacing="0em"><tspan x="109.957" y="95.328">Done</tspan></text>
+<text fill="black" v-bind:fill-opacity="[ready && !paused && done ? 1 : 0.5]" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="14" font-weight="500" letter-spacing="0em"><tspan x="109.957" y="95.328">Done</tspan></text>
 <g filter="url(#filter3_d_taskstatus)">
-<circle cx="160" cy="89" r="16" fill="black" fill-opacity="0.5"/>
+<circle cx="160" cy="89" r="16" fill="black" v-bind:fill-opacity="[ready && !paused && done ? 1 : 0.5]"/>
 </g>
 <path d="M152 89.7179L158.857 98C158.982 92.855 164.31 82.6007 167 81" stroke="white" stroke-width="5" stroke-linejoin="round"/>
-<text fill="black" fill-opacity="0.5" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="14" font-weight="500" letter-spacing="0em"><tspan x="104.051" y="61.328">Ready</tspan></text>
+<text fill="black" v-bind:fill-opacity="[ready && !paused && !done ? 1 : 0.5]" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="14" font-weight="500" letter-spacing="0em"><tspan x="104.051" y="61.328">Ready</tspan></text>
 <g filter="url(#filter4_d_taskstatus)">
-<circle cx="160" cy="55" r="16" fill="black" fill-opacity="0.5"/>
+<circle cx="160" cy="55" r="16" fill="black" v-bind:fill-opacity="[ready && !paused && !done ? 1 : 0.5]"/>
 </g>
 <text fill="white" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="14" font-weight="500" letter-spacing="0em"><tspan x="151.435" y="61.328">7/7</tspan></text>
 

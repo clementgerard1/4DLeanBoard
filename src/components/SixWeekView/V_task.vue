@@ -66,11 +66,20 @@ export default {
 			ready = this.task.isReady();
 		}
 
+		let paused = false;
+		if(this.task != null){
+			paused = this.task.isPaused();
+		}
+
+		let done = false;
+		if(this.task != null){
+			done = this.task.isDone();
+		}
+
 		let previousready = false;
 		if(previousTask != null){
 			previousready = previousTask.isReady();
 		}
-
 
 		return {
 			"selected" : false,
@@ -88,7 +97,9 @@ export default {
 			ready : ready,
 			previousready : previousready,
 			previousTask : previousTask,
-			previouscolor : previousColor
+			previouscolor : previousColor,
+			done : done,
+			paused : paused,
 		}
 	},
 	inject : [

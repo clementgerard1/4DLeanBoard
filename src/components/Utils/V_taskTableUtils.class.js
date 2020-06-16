@@ -66,7 +66,6 @@ class V_TaskTableUtils{
 	*/
 	static highlightTaskById(taskId){
 		const task = this.tasks[0].model.getTaskById(taskId);
-		console.log(task);
 		this.setToken(task);
 	}
 

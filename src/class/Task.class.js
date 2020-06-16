@@ -16,6 +16,8 @@ class Task extends PlanningObject{
 	#object4D;
 	#taskTeam;
 	#parentPhase;
+	#paused;
+	#done;
 
 	/**
  		@class Task
@@ -33,6 +35,8 @@ class Task extends PlanningObject{
 		this.#object4D = null;
 		this.#taskTeam = null;
 		this.#parentPhase = null;
+		this.#paused = false;
+		this.#done = false;
 	}
 
 	/**
@@ -274,6 +278,38 @@ class Task extends PlanningObject{
 			if(!properties[p].getValue()) return false;
 		}
 		return true;
+	}
+
+	/** set the done state of the task
+		@param {bool}
+	*/
+	setDone(bool){
+		if(typeof bool != "undefined"){
+			this.#done = bool;
+		}
+	}
+
+	/** set the paused state of the task
+		@param {bool}
+	*/
+	setDone(bool){
+		if(typeof bool != "undefined"){
+			this.#paused = bool;
+		}
+	}
+
+	/** verify if task is done
+		@returns {bool}
+	*/
+	isDone(){
+		return this.#done;
+	}
+
+	/** verify if task is paused
+		@returns {bool}
+	*/
+	isPaused(){
+		return this.#paused;
 	}
 
 }
