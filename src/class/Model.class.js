@@ -221,5 +221,16 @@ class Model{
 		return null;
 	}
 
+	getTaskById(id){
+		const phases = this.getPhases();
+		for(let p in phases){
+			const obj = phases[p].getTask(id);
+			if(obj != null){
+				return obj;
+			}
+		}
+		return null;
+	}
+
 }
 export default Model;

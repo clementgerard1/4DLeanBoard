@@ -135,7 +135,7 @@ class Phase extends PlanningObject{
 	*/
 	getTask(id){
 		if(typeof this.#tasks[id] == "undefined"){
-			console.error("getTask(id) : id " + id + " unknowned on tasks colleciton")
+			//console.error("getTask(id) : id " + id + " unknowned on tasks colleciton")
 			return null;
 		}else{
 			return this.#tasks[id];

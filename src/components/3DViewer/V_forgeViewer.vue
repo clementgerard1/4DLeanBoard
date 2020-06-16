@@ -92,7 +92,7 @@ export default {
 					for(let k in o4D){
 						var o3D = o4D[k].getObjects3D();
 						for(let l in o3D) {
-							map.set(o3D[l].getId(), o3D[l]);
+							map.set(o3D[l].getIFCId(), o3D[l]);
 						}
 					}
 				}
@@ -106,7 +106,8 @@ export default {
 					// object 3D séléctionné
 					var obj = this.map.get(res.properties[i].displayValue);
 					// illumine la tâche asssocié au parent 
-					V_4DUtils.highlightTask(obj.getParent())
+					console.log(obj, obj.getParent().getTask());
+					V_socketUtils.highlightTask(obj.getParent().getTask());
 				}
 			}
 			if(!foundGuid) {

@@ -1,4 +1,5 @@
 import V_4DUtils from "./V_4DUtils.class.js";
+import V_taskTableUtils from "./V_taskTableUtils.class.js";
 
 class V_socketUtils{
 
@@ -17,8 +18,12 @@ class V_socketUtils{
 
 	static initSocket(){
 		this.socket.on("highlightObject4D", (datas) => {
-			console.log(datas);
 			V_4DUtils.highlightObject4DById(datas.id);
+		});
+
+		this.socket.on("highlightTask", (datas) => {
+			console.log(datas);
+			V_taskTableUtils.highlightTaskById(datas.id);
 		});
 	}
 
@@ -30,10 +35,15 @@ class V_socketUtils{
 		this.socket.emit("addW6");
 	}
 
-  static highlightObject4D(object4D){
-  	V_4DUtils.highlightObject4D(object4D);
-  	this.socket.emit("highlightObject4D", { id : object4D.getId()});
-  }
+	static highlightTask(task){
+		V_taskTableUtils.highlightTask(task);
+  		this.socket.emit("highlightTask", { id : task.getId()});
+	}
+
+  	static highlightObject4D(object4D){
+  		V_4DUtils.highlightObject4D(object4D);
+  		this.socket.emit("highlightObject4D", { id : object4D.getId()});
+  	}
 
 }
 export default V_socketUtils;

@@ -48,17 +48,6 @@ class V_4DUtils{
 		this.highlightObject4D(object4D);
 	}
 
-	/**
-		Highlight Task on 6W Planning
-		@param {Object4D} Object4D to hightlight
-		@static
-	*/
-	static highlightTask(object4D){
-		
-		console.log("hey");
-		V_taskTableUtils.setToken(object4D.getTask());
-	}
-
 
 }
 export default V_4DUtils;

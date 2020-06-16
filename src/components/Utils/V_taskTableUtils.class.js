@@ -59,6 +59,17 @@ class V_TaskTableUtils{
 		}
 	}
 
+	/**
+		Highlight Task on 6W Planning By Id
+		@param {string} taskId 
+		@static
+	*/
+	static highlightTaskById(taskId){
+		const task = this.tasks[0].model.getTaskById(taskId);
+		console.log(task);
+		this.setToken(task);
+	}
+
 	static updateRequirements(task){
 		for( let t in this.tasks){
 			if(this.tasks[t].task == task) this.tasks[t].updateRequirements();
