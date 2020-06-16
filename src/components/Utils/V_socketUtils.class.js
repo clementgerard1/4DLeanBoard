@@ -36,7 +36,7 @@ class V_socketUtils{
 	}
 
 	static highlightTask(task){
-		V_taskTableUtils.highlightTask(task);
+		V_taskTableUtils.highlightTaskById(task.getId());
   		this.socket.emit("highlightTask", { id : task.getId()});
 	}
 
