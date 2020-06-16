@@ -3,3 +3,4 @@ node_modules
 dev
 dist
 src/class/doc
+src/class/jest/testReport.html
