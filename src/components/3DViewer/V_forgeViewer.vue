@@ -2,6 +2,7 @@ import V_4DUtils from "../Utils/V_4DUtils.class.js";
 import V_socketUtils from "../Utils/V_socketUtils.class.js";
 import Config from "../../../config.js"
 import "./V_forgeViewer.scss";
+import scssVariables from "../SixWeekView/assets/_variables.scss";
 
 /**
 	* @vue-prop {Object} manifest forge Manifest
@@ -12,11 +13,14 @@ import "./V_forgeViewer.scss";
 	* @vue-event {Number} decrement - Emit counter's value after decrement
 */
 export default {
-	date:{
-		"viewer" : null,
-		"tree" : null,
-		"selected" : [],
-		"map" : []
+	data: function(){
+		return {
+			"viewer" : null,
+			"tree" : null,
+			"selected" : [],
+			"map" : [],
+			"objs" : {}
+		}
 	},
 	props:[
 		"manifest",
@@ -81,9 +85,24 @@ export default {
 				// fonction pour cacher les objets passer en paramètre (ids) => hide()
 			}
 		},
-		map3DObjs(map) {
+		map3DObjs() {
 			// tableau clé valeur avec en clé l'id de l'objet et en valeur l'objet
+			const map = this.map;
 			let rep = false;
+
+			const list = this.viewer.model.getFragmentList().materialIdMap;
+
+	        var baseMaterial = new THREE.MeshPhongMaterial({
+	            color: 0xFFFFFF,
+	            specular: 0xFFFFFF,
+	            alphaTest : 0,
+	        });
+
+	        const materials = this.viewer.impl.getMaterials();
+			materials.addMaterial( "materialTest", baseMaterial, true);
+
+	        console.log("HEdffRY");
+
 			var mils = this.model.getMilestones();
 			for(let i in mils) {
 				var phs = mils[i].getPhases();
@@ -92,10 +111,45 @@ export default {
 					for(let k in o4D){
 						var o3D = o4D[k].getObjects3D();
 						for(let l in o3D) {
-							map.set(o3D[l].getIFCId(), o3D[l]);
+							for(let s in this.tree.nodeAccess.nameSuffixes){
+								if(this.tree.nodeAccess.nameSuffixes[s] == o3D[l].getUniqId()){
+									const index = this.getDbId(s);
+									const r = parseInt(scssVariables[phs[j].getColorClass().replace("BG_", "").toLowerCase()].slice(1,3), 16) / 255;
+									const g = parseInt(scssVariables[phs[j].getColorClass().replace("BG_", "").toLowerCase()].slice(3,5), 16) / 255;
+									const b = parseInt(scssVariables[phs[j].getColorClass().replace("BG_", "").toLowerCase()].slice(5,7), 16) / 255;
+									this.objs[o3D[l].getId()] = {
+										obj3D : o3D[l],
+										guId : o3D[l].getIFCId(),
+										dbId : index,
+										color : {
+											r : r,
+											g : g,
+											b : b,
+											a : 0.2
+										}
+									}
+									this.tree.enumNodeChildren(this.objs[o3D[l].getId()].dbId, (node) => { this.color3DObject(node, this.objs[o3D[l].getId()], baseMaterial); }, true);
+								}
+							}
 						}
 					}
 				}
+			}
+
+		    this.viewer.impl.invalidate(true);
+			console.log(this.objs);
+
+	        console.log(this.viewer.impl);
+		},
+		color3DObject(node, obj, baseMaterial){
+			if(this.tree.getChildCount(node) == 0){
+				this.viewer.model.getFragmentList().setMaterial(node, baseMaterial);
+
+				const frag = this.viewer.impl.getRenderProxy(this.viewer.model, node);
+				frag.material = baseMaterial;
+				console.log(frag);
+				this.viewer.setThemingColor(node, new THREE.Vector4(obj.color.r, obj.color.g, obj.color.b, obj.color.a));
+				this.viewer.impl.visibilityManager.show(obj.dbId);
 			}
 		},
 		getPropertie(res) {
@@ -119,9 +173,6 @@ export default {
 			}
 		},
 		highlightTask() {
-
-			this.map = new Map();
-			this.map3DObjs(this.map);
 
 			var selection = this.viewer.getSelection();
 			var interId = [];
@@ -190,7 +241,6 @@ export default {
 			var selectedItem = geometryItems[0];
 
 			var domContainer = document.getElementById('forgeV');
-
 			// UI-less Version: viewer without controls and commands
 			//var viewer = new Autodesk.Viewing.Viewer3D(domContainer)
 
@@ -226,7 +276,10 @@ export default {
 			this.viewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, this.highlightTask);
 		},
 		onGeometryLoaded(that){
+			console.log(this);
 			this.tree = this.viewer.model.getInstanceTree();
+			this.map = new Map();
+			this.map3DObjs();
 		},
 		onEnvInitialized(that){
 			Autodesk.Viewing.Document.load(
