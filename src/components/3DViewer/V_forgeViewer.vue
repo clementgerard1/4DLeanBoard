@@ -38,7 +38,7 @@ export default {
 			}
 		},
 		highlight(object4D){
-
+			this.clearSelected();
 			if(this.viewer != null){
 				// ^ peut être ajouter la couleur qu'on veut mettre à l'object3D en paramètre
 				// sous la forme d'un vecteur4 contenant (r, g, b, a)
