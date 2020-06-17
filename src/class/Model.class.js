@@ -167,6 +167,7 @@ class Model{
 
 			}
 
+			this.setStartDate(start);
 			this.#duration = Math.ceil(((end.getTime() - start.getTime()) / (1000 * 3600 * 24)) + 1);
 		}
 

@@ -1,0 +1,16 @@
+@use "../SixWeekView/assets/variables" as v;
+
+.playerWeek{
+
+
+
+}
+
+.playerWeek.selected{
+	border: 2px solid v.$greenbluish_light;
+	margin:0px;
+}
+
+.playerWeek.hightlighted{
+	background: v.$white_transparent_reverse;
+}

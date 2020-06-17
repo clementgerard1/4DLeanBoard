@@ -27,6 +27,10 @@ io.on("connection", function(client){
         client.broadcast.emit("highlightTask", datas);
     });
 
+    client.on("setTime", (datas) => {
+        client.broadcast.emit("setTime", datas);
+    });
+
 });
 
 http.listen(socketPort, () => {

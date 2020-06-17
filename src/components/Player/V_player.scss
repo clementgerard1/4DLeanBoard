@@ -1,6 +1,36 @@
+@use "../SixWeekView/assets/variables" as v;
+
 .player{
-	input{
+
+	display: flex;
+
+	#timelinePlayer{
 		height : 100%;
-		width : 100%;
+		width : calc(100% - #{ 2 * v.$playerDateWidth});
+	}
+
+	.date{
+		display: flex;
+    align-items: center;
+    justify-content: center;
+		text-align: center;
+		width : v.$playerDateWidth;
+		background-color: v.$blackish;
+		color: v.$white;
+		/* Oswald 24 */
+		font-family: Oswald;
+		font-style: normal;
+		font-weight: 500;
+		font-size: 24px;
+		line-height: 36px;
+		display: flex;
+		align-items: center;
+		text-align: center;
+		text-indent: 3px;
+		text-transform: capitalize;
+	}
+
+	.r90{
+		transform: rotate(-90deg);
 	}
 }

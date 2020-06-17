@@ -1,8 +1,8 @@
 import V_4DUtils from "./V_4DUtils.class.js";
 import V_taskTableUtils from "./V_taskTableUtils.class.js";
+import V_timelineUtils from "./V_timelineUtils.class.js";
 
 class V_socketUtils{
-
 
 	static socket = null;
 	
@@ -24,6 +24,10 @@ class V_socketUtils{
 		this.socket.on("highlightTask", (datas) => {
 			V_taskTableUtils.highlightTaskById(datas.id);
 		});
+
+		this.socket.on("setTime", (datas) => {
+			V_timelineUtils.setTime(datas.time);
+		});
 	}
 
 	static addViewer(){
@@ -39,10 +43,15 @@ class V_socketUtils{
   		this.socket.emit("highlightTask", { id : task.getId()});
 	}
 
-  	static highlightObject4D(object4D){
-  		V_4DUtils.highlightObject4D(object4D);
-  		this.socket.emit("highlightObject4D", { id : object4D.getId()});
-  	}
+	static highlightObject4D(object4D){
+		V_4DUtils.highlightObject4D(object4D);
+		this.socket.emit("highlightObject4D", { id : object4D.getId()});
+	}
+
+	static setTime(time){
+		V_timelineUtils.setTime(time);
+		this.socket.emit("setTime", { time : time});
+	}
 
 }
 export default V_socketUtils;

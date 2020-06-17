@@ -65,8 +65,10 @@ class V_TaskTableUtils{
 		@static
 	*/
 	static highlightTaskById(taskId){
-		const task = this.tasks[0].model.getTaskById(taskId);
-		this.setToken(task);
+		if(typeof this.tasks[0] != "undefined"){
+			const task = this.tasks[0].model.getTaskById(taskId);
+			this.setToken(task);
+		}
 	}
 
 	static updateRequirements(task){

@@ -188,7 +188,7 @@ async function init(){
 	 		<div id="content">
 	 			<div id="viewerFrame">
 	 				<forgeviewer id="forgeViewer" v-bind:model="model" v-bind:timeline="timeline" v-bind:manifest="manifest" v-bind:oauth="oauth"></forgeviewer>
-	 				<player id="mainPlayer" v-bind:duration="duration" v-bind:playerinit="playerinit"></player>
+	 				<player id="mainPlayer" v-bind:duration="duration" v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit"></player>
 	 			</div>
 	 			<tasktableframe id="taskTableFrame" v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit" v-bind:duration="duration"></tasktableframe>
 	 		</div>

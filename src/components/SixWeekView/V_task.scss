@@ -13,6 +13,7 @@
 		padding-right : list.nth(v.$rowHeaderColumnMargin , 2);
 		padding-left: list.nth(v.$rowHeaderColumnMargin , 2);
 		box-sizing: content-box !important;
+		min-width : 188px;
 
 		.task{
 			position : relative;

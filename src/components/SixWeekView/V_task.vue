@@ -186,10 +186,12 @@ export default {
 		time : function(){
 			if(this.task != null){
 				this.selected = V_taskTableUtils.isTokenOwner(this);
+				if(this.selected){
+					V_socketUtils.highlightObject4D(this.task.getObject4D());
+				}
 			}else{
 				this.selected = null;
 			}
-			V_socketUtils.highlightObject4D(this.task.getObject4D());
 		},
 		ready : function(){
 			this.updateStateButtons();

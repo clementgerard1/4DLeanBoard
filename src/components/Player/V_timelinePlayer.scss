@@ -1,0 +1,19 @@
+@use "../SixWeekView/assets/variables" as v;
+
+.timelinePlayer{
+	display : flex;
+	background: v.$light;
+
+	.week{
+		flex : 1;
+		background: v.$white_transparent;
+		mix-blend-mode: normal;
+		border-radius: 5px;
+		margin: 2px;
+	}
+
+	.playerLine{
+
+	}
+
+}
