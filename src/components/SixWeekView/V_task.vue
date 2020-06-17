@@ -81,6 +81,9 @@ export default {
 			previousready = previousTask.isReady();
 		}
 
+		//For avoid tap propagation, need to delete it
+		let constraintTap = false
+
 		return {
 			"selected" : false,
 			"state" :false,
@@ -100,6 +103,7 @@ export default {
 			previouscolor : previousColor,
 			done : done,
 			paused : paused,
+			constraintTap : constraintTap
 		}
 	},
 	inject : [
@@ -201,8 +205,14 @@ export default {
 		updateStateButtons: function(){
 			if(!this.ready){
 				this.readytaskface = '<g filter="url(#filter1_d_task)"><circle cx="171" cy="164" r="16" fill="white"></circle><circle cx="171" cy="164" r="15" stroke="black" stroke-width="2"></circle></g>';
-			}else{
-				this.readytaskface = '<g filter="url(#filter1_d_taskfaceready)"><circle cx="171" cy="164" r="16" fill="black"/></g>';
+			}else{ 
+				if(this.done){
+					this.readytaskface = '<g filter="url(#filter1_d_donetask)"><circle cx="171" cy="164" r="16" fill="black"/></g>';
+				}else if(this.paused){
+					this.readytaskface = '<g filter="url(#filter1_d_pausedtask)"><circle cx="171" cy="164" r="16" fill="black"/></g>';
+				}else{
+					this.readytaskface = '<g filter="url(#filter1_d_taskfaceready)"><circle cx="171" cy="164" r="16" fill="black"/></g>';
+				}
 			}
 		},
 		updateStateDiv: function(){
@@ -256,12 +266,47 @@ export default {
 
 		},
 		handleTap: function(event){
-			if(this.task != null){
-				V_taskTableUtils.setToken(this.task);
+			if(!this.constraintTap){
+				if(this.task != null){
+					V_taskTableUtils.setToken(this.task);
+				}
+				V_socketUtils.highlightObject4D(this.task.getObject4D());
+			}else{
+				this.constraintTap = false;
 			}
-			V_socketUtils.highlightObject4D(this.task.getObject4D());
+		},
+		handleReadyTap: function(event){
+			this.constraintTap = true;
+			if(this.ready){
+					this.done = false;
+					this.task.setDone(false);
+					this.paused = false;
+					this.task.setPaused(false);
+					V_taskTableUtils.updateRequirements(this.task);
+			}
+		},
+		handleDoneTap: function(event){
+			this.constraintTap = true;
+			if(this.ready){
+				this.done = true;
+				this.task.setDone(true);
+				this.paused = false;
+				this.task.setPaused(false);
+				V_taskTableUtils.updateRequirements(this.task);
+			}
+		},
+		handlePausedTap: function(event){
+			this.constraintTap = true;
+			if(this.ready){
+				this.paused = true;
+				this.task.setPaused(true);
+				this.done = false;
+				this.task.setDone(false);
+				V_taskTableUtils.updateRequirements(this.task);
+			}
 		},
 		handleConstraintChange : function(event){
+			this.constraintTap = true;
 			switch(event.target.id){
 				case "constraintTap": this.task.getRequirement("constraint").setValue(!this.task.getRequirement("constraint").getValue()); break;
 				case "informationTap": this.task.getRequirement("information").setValue(!this.task.getRequirement("information").getValue()); break;
@@ -271,7 +316,6 @@ export default {
 				case "safetyTap": this.task.getRequirement("safety").setValue(!this.task.getRequirement("safety").getValue()); break;
 				case "spaceTap": this.task.getRequirement("space").setValue(!this.task.getRequirement("space").getValue()); break;
 			}
-			event.srcEvent.stopPropagation();
 			V_taskTableUtils.updateRequirements(this.task);
 		},
 		updateRequirements(){
@@ -286,10 +330,19 @@ export default {
 				this.safety = this.task.getRequirement("safety").getValue();
 				this.space = this.task.getRequirement("space").getValue();
 				this.ready = this.task.isReady();
-			}		
+				this.done = this.task.isDone();
+				this.paused = this.task.isPaused();
+			}
 
 			if(this.ready != previousReady){
 				V_taskTableUtils.updatePrevious(this.task);
+			}
+
+			if(!this.ready){
+				this.done = false;
+				this.task.setDone(false);
+				this.paused = false;
+				this.task.setPaused(false);
 			}
 
 		},

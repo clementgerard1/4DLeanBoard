@@ -82,6 +82,7 @@ async function init(){
 
 						if(hammer == null){
 							hammer = new Hammer(el);
+							hammer.domEvents = true;
 							TouchGesturesUtils.addHammer(el, hammer);
 						} 
 
@@ -108,6 +109,7 @@ async function init(){
 						let hammer = TouchGesturesUtils.getHammer(el);
 						if(hammer == null){
 							hammer = new Hammer(el);
+							hammer.domEvents = true;
 							TouchGesturesUtils.addHammer(el, hammer);
 						} 
 						
@@ -133,6 +135,7 @@ async function init(){
 						let hammer = TouchGesturesUtils.getHammer(el);
 						if(hammer == null){
 							hammer = new Hammer(el);
+							hammer.domEvents = true;
 							TouchGesturesUtils.addHammer(el, hammer);
 						} 
 						hammer.on("press", binding.value);

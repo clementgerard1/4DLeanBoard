@@ -12,7 +12,16 @@
 <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="24" font-weight="500" letter-spacing="0em"><tspan x="19" y="30.848">{{tid}}</tspan></text>
 
 <g v-show="isOpen" v-html="readytaskface"></g>
-<text v-show="isOpen && ready"fill="white" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="14" font-weight="500" letter-spacing="0em"><tspan x="162.435" y="170.328">7/7</tspan></text>
+
+
+<path v-show="isOpen" v-if="done" d="M163 164.718L169.857 173C169.982 167.855 175.31 157.601 178 156" stroke="white" stroke-width="5" stroke-linejoin="round"/>
+
+<g v-show="isOpen" v-else-if="paused">
+	<rect x="165" y="155" width="4" height="17" fill="white"/>
+	<rect x="174" y="155" width="4" height="17" fill="white"/>
+</g>
+
+<text v-show="isOpen" v-else-if="ready" fill="white" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="14" font-weight="500" letter-spacing="0em"><tspan x="162.435" y="170.328">7/7</tspan></text>
 
 <g v-show="isOpen">
 	<rect v-if="space" x="145" y="167" width="10" height="10" rx="5"  fill="black"/>

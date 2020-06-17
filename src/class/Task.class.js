@@ -292,7 +292,7 @@ class Task extends PlanningObject{
 	/** set the paused state of the task
 		@param {bool}
 	*/
-	setDone(bool){
+	setPaused(bool){
 		if(typeof bool != "undefined"){
 			this.#paused = bool;
 		}
@@ -311,6 +311,7 @@ class Task extends PlanningObject{
 	isPaused(){
 		return this.#paused;
 	}
+
 
 }
 export default Task;
