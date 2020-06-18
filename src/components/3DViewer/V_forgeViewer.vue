@@ -23,7 +23,6 @@ export default {
 			"objs" : {},
 			"geometryFlag" : false,
 			"treeFlag" : false,
-			"countt" : 0,
 		}
 	},
 	props:[
@@ -33,17 +32,23 @@ export default {
 		"model"
 	],
 	methods:{
+
+		//
 		clearSelected(){
 			for(let i in this.selected){
 				this.viewer.toggleSelect(this.selected[i]);
 			}
 			this.selected = [];
 		},
+
+		//
 		clearHighlighting(){
 			if(this.viewer != null){
 				this.clearSelected();
 			}
 		},
+
+		//
 		highlight(object4D){
 			this.clearSelected();
 			if(this.viewer != null){
@@ -86,19 +91,6 @@ export default {
 			}
 		},
 		map3DObjs() {
-			// tableau clé valeur avec en clé l'id de l'objet et en valeur l'objet
-			const map = this.map;
-			let rep = false;
-
-			const impl = this.viewer.impl;
-			//this.viewer.impl.matman().addMaterial("baseMaterial", baseMaterial, true);
-			//console.log(impl);
-			//console.log(impl.getMaterials()._materials);
-			//console.log(this.viewer.model.getFragmentList());
-			//console.log(this.viewer.model.getFragmentList().materialIdMap);
-
-      const that= this;
-
 			var mils = this.model.getMilestones();
 			for(let i in mils) {
 				var phs = mils[i].getPhases();
@@ -113,12 +105,13 @@ export default {
 									const r = parseInt(scssVariables[phs[j].getColorClass().replace("BG_", "").toLowerCase()].slice(1,3), 16) / 255;
 									const g = parseInt(scssVariables[phs[j].getColorClass().replace("BG_", "").toLowerCase()].slice(3,5), 16) / 255;
 									const b = parseInt(scssVariables[phs[j].getColorClass().replace("BG_", "").toLowerCase()].slice(5,7), 16) / 255;
-									const material = new THREE.MeshPhongMaterial({
+									const a = 0.75;
+									const material = new THREE.MeshBasicMaterial({
 									    reflectivity: 0.0,
 									    flatShading: true,
 									    transparent: true,
-									    opacity: 0.8,
-									    color: scssVariables[phs[j].getColorClass().replace("BG_", "").toLowerCase()]
+									    opacity: a,
+									    color: scssVariables[phs[j].getColorClass().replace("BG_", "").toLowerCase()],
 						      });
 									this.objs[o3D[l].getId()] = {
 										obj3D : o3D[l],
@@ -128,14 +121,17 @@ export default {
 											r : r,
 											g : g,
 											b : b,
-											a : 0.2
+											a : a
 										},
-										material : material
+										material : material,
+										initialMaterial : null,
+										colored : false,
+										state : "initial", // Pour plus tard
+										needUpdate : false,
 									}
-									// console.log("dbid", index, o3D[l].getName());
-									const materials = impl.getMaterials();
+									const materials = this.viewer.impl.getMaterials();
 									materials.addMaterial(Utils.getGuid(), material, true);
-									this.color3DObject(this.objs[o3D[l].getId()], this.objs[o3D[l].getId()].material);
+									this.color3DObject(this.objs[o3D[l].getId()]);
 								}
 							}
 						}
@@ -144,80 +140,43 @@ export default {
 			}
 
 		},
-		color3DObject(obj, baseMaterial){
-			//console.log(this.tree);
-			//setTimeout(()=>{
+		color3DObject(obj){
+			if(!obj.colored || obj.needUpdate){
 				this.tree.enumNodeChildren(obj.dbId,
 					(node) => { 
-						// console.log(obj.dbId, node);
-						// console.log(this.viewer.model.getFragmentList());
 						const newId = this.viewer.model.getFragmentList().fragments.fragId2dbId.indexOf(node);
-						//console.log(node, this.viewer.model.getFragmentList());
-						const materialId = this.viewer.model.getFragmentList().materialmap[baseMaterial.id];
-						//const count = this.tree.getChildCount(node);
-						//const proxy = this.viewer.impl.getRenderProxy(this.viewer.model, node);
-						//console.log(proxy);
-						//proxy.material = baseMaterial;
-						//console.log(this.countt++);
-						//console.log(obj.obj3D.getName(), obj.dbId, this.tree.getChildCount(node));
-						//if(typeof this.viewer.model.getFragmentList().getMaterial(node) != "undefined"){
-						//}
-						const id = node+1;
-						//console.log(baseMaterial.id, this.viewer.model.getFragmentList().materialmap);
-						this.viewer.model.getFragmentList().setMaterial(newId, baseMaterial);
-						//console.log(this.viewer.model.getFragmentList().getMaterial(node));
-						//console.log(obj.obj3D.getName(), obj.dbId, node, this.viewer.model.getFragmentList().materialids);
-						//console.log(this.viewer.model.getFragmentList().materialids.length);
-						//for(let m in this.viewer.model.getFragmentList().materialids){
-						//if(node < this.viewer.model.getFragmentList().materialids.length){
+						const materialId = this.viewer.model.getFragmentList().materialmap[obj.material.id];
+						this.viewer.model.getFragmentList().setMaterial(newId, obj.material);
 						if(newId != -1){
+							if(obj.initialMaterial == null) obj.initialMaterial = this.viewer.model.getFragmentList().materialids[newId];
 							this.viewer.model.getFragmentList().materialids[newId] = materialId;
+							obj.colored = true;
 						}
-						//}
-						//}
-						//console.log(obj.obj3D.getName(), obj.dbId, node, this.viewer.model.getFragmentList().materialids);
-						//if(typeof this.viewer.model.getFragmentList().getMaterial(node) != "undefined"){
-							//console.log("----");
-							//console.log(this.viewer.model.getFragmentList().getMaterial(node));
-							//console.log(this.viewer.model.getFragmentList().getMaterial(node).color["r"]);
-						//}
-
 						this.viewer.impl.invalidate(true);
-						// if(true || count == 0){
 
-						// }else{
-
-						// }
 					}, 
 				true);
-			//}, 500);
-			// this.viewer.impl.sceneUpdated(true);
-
-			//if(this.tree.getChildCount(node) == 0){
-				/*console.log("--");
-				console.log(obj.obj3D.getName());
-				console.log("1", this.viewer.model.getFragmentList().getMaterial(node));
-				this.viewer.model.getFragmentList().setMaterial(node, baseMaterial);
-				console.log(this.viewer.impl);
-				console.log("2", this.viewer.model.getFragmentList().getMaterial(node));
-				console.log("--");
-				//console.log(baseMaterial.opacity);
-				
-				const frag = this.viewer.impl.getRenderProxy(this.viewer.model, node);
-				if(frag.material != null){
-					frag.material = baseMaterial;
-				}
-				frag.material = baseMaterial;
-				console.log(frag.material);
-				console.log(frag.material);
-				for(let f in Object.keys(frag)){
-					console.log(Object.keys(frag)[f], frag[Object.keys(frag)[f]]);
-				}
-				this.viewer.setThemingColor(node, new THREE.Vector4(obj.color.r, obj.color.g, obj.color.b, obj.color.a));
-				this.viewer.impl.visibilityManager.show(obj.dbId);*/
-				
-			//}
+			}
 		},
+		restore3DObject(obj){
+			if(obj.colored || obj.needUpdate){
+				this.tree.enumNodeChildren(obj.dbId,
+					(node) => { 
+						const newId = this.viewer.model.getFragmentList().fragments.fragId2dbId.indexOf(node);
+						const materialId = this.viewer.model.getFragmentList().materialmap[obj.initialMaterial.id];
+						this.viewer.model.getFragmentList().setMaterial(newId, obj.material);
+						if(newId != -1){
+							this.viewer.model.getFragmentList().materialids[newId] = materialId;
+							obj.colored = false;
+						}
+						this.viewer.impl.invalidate(true);
+
+					}, 
+				true);
+			}
+		},
+
+		//
 		getPropertie(res) {
 			let foundGuid = false;
 			for(let i in res.properties) {
@@ -237,27 +196,20 @@ export default {
 				}
 			}
 		},
+
+		//
 		highlightTask() {
 
 			var selection = this.viewer.getSelection();
-			console.log(selection);
 			var interId = [];
 
 			for(let i in selection) {
 				interId.push(this.getUniqueId(selection[i]));
 				this.viewer.getProperties(selection[i], this.getPropertie);
 			}
-			/*var uniqId = [];
-			for(let j in interId) {
-				console.log(interId[j]);
-				for(let k in this.tree.nodeAccess.nameSuffixes) {
-					if(k == interId[j]) {
-						uniqId.push(this.tree.nodeAccess.nameSuffixes[k]);
-					}
-				}
-			}
-			console.log(uniqId);*/
 		},
+
+		//
 		selectionGetProperties() {
 
 			function propCallback(data) {
@@ -266,9 +218,6 @@ export default {
 					console.log("no properties");
 					return;
 				}
-				// affiche les propriétés de l'objet
-				// pour le changement de couleur les propriétés suivante nous intéressent
-				// data.properties[52-63 + 65] et éventuellement la propriété 64.
 			}
 
 			function propErrorCallback(data) {
@@ -315,31 +264,18 @@ export default {
 			const opt = {
 			   profileSettings: {
 			       ambientShadows: false
-			   },
-			   memory: {
-            limit:  1000 // in MB
-        }
+			   }
 			}
 
 			this.viewer = new Autodesk.Viewing.GuiViewer3D(domContainer, opt);
-			//console.log(this.viewer);
 
 			this.viewer.initialize();
 			this.viewer.loadModel(doc.getViewablePath(selectedItem));
 
-			// this.viewer.impl.setSelectionColor(new THREE.Color(1,0,0));
-			// activés de base (mais importante à reverse):
-
 			// important selon moi
 			this.viewer.setReverseZoomDirection(true);
 
-			// this.viewer.setBackgroundColor(255,255,0,0,0,0);
 			this.viewer.setLightPreset(12);
-
-			/*this.getAllLeafComponents(this.viewer, function (dbIds) {
-				console.log('Found ' + dbIds.length + ' leaf nodes');
-				console.log(dbIds);
-			});*/
 
 			this.viewer.addEventListener(Autodesk.Viewing.OBJECT_TREE_CREATED_EVENT, () => this.fireLoadEvent("tree"));
 			this.viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, () => this.fireLoadEvent("geometry"));
@@ -351,48 +287,27 @@ export default {
 			}else{
 				this.treeFlag = true;
 			}
-			if(this.treeFlag && this.geometryFlag) this.onGeometryLoaded();
+			if(this.treeFlag && this.geometryFlag) this.onLoaded();
 
 		},
-		onGeometryLoaded(that){
+		onLoaded(that){
 			this.tree = this.viewer.model.getInstanceTree();
-			this.map = new Map();
 			this.map3DObjs();
 		},
 		onEnvInitialized(that){
 			Autodesk.Viewing.Document.load(
-		        "urn:" + that.manifest.urn,
-		        function(doc) {
-		          that.onDocumentLoaded (doc, that)
-		        },
-		        function (errCode){
-		          that.onLoadError (errCode, that)
-		        });
+        "urn:" + that.manifest.urn,
+        function(doc) {
+          that.onDocumentLoaded (doc, that)
+        },
+        function (errCode){
+          that.onLoadError (errCode, that)
+        }
+      );
 		},
 		onLoadError(errCode, that){
 	      console.log('Error loading document: ' + errCode)
-		}/* ,
-		getAllLeafComponents(viewer, callback) {
-			var cbCount = 0; // count pending callbacks
-			var components = []; // store the results
-			var tree; // the instance tree
-
-			function getLeafComponentsRec(parent) {
-				cbCount++;
-				if (tree.getChildCount(parent) != 0) {
-					tree.enumNodeChildren(parent, function (children) {
-						getLeafComponentsRec(children);
-					}, false);
-				} else {
-					components.push(parent);
-				}
-				if (--cbCount == 0) callback(components);
-			}
-			viewer.getObjectTree(function (objectTree) {
-				tree = objectTree;
-				var allLeafComponents = getLeafComponentsRec(tree.getRootId());
-			});
-		}*/
+		}
 	},
 	created : function(){
 		V_4DUtils.setForgeViewer(this);
