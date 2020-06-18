@@ -102,6 +102,9 @@ $phaseHeight : 30px;
 $playerHeight : 188px;
 $playerDateWidth : 38px;
 
+/* 3D */
+$select3DColor : $greenbluish_light;
+
 :export{
 	taskSize : $taskSize;
 	taskHeightClosedPourcent : $taskHeightClosedPourcent;
@@ -122,4 +125,5 @@ $playerDateWidth : 38px;
 	greenishlight_transparent : $greenishlight_transparent;
 	black50 : $black50;
 	redish : $redish;
+	select3DColor : $select3DColor;
 }

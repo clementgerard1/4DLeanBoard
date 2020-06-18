@@ -68,7 +68,7 @@ async function init(){
 			//Model Loaded and Timeline created
 			timeline = tl;
 			model = timeline.getModel();
-			playerInit = 0;
+			playerInit = 7;
 			const phase = timeline.getModel().getMilestones()[0].getPhases()[0];
 		  	duration = model.getDuration();
 

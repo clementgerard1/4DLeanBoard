@@ -23,6 +23,7 @@ export default {
 			"objs" : {},
 			"geometryFlag" : false,
 			"treeFlag" : false,
+			"selectedMaterial" : null,
 		}
 	},
 	props:[
@@ -33,62 +34,65 @@ export default {
 	],
 	methods:{
 
-		//
-		clearSelected(){
-			for(let i in this.selected){
-				this.viewer.toggleSelect(this.selected[i]);
+		getObjByDbId(dbId){
+			const toReturn = [];
+			for(let o in this.objs){
+				if(this.objs[o].dbId == dbId){
+					toReturn.push(this.objs[o]);
+				}
 			}
-			this.selected = [];
+			return toReturn;
 		},
-
 		//
 		clearHighlighting(){
 			if(this.viewer != null){
-				this.clearSelected();
+				for(let i in this.selected){
+					this.restore3DObject(this.selected[i]);
+					delete this.selected[i];
+				}	
 			}
+			this.selectedTemp = [];
 		},
 
 		//
 		highlight(object4D){
-			this.clearSelected();
+			this.clearHighlighting();
 			if(this.viewer != null){
 				// ^ peut être ajouter la couleur qu'on veut mettre à l'object3D en paramètre
 				// sous la forme d'un vecteur4 contenant (r, g, b, a)
 
+
 				const objects3D = object4D.getObjects3D();
 				for(let o in objects3D){
 					const object3D = objects3D[o];
-
-					// indexFromId est la clé permettant de trouver l'id pour illuminer l'élément correspondant
 					for(let s in this.tree.nodeAccess.nameSuffixes){
 						if(this.tree.nodeAccess.nameSuffixes[s] == object3D.getUniqId()){
 							const index = this.getDbId(s);
 							if(!this.selected.includes(index)){
-								this.selected.push(index);
-								this.viewer.toggleSelect(index);
-								this.viewer.setThemingColor(index, null);
-								const color = new THREE.Vector4(0.0, 1.0, 0.0, 0.5);
-								this.viewer.setThemingColor(index, color, this.viewer.model);
+								const obj = this.objs[object3D.getId()];
+								this.selected.push(obj);
+								this.color3DObject(obj, true);
 								this.viewer.fitToView(index[0], this.viewer.model);
 							}
 						}
 					}
 
 					// sélectionne si pas sélectionner, sinon désélectionne
-					this.selectionGetProperties();
+					//this.selectionGetProperties();
 					// sensé illuminer un objet avec la couleur (r,g,b,op) passée en paramètre
 
 					//const prop = this.viewer.model.getProperties(index3, this.propertiesReturn, this.propertiesError);
 
 					// dessous les objets principaux pour le changement de couleurs par themingColor
-					const fragList = this.viewer.model.getFragmentList();
-					const colorMap = fragList.db2ThemingColor;
+					//const fragList = this.viewer.model.getFragmentList();
+					//const colorMap = fragList.db2ThemingColor;
 
 				}
 				
 				//repositionne la caméra
 				// fonction pour cacher les objets passer en paramètre (ids) => hide()
 			}
+
 		},
 		map3DObjs() {
 			var mils = this.model.getMilestones();
@@ -112,7 +116,7 @@ export default {
 									    transparent: true,
 									    opacity: a,
 									    color: scssVariables[phs[j].getColorClass().replace("BG_", "").toLowerCase()],
-						      });
+						      		});
 									this.objs[o3D[l].getId()] = {
 										obj3D : o3D[l],
 										guId : o3D[l].getIFCId(),
@@ -124,14 +128,14 @@ export default {
 											a : a
 										},
 										material : material,
-										initialMaterial : null,
+										initialMaterials : {},
 										colored : false,
 										state : "initial", // Pour plus tard
 										needUpdate : false,
 									}
 									const materials = this.viewer.impl.getMaterials();
 									materials.addMaterial(Utils.getGuid(), material, true);
-									this.color3DObject(this.objs[o3D[l].getId()]);
+									//this.color3DObject(this.objs[o3D[l].getId()]);
 								}
 							}
 						}
@@ -140,15 +144,25 @@ export default {
 			}
 
 		},
-		color3DObject(obj){
+		color3DObject(obj, selectMode = false){
+
 			if(!obj.colored || obj.needUpdate){
 				this.tree.enumNodeChildren(obj.dbId,
 					(node) => { 
 						const newId = this.viewer.model.getFragmentList().fragments.fragId2dbId.indexOf(node);
-						const materialId = this.viewer.model.getFragmentList().materialmap[obj.material.id];
-						this.viewer.model.getFragmentList().setMaterial(newId, obj.material);
+						if(newId != -1 && !Object.keys(obj.initialMaterials).includes(newId)){
+							obj.initialMaterials[newId] = this.viewer.model.getFragmentList().getMaterial(newId);
+						} 
+
+						let materialId = null;
+						if(selectMode){
+							materialId = this.viewer.model.getFragmentList().materialmap[this.selectedMaterial.id];
+							this.viewer.model.getFragmentList().setMaterial(newId, this.selectedMaterial);
+						}else{
+							materialId = this.viewer.model.getFragmentList().materialmap[obj.material.id];
+							this.viewer.model.getFragmentList().setMaterial(newId, obj.material);
+						}
 						if(newId != -1){
-							if(obj.initialMaterial == null) obj.initialMaterial = this.viewer.model.getFragmentList().materialids[newId];
 							this.viewer.model.getFragmentList().materialids[newId] = materialId;
 							obj.colored = true;
 						}
@@ -161,12 +175,17 @@ export default {
 		restore3DObject(obj){
 			if(obj.colored || obj.needUpdate){
 				this.tree.enumNodeChildren(obj.dbId,
-					(node) => { 
+					(node) => {
+
 						const newId = this.viewer.model.getFragmentList().fragments.fragId2dbId.indexOf(node);
-						const materialId = this.viewer.model.getFragmentList().materialmap[obj.initialMaterial.id];
-						this.viewer.model.getFragmentList().setMaterial(newId, obj.material);
 						if(newId != -1){
+							console.log("--")
+							const materialId = this.viewer.model.getFragmentList().materialmap[ obj.initialMaterials[newId].id ];
+							console.log(newId, obj.initialMaterials[newId], materialId);
+							console.log(this.viewer.model.getFragmentList());
+							this.viewer.model.getFragmentList().setMaterial(newId, obj.initialMaterials[newId]);
 							this.viewer.model.getFragmentList().materialids[newId] = materialId;
+							console.log(this.viewer.model.getFragmentList().materialids[newId]);
 							obj.colored = false;
 						}
 						this.viewer.impl.invalidate(true);
@@ -177,7 +196,7 @@ export default {
 		},
 
 		//
-		getPropertie(res) {
+		getProperty(res) {
 			let foundGuid = false;
 			for(let i in res.properties) {
 				if(this.map.has(res.properties[i].displayValue)) {
@@ -191,7 +210,7 @@ export default {
 			if(!foundGuid) {
 				for(let i in res.properties) {
 					if(res.properties[i].displayName == "parent") {
-						this.viewer.getProperties(res.properties[i].displayValue, this.getPropertie);
+						this.viewer.getProperties(res.properties[i].displayValue, this.getProperty);
 					}
 				}
 			}
@@ -200,12 +219,16 @@ export default {
 		//
 		highlightTask() {
 
-			var selection = this.viewer.getSelection();
-			var interId = [];
-
-			for(let i in selection) {
-				interId.push(this.getUniqueId(selection[i]));
-				this.viewer.getProperties(selection[i], this.getPropertie);
+			const selection = this.viewer.getSelection();
+			this.viewer.clearSelection();
+			
+			for(let s in selection){
+				const fragId = this.viewer.model.getFragmentList().fragments.fragId2dbId[selection[s]];
+				const objs = this.getObjByDbId(fragId);
+				for(let o in objs){
+					this.color3DObject(objs[o], true);
+					V_socketUtils.highlightTask(objs[o].obj3D.getParent().getTask());
+				}
 			}
 		},
 
@@ -292,6 +315,15 @@ export default {
 		},
 		onLoaded(that){
 			this.tree = this.viewer.model.getInstanceTree();
+			this.selectedMaterial = new THREE.MeshBasicMaterial({
+			    reflectivity: 0.0,
+			    flatShading: true,
+			    transparent: true,
+			    opacity: 0.8,
+			    color: scssVariables["select3DColor"],
+	  		});
+			const materials = this.viewer.impl.getMaterials();
+	  		materials.addMaterial(Utils.getGuid(), this.selectedMaterial, true);
 			this.map3DObjs();
 		},
 		onEnvInitialized(that){
