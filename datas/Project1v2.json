@@ -589,7 +589,49 @@
                   }
                ]
             }
-         }
+         },
+         "event" : false,
+         "eventDate" : null
+      },
+      "MilestoneID2": {
+         "Name": "Milieu",
+         "Requirements": {
+            "requirement1": "LandRightsDelivered"
+         },
+         "phases": {
+         },
+         "event" : true,
+         "eventDate" : "11/02/2021"
+      },
+      "MilestoneID3": {
+         "Name": "Milieu-fin",
+         "Requirements": {
+            "requirement1": "LandRightsDelivered"
+         },
+         "phases": {
+         },
+         "event" : true,
+         "eventDate" : "01/03/2021"
+      },
+      "MilestoneID4": {
+         "Name": "Fin",
+         "Requirements": {
+            "requirement1": "LandRightsDelivered"
+         },
+         "phases": {
+         },
+         "event" : true,
+         "eventDate" : "20/03/2021"
+      },
+      "MilestoneID5": {
+         "Name": "Start",
+         "Requirements": {
+            "requirement1": "LandRightsDelivered"
+         },
+         "phases": {
+         },
+         "event" : true,
+         "eventDate" : "01/02/2021"
       }
    },
    "taskteams" : {
