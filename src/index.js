@@ -145,6 +145,28 @@ async function init(){
 				}
 			});
 
+			Vue.directive("pan", {
+				bind: function(el, binding) 
+				{
+					if(el.getAttribute("hammerid") == null){
+						el.setAttribute("hammerid", Utils.getId("hammer"));
+					}
+					if (typeof binding.value === "function") {
+						let hammer = TouchGesturesUtils.getHammer(el);
+						if(hammer == null){
+							hammer = new Hammer(el);
+							TouchGesturesUtils.addHammer(el, hammer);
+						} 
+		
+						hammer.on("panstart", binding.value);
+						hammer.on("panmove", binding.value);
+						hammer.on("panend", binding.value);
+
+						TouchGesturesUtils.updateHammer(el);
+					}
+				}
+			});
+
 			//Création du viewer
 			let clientId = Config.autoDeskForgeSettings[Config.autoDeskAccount].clientId;
 			let clientSecret = Config.autoDeskForgeSettings[Config.autoDeskAccount].clientSecret;

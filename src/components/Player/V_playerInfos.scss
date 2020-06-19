@@ -1,0 +1,32 @@
+@use "../SixWeekView/assets/variables" as v;
+
+.svgPlayer{
+	svg{
+		height : 100%;
+		width : 100%;
+
+		.playerBackground{
+			height : 6%;
+			width : calc(100% + 2px);
+			x : -1;
+			y : 80%;
+			stroke: v.$blackish;
+			fill: "rgba(0,0,0,0)";
+		}
+
+		.playerBackgroundFill{
+			height : 6%;
+			width : 0px;
+			x : -1;
+			y : 80%;
+			stroke: v.$blackish;
+			fill: v.$blackish;
+		}
+
+		.playerButton{
+			fill: v.$greenbluish_light;
+			cy : 83%;
+		}
+
+	}
+}

@@ -48,7 +48,6 @@ export default {
 		getObjByNodeId(nodeId){
 			const toReturn = [];
 			for(let o in this.objs){
-				console.log(this.objs[o].nodes, nodeId);
 				if(this.objs[o].nodes.includes(nodeId)) toReturn.push(this.objs[o]);
 			}
 			return toReturn;
@@ -242,7 +241,6 @@ export default {
 			
 			for(let s in selection){
 				const objs = this.getObjByNodeId(selection[s]);
-				console.log(selection[s], objs);
 				for(let o in objs){
 					this.color3DObject(objs[o], true);
 					this.selected.push(objs[o]);

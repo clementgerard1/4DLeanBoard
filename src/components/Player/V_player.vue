@@ -1,10 +1,12 @@
 import "./V_player.scss";
 import V_socketUtils from "../Utils/V_socketUtils.class.js";
 import V_timelinePlayer from "./V_timelinePlayer.vue";
+import V_playerInfos from "./V_playerInfos.vue";
 
 export default {
 	components:{
 		timelinePlayer : V_timelinePlayer,
+		"playerinfos" : V_playerInfos
 	},
 	data : function(){
 		return {
@@ -38,8 +40,8 @@ export default {
 			const date = new Date(this.model.getStartDate().valueOf() + 864E5 * this.model.getDuration());
 			return date.getDay() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
 		},
-		_duration  : function(){
-			return this.duration;
+		nbweek  : function(){
+			return Math.ceil(this.duration / 7);
 		},
 		_playerinit : function(){
 			return this.playerinit;
@@ -47,10 +49,13 @@ export default {
 	},
 	template : `
 	<div class="player">
-		<div class="date"><p class="r90">{{startdate}}</p></div>
+		<div class="backgroundPlayer">
+			<div class="date"><p class="r90">{{startdate}}</p></div>
 
-		<!-- <input id="taskTablePlayer" min=0 v-bind:max="maximum" type="number" v-model.number="time"/> -->
-		<timelinePlayer v-bind:playerinit="_playerinit" v-bind:duration="_duration" id="timelinePlayer"></timelinePlayer>
-		<div class="date" ><p class="r90">{{enddate}}</p></div>
+			<timelinePlayer v-bind:playerinit="_playerinit" v-bind:nbweek="nbweek" id="timelinePlayer"></timelinePlayer>
+			<div class="date" ><p class="r90">{{enddate}}</p></div>
+		</div>
+		<playerinfos v-bind:playerinit="_playerinit" class="svgPlayer" v-bind:nbweek="nbweek"></playerinfos>
+
 	</div>`,
 }

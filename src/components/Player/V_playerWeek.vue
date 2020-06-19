@@ -1,6 +1,4 @@
 import "./V_playerWeek.scss";
-import V_socketUtils from "../Utils/V_socketUtils.class.js";
-import V_timelineUtils from "../Utils/V_timelineUtils.class.js";
 import V_playerWeek from "./V_playerWeek.vue";
 
 export default {
