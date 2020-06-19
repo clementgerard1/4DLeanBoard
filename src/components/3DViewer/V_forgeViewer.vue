@@ -307,10 +307,12 @@ export default {
 			   }
 			}
 
-			this.viewer = new Autodesk.Viewing.GuiViewer3D(domContainer, opt);
+			this.viewer = new Autodesk.Viewing.Viewer3D(domContainer, opt);
 
 			this.viewer.initialize();
 			this.viewer.loadModel(doc.getViewablePath(selectedItem));
+			this.viewer.loadExtension('Autodesk.ViewCubeUi');
+			this.viewer.setQualityLevel(false, false);
 
 			// important selon moi
 			this.viewer.setReverseZoomDirection(true);

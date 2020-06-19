@@ -13,18 +13,28 @@ test('Milestone constructor()', () =>{
 	const milestone = new Milestone();
 	expect(milestone.getId()).toBe(0);
 	expect(milestone.getName()).toBe("");
+	expect(milestone.isEvent()).toBe(false);
 });
 
-test('Milestone constructor(name)', () =>{
+test('Milestone constructor()', () =>{
 	const milestone = new Milestone("hello");
 	expect(milestone.getId()).toBe(0);
 	expect(milestone.getName()).toBe("hello");
+	expect(milestone.isEvent()).toBe(false);
 });
 
-test('Milestone constructor(id, name)', () =>{
-	const milestone = new Milestone("hello", 15);
+test('Milestone constructor(name, event)', () =>{
+	const milestone = new Milestone("hello", true);
+	expect(milestone.getId()).toBe(0);
+	expect(milestone.isEvent()).toBe(true);
+	expect(milestone.getName()).toBe("hello");
+});
+
+test('Milestone constructor(name, event, id)', () =>{
+	const milestone = new Milestone("hello", true, 15);
 	expect(milestone.getId()).toBe(15);
 	expect(milestone.getName()).toBe("hello");
+	expect(milestone.isEvent()).toBe(true);
 });
 
 test('addPhase()', () => {

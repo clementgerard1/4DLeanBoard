@@ -6,6 +6,7 @@ import PlanningObject from "./interfaces/PlanningObject.class";
 class Milestone extends PlanningObject{
 
 	#phases;
+	#event;
 
 	/**
 		
@@ -16,11 +17,21 @@ class Milestone extends PlanningObject{
  		@constructs 
 
 		@param {string} [name=""] Name of milestone.
+		@param {bool} [event=""] true if milestone is an event / false if this is a container for phases.
 		@param {int} [id=automaticaly generated] id of the milestone
 	*/
-	constructor(name = "", id = Utils.getId("milestone")){
+	constructor(name = "", event = false, id = Utils.getId("milestone")){
 		super(name, id);
 		this.#phases = {};
+		this.#event = event;
+	}
+
+	/**
+		return true if the milestone is an event / false if this is a container for phases
+		@returns bool
+	*/
+	isEvent(){
+		return this.#event;
 	}
 
 	/**

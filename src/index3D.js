@@ -3,6 +3,7 @@ import Utils from "./class/Utils.class.js";
 import Loader from "./class/Loader.class.js";
 import Timeline from "./class/Timeline.class.js";
 import V_player from "./components/Player/V_player.vue";
+import V_svgDefs from "./components/SixWeekView/V_SvgDefs.vue";
 import V_forgeViewer from "./components/3DViewer/V_forgeViewer.vue";
 import openSocket from "socket.io-client";
 
@@ -170,6 +171,7 @@ async function init(){
 		components : {
 			forgeviewer : V_forgeViewer,
 			player : V_player,
+			svgdefs : V_svgDefs,
 		},
 		data:{
 			playerinit : playerInit,
@@ -188,6 +190,7 @@ async function init(){
 	 				<player id="mainPlayer" v-bind:duration="duration" v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit"></player>
 	 			</div>
 	 		</div>
+	 		<svgdefs style="width : 0px; height: 0px;"></svgdefs>
 	 	</div>
  		`
 	});

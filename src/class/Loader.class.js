@@ -129,90 +129,101 @@ class Loader{
 
 			let MstartDate = null;
 			let MendDate = null;
-			const phases = milestones[m]["phases"];
-			for(let p in phases){
-				const phase = new Phase(phases[p]["Name"]);
-				phase.setColorClass(phases[p]["color"]);
-				if(typeof contractors[phases[p]["contractor"]] == "undefined") contractors[phases[p]["contractor"]] = new Contractor(phases[p]["contractor"]);
-				phase.setContractor(contractors[phases[p]["contractor"]]);
-				milestone.addPhase(phase);
 
-				const tasks = phases[p]["tasks"];
-				let PstartDate = null;
-				let PendDate = null;
-				for(let t in tasks){
-					if(tasks[t] != null){
-						const task = new Task(tasks[t]["Name"], tasks[t]["TID"]);
-						const object4D = new Object4D(tasks[t]["4DID"], tasks[t]["4DID"]);
-						task.setObject4D(object4D);
-						object4D.setTask(task);
-						//task.setDuration(tasks[t]["Duration"]);
-						const startDate = new Date(tasks[t]["Start"].slice(6, 10), parseInt(tasks[t]["Start"].slice(3, 5)) - 1, tasks[t]["Start"].slice(0, 2));
-						task.setStartDate(startDate);
-						const endDate = new Date(tasks[t]["End"].slice(6, 10), parseInt(tasks[t]["End"].slice(3, 5)) - 1, tasks[t]["End"].slice(0, 2));
-						task.setEndDate(endDate);
+				
+			
+			if(milestones[m]["event"]){
+				const date = new Date(milestones[m]["eventDate"].slice(6, 10), parseInt(milestones[m]["eventDate"].slice(3, 5)) - 1, milestones[m]["eventDate"].slice(0, 2));
+				milestone.setStartDate(date);	
+				milestone.setEndDate(date);
+			}else{
+				const phases = milestones[m]["phases"];
+				for(let p in phases){
+					const phase = new Phase(phases[p]["Name"]);
+					phase.setColorClass(phases[p]["color"]);
+					if(typeof contractors[phases[p]["contractor"]] == "undefined") contractors[phases[p]["contractor"]] = new Contractor(phases[p]["contractor"]);
+					phase.setContractor(contractors[phases[p]["contractor"]]);
+					milestone.addPhase(phase);
 
-						if(PstartDate == null || startDate < PstartDate) PstartDate = startDate;
-						if(PendDate == null || endDate > PendDate) PendDate = endDate;
+					const tasks = phases[p]["tasks"];
+					let PstartDate = null;
+					let PendDate = null;
+					for(let t in tasks){
+						if(tasks[t] != null){
+							const task = new Task(tasks[t]["Name"], tasks[t]["TID"]);
+							const object4D = new Object4D(tasks[t]["4DID"], tasks[t]["4DID"]);
+							task.setObject4D(object4D);
+							object4D.setTask(task);
+							//task.setDuration(tasks[t]["Duration"]);
+							const startDate = new Date(tasks[t]["Start"].slice(6, 10), parseInt(tasks[t]["Start"].slice(3, 5)) - 1, tasks[t]["Start"].slice(0, 2));
+							task.setStartDate(startDate);
+							const endDate = new Date(tasks[t]["End"].slice(6, 10), parseInt(tasks[t]["End"].slice(3, 5)) - 1, tasks[t]["End"].slice(0, 2));
+							task.setEndDate(endDate);
 
-						if(typeof taskTeams[tasks[t]["Team"]] == "undefined") taskTeams[tasks[t]["Team"]] = new TaskTeam(tasks[t]["Team"]);
-						task.setTaskTeam(taskTeams[tasks[t]["Team"]]);
-						taskTeams[tasks[t]["Team"]].setWorkers(tasks[t]["Workers"]);
-						if(typeof zones[tasks[t]["Zone"]] == "undefined") zones[tasks[t]["Zone"]] = new Zone(tasks[t]["Zone"]);
-						task.setZone(zones[tasks[t]["Zone"]]);
+							if(PstartDate == null || startDate < PstartDate) PstartDate = startDate;
+							if(PendDate == null || endDate > PendDate) PendDate = endDate;
 
-						//Requirements
-						const constraint = new Requirement("constraint");
-						constraint.setValue(tasks[t]["Requirements"]["Constraint"]);
-						const information = new Requirement("information");
-						information.setValue(tasks[t]["Requirements"]["Information"]);
-						const materials = new Requirement("materials");
-						materials.setValue(tasks[t]["Requirements"]["Materials"]);
-						const manpower = new Requirement("manpower");
-						manpower.setValue(tasks[t]["Requirements"]["Manpower"]);
-						const equipement = new Requirement("equipement");
-						equipement.setValue(tasks[t]["Requirements"]["Equipement"]);
-						const safety = new Requirement("safety");
-						safety.setValue(tasks[t]["Requirements"]["Safety"]);
-						const space = new Requirement("space");
-						space.setValue(tasks[t]["Requirements"]["Space"]);
-						task.addRequirement("constraint", constraint);
-						task.addRequirement("information", information);
-						task.addRequirement("materials", materials);
-						task.addRequirement("manpower", manpower);
-						task.addRequirement("equipement", equipement);
-						task.addRequirement("safety", safety);
-						task.addRequirement("space", space);
+							if(typeof taskTeams[tasks[t]["Team"]] == "undefined") taskTeams[tasks[t]["Team"]] = new TaskTeam(tasks[t]["Team"]);
+							task.setTaskTeam(taskTeams[tasks[t]["Team"]]);
+							taskTeams[tasks[t]["Team"]].setWorkers(tasks[t]["Workers"]);
+							if(typeof zones[tasks[t]["Zone"]] == "undefined") zones[tasks[t]["Zone"]] = new Zone(tasks[t]["Zone"]);
+							task.setZone(zones[tasks[t]["Zone"]]);
 
-						for(let o in tasks[t]["GUID"]){
-							const object3D = new Object3D(obj3Ds[tasks[t]["GUID"][o]].name, parseInt(obj3Ds[tasks[t]["GUID"][o]].id), tasks[t]["GUID"][o]);
-							object4D.addObject3D(object3D);
-							object3D.setParent(object4D);
+							//Requirements
+							const constraint = new Requirement("constraint");
+							constraint.setValue(tasks[t]["Requirements"]["Constraint"]);
+							const information = new Requirement("information");
+							information.setValue(tasks[t]["Requirements"]["Information"]);
+							const materials = new Requirement("materials");
+							materials.setValue(tasks[t]["Requirements"]["Materials"]);
+							const manpower = new Requirement("manpower");
+							manpower.setValue(tasks[t]["Requirements"]["Manpower"]);
+							const equipement = new Requirement("equipement");
+							equipement.setValue(tasks[t]["Requirements"]["Equipement"]);
+							const safety = new Requirement("safety");
+							safety.setValue(tasks[t]["Requirements"]["Safety"]);
+							const space = new Requirement("space");
+							space.setValue(tasks[t]["Requirements"]["Space"]);
+							task.addRequirement("constraint", constraint);
+							task.addRequirement("information", information);
+							task.addRequirement("materials", materials);
+							task.addRequirement("manpower", manpower);
+							task.addRequirement("equipement", equipement);
+							task.addRequirement("safety", safety);
+							task.addRequirement("space", space);
+
+							for(let o in tasks[t]["GUID"]){
+								const object3D = new Object3D(obj3Ds[tasks[t]["GUID"][o]].name, parseInt(obj3Ds[tasks[t]["GUID"][o]].id), tasks[t]["GUID"][o]);
+								object4D.addObject3D(object3D);
+								object3D.setParent(object4D);
+							}
+
+							phase.addTask(task);
+							task.setParentPhase(phase);
+							phase.addObject4D(object4D);
+							object4D.setPhase(phase);
+							tasksForPreviousNext[task.getId()] = {
+								"previous" : tasks[t]["Previous"],
+								"next" : tasks[t]["Next"]
+							}
+							tasksCollection[task.getId()] = task;
 						}
 
-						phase.addTask(task);
-						task.setParentPhase(phase);
-						phase.addObject4D(object4D);
-						object4D.setPhase(phase);
-						tasksForPreviousNext[task.getId()] = {
-							"previous" : tasks[t]["Previous"],
-							"next" : tasks[t]["Next"]
-						}
-						tasksCollection[task.getId()] = task;
 					}
+
+					phase.setStartDate(PstartDate);
+					phase.setEndDate(PendDate);
+
+					if(MstartDate == null || PstartDate < MstartDate) MstartDate = PstartDate;
+					if(MendDate == null || PendDate > MendDate) MendDate = PendDate;
 
 				}
 
-				phase.setStartDate(PstartDate);
-				phase.setEndDate(PendDate);
 
-				if(MstartDate == null || PstartDate < MstartDate) MstartDate = PstartDate;
-				if(MendDate == null || PendDate > MendDate) MendDate = PendDate;
-
+				milestone.setStartDate(MstartDate);
+				milestone.setEndDate(MendDate);
 			}
 
-			milestone.setStartDate(MstartDate);
-			milestone.setEndDate(MendDate);
 
 		}
 		const phases = model.getPhases();
