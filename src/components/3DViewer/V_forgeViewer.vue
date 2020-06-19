@@ -24,6 +24,7 @@ export default {
 			"geometryFlag" : false,
 			"treeFlag" : false,
 			"selectedMaterial" : null,
+			"initialMaterials" : [],
 		}
 	},
 	props:[
@@ -149,9 +150,11 @@ export default {
 			if(!obj.colored || obj.needUpdate){
 				this.tree.enumNodeChildren(obj.dbId,
 					(node) => { 
+						const count = this.tree.getChildCount(node);
 						const newId = this.viewer.model.getFragmentList().fragments.fragId2dbId.indexOf(node);
-						if(newId != -1 && !Object.keys(obj.initialMaterials).includes(newId)){
-							obj.initialMaterials[newId] = this.viewer.model.getFragmentList().getMaterial(newId);
+						if(newId != -1 && typeof this.initialMaterials[newId] == "undefined"){
+							this.initialMaterials[newId] = this.viewer.model.getFragmentList().getMaterial(newId);
+							console.log(obj.initialMaterials[newId], this.initialMaterials[newId].id, count, newId );
 						} 
 
 						let materialId = null;
@@ -179,13 +182,9 @@ export default {
 
 						const newId = this.viewer.model.getFragmentList().fragments.fragId2dbId.indexOf(node);
 						if(newId != -1){
-							console.log("--")
-							const materialId = this.viewer.model.getFragmentList().materialmap[ obj.initialMaterials[newId].id ];
-							console.log(newId, obj.initialMaterials[newId], materialId);
-							console.log(this.viewer.model.getFragmentList());
-							this.viewer.model.getFragmentList().setMaterial(newId, obj.initialMaterials[newId]);
+							const materialId = this.viewer.model.getFragmentList().materialmap[ this.initialMaterials[newId].id ];
+							this.viewer.model.getFragmentList().setMaterial(newId, this.initialMaterials[newId]);
 							this.viewer.model.getFragmentList().materialids[newId] = materialId;
-							console.log(this.viewer.model.getFragmentList().materialids[newId]);
 							obj.colored = false;
 						}
 						this.viewer.impl.invalidate(true);

@@ -2,7 +2,7 @@ class V_timelineUtils{
 
 	static time = null;
 	static listeners = {
-		"time" : {},
+		"time" : [],
 	};
 
 	/**
@@ -14,10 +14,11 @@ class V_timelineUtils{
 	*/
 	static addListener(event, obj, func){
 		if(typeof this.listeners[event] != "undefined"){
-			this.listeners[event][obj] = func;
+			this.listeners[event][obj._uid] = func;
 		}else{
 			console.error("event " + event + " unknowed");
 		}
+		console.log("obj", this.listeners);
 	}	
 
 	/**
