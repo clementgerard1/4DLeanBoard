@@ -120,12 +120,12 @@
                         "2XqLaPqlL6pRaKaKWyMH2W"
                      ],
                      "Requirements" : {
-                        "Constraint" : false,
+                        "Constraint" : true,
                         "Information" : true,
-                        "Materials" : false,
+                        "Materials" : true,
                         "Manpower" : true,
                         "Equipement" : true,
-                        "Safety" : false,
+                        "Safety" : true,
                         "Space" : true
                      },
                      "Name": "Ground slab pouring",
@@ -432,32 +432,6 @@
                   null,
                   null,
                   {
-                     "TID": 201,
-                     "4DID": 201,
-                     "GUID" : [
-                        "2XqLaPqlL6pRaKaKWyMH2W"
-                     ],
-                     "Requirements" : {
-                        "Constraint" : false,
-                        "Information" : false,
-                        "Materials" : false,
-                        "Manpower" : true,
-                        "Equipement" : false,
-                        "Safety" : false,
-                        "Space" : true
-                     },
-                     "Name": "Ground slab pouring",
-                     "Start": "01/02/2021",
-                     "End": "14/02/2021",
-                     "Duration": 14,
-                     "Workers": 4,
-                     "Previous": 0,
-                     "Next": 202,
-                     "Level": 0,
-                     "Zone": "A",
-                     "Team": "Masons 1"
-                  },
-                  {
                      "TID": 202,
                      "4DID": 202,
                      "GUID" : [
@@ -477,7 +451,7 @@
                      "End": "18/02/2021",
                      "Workers": 4,
                      "Duration": 5,
-                     "Previous": 101,
+                     "Previous": 0,
                      "Next": 103,
                      "Level": 0,
                      "Zone": "A",
@@ -503,7 +477,7 @@
                      "Start": "14/02/2021",
                      "End": "18/02/2021",
                      "Duration": 5,
-                     "Previous": 101,
+                     "Previous": 0,
                      "Next": 104,
                      "Level": 0,
                      "Zone": "A",
@@ -529,7 +503,7 @@
                      "Start": "26/02/2021",
                      "End": "02/03/2021",
                      "Duration": 5,
-                     "Previous": 201,
+                     "Previous": 0,
                      "Next": 205,
                      "Level": 0,
                      "Zone": "A",
@@ -555,7 +529,7 @@
                      "Start": "26/02/2021",
                      "End": "02/03/2021",
                      "Duration": 5,
-                     "Previous": 201,
+                     "Previous": 0,
                      "Next": 206,
                      "Level": 0,
                      "Zone": "A",
@@ -608,39 +582,10 @@
                      "End": "21/03/2021",
                      "Duration": 6,
                      "Previous": 206,
-                     "Next": 208,
+                     "Next": 0,
                      "Level": 0,
                      "Zone": "A",
                      "Team": "Carpenters 2"
-                  },
-                  {
-                     "TID": 208,
-                     "4DID": 208,
-                     "Workers": 4,
-                     "GUID" : [
-                        "2XqLaPqlL6pRaKaKeyMH3A",
-                        "2XqLaPqlL6pRaKaKqyMH3A", 
-                        "2XqLaPqlL6pRaKaKmyMH3A", 
-                        "2XqLaPqlL6pRaKaKiyMH3A"
-                     ],
-                     "Requirements" : {
-                        "Constraint" : true,
-                        "Information" : true,
-                        "Materials" : false,
-                        "Manpower" : true,
-                        "Equipement" : false,
-                        "Safety" : false,
-                        "Space" : true
-                     },
-                     "Name": "Roof installation",
-                     "Start": "16/03/2021",
-                     "End": "29/03/2021",
-                     "Duration": 14,
-                     "Previous": 207,
-                     "Next": 0,
-                     "Level": 1,
-                     "Zone": "A",
-                     "Team": "Carpenters 1"
                   }
                ]
             }
