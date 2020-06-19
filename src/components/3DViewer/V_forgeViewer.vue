@@ -44,6 +44,15 @@ export default {
 			}
 			return toReturn;
 		},
+
+		getObjByNodeId(nodeId){
+			const toReturn = [];
+			for(let o in this.objs){
+				console.log(this.objs[o].nodes, nodeId);
+				if(this.objs[o].nodes.includes(nodeId)) toReturn.push(this.objs[o]);
+			}
+			return toReturn;
+		},		
 		//
 		clearHighlighting(){
 			if(this.viewer != null){
@@ -130,12 +139,14 @@ export default {
 										},
 										material : material,
 										initialMaterials : {},
+										nodes: [],
 										colored : false,
 										state : "initial", // Pour plus tard
 										needUpdate : false,
 									}
 									const materials = this.viewer.impl.getMaterials();
 									materials.addMaterial(Utils.getGuid(), material, true);
+									this.getNodeInfos(this.objs[o3D[l].getId()]);
 									//this.color3DObject(this.objs[o3D[l].getId()]);
 								}
 							}
@@ -145,17 +156,24 @@ export default {
 			}
 
 		},
+		getNodeInfos(obj){
+			this.tree.enumNodeChildren(obj.dbId,
+				(node) => { 
+					const newId = this.viewer.model.getFragmentList().fragments.fragId2dbId.indexOf(node);
+					if(newId != -1 && typeof this.initialMaterials[newId] == "undefined"){
+						this.initialMaterials[newId] = this.viewer.model.getFragmentList().getMaterial(newId);
+					} 
+					if(!obj.nodes.includes(node)) obj.nodes.push(node);
+				}, 
+			true);
+		},
 		color3DObject(obj, selectMode = false){
 
 			if(!obj.colored || obj.needUpdate){
 				this.tree.enumNodeChildren(obj.dbId,
 					(node) => { 
-						const count = this.tree.getChildCount(node);
+						//const count = this.tree.getChildCount(node);
 						const newId = this.viewer.model.getFragmentList().fragments.fragId2dbId.indexOf(node);
-						if(newId != -1 && typeof this.initialMaterials[newId] == "undefined"){
-							this.initialMaterials[newId] = this.viewer.model.getFragmentList().getMaterial(newId);
-							console.log(obj.initialMaterials[newId], this.initialMaterials[newId].id, count, newId );
-						} 
 
 						let materialId = null;
 						if(selectMode){
@@ -219,13 +237,15 @@ export default {
 		highlightTask() {
 
 			const selection = this.viewer.getSelection();
+			this.clearHighlighting();
 			this.viewer.clearSelection();
 			
 			for(let s in selection){
-				const fragId = this.viewer.model.getFragmentList().fragments.fragId2dbId[selection[s]];
-				const objs = this.getObjByDbId(fragId);
+				const objs = this.getObjByNodeId(selection[s]);
+				console.log(selection[s], objs);
 				for(let o in objs){
 					this.color3DObject(objs[o], true);
+					this.selected.push(objs[o]);
 					V_socketUtils.highlightTask(objs[o].obj3D.getParent().getTask());
 				}
 			}

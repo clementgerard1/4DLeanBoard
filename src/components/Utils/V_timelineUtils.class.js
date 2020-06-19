@@ -18,7 +18,6 @@ class V_timelineUtils{
 		}else{
 			console.error("event " + event + " unknowed");
 		}
-		console.log("obj", this.listeners);
 	}	
 
 	/**
