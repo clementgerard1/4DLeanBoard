@@ -20,11 +20,14 @@ export default {
 			"tree" : null,
 			"selected" : [],
 			"map" : [],
-			"objs" : {},
+			"objs" : [],
 			"geometryFlag" : false,
 			"treeFlag" : false,
 			"selectedMaterial" : null,
 			"initialMaterials" : [],
+			"shownContractor" : null,
+			"fliterModeFlag" : false,
+			"colored" : [],
 		}
 	},
 	props:[
@@ -36,15 +39,39 @@ export default {
 	methods:{
 
 		setContractorDisplayMode(bool){
-			console.log("contractor display mode : " + bool);
+			if(bool) {
+				var mils = this.model.getMilestones();
+				for(let i in mils) {
+					var phases = mils[i].getPhases();
+					for(let j in phases) {
+						var objs4D = phases[j].getObjects4D();
+						for(let k in objs4D) {
+							var objs3D = objs4D[k].getObjects3D();
+							for(let l in objs3D) {
+								if((phases[j].getContractor().getId() == this.shownContractor) || (this.shownContractor==null)) {
+									this.color3DObject(this.objs[objs3D[l].getId()]);
+								} else {
+									this.color3DObject(this.objs[objs3D[l].getId()], false, true);
+								}
+							}
+						}
+					}
+				}
+				this.fliterModeFlag = true;
+			} else {
+				this.clearColors();
+				this.fliterModeFlag = false;
+			}
 		},
 
 		setContractorDisplayed(contractor){
 			if(contractor != null){
-				console.log("contractor displayed : " + contractor.getName());
+				this.shownContractor = contractor.getId();
 			}else{
-				console.log("all contractors selected");
+				this.shownContractor = null;
 			}
+			this.clearColors();
+			this.setContractorDisplayMode(this.fliterModeFlag);
 		},
 
 		getObjByDbId(dbId){
@@ -70,12 +97,19 @@ export default {
 				for(let i in this.selected){
 					this.restore3DObject(this.selected[i]);
 					delete this.selected[i];
-				}	
+				}
 			}
-			this.selectedTemp = [];
+			this.selected = [];
 		},
-
-		//
+		clearColors(){
+			if(this.viewer != null){
+				for(let i in this.colored){
+					this.restore3DObject(this.colored[i]);
+					delete this.colored[i];
+				}
+			}
+			this.colored = [];
+		},
 		highlight(object4D){
 			this.clearHighlighting();
 			if(this.viewer != null){
@@ -138,6 +172,13 @@ export default {
 									    opacity: a,
 									    color: scssVariables[phs[j].getColorClass().replace("BG_", "").toLowerCase()],
 						      		});
+						      		const sMat = new THREE.MeshBasicMaterial({
+									    reflectivity: 0.0,
+									    flatShading: true,
+									    transparent: true,
+									    opacity: 0.3,
+									    color: scssVariables[phs[j].getColorClass().replace("BG_", "").toLowerCase()],
+						      		});
 									this.objs[o3D[l].getId()] = {
 										obj3D : o3D[l],
 										guId : o3D[l].getIFCId(),
@@ -149,6 +190,7 @@ export default {
 											a : a
 										},
 										material : material,
+										sMat : sMat,
 										initialMaterials : {},
 										nodes: [],
 										colored : false,
@@ -157,6 +199,7 @@ export default {
 									}
 									const materials = this.viewer.impl.getMaterials();
 									materials.addMaterial(Utils.getGuid(), material, true);
+									materials.addMaterial(Utils.getGuid(), sMat, true);
 									this.getNodeInfos(this.objs[o3D[l].getId()]);
 									//this.color3DObject(this.objs[o3D[l].getId()]);
 								}
@@ -165,7 +208,6 @@ export default {
 					}
 				}
 			}
-
 		},
 		getNodeInfos(obj){
 			this.tree.enumNodeChildren(obj.dbId,
@@ -178,7 +220,7 @@ export default {
 				}, 
 			true);
 		},
-		color3DObject(obj, selectMode = false){
+		color3DObject(obj, selectMode = false, shadowMode = false){
 
 			if(!obj.colored || obj.needUpdate){
 				this.tree.enumNodeChildren(obj.dbId,
@@ -190,6 +232,9 @@ export default {
 						if(selectMode){
 							materialId = this.viewer.model.getFragmentList().materialmap[this.selectedMaterial.id];
 							this.viewer.model.getFragmentList().setMaterial(newId, this.selectedMaterial);
+						}else if(shadowMode){
+							materialId = this.viewer.model.getFragmentList().materialmap[obj.sMat.id];
+							this.viewer.model.getFragmentList().setMaterial(newId, obj.sMat);
 						}else{
 							materialId = this.viewer.model.getFragmentList().materialmap[obj.material.id];
 							this.viewer.model.getFragmentList().setMaterial(newId, obj.material);
@@ -202,6 +247,7 @@ export default {
 
 					}, 
 				true);
+				this.colored.push(obj);
 			}
 		},
 		restore3DObject(obj){
