@@ -2,9 +2,16 @@ import Model from '../Model.class.js';
 import Utils from '../Utils.class.js';
 import Milestone from '../Milestone.class.js';
 import Phase from '../Phase.class.js';
+import Task from '../Task.class.js';
+import Operation from '../Operation.class.js';
 import Object4D from '../Object4D.class.js';
 import Object3D from '../Object3D.class.js';
 import Contractor from '../Contractor.class.js';
+import TaskTeam from '../TaskTeam.class.js';
+import OperationUnit from '../OperationUnit.class.js';
+import Zone from '../Zone.class.js';
+import State from '../State.class.js';
+import Delivrable from '../Delivrable.class.js';
 
 beforeEach(() => {
   Utils.ids = {
@@ -95,6 +102,40 @@ test('getContractors()', () => {
   expect(model.getContractors().length).toBe(2);
 });
 
+test('getTaskTeams()', () => {
+	const model = new Model();
+	const milestone = new Milestone();
+	model.addMilestone(milestone);
+	const phase = new Phase();
+	const phase2 = new Phase();
+	milestone.addPhase(phase);
+	milestone.addPhase(phase2);
+	const task = new Task();
+	const taskTeam = new TaskTeam();
+	task.setTaskTeam(taskTeam);
+	phase.addTask(task);
+  expect(model.getTaskTeams().length).toBe(1);
+});
+
+test('getOperationUnits()', () => {
+	const model = new Model();
+	const milestone = new Milestone();
+	model.addMilestone(milestone);
+	const phase = new Phase();
+	const phase2 = new Phase();
+	milestone.addPhase(phase);
+	milestone.addPhase(phase2);
+	const task = new Task();
+	phase.addTask(task);
+	const operation = new Operation();
+	task.addOperation(operation);
+
+	const operationUnit = new OperationUnit();
+	operation.setOperationUnit(operationUnit);
+
+  expect(model.getOperationUnits().length).toBe(1);
+});
+
 test('getPhases()', () => {
 	const model = new Model();
 	const milestone = new Milestone();
@@ -130,4 +171,82 @@ test('getContractorById(id)', () => {
 	model.addMilestone(milestone);
 	milestone.addPhase(phase);
 	expect(model.getContractorById(0)).toStrictEqual(contractor);
+});
+
+test('getTasks()', () => {
+	const model = new Model();
+	const milestone = new Milestone();
+	const phase = new Phase();
+	const task = new Task();
+	phase.addTask(task);
+	model.addMilestone(milestone);
+	milestone.addPhase(phase);
+	expect(model.getTasks().length).toStrictEqual(1);
+});
+
+test('getOperations()', () => {
+	const model = new Model();
+	const milestone = new Milestone();
+	const phase = new Phase();
+	const task = new Task();
+	const operation = new Operation();
+	task.addOperation(operation);
+	phase.addTask(task);
+	model.addMilestone(milestone);
+	milestone.addPhase(phase);
+	expect(model.getTasks().length).toStrictEqual(1);
+});
+
+test('getProperties()', () => {
+	const model = new Model();
+	const milestone = new Milestone();
+	const phase = new Phase();
+	const task = new Task();
+	const operation = new Operation();
+	task.addOperation(operation);
+	phase.addTask(task);
+	model.addMilestone(milestone);
+	milestone.addPhase(phase);
+	task.setZone(new Zone());
+	task.setState(new State());
+	expect(model.getProperties().length).toStrictEqual(2);
+});
+
+test('getDelivrables()', () => {
+	const model = new Model();
+	const milestone = new Milestone();
+	const phase = new Phase();
+	const delivrable = new Delivrable();
+	model.addMilestone(milestone);
+	milestone.addPhase(phase);
+	phase.addDelivrable(delivrable);
+	expect(model.getDelivrables().length).toStrictEqual(1);
+});
+
+test('getObjects4D()', () => {
+	const model = new Model();
+	const milestone = new Milestone();
+	const phase = new Phase();
+	const task = new Task();
+	const object4D = new Object4D();
+	task.setObject4D(object4D);
+	phase.addTask(task);
+	model.addMilestone(milestone);
+	milestone.addPhase(phase);
+	expect(model.getObjects4D().length).toStrictEqual(1);
+});
+
+test('getObjects3D()', () => {
+	const model = new Model();
+	const milestone = new Milestone();
+	const phase = new Phase();
+	const task = new Task();
+	const object4D = new Object4D();
+	const object3D = new Object3D();
+	object4D.addObject3D(object3D);
+	task.setObject4D(object4D);
+	phase.addTask(task);
+	model.addMilestone(milestone);
+	milestone.addPhase(phase);
+	expect(model.getObjects3D().length).toStrictEqual(1);
 });

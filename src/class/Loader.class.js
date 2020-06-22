@@ -120,7 +120,14 @@ class Loader{
 
 		const milestones = infos["milestones"];
 		for(let m in milestones){
-			const milestone = new Milestone(milestones[m]["Name"]);
+
+			const milestone = null;
+			if(milestones[m]["event"]){
+				milestone = new Milestone(milestones[m]["Name"], true);
+			}else{
+				milestone = new Milestone(milestones[m]["Name"]);
+			}
+
 			model.addMilestone(milestone);
 			for(let r in milestones[m]["requirements"]){
 				const requirement = new Requirement(milestones[m]["requirements"][r]);
