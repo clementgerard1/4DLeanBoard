@@ -42,11 +42,11 @@ export default {
 	},
 	methods : {
 		windowUpdate : function(event){
+			const weekWidth = (this.svg.clientWidth) / this.nbweek;
 			const backRect = document.querySelector(".svgPlayer" + this.id + " .playerBackground");
-			const backRectBlack = document.querySelector(".svgPlayer" + this.id + " .playerBackgroundBlack");
 			this.widthh = this.svg.clientWidth;
 			backRect.setAttribute("width",  this.svg.clientWidth + 2);
-			backRectBlack.setAttribute("width",  this.svg.clientWidth + 2);
+			this.playerX = this.time * weekWidth + (weekWidth / 2);
 		},
 		handleTimeChange: function(event){
 			V_socketUtils.setTime(event.target.id);
@@ -95,8 +95,8 @@ export default {
 	<div v-pan="handlePan" class="svgPlayer" v-bind:class="svgClass">
 		<svg height="` + scssVariables.playerHeight.replace("px", "") + `" fill="none" xmlns="http://www.w3.org/2000/svg">
 			
-			<rect class="playerBackground" stroke="black" stroke-width="2"/>
-			<rect class="playerBackgroundBlack" fill="black" stroke="black" stroke-width="2"/>
+			<rect class="playerBackground" stroke-width="2"/>
+			<rect class="playerBackgroundFilled" v-bind:width="playerX" stroke-width="2"/>
 
 			<g filter="url(#filter0_d_playerButton)">
 				<circle class="playerButton" v-bind:cx="playerX" r="21" fill="#97D7C7"/>
