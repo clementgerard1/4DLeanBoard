@@ -35,6 +35,18 @@ export default {
 	],
 	methods:{
 
+		setContractorDisplayMode(bool){
+			console.log("contractor display mode : " + bool);
+		},
+
+		setContractorDisplayed(contractor){
+			if(contractor != null){
+				console.log("contractor displayed : " + contractor.getName());
+			}else{
+				console.log("all contractors selected");
+			}
+		},
+
 		getObjByDbId(dbId){
 			const toReturn = [];
 			for(let o in this.objs){

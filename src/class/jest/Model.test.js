@@ -120,3 +120,14 @@ test('get3DObjectById(id)', () => {
 	milestone.addPhase(phase);
 	expect(model.get3DObjectById(obj3D.getId())).toStrictEqual(obj3D);
 });
+
+test('getContractorById(id)', () => {
+	const model = new Model();
+	const milestone = new Milestone();
+	const phase = new Phase();
+	const contractor = new Contractor("test", 0);
+	phase.setContractor(contractor);
+	model.addMilestone(milestone);
+	milestone.addPhase(phase);
+	expect(model.getContractorById(0)).toStrictEqual(contractor);
+});

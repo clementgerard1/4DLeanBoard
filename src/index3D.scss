@@ -21,9 +21,15 @@ body{
 		height : 100vh;
 		max-height: 100vh;
 
+		#filterPanel{
+			height : v.$filterPanelHeight;
+			width : 100%;
+		}
+
 		#forgeViewer{
-			height : calc(100vh - #{v.$playerHeight});
+			height : calc(100vh - #{v.$playerHeight} - #{v.$filterPanelHeight});
 			overflow: hidden;
+			position: relative;
 		}
 
 		#mainPlayer{

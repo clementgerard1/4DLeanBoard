@@ -3,6 +3,7 @@ import Utils from "./class/Utils.class.js";
 import Loader from "./class/Loader.class.js";
 import Timeline from "./class/Timeline.class.js";
 import V_player from "./components/Player/V_player.vue";
+import V_filterPanel from "./components/FilterPanel/V_filterPanel.vue";
 import V_svgDefs from "./components/SixWeekView/V_SvgDefs.vue";
 import V_forgeViewer from "./components/3DViewer/V_forgeViewer.vue";
 import openSocket from "socket.io-client";
@@ -169,6 +170,7 @@ async function init(){
 	const app = new Vue({
 		el : '#content',
 		components : {
+			filterpanel : V_filterPanel,
 			forgeviewer : V_forgeViewer,
 			player : V_player,
 			svgdefs : V_svgDefs,
@@ -186,6 +188,7 @@ async function init(){
  		<div>
 	 		<div id="content">
 	 			<div id="viewerFrame">
+	 				<filterpanel id="filterPanel" v-bind:model="model"></filterpanel>
 	 				<forgeviewer id="forgeViewer" v-bind:model="model" v-bind:timeline="timeline" v-bind:manifest="manifest" v-bind:oauth="oauth"></forgeviewer>
 	 				<player id="mainPlayer" v-bind:duration="duration" v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit"></player>
 	 			</div>

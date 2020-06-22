@@ -48,6 +48,39 @@ class V_4DUtils{
 		this.highlightObject4D(object4D);
 	}
 
+	/**
+		Set contractor displayed by id on Forge Viewer
+		@param {string} Object4Did id of Object4D to hightlight
+		@static
+	*/
+	static setContractorDisplayedById(contractorId){
+		const contractor = this.viewer.model.getContractorById(contractorId);
+		if(contractor != null){
+			this.setContractorDisplayed(contractor);
+		}
+	}
+
+	/**
+		Set contractor displayed on Forge Viewer
+		@param {string} Object4Did id of Object4D to hightlight
+		@static
+	*/
+	static setContractorDisplayed(contractor){
+		if(this.viewer != null){
+			this.viewer.setContractorDisplayed(contractor);
+		}
+	}
+
+	/**
+		Set contractor display mode on Forge Viewer
+		@param {bool} bool
+		@static
+	*/
+	static setContractorDisplayMode(bool){
+		if(this.viewer != null){
+			this.viewer.setContractorDisplayMode(bool);
+		}
+	}
 
 }
 export default V_4DUtils;

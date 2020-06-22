@@ -150,6 +150,19 @@ class Model{
 	}
 
 	/**
+		get a contractors of the model by id
+		@params {uint} contractor id 
+		@returns {Contractor} return null if no contractor exist with this id
+	*/
+	getContractorById(id){
+		const contractors = this.getContractors();
+		for( let c in contractors){
+			if(contractors[c].getId() == id) return contractors[c];
+		}
+		return null;
+	}
+
+	/**
 		get duration of the model
 		@returns {int}
 	*/
@@ -221,6 +234,11 @@ class Model{
 		return null;
 	}
 
+	/*
+		get a Task by its id
+		@param {String} id 
+		@returns {Task}
+	*/	
 	getTaskById(id){
 		const phases = this.getPhases();
 		for(let p in phases){

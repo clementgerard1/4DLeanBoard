@@ -13,7 +13,6 @@ body{
 	max-width: 100vw;
 
 	#viewerFrame{
-		position: relative;
 		box-sizing: border-box;
 		display:inline-block;
 
@@ -22,9 +21,15 @@ body{
 		height : 100vh;
 		max-height: 100vh;
 
+		#filterPanel{
+			height : v.$filterPanelHeight;
+			width : 100%;
+		}
+
 		#forgeViewer{
-			height : calc(100vh - #{v.$playerHeight});
+			height : calc(100vh - #{v.$playerHeight} - #{v.$filterPanelHeight});
 			overflow: hidden;
+			position: relative;
 		}
 
 		#mainPlayer{

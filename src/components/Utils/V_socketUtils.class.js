@@ -16,6 +16,10 @@ class V_socketUtils{
 		this.initSocket();
 	}
 
+	/**
+		Init the socket the socket object for connexion / Private
+		@static
+	*/
 	static initSocket(){
 		this.socket.on("highlightObject4D", (datas) => {
 			V_4DUtils.highlightObject4DById(datas.id);
@@ -28,29 +32,85 @@ class V_socketUtils{
 		this.socket.on("setTime", (datas) => {
 			V_timelineUtils.setTime(datas.time);
 		});
+
+		this.socket.on("setContractorDisplayed", (datas) => {
+			V_4DUtils.setContractorDisplayedById(datas.contractor);
+		});
+
+		this.socket.on("setContractorDisplayMode", (datas) => {
+			V_4DUtils.setContractorDisplayMode(datas.bool);
+		});
 	}
 
+	/**
+		Add this socket as a viewer
+		@static
+	*/	
 	static addViewer(){
 		this.socket.emit("addViewer");
 	}
 
+	/**
+		Add this socket as a W6Planning
+		@static
+	*/	
 	static addW6(){
 		this.socket.emit("addW6");
 	}
 
+	/**
+		Highlight a task on W6Planning from Viewer
+		@param {Task} task 
+		@static
+	*/		
 	static highlightTask(task){
 		V_taskTableUtils.highlightTaskById(task.getId());
   		this.socket.emit("highlightTask", { id : task.getId()});
 	}
 
+
+	/**
+		Highlight a object4D on Viewer from 6WPlanning
+		@param {Task} task 
+		@static
+	*/		
 	static highlightObject4D(object4D){
 		V_4DUtils.highlightObject4D(object4D);
 		this.socket.emit("highlightObject4D", { id : object4D.getId()});
 	}
 
+	/**
+		Set global time
+		@param {uint} time
+		@static
+	*/	
 	static setTime(time){
 		V_timelineUtils.setTime(time);
 		this.socket.emit("setTime", { time : time});
+	}
+
+	/**
+		Set the contractor displayed on viewer
+		@param {Contractor} contractor
+		@static
+	*/	
+	static setContractorDisplayed(contractor){
+		V_4DUtils.setContractorDisplayed(contractor);
+		if(contractor != null){
+			this.socket.emit("setContractorDisplayed", { contractor : contractor.getId()});
+		}else{
+			this.socket.emit("setContractorDisplayed", { contractor : null});
+		}
+	}
+
+	/**
+		Set the contractor mode of viewer
+		@param {bool} active
+		@static
+	*/	
+	static setContractorDisplayMode(active){
+		V_4DUtils.setContractorDisplayMode(active);
+		this.socket.emit("setContractorDisplayMode", { bool : active});
 	}
 
 }

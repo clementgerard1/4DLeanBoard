@@ -1,0 +1,20 @@
+.filterPanel{
+	border-bottom : 1px solid black;
+
+	label{
+		border : 1px solid black;
+		padding : 5px;
+		border-radius: 5px;
+		display : inline-block;
+		margin : 5px;
+	}
+
+	select{
+		border : 1px solid black;
+		padding : 5px;
+		border-radius: 5px;
+		display : inline-block;
+		margin : 5px;
+	}
+
+}
