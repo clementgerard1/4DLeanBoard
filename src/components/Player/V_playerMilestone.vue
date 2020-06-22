@@ -20,7 +20,9 @@ export default {
 	},
 	computed : {
 		done : function(){
-			return this.timeline.getDateObject(this.time * 7) > this.milestone.getEndDate();
+			const safeDate = new Date(this.milestone.getEndDate().valueOf());
+			safeDate.setTime(safeDate.getTime() + (2*60*60*1000));
+			return this.timeline.getDateObject(this.time * 7) > safeDate;
 		},
 		milestoneClass : function(){
 			return "milestoneplayer" + this.id;

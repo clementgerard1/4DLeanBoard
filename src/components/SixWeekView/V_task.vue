@@ -127,6 +127,7 @@ export default {
 		V_taskTableUtils.addTask(this);
 	},
 	updated: function(){
+		this.updateDatas();
 		this.updateStateDiv();
 	},
 	computed:{
@@ -201,6 +202,93 @@ export default {
 		}
 	},
 	methods:{
+		updateDatas: function(){
+			let previousTask = null;
+			if(this.task != null){
+				const previous = this.task.getPreviousTasks()[Object.keys(this.task.getPreviousTasks())[0]];
+				if(typeof previous != "undefined"){
+					previousTask = previous;
+				}else{
+					previousTask = null;
+				}
+			}else{
+				previousTask =  null;
+			}
+
+			let constraint = false;
+			if(this.task != null){
+				constraint = this.task.getRequirement("constraint").getValue();
+			}
+
+			let information = false;
+			if(this.task != null){
+				information = this.task.getRequirement("information").getValue();
+			}
+
+			let materials = false;
+			if(this.task != null){
+				materials = this.task.getRequirement("materials").getValue();
+			}		
+
+			let manpower = false;
+			if(this.task != null){
+				manpower = this.task.getRequirement("manpower").getValue();
+			}		
+
+			let equipement = false;
+			if(this.task != null){
+				equipement = this.task.getRequirement("equipement").getValue();
+			}		
+
+			let safety = false;
+			if(this.task != null){
+				safety = this.task.getRequirement("safety").getValue();
+			}		
+
+			let space = false;
+			if(this.task != null){
+				space = this.task.getRequirement("space").getValue();
+			}		
+
+			let previousColor = null;
+			if(previousTask != null){
+				previousColor =  scssVariables[previousTask.getParentPhase().getColorClass().replace("BG_", "").toLowerCase()];
+			}
+
+			let ready = false
+			if(this.task != null){
+				ready = this.task.isReady();
+			}
+
+			let paused = false;
+			if(this.task != null){
+				paused = this.task.isPaused();
+			}
+
+			let done = false;
+			if(this.task != null){
+				done = this.task.isDone();
+			}
+
+			let previousready = false;
+			if(previousTask != null){
+				previousready = previousTask.isReady();
+			}
+
+			this.previousTask = previousTask;
+			this.constraint = constraint;
+			this.information = information;
+			this.materials = materials;
+			this.manpower = manpower;
+			this.equipement = equipement;
+			this.safety = safety;
+			this.space = space;
+			this.previouscolor = previousColor;
+			this.ready = ready;
+			this.paused = paused;
+			this.done = done;
+			this.previousready = previousready;
+		},
 		hightlight: function(bool){
 			this.highlighted = bool;
 		},
@@ -351,7 +439,7 @@ export default {
 		updatePrevious(){
 
 			if(this.previousTask != null){
-				this.previousColor =  scssVariables[this.previousTask.getParentPhase().getColorClass().replace("BG_", "").toLowerCase()];
+				this.previouscolor =  scssVariables[this.previousTask.getParentPhase().getColorClass().replace("BG_", "").toLowerCase()];
 			}
 
 			if(this.previousTask != null){
