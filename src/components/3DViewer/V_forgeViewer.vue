@@ -172,6 +172,13 @@ export default {
 									    opacity: a,
 									    color: scssVariables[phs[j].getColorClass().replace("BG_", "").toLowerCase()],
 						      		});
+						      		const sMat = new THREE.MeshBasicMaterial({
+									    reflectivity: 0.0,
+									    flatShading: true,
+									    transparent: true,
+									    opacity: 0.3,
+									    color: scssVariables[phs[j].getColorClass().replace("BG_", "").toLowerCase()],
+						      		});
 									this.objs[o3D[l].getId()] = {
 										obj3D : o3D[l],
 										guId : o3D[l].getIFCId(),
@@ -183,6 +190,7 @@ export default {
 											a : a
 										},
 										material : material,
+										sMat : sMat,
 										initialMaterials : {},
 										nodes: [],
 										colored : false,
@@ -191,6 +199,7 @@ export default {
 									}
 									const materials = this.viewer.impl.getMaterials();
 									materials.addMaterial(Utils.getGuid(), material, true);
+									materials.addMaterial(Utils.getGuid(), sMat, true);
 									this.getNodeInfos(this.objs[o3D[l].getId()]);
 									//this.color3DObject(this.objs[o3D[l].getId()]);
 								}
@@ -224,7 +233,8 @@ export default {
 							materialId = this.viewer.model.getFragmentList().materialmap[this.selectedMaterial.id];
 							this.viewer.model.getFragmentList().setMaterial(newId, this.selectedMaterial);
 						}else if(shadowMode){
-							console.log("babar");
+							materialId = this.viewer.model.getFragmentList().materialmap[obj.sMat.id];
+							this.viewer.model.getFragmentList().setMaterial(newId, obj.sMat);
 						}else{
 							materialId = this.viewer.model.getFragmentList().materialmap[obj.material.id];
 							this.viewer.model.getFragmentList().setMaterial(newId, obj.material);
