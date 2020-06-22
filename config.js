@@ -3,7 +3,7 @@ module.exports = {
 	"socketConsole" : false,
 	"socketConsoleIP" : "localhost",
 	"socketConsolePort" : 3002,
-	"forgeRenderer" : false,
+	"forgeRenderer" : true,
 
 	"autoDeskAccount" : "clement",
 
