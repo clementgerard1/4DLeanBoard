@@ -183,7 +183,7 @@ eval("module.exports = function () {\n  window.addEventListener(\"load\", functi
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("var dataStructure = __webpack_require__(/*! ./dataStructure/dataStructure.js */ \"./test-pages/src/dataStructure/dataStructure.js\");\n\nvar privatePropertiesAndMethods = __webpack_require__(/*! ./privatePropertiesAndMethods/privatePropertiesAndMethods.js */ \"./test-pages/src/privatePropertiesAndMethods/privatePropertiesAndMethods.js\");\n\nvar testTouches = __webpack_require__(/*! ./testTouches/testTouches.js */ \"./test-pages/src/testTouches/testTouches.js\");\n\nvar touchGestures = __webpack_require__(/*! ./touchGestures/touchGestures.js */ \"./test-pages/src/touchGestures/touchGestures.js\");\n\nvar animateTests = __webpack_require__(/*! ./animateTests/animateTests.js */ \"./test-pages/src/animateTests/animateTests.js\");\n\nvar fpsTest = __webpack_require__(/*! ./fpsTest/fpsTest.js */ \"./test-pages/src/fpsTest/fpsTest.js\");\n\nfor (var n in window.boardClasses) {\n  eval(\"window.\" + n + \" = window.boardClasses[n];\");\n}\n\nfor (var m in window.vueClasses) {\n  eval(\"window.\" + m + \" = window.vueClasses[m];\");\n}\n\nvar str = window.location.href.split(\"/\");\n\nif (str[str.length - 1] != \"\") {\n  eval(str[str.length - 1] + \"()\");\n} else if (str[str.length - 2] != \"\" && str[str.length - 2] != \"localhost:3000\") {\n  eval(str[str.length - 2] + \"()\");\n}\n\n//# sourceURL=webpack:///./test-pages/src/index.js?");
+eval("var dataStructure = __webpack_require__(/*! ./dataStructure/dataStructure.js */ \"./test-pages/src/dataStructure/dataStructure.js\");\n\nvar privatePropertiesAndMethods = __webpack_require__(/*! ./privatePropertiesAndMethods/privatePropertiesAndMethods.js */ \"./test-pages/src/privatePropertiesAndMethods/privatePropertiesAndMethods.js\");\n\nvar testTouches = __webpack_require__(/*! ./testTouches/testTouches.js */ \"./test-pages/src/testTouches/testTouches.js\");\n\nvar touchGestures = __webpack_require__(/*! ./touchGestures/touchGestures.js */ \"./test-pages/src/touchGestures/touchGestures.js\");\n\nvar animateTests = __webpack_require__(/*! ./animateTests/animateTests.js */ \"./test-pages/src/animateTests/animateTests.js\");\n\nvar fpsTest = __webpack_require__(/*! ./fpsTest/fpsTest.js */ \"./test-pages/src/fpsTest/fpsTest.js\");\n\nvar serializeModel = __webpack_require__(/*! ./serializeModel/serializeModel.js */ \"./test-pages/src/serializeModel/serializeModel.js\");\n\nfor (var n in window.boardClasses) {\n  eval(\"window.\" + n + \" = window.boardClasses[n];\");\n}\n\nfor (var m in window.vueClasses) {\n  eval(\"window.\" + m + \" = window.vueClasses[m];\");\n}\n\nvar str = window.location.href.split(\"/\");\n\nif (str[str.length - 1] != \"\") {\n  eval(str[str.length - 1] + \"()\");\n} else if (str[str.length - 2] != \"\" && str[str.length - 2] != \"localhost:3000\") {\n  eval(str[str.length - 2] + \"()\");\n}\n\n//# sourceURL=webpack:///./test-pages/src/index.js?");
 
 /***/ }),
 
@@ -195,6 +195,17 @@ eval("var dataStructure = __webpack_require__(/*! ./dataStructure/dataStructure.
 /***/ (function(module, exports) {
 
 eval("module.exports = function () {\n  window.addEventListener(\"load\", function () {\n    init();\n  });\n};\n\nfunction init() {\n  var file = null;\n  Promise.all([Utils.loadTextFile(\"/datas/Project1.csv\"), Utils.loadTextFile(\"/datas/Project1.ifc\")]).then(function (files) {\n    return Loader.fromCSVandIFC(files[0], files[1]);\n  }).then(function (timeline) {\n    console.log(timeline); //Model Loaded\n\n    console.log(\"Must be undefined => \" + timeline.model);\n    console.log(\"With GetModel() => \", timeline.getModel());\n  })[\"catch\"](function (error) {\n    return console.error(error);\n  });\n}\n\n//# sourceURL=webpack:///./test-pages/src/privatePropertiesAndMethods/privatePropertiesAndMethods.js?");
+
+/***/ }),
+
+/***/ "./test-pages/src/serializeModel/serializeModel.js":
+/*!*********************************************************!*\
+  !*** ./test-pages/src/serializeModel/serializeModel.js ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = function () {\n  window.addEventListener(\"load\", function () {\n    init();\n  });\n};\n\nfunction init() {\n  console.log(\"SERVER DATA\");\n}\n\n//# sourceURL=webpack:///./test-pages/src/serializeModel/serializeModel.js?");
 
 /***/ }),
 

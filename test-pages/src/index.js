@@ -4,6 +4,7 @@ const testTouches = require("./testTouches/testTouches.js");
 const touchGestures = require("./touchGestures/touchGestures.js");
 const animateTests = require("./animateTests/animateTests.js");
 const fpsTest = require("./fpsTest/fpsTest.js");
+const serializeModel = require("./serializeModel/serializeModel.js");
 
 for( let n in window.boardClasses){
 	eval("window." + n + " = window.boardClasses[n];");
