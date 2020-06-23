@@ -105,6 +105,14 @@ class Model{
 	}	
 
 	/**
+		Set the name of the model
+		@params {string} name 
+	*/
+	setName(name){
+		this.#name = name;
+	}	
+
+	/**
 		Get the last modified date of the model
 		@returns {Date} last modified date of the model
 	*/

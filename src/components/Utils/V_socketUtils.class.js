@@ -1,6 +1,7 @@
 import V_4DUtils from "./V_4DUtils.class.js";
 import V_taskTableUtils from "./V_taskTableUtils.class.js";
 import V_timelineUtils from "./V_timelineUtils.class.js";
+import DataApi from "../../../dataServer/DataApi.class.js";
 
 class V_socketUtils{
 
@@ -136,7 +137,13 @@ class V_socketUtils{
 		this.socket.emit("highlightObject4D", { id : object4D.getId()});
 	}
 
-	//setRequirement
+	static setRequirement(model, requirement){
+ 		DataApi.patchRequirement(model, requirement);
+	}
+
+	static setTaskState(model, task){
+		DataApi.patchTaskState(model, task);	
+	}
 	//setDone
 	//setPause
 	//setReady

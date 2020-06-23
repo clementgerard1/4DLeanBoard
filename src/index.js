@@ -51,10 +51,11 @@ async function init(){
 	.then( mod => {
 			//Model Loaded
 			model = mod;
+			if(model.getName() == "") model.setName("test");
 			timeline = new Timeline(model);;
 			playerInit = 0;
 			const phase = timeline.getModel().getMilestones()[0].getPhases()[0];
-		  duration = model.getDuration();
+		  	duration = model.getDuration();
 
 			//Création du viewer
 			let clientId = Config.autoDeskForgeSettings[Config.autoDeskAccount].clientId;

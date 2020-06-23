@@ -28,12 +28,12 @@ class DataApi{
 
 	}
 
-	//static async patchTaskState(task){
-	//	return axios.patch(DataApi.serverUrl + '/requirement/?modelname=' + name + "&requirementid=" + id);
-	//}
+	static async patchTaskState(model, task){
+		return axios.patch(DataApi.serverUrl + '/task/state?modelname=' + model.getName() + "&taskid=" + task.getId() + "&paused=" + task.isPaused() + "&done=" + task.isDone());
+	}
 
-	static async patchRequirement(requirement){
-		return axios.patch(DataApi.serverUrl + '/requirement/?modelname=' + name + "&requirementid=" + id);
+	static async patchRequirement(model, requirement){
+		return axios.patch(DataApi.serverUrl + '/requirement/?modelname=' + model.getName() + "&requirementid=" + requirement.getId() + "&requirementvalue=" + requirement.getValue());
 	}
 
 	static async isAvailable(){

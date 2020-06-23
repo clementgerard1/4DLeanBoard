@@ -143,7 +143,7 @@ class PlanningObject{
 	*/
 	getPropertyByName(name){
 		if(!(Object.keys(this.#properties).includes(name))){
-			console.error("addPropertyByName(name) : name " + name + " not in the collection");
+			console.error("getPropertyByName(name) : name " + name + " not in the collection");
 			return null;
 		}else{
 			return this.#properties[name];
@@ -156,12 +156,12 @@ class PlanningObject{
 		@returns {Property} Property corresponding
 	*/
 	getProperty(id){
-		if(typeof this.#properties[id] == "undefined"){
-			console.error("getProperty(id) : id " + id + " unknowned on properties colleciton")
-			return null;
-		}else{
-			return this.#properties[id];
+		let n = null;
+		const properties = this.getProperties();
+		for(let p in properties){
+			if(properties[p].getId() == id) return properties[p];
 		}
+		return null;
 	}
 
 	/**

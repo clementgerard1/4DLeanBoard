@@ -398,14 +398,22 @@ export default {
 		handleConstraintChange : function(event){
 			this.constraintTap = true;
 			switch(event.target.id){
-				case "constraintTap": this.task.getRequirement("constraint").setValue(!this.task.getRequirement("constraint").getValue()); break;
-				case "informationTap": this.task.getRequirement("information").setValue(!this.task.getRequirement("information").getValue()); break;
-				case "materialsTap": this.task.getRequirement("materials").setValue(!this.task.getRequirement("materials").getValue()); break;
-				case "manpowerTap": this.task.getRequirement("manpower").setValue(!this.task.getRequirement("manpower").getValue()); break;
-				case "equipementTap": this.task.getRequirement("equipement").setValue(!this.task.getRequirement("equipement").getValue()); break;
-				case "safetyTap": this.task.getRequirement("safety").setValue(!this.task.getRequirement("safety").getValue()); break;
-				case "spaceTap": this.task.getRequirement("space").setValue(!this.task.getRequirement("space").getValue()); break;
+				case "constraintTap": 	this.task.getRequirement("constraint").setValue(!this.task.getRequirement("constraint").getValue()); 
+										break;
+				case "informationTap": 	this.task.getRequirement("information").setValue(!this.task.getRequirement("information").getValue()); 
+										break;
+				case "materialsTap": 	this.task.getRequirement("materials").setValue(!this.task.getRequirement("materials").getValue()); 
+										break;
+				case "manpowerTap": 	this.task.getRequirement("manpower").setValue(!this.task.getRequirement("manpower").getValue()); 
+										break;
+				case "equipementTap": 	this.task.getRequirement("equipement").setValue(!this.task.getRequirement("equipement").getValue()); 
+										break;
+				case "safetyTap": 		this.task.getRequirement("safety").setValue(!this.task.getRequirement("safety").getValue()); 
+										break;
+				case "spaceTap": 		this.task.getRequirement("space").setValue(!this.task.getRequirement("space").getValue()); 
+										break;
 			}
+			V_socketUtils.setRequirement(this.model, this.task.getRequirement(event.target.id.replace("Tap", "")));
 			V_taskTableUtils.updateRequirements(this.task);
 		},
 		updateRequirements(){
@@ -434,6 +442,8 @@ export default {
 				this.paused = false;
 				this.task.setPaused(false);
 			}
+
+			V_socketUtils.setTaskState(this.model, this.task);
 
 		},
 		updatePrevious(){
