@@ -1,5 +1,19 @@
 import Utils from "./Utils.class.js";
 import Milestone from './Milestone.class.js';
+import Phase from './Phase.class.js';
+import Task from './Task.class.js';
+import Operation from './Operation.class.js';
+import Contractor from './Contractor.class.js';
+import TaskTeam from './TaskTeam.class.js';
+import OperationUnit from './OperationUnit.class.js';
+import Zone from './Zone.class.js';
+import Delivrable from './Delivrable.class.js';
+import Requirement from './Requirement.class.js';
+import Level from './Level.class.js';
+import State from './State.class.js';
+import ConstructionType from './ConstructionType.class.js';
+import Object3D from './Object3D.class.js';
+import Object4D from './Object4D.class.js';
 import Serialize from 'serialize-javascript';
 
 class Model{
@@ -564,7 +578,7 @@ class Model{
 				properties : propertyIds,
 				operations : operationIds,
 				taskTeam : t.getTaskTeam().getId(),
-				object4D : t.getObject4D(),
+				object4D : t.getObject4D().getId(),
 			}
 
 			jsonObj.tasks.push(task);
@@ -632,10 +646,17 @@ class Model{
 		for(let key in taskTeams){
 			const t = taskTeams[key];
 
+			const operationUnits = t.getOperationUnits();
+			const operationUnitIds = [];
+			for(let o in operationUnits){
+				operationUnitIds.push(operationUnits[o].getId());
+			}
+
 			const taskTeam = {
 				id : t.getId(),
 				name : t.getName(),
 				workers : t.getWorkers(),
+				operationUnits : operationUnits,
 			}
 
 			jsonObj.taskTeams.push(taskTeam);
@@ -658,10 +679,15 @@ class Model{
 		const properties = this.getProperties();
 		for(let key in properties){
 			const p = properties[key];
+			let value = null;
+			if(p.constructor.name == "Zone" || p.constructor.name == "Zone" || p.constructor.name == "Requirement" || p.constructor.name == "Level" || p.constructor.name == "ConstructionType"){
+				value = p.getValue();
+			}
 			const property = {
 				id : p.getId(),
 				name : p.getName(),
-				type : p.constructor.name
+				type : p.constructor.name,
+				value : value,
 			}
 
 			jsonObj.properties.push(property);
@@ -727,12 +753,240 @@ class Model{
 		@returns {Model}
 	*/
 	deserialize(json){
-		const model = new Model();
 		const datas = eval('(' + json + ')');
-		console.log(datas);
 
-		
-		return model;
+		//Init
+		this.#milestones = [];
+		this.#duration = null;
+
+		//Objects creation without links
+		const milestones = [];
+		const phases = [];
+		const tasks = [];
+		const operations = [];
+
+		for(let m in datas.milestones){
+			const infos = datas.milestones[m];
+			const milestone = new Milestone(infos.name, infos.event, infos.id);
+			milestone.setStartDate(infos.start);
+			milestone.setEndDate(infos.end);
+			milestones[milestone.getId()] =  milestone;
+		}
+		for(let p in datas.phases){
+			const infos = datas.phases[p];
+			const phase = new Phase(infos.name, infos.id);
+			phase.setStartDate(infos.start);
+			phase.setEndDate(infos.end);
+			phase.setColorClass(infos.colorClass);
+			phases[phase.getId()] = phase;
+		}
+		for(let t in datas.tasks){
+			const infos = datas.tasks[t];
+			const task = new Task(infos.name, infos.id);
+			task.setStartDate(infos.start);
+			task.setEndDate(infos.end);
+			tasks[task.getId()] = task;
+		}
+		for(let o in datas.operations){
+			const infos = datas.operations[o];
+			const operation = new Operation(infos.name, infos.id);
+			operation.setStartDate(infos.start);
+			operation.setEndDate(infos.end);
+			operations[operation.getId()] = operation;
+		}
+
+		const contractors = [];
+		const taskTeams = [];
+		const operationUnits = [];
+
+		for(let c in datas.contractors){
+			const infos = datas.contractors[c];
+			const contractor = new Contractor(infos.name, infos.id);
+			contractors[contractor.getId()] = contractor;
+		}
+		for(let t in datas.taskTeams){
+			const infos = datas.taskTeams[t];
+			const taskTeam = new TaskTeam(infos.name, infos.id);
+			taskTeam.setWorkers(infos.workers);
+			taskTeams[taskTeam.getId()] = taskTeam;
+		}
+		for(let o in datas.operationUnits){
+			const infos = datas.operationUnits[o];
+			const operationUnit = new OperationUnit(infos.name, infos.id);
+			operationUnits[operationUnit.getId()] = operationUnit;
+		}
+
+		const properties = [];
+		const delivrables = [];
+
+		for(let p in datas.properties){
+			const infos = datas.properties[p];
+			if(infos.type == "Zone"){
+				const zone = new Zone(infos.value, infos.name, infos.id);
+				properties[zone.getId()] = zone;
+
+			}else if(infos.type == "State"){
+				const state = new State(infos.value, infos.name, infos.id);
+				state.setValue(infos.value);
+				properties[state.getId()] = state;
+
+			}else if(infos.type == "Requirement"){
+				const requirement = new Requirement(infos.name, infos.id);
+				requirement.setValue(infos.value);
+				properties[requirement.getId()] = requirement;
+
+			}else if(infos.type == "Level"){
+				const level = new Level(infos.value, infos.name, infos.id);
+				level.setValue(infos.value);
+				properties[level.getId()] = level;
+
+			}else if(infos.type == "ConstructionType"){
+				const constructionType = new ConstructionType(infos.value, infos.name, infos.id);
+				constructionType.setValue(infos.value);
+				properties[constructionType.getId()] = constructionType;
+
+			}else{
+				const property = new Property(infos.name, infos.id);
+				properties[property.getId()] = property;
+
+			}
+		}
+
+		for(let d in datas.delivrables){
+			const infos = datas.delivrables[d];
+			const delivrable = new Delivrable(infos.name, infos.id);
+			delivrables[delivrable.getId()] = delivrable;
+		}
+
+		const objects3D = [];
+		const objects4D = [];
+
+		for(let o in datas.objects3D){
+			const infos = datas.objects3D[o];
+			const object3D = new Object3D(infos.name, infos.objId, infos.ifcId, infos.id);
+			objects3D[object3D.getId()] = object3D;
+		}
+		for(let o in datas.objects4D){
+			const infos = datas.objects4D[o];
+			const object4D = new Object4D(infos.name, infos.id);
+			objects4D[object4D.getId()] = object4D;
+		}
+
+		//Links creation
+		for(let m in datas.milestones){
+			const infos = datas.milestones[m];
+			const milestone = milestones[infos.id];
+			for(let f in infos.followings){
+				milestone.addFollowingMilestone(milestones[infos.followings[f]]);
+			}
+			for(let p in infos.previous){
+				milestone.addPreviousMilestone(milestones[infos.previous[p]]);
+			}
+			for(let p in infos.properties){
+				milestone.addRequirement(properties[infos.properties[p]]);
+			}
+			for(let p in infos.phases){
+				milestone.addPhase(phases[infos.phases[p]]);
+			}
+			this.addMilestone(milestone);
+		}
+
+		for(let p in datas.phases){
+			const infos = datas.phases[p];
+			const phase = phases[infos.id];
+			phase.setContractor(contractors[infos.contractor]);
+			for(let f in infos.followings){
+				phase.addFollowingPhase(phases[infos.followings[f]]);
+			}
+			for(let p in infos.previous){
+				phase.addPreviousPhase(phases[infos.previous[p]]);
+			}
+			for(let d in infos.delivrables){
+				phase.addDelivrable(delivrable[infos.delivrables[d]]);
+			}
+			for(let p in infos.properties){
+				phase.addProperty(properties[infos.properties[p]]);
+			}
+			for(let t in infos.tasks){
+				phase.addTask(tasks[infos.tasks[t]]);
+			}
+			for(let o in infos.objects4D){
+				phase.addObject4D(objects4D[infos.objects4D[o]]);
+			}
+		}
+
+		for(let t in datas.tasks){
+			const infos = datas.tasks[t];
+			const task = tasks[infos.id];
+			task.setTaskTeam(taskTeams[infos.taskTeam]);
+			task.setObject4D(objects4D[infos.object4D]);
+			for(let f in infos.followings){
+				task.addFollowingTask(tasks[infos.followings[f]]);
+			}
+			for(let p in infos.previous){
+				task.addPreviousTask(tasks[infos.previous[p]]);
+			}
+			for(let o in infos.operations){
+				phase.addOperation(operations[infos.operations[o]]);
+			}
+			for(let p in infos.properties){
+				const property = properties[infos.properties[p]];
+				if(property.type == "Zone"){
+					task.setZone(property);
+				}else if(property.type == "ConstructionType"){
+					task.setConstructionType(property);
+				}else if(property.type == "State"){
+					task.setState(property);
+				}
+			}
+		}
+
+		for(let o in datas.operations){
+			const infos = datas.operations[o];
+			const operation = operations[infos.id];
+			operation.setOperationUnit(operationUnits[infos.operationUnit]);
+			for(let f in infos.followings){
+				operation.addFollowingOperation(operations[infos.followings[f]]);
+			}
+			for(let p in infos.previous){
+				operation.addPreviousOperation(operations[infos.previous[p]]);
+			}
+			for(let p in infos.properties){
+				operation.addProperty(properties[infos.properties[p]]);
+			}
+		}
+
+		for(let c in datas.contractors){
+			const infos = datas.contractors[c];
+			const contractor = contractors[infos.id];
+			for(let t in infos.taskTeams){
+				contractor.addTaskTeam(taskTeams[infos.taskTeams[t]]);
+			}
+		}		
+
+		for(let t in datas.taskTeams){
+			const infos = datas.taskTeams[t];
+			const taskTeam = taskTeams[infos.id];
+			for(let o in infos.operationUnits){
+				taskTeam.addOperationUnit(operationUnits[infos.operationUnits[o]]);
+			}
+		}		
+
+		for(let o in datas.objects4D){
+			const infos = datas.objects4D[o];
+			const object4D = objects4D[infos.id];
+			object4D.setPhase(phases[infos.phase]);
+			object4D.setTask(tasks[infos.task]);
+			for(let o in infos.objects3D){
+				object4D.addObject3D(objects3D[infos.objects3D[o]]);
+			}
+		}		
+
+		for(let o in datas.objects3D){
+			const infos = datas.objects3D[o];
+			const object3D = objects3D[infos.id];
+			object3D.setParent(objects4D[infos.parentObject4D]);
+		}		
 	}
 
 }

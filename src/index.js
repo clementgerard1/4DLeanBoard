@@ -2,6 +2,7 @@ import Vue from "vue/dist/vue.esm.js";
 import Utils from "./class/Utils.class.js";
 import Loader from "./class/Loader.class.js";
 import Timeline from "./class/Timeline.class.js";
+import Model from "./class/Model.class.js";
 import V_player from "./components/Player/V_player.vue";
 import V_filterPanel from "./components/FilterPanel/V_filterPanel.vue";
 import V_svgDefs from "./components/SixWeekView/V_SvgDefs.vue";
@@ -69,6 +70,9 @@ async function init(){
 			//Model Loaded and Timeline created
 			timeline = tl;
 			model = timeline.getModel();
+			const json = model.serialize();
+			model = new Model()
+			model.deserialize(json);
 			playerInit = 0;
 			const phase = timeline.getModel().getMilestones()[0].getPhases()[0];
 		  	duration = model.getDuration();

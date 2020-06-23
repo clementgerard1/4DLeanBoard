@@ -33,7 +33,7 @@ class Zone extends Property{
 		@param {string} value of the zone property
 	*/
 	setValue(value){
-		if(typeof value == "string"){
+		if(typeof value != "string"){
 			console.error("setValue(value) need a string ; provided : " + value);
 		}else{
 			this.#val = value;
