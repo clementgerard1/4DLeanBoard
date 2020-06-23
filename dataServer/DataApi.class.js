@@ -25,12 +25,19 @@ class DataApi{
 			model.deserialize(modelS.data);
 			return model;
 		});
+
+	}
+
+	//static async patchTaskState(task){
+	//	return axios.patch(DataApi.serverUrl + '/requirement/?modelname=' + name + "&requirementid=" + id);
+	//}
+
+	static async patchRequirement(requirement){
+		return axios.patch(DataApi.serverUrl + '/requirement/?modelname=' + name + "&requirementid=" + id);
 	}
 
 	static async isAvailable(){
-
-		return await axios.get(DataApi.serverUrl).then( () => {return true;}).catch( () => {return false;});
-		
+		return axios.get(DataApi.serverUrl).then( () => {return true;}).catch( () => {return false;});
 	}
 
 }

@@ -12,6 +12,9 @@ export default {
 			contractors : contractors
 		}
 	},
+	created: function(){
+		V_socketUtils.addFilter();
+	},
 	props : [
 		"model"
 	],

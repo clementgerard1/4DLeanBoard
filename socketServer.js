@@ -6,7 +6,9 @@ const io = require('socket.io')(http);
 const socketPort = 3001;
 
 const viewers = [];
+const players = [];
 const w6s = [];
+const filters = [];
 
 io.on("connection", function(client){
 
@@ -17,6 +19,14 @@ io.on("connection", function(client){
 
     client.on("addW6", () => {
         w6s.push(client);
+    });
+
+    client.on("addPlayer", () => {
+        players.push(client);
+    });
+
+    client.on("addFilter", () => {
+        filters.push(client);
     });
 
     client.on("highlightObject4D", (datas) => {

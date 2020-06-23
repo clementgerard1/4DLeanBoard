@@ -59,25 +59,22 @@ class V_socketUtils{
 	}
 
 	/**
-		Highlight a task on W6Planning from Viewer
-		@param {Task} task 
+		Add this socket as a W6Planning
 		@static
-	*/		
-	static highlightTask(task){
-		V_taskTableUtils.highlightTaskById(task.getId());
-  		this.socket.emit("highlightTask", { id : task.getId()});
+	*/	
+	static addPlayer(){
+		this.socket.emit("addPlayer");
 	}
-
 
 	/**
-		Highlight a object4D on Viewer from 6WPlanning
-		@param {Task} task 
+		Add this socket as a W6Planning
 		@static
-	*/		
-	static highlightObject4D(object4D){
-		V_4DUtils.highlightObject4D(object4D);
-		this.socket.emit("highlightObject4D", { id : object4D.getId()});
+	*/	
+	static addFilter(){
+		this.socket.emit("addFilter");
 	}
+
+	/* ---------------------------- PLAYER INTERACTIONS ---------------------------- */
 
 	/**
 		Set global time
@@ -89,6 +86,20 @@ class V_socketUtils{
 		this.socket.emit("setTime", { time : time});
 	}
 
+	/* ---------------------------- 3D INTERACTIONS ---------------------------- */
+
+	/**
+		Highlight a task on W6Planning from Viewer
+		@param {Task} task 
+		@static
+	*/		
+	static highlightTask(task){
+		V_taskTableUtils.highlightTaskById(task.getId());
+  		this.socket.emit("highlightTask", { id : task.getId()});
+	}
+
+
+/* ---------------------------- 3D Filter INTERACTIONS ---------------------------- */
 	/**
 		Set the contractor displayed on viewer
 		@param {Contractor} contractor
@@ -112,6 +123,26 @@ class V_socketUtils{
 		V_4DUtils.setContractorDisplayMode(active);
 		this.socket.emit("setContractorDisplayMode", { bool : active});
 	}
+
+	/* ---------------------------- W6 INTERACTIONS ---------------------------- */
+
+	/**
+		Highlight a object4D on Viewer from 6WPlanning
+		@param {Task} task 
+		@static
+	*/		
+	static highlightObject4D(object4D){
+		V_4DUtils.highlightObject4D(object4D);
+		this.socket.emit("highlightObject4D", { id : object4D.getId()});
+	}
+
+	//setRequirement
+	//setDone
+	//setPause
+	//setReady
+	//setDoubleClick
+	//setSimple
+	//setPushPrevious
 
 }
 export default V_socketUtils;

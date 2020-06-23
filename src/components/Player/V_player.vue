@@ -14,6 +14,9 @@ export default {
 				maximum : Math.trunc(this.duration / 7)
 		}
 	},
+	created : function(){
+		V_socketUtils.addPlayer();
+	},
 	watch : {
 		time : function(){
 			V_socketUtils.setTime(this.time);
