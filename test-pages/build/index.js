@@ -205,7 +205,7 @@ eval("module.exports = function () {\n  window.addEventListener(\"load\", functi
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("module.exports = function () {\n  window.addEventListener(\"load\", function () {\n    init();\n  });\n};\n\nfunction init() {\n  Promise.all([Utils.loadTextFile(\"datas/Project1v2.json\"), Utils.loadTextFile(\"datas/Project1.ifc\")]).then(function (files) {\n    return Loader.fromJSONandIFC(files[0], files[1]);\n  }).then(function (tl) {\n    var model = tl.getModel();\n    var json = model.serialize();\n    console.log(json);\n    var model2 = model.deserialize(json);\n    console.log(model2);\n  })[\"catch\"](function (error) {\n    return console.error(error);\n  });\n}\n\n//# sourceURL=webpack:///./test-pages/src/serializeModel/serializeModel.js?");
+eval("module.exports = function () {\n  window.addEventListener(\"load\", function () {\n    init();\n  });\n};\n\nfunction init() {\n  DataApi.getModel(\"test\").then(function (model) {});\n  /*const model = tl.getModel();\n  DataApi.postModel(model, \"test\")\n  .then(()=>{\n  \tconsole.log(\"success\");\n  }).catch(()=>{\n  \tconsole.error(\"error\");\n  });*/\n}\n\n//# sourceURL=webpack:///./test-pages/src/serializeModel/serializeModel.js?");
 
 /***/ }),
 

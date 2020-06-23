@@ -931,12 +931,15 @@ class Model{
 			}
 			for(let p in infos.properties){
 				const property = properties[infos.properties[p]];
-				if(property.type == "Zone"){
+
+				if(property instanceof Zone){
 					task.setZone(property);
-				}else if(property.type == "ConstructionType"){
+				}else if(property  instanceof ConstructionType){
 					task.setConstructionType(property);
-				}else if(property.type == "State"){
+				}else if(property  instanceof State){
 					task.setState(property);
+				}else if(property  instanceof Requirement){
+					task.addRequirement(property.getName(), property);
 				}
 			}
 		}

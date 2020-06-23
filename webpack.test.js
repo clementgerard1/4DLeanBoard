@@ -12,6 +12,7 @@ module.exports = {
   	index : './test-pages/src/index.js',
   	entry : './src/class/entry.js',
   	entryVue : './src/components/entry.js',
+  	dataEntry : './dataServer/dataEntry.js'
   },
   output: {
     path: path.resolve(__dirname, './test-pages/build'),

@@ -1,3 +1,4 @@
+import DataApi from "../dataServer/DataApi.class.js";
 import Vue from "vue/dist/vue.esm.js";
 import Utils from "./class/Utils.class.js";
 import Loader from "./class/Loader.class.js";
@@ -59,92 +60,23 @@ async function init(){
 	const socket = openSocket(window.location.host.replace("3000", "3001"));
 	V_socketUtils.setSocket(socket);
 
-	await Promise.all([Utils.loadTextFile("datas/Project1v2.json"), Utils.loadTextFile("datas/Project1.ifc")])
-	.then( files => {
-			return Loader.fromJSONandIFC(files[0], files[1]);
-		})
-	.then( tl => {
-			//Model Loaded and Timeline created
-			timeline = tl;
-			model = timeline.getModel();
+	await DataApi.isAvailable().then(available => {
+		if(available){
+			return DataApi.getModel("test");
+		}else{
+			return Promise.all([Utils.loadTextFile("datas/Project1v2.json"), Utils.loadTextFile("datas/Project1.ifc")])
+			.then( files => {
+				return Loader.fromJSONandIFC(files[0], files[1]);
+			})
+		}
+	})
+	.then( mod => {
+			//Model Loaded
+			model = mod;
+			timeline = new Timeline(model);;
 			playerInit = 0;
 			const phase = timeline.getModel().getMilestones()[0].getPhases()[0];
 		  	duration = model.getDuration();
-
-	  	//Touch gestures
-	  	Vue.directive("tap", {
-				bind: function(el, binding) 
-				{
-					if(el.getAttribute("hammerid") == null){
-						el.setAttribute("hammerid", Utils.getId("hammer"));
-					}
-					if (typeof binding.value === "function") {
-						let hammer = TouchGesturesUtils.getHammer(el);
-
-						if(hammer == null){
-							hammer = new Hammer(el);
-							TouchGesturesUtils.addHammer(el, hammer);
-						} 
-
-						const singleTap = new Hammer.Tap({
-								event: 'tap1'
-						});
-						singleTap.recognizeWith(hammer.recognizers)
-						hammer.add([singleTap]);
-						hammer.on("tap1", binding.value);
-
-						TouchGesturesUtils.updateHammer(el);
-					}
-				}
-			});
-
-			//Touch gestures
-	  	Vue.directive("doubletap", {
-				bind: function(el, binding) 
-				{
-					if(el.getAttribute("hammerid") == null){
-						el.setAttribute("hammerid", Utils.getId("hammer"));
-					}
-					if (typeof binding.value === "function") {
-						let hammer = TouchGesturesUtils.getHammer(el);
-						if(hammer == null){
-							hammer = new Hammer(el);
-							TouchGesturesUtils.addHammer(el, hammer);
-						} 
-						
-						const doubleTap = new Hammer.Tap(
-							{event: 'tap2', taps: 2, interval: 300, posThreshold: 150, threshold: 50 }
-						);
-						doubleTap.recognizeWith(hammer.recognizers)
-						hammer.add(doubleTap);
-						hammer.on("tap2", binding.value);
-
-						TouchGesturesUtils.updateHammer(el);
-					}
-				}
-			});
-
-			Vue.directive("pan", {
-				bind: function(el, binding) 
-				{
-					if(el.getAttribute("hammerid") == null){
-						el.setAttribute("hammerid", Utils.getId("hammer"));
-					}
-					if (typeof binding.value === "function") {
-						let hammer = TouchGesturesUtils.getHammer(el);
-						if(hammer == null){
-							hammer = new Hammer(el);
-							TouchGesturesUtils.addHammer(el, hammer);
-						} 
-		
-						hammer.on("panstart", binding.value);
-						hammer.on("panmove", binding.value);
-						hammer.on("panend", binding.value);
-
-						TouchGesturesUtils.updateHammer(el);
-					}
-				}
-			});
 
 			//Création du viewer
 			let clientId = Config.autoDeskForgeSettings[Config.autoDeskAccount].clientId;
@@ -166,6 +98,80 @@ async function init(){
 	})
 	.catch( error => console.error(error));
 
+	//Touch gestures
+	Vue.directive("tap", {
+		bind: function(el, binding) 
+		{
+			if(el.getAttribute("hammerid") == null){
+				el.setAttribute("hammerid", Utils.getId("hammer"));
+			}
+			if (typeof binding.value === "function") {
+				let hammer = TouchGesturesUtils.getHammer(el);
+
+				if(hammer == null){
+					hammer = new Hammer(el);
+					TouchGesturesUtils.addHammer(el, hammer);
+				} 
+
+				const singleTap = new Hammer.Tap({
+						event: 'tap1'
+				});
+				singleTap.recognizeWith(hammer.recognizers)
+				hammer.add([singleTap]);
+				hammer.on("tap1", binding.value);
+
+				TouchGesturesUtils.updateHammer(el);
+			}
+		}
+	});
+
+	//Touch gestures
+	Vue.directive("doubletap", {
+		bind: function(el, binding) 
+		{
+			if(el.getAttribute("hammerid") == null){
+				el.setAttribute("hammerid", Utils.getId("hammer"));
+			}
+			if (typeof binding.value === "function") {
+				let hammer = TouchGesturesUtils.getHammer(el);
+				if(hammer == null){
+					hammer = new Hammer(el);
+					TouchGesturesUtils.addHammer(el, hammer);
+				} 
+				
+				const doubleTap = new Hammer.Tap(
+					{event: 'tap2', taps: 2, interval: 300, posThreshold: 150, threshold: 50 }
+				);
+				doubleTap.recognizeWith(hammer.recognizers)
+				hammer.add(doubleTap);
+				hammer.on("tap2", binding.value);
+
+				TouchGesturesUtils.updateHammer(el);
+			}
+		}
+	});
+
+	Vue.directive("pan", {
+		bind: function(el, binding) 
+		{
+			if(el.getAttribute("hammerid") == null){
+				el.setAttribute("hammerid", Utils.getId("hammer"));
+			}
+			if (typeof binding.value === "function") {
+				let hammer = TouchGesturesUtils.getHammer(el);
+				if(hammer == null){
+					hammer = new Hammer(el);
+					TouchGesturesUtils.addHammer(el, hammer);
+				} 
+
+				hammer.on("panstart", binding.value);
+				hammer.on("panmove", binding.value);
+				hammer.on("panend", binding.value);
+
+				TouchGesturesUtils.updateHammer(el);
+			}
+		}
+	});
 
 	const app = new Vue({
 		el : '#content',

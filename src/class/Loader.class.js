@@ -246,9 +246,8 @@ class Loader{
 
 
 		model.setStartDate(new Date());
-		const timeline = new Timeline(model);
 
-		return timeline;
+		return model;
 
 	}
 
@@ -351,9 +350,8 @@ class Loader{
 
 
 		model.setStartDate(new Date());
-		const timeline = new Timeline(model);
 
-		return timeline;
+		return model;
 
 	}
 
@@ -451,9 +449,8 @@ class Loader{
 
 
 		model.setStartDate(new Date());
-		const timeline = new Timeline(model);
 
-		return timeline;
+		return model;
 
 	}
 
@@ -543,9 +540,8 @@ class Loader{
 		}
   
 		model.setStartDate(startDate);
-		const timeline = new Timeline(model);
 
-		return timeline;
+		return model;
 
 	}
 
