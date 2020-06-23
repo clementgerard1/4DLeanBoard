@@ -58,9 +58,11 @@ export default {
 					}
 				}
 				this.fliterModeFlag = true;
+				this.viewer.setGroundShadow(false);
 			} else {
 				this.clearColors();
 				this.fliterModeFlag = false;
+				this.viewer.setGroundShadow(true);
 			}
 		},
 
@@ -123,8 +125,11 @@ export default {
 					for(let s in this.tree.nodeAccess.nameSuffixes){
 						if(this.tree.nodeAccess.nameSuffixes[s] == object3D.getUniqId()){
 							const index = this.getDbId(s);
+							const obj = this.objs[object3D.getId()];
+							if(this.colored.includes(index)) {
+								this.restore3DObject(obj);
+							}
 							if(!this.selected.includes(index)){
-								const obj = this.objs[object3D.getId()];
 								this.selected.push(obj);
 								this.color3DObject(obj, true);
 								this.viewer.fitToView(index[0], this.viewer.model);
