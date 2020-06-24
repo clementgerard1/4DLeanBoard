@@ -53,6 +53,9 @@ export default {
 		},
 		watchTime : function(time){
 			this.time = time;
+			if(!this.playerflag){
+				this.windowUpdate();
+			}
 		},
 		handlePan : function(event){
 			const x = event.srcEvent.clientX - this.svg.getBoundingClientRect().x;
@@ -64,9 +67,10 @@ export default {
 				if(event.type == "panmove" || event.type == "panstart"){
 					if( x > (weekWidth / 2) && x < ((this.nbweek-1) * weekWidth + (weekWidth / 2)) ){
 						this.playerX = x;
-
 						const time = Math.trunc(x / weekWidth);
-						V_socketUtils.setTime(time);
+						if(time != this.time){
+							V_socketUtils.setTime(time);
+						}
 					}
 				}
 

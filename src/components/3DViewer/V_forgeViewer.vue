@@ -1,5 +1,6 @@
 import V_4DUtils from "../Utils/V_4DUtils.class.js";
 import V_socketUtils from "../Utils/V_socketUtils.class.js";
+import V_timelineUtils from "../Utils/V_timelineUtils.class.js";
 import Config from "../../../config.js"
 import "./V_forgeViewer.scss";
 import scssVariables from "../SixWeekView/assets/_variables.scss";
@@ -481,11 +482,17 @@ export default {
 		},
 		onLoadError(errCode, that){
 	      console.log('Error loading document: ' + errCode)
+		},
+
+		watchTime : function(time){
+			this.time = time;
+			const selected = this.timeline.getTasksBetweenTwoDates(time * 7, (time * 7) + 7);
 		}
 	},
 	created : function(){
 		V_4DUtils.setForgeViewer(this);
 		V_socketUtils.addViewer();
+		V_timelineUtils.addListener("time", this, this.watchTime);
 	},
 	mounted : function(){
 		if(Config["forgeRenderer"]){

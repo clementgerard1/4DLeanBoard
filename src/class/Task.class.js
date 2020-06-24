@@ -233,11 +233,20 @@ class Task extends PlanningObject{
 
 	/**
 		Get a requierement of the task
-		@param {string} name Name of LPSRequirement 
-		@returns {ConstructionType} constructionType of the task
+		@param {string} name 
+		@returns {Requirement} 
 	*/
 	getRequirement(name){
 		return super.getPropertyByName(name);
+	}
+
+	/**
+		Get a requierement of the task by id
+		@param {uint} id 
+		@returns {Requirement}
+	*/
+	getRequirementById(id){
+		return super.getProperty(id);
 	}
 
 	/**

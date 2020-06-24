@@ -188,7 +188,7 @@ export default {
 			if(this.task != null){
 				this.selected = V_taskTableUtils.isTokenOwner(this);
 				if(this.selected){
-					V_socketUtils.highlightObject4D(this.task.getObject4D());
+					V_socketUtils.highlightObject4D(this.task.getObject4D(), true);
 				}
 			}else{
 				this.selected = null;
@@ -328,7 +328,7 @@ export default {
 				};
 			}
 		},
-		handleDoubleTap: function(event){
+		updateStateDisplay : function(){
 			if(this.notEmpty){
 				if(!this.state){
 					this.state = true;
@@ -347,20 +347,22 @@ export default {
 				}
 			}
 		},
+		handleDoubleTap: function(event){
+			V_socketUtils.updateStateDisplay(this.task);
+		},
 		handlePress : function(event){
 			const display = event.type == "press";
 			const tasks = this.task.getPreviousTasks();
 			for(let t  in tasks){
-				V_taskTableUtils.highlightTask(tasks[t] , display);
+				V_socketUtils.pressHighlightTask(tasks[t] , display);
 			}
 
 		},
 		handleTap: function(event){
 			if(!this.constraintTap){
 				if(this.task != null){
-					V_taskTableUtils.setToken(this.task);
+					V_socketUtils.highlightObject4D(this.task.getObject4D(), !this.selected);
 				}
-				V_socketUtils.highlightObject4D(this.task.getObject4D());
 			}else{
 				this.constraintTap = false;
 			}
@@ -368,45 +370,52 @@ export default {
 		handleReadyTap: function(event){
 			this.constraintTap = true;
 			if(this.ready){
-					this.done = false;
-					this.task.setDone(false);
-					this.paused = false;
-					this.task.setPaused(false);
-					V_taskTableUtils.updateRequirements(this.task);
+				this.task.setDone(false);
+				this.task.setPaused(false);
+				V_socketUtils.setTaskState(this.model, this.task);
 			}
 		},
 		handleDoneTap: function(event){
 			this.constraintTap = true;
 			if(this.ready){
-				this.done = true;
 				this.task.setDone(true);
-				this.paused = false;
 				this.task.setPaused(false);
-				V_taskTableUtils.updateRequirements(this.task);
+				V_socketUtils.setTaskState(this.model, this.task);
 			}
 		},
 		handlePausedTap: function(event){
 			this.constraintTap = true;
 			if(this.ready){
-				this.paused = true;
 				this.task.setPaused(true);
-				this.done = false;
 				this.task.setDone(false);
-				V_taskTableUtils.updateRequirements(this.task);
+				V_socketUtils.setTaskState(this.model, this.task);
 			}
 		},
 		handleConstraintChange : function(event){
 			this.constraintTap = true;
 			switch(event.target.id){
-				case "constraintTap": this.task.getRequirement("constraint").setValue(!this.task.getRequirement("constraint").getValue()); break;
-				case "informationTap": this.task.getRequirement("information").setValue(!this.task.getRequirement("information").getValue()); break;
-				case "materialsTap": this.task.getRequirement("materials").setValue(!this.task.getRequirement("materials").getValue()); break;
-				case "manpowerTap": this.task.getRequirement("manpower").setValue(!this.task.getRequirement("manpower").getValue()); break;
-				case "equipementTap": this.task.getRequirement("equipement").setValue(!this.task.getRequirement("equipement").getValue()); break;
-				case "safetyTap": this.task.getRequirement("safety").setValue(!this.task.getRequirement("safety").getValue()); break;
-				case "spaceTap": this.task.getRequirement("space").setValue(!this.task.getRequirement("space").getValue()); break;
+				case "constraintTap": 	this.task.getRequirement("constraint").setValue(!this.task.getRequirement("constraint").getValue()); 
+										break;
+				case "informationTap": 	this.task.getRequirement("information").setValue(!this.task.getRequirement("information").getValue()); 
+										break;
+				case "materialsTap": 	this.task.getRequirement("materials").setValue(!this.task.getRequirement("materials").getValue()); 
+										break;
+				case "manpowerTap": 	this.task.getRequirement("manpower").setValue(!this.task.getRequirement("manpower").getValue()); 
+										break;
+				case "equipementTap": 	this.task.getRequirement("equipement").setValue(!this.task.getRequirement("equipement").getValue()); 
+										break;
+				case "safetyTap": 		this.task.getRequirement("safety").setValue(!this.task.getRequirement("safety").getValue()); 
+										break;
+				case "spaceTap": 		this.task.getRequirement("space").setValue(!this.task.getRequirement("space").getValue()); 
+										break;
 			}
-			V_taskTableUtils.updateRequirements(this.task);
+			V_socketUtils.setRequirement(this.model, this.task.getRequirement(event.target.id.replace("Tap", "")), this.task);
+		},
+		updateTaskState(){
+			if(this.ready){
+				this.paused = this.task.isPaused();
+				this.done = this.task.isDone();
+			}
 		},
 		updateRequirements(){
 			let previousReady = this.ready;
