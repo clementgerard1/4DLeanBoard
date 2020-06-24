@@ -29,7 +29,7 @@ export default {
 		},
 		checkboxes : function(){
 			V_socketUtils.setContractorDisplayMode(this.checkboxes.includes("contractors"));
-		}
+		},
 	},
 	template : `
 	<div class="filterPanel">

@@ -188,7 +188,7 @@ export default {
 			if(this.task != null){
 				this.selected = V_taskTableUtils.isTokenOwner(this);
 				if(this.selected){
-					V_socketUtils.highlightObject4D(this.task.getObject4D());
+					V_socketUtils.highlightObject4D(this.task.getObject4D(), true);
 				}
 			}else{
 				this.selected = null;
@@ -361,7 +361,7 @@ export default {
 		handleTap: function(event){
 			if(!this.constraintTap){
 				if(this.task != null){
-					V_socketUtils.highlightObject4D(this.task.getObject4D());
+					V_socketUtils.highlightObject4D(this.task.getObject4D(), !this.selected);
 				}
 			}else{
 				this.constraintTap = false;

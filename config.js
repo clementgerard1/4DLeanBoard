@@ -1,6 +1,6 @@
 module.exports = {
 	//For transfert logs from tablette to nodejs console
-	"socketConsole" : false,
+	"socketConsole" : true,
 	"socketConsoleIP" : "localhost",
 	"socketConsolePort" : 3002,
 

@@ -24,8 +24,8 @@ class V_socketUtils{
 	static initSocket(){
 		this.socket.on("highlightObject4D", (datas) => {
 
-			V_taskTableUtils.setTokenByObject4DId(datas.objId);
-			V_4DUtils.highlightObject4DById(datas.objId);
+			V_taskTableUtils.setTokenByObject4DId(datas.objId, datas.value);
+			V_4DUtils.highlightObject4DById(datas.objId, datas.value);
 
 		});
 
@@ -63,6 +63,11 @@ class V_socketUtils{
 		this.socket.on("setTaskState", (datas) => {
 			V_4DUtils.setContractorDisplayMode(datas.bool);
 		});
+		this.socket.on("clearHighlighting", (datas) => {
+			V_taskTableUtils.clearTokens();
+			V_4DUtils.clearHighlighting();
+		});
+
 	}
 
 	/**
@@ -152,12 +157,19 @@ class V_socketUtils{
 	/**
 		Highlight a object4D on Viewer from 6WPlanning
 		@param {Task} task 
+		@param {bool} bool
 		@static
 	*/		
-	static highlightObject4D(object4D){
-		V_taskTableUtils.setToken(object4D.getTask());
-		V_4DUtils.highlightObject4D(object4D);
-		this.socket.emit("highlightObject4D", { objId : object4D.getId()});
+	static highlightObject4D(object4D, bool){
+		V_taskTableUtils.setToken(object4D.getTask(), bool);
+		V_4DUtils.highlightObject4D(object4D, bool);
+		this.socket.emit("highlightObject4D", { objId : object4D.getId(), value:bool});
+	}
+
+	static clearHighlighting(){
+		V_taskTableUtils.clearTokens();
+		V_4DUtils.clearHighlighting();
+		this.socket.emit("clearHighlighting");
 	}
 
 	static setRequirement(model, requirement, task){

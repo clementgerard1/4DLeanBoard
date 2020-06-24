@@ -56,6 +56,10 @@ io.on("connection", function(client){
     client.on("updateStateDisplay", (datas) => {
         client.broadcast.emit("updateStateDisplay", datas);
     })
+
+    client.on("clearHighlighting", (datas) => {
+        client.broadcast.emit("clearHighlighting", datas);
+    })
     
 });
 

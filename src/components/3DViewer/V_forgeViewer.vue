@@ -1,5 +1,6 @@
 import V_4DUtils from "../Utils/V_4DUtils.class.js";
 import V_socketUtils from "../Utils/V_socketUtils.class.js";
+import V_timelineUtils from "../Utils/V_timelineUtils.class.js";
 import Config from "../../../config.js"
 import "./V_forgeViewer.scss";
 import scssVariables from "../SixWeekView/assets/_variables.scss";
@@ -117,8 +118,8 @@ export default {
 			}
 			this.colored = [];
 		},
-		highlight(object4D){
-			this.clearHighlighting();
+		highlight(object4D, bool){
+			//this.clearHighlighting();
 			if(this.viewer != null){
 				// ^ peut être ajouter la couleur qu'on veut mettre à l'object3D en paramètre
 				// sous la forme d'un vecteur4 contenant (r, g, b, a)
@@ -425,11 +426,17 @@ export default {
 		},
 		onLoadError(errCode, that){
 	      console.log('Error loading document: ' + errCode)
+		},
+
+		watchTime : function(time){
+			this.time = time;
+			const selected = this.timeline.getTasksBetweenTwoDates(time * 7, (time * 7) + 7);
 		}
 	},
 	created : function(){
 		V_4DUtils.setForgeViewer(this);
 		V_socketUtils.addViewer();
+		V_timelineUtils.addListener("time", this, this.watchTime);
 	},
 	mounted : function(){
 		if(Config["forgeRenderer"]){

@@ -353,6 +353,23 @@ class Timeline{
 		}
 	}
 
+	/*
+		get tasks between two moments
+		@param {uint} start
+		@param {uint} end
+		@returns {Array} 
+	*/
+	getTasksBetweenTwoDates(start, end){
+		const toReturn = [];
+		for(let i = start; i < end ; i++){
+			const tasks = this.#steps[i].tasks;
+			for(let t in tasks){
+				if(!toReturn.includes(tasks[t])) toReturn.push(tasks[t]);
+			}
+		}
+		return toReturn;
+	}
+
 	getTime(date){
 		return (date.getTime() - this.#startDate.getTime()) / (1000 * 3600 * 24);
 	}
