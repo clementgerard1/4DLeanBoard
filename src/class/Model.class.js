@@ -587,6 +587,8 @@ class Model{
 				operations : operationIds,
 				taskTeam : t.getTaskTeam().getId(),
 				object4D : t.getObject4D().getId(),
+				done : t.isDone(),
+				paused : t.isPaused()
 			}
 
 			jsonObj.tasks.push(task);
@@ -793,6 +795,8 @@ class Model{
 			const task = new Task(infos.name, infos.id);
 			task.setStartDate(infos.start);
 			task.setEndDate(infos.end);
+			task.setDone(infos.done);
+			task.setPaused(infos.paused);
 			tasks[task.getId()] = task;
 		}
 		for(let o in datas.operations){

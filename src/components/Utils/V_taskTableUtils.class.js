@@ -1,4 +1,4 @@
-class V_TaskTableUtils{
+class V_taskTableUtils{
 
 	static token = {
 		taskId : null
@@ -33,6 +33,12 @@ class V_TaskTableUtils{
 		return true;
 	}	
 
+	static setTokenByObject4DId(obj4DId){
+		for( let t in this.tasks){
+			if(this.tasks[t].task != null && this.tasks[t].task.getObject4D().getId() == obj4DId) V_taskTableUtils.setToken(this.tasks[t].task);
+		}
+	}
+
 	/**
 		Check if the V_task has the toekn
 		@param {V_task} obj which ask 
@@ -59,6 +65,24 @@ class V_TaskTableUtils{
 		}
 	}
 
+	static highlightTaskByIdAndUpdate(taskId, bool){
+		for( let t in this.tasks){
+			if(this.tasks[t].task != null && this.tasks[t].task.getId() == taskId) this.tasks[t].hightlight(bool);
+		}
+	}
+
+	static updateStateDisplay(task){
+		for( let t in this.tasks){
+			if(this.tasks[t].task == task) this.tasks[t].updateStateDisplay();
+		}
+	}
+
+	static updateStateDisplayById(taskId){
+		for( let t in this.tasks){
+			if(this.tasks[t].task != null && this.tasks[t].task.getId() == taskId) this.tasks[t].updateStateDisplay();
+		}
+	}
+
 	/**
 		Highlight Task on 6W Planning By Id
 		@param {string} taskId 
@@ -71,9 +95,39 @@ class V_TaskTableUtils{
 		}
 	}
 
+	static selectTaskById(taskid){
+
+	}
+
 	static updateRequirements(task){
 		for( let t in this.tasks){
 			if(this.tasks[t].task == task) this.tasks[t].updateRequirements();
+		}
+	}
+
+	static updateTaskState(task){
+		for( let t in this.tasks){
+			if(this.tasks[t].task == task) this.tasks[t].updateTaskState();
+		}
+	}
+
+	static updateRequirementByIdAndUpdate(taskId, requirementName, value){
+		for( let t in this.tasks){
+			if(this.tasks[t].task != null && this.tasks[t].task.getId() == taskId){
+				this.tasks[t].task.getRequirement(requirementName).setValue(value);
+				this.tasks[t].updateRequirements();
+			} 
+		}
+	}
+
+	static setTaskStateByIdAndUpdate(taskId, done, paused){
+		for( let t in this.tasks){
+			if(this.tasks[t].task != null && this.tasks[t].task.getId() == taskId){
+				this.tasks[t].task.setPaused(paused);
+				this.tasks[t].task.setDone(done);
+				V_taskTableUtils.updateTaskState(this.tasks[t].task);
+				V_taskTableUtils.updateRequirements(this.tasks[t].task);
+			} 
 		}
 	}
 
@@ -89,4 +143,4 @@ class V_TaskTableUtils{
 	}
 
 }
-export default V_TaskTableUtils;
+export default V_taskTableUtils;

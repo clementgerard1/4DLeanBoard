@@ -41,6 +41,22 @@ io.on("connection", function(client){
         client.broadcast.emit("setTime", datas);
     });
 
+    client.on("setRequirement", (datas) => {
+        client.broadcast.emit("setRequirement", datas);
+    })
+
+    client.on("setTaskState", (datas) => {
+        client.broadcast.emit("setTaskState", datas);
+    })
+
+    client.on("pressHighlightTask", (datas) => {
+        client.broadcast.emit("pressHighlightTask", datas);
+    })
+
+    client.on("updateStateDisplay", (datas) => {
+        client.broadcast.emit("updateStateDisplay", datas);
+    })
+    
 });
 
 http.listen(socketPort, () => {
