@@ -141,6 +141,7 @@ function init(){
 			oauth : null,
 			modelSelected : false,
 			selectPanel : false,
+			forgeReady : false,
  		},
  		methods:{
  			findGetParameter : function(parameterName) {
@@ -200,7 +201,8 @@ function init(){
 				.then( datas => {
 
 					this.manifest = datas.manifest;
-					this.oAuth = datas.oAuth;
+					this.oauth = datas.oAuth;
+					this.forgeReady = true;
 				})
 				.catch( error => console.error(error));
  			},
@@ -209,13 +211,20 @@ function init(){
  			}
  		},
  		created : function(){
- 			const modelName = this.findGetParameter("model");
- 			const type = this.findGetParameter("model"); // 3D, 6W, Player
- 			if(modelName != null){
- 				this.loadModel(modelName);
- 			}else{
- 				this.selectPanel = true;
- 			}
+ 			DataApi.isAvailable().then(available => {
+ 				if(available){
+		 			const modelName = this.findGetParameter("model");
+		 			const type = this.findGetParameter("model"); // 3D, 6W, Player
+		 			if(modelName != null){
+		 				this.loadModel(modelName);
+		 			}else{
+		 				this.selectPanel = true;
+		 			}
+		 		}else{
+		 			console.error("DATA SERVER DOESN'T AVAILABLE");
+		 			this.loadModel("");
+		 		}
+		 	});
  		},
  		template : `
  		<div>
@@ -225,7 +234,7 @@ function init(){
 	 				<p v-tap="handleTap"> No selected </p>
 	 			</modelselect>
 
-	 			<div v-if="modelSelected" id="viewerFrame">
+	 			<div v-if="forgeReady" id="viewerFrame">
 	 				<filterpanel id="filterPanel" v-bind:model="model"></filterpanel>
 	 				<forgeviewer id="forgeViewer" v-bind:model="model" v-bind:timeline="timeline" v-bind:manifest="manifest" v-bind:oauth="oauth"></forgeviewer>
 	 				<player id="mainPlayer" v-bind:duration="duration" v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit"></player>
