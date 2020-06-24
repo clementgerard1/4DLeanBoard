@@ -33,50 +33,6 @@ async function init(){
 	let oAuth = null;
 	let timeline = null;
 
-	//Socket Server Connexion
-	const socket = openSocket(window.location.host.replace("3000", "3001"));
-	V_socketUtils.setSocket(socket);
-
-
-	await DataApi.isAvailable().then(available => {
-		if(available){
-			return DataApi.getModel("test");
-		}else{
-			return Promise.all([Utils.loadTextFile("datas/Project1v2.json"), Utils.loadTextFile("datas/Project1.ifc")])
-			.then( files => {
-				return Loader.fromJSONandIFC(files[0], files[1]);
-			})
-		}
-	})
-	.then( mod => {
-			//Model Loaded
-			model = mod;
-			if(model.getName() == "") model.setName("test");
-			timeline = new Timeline(model);;
-			playerInit = 0;
-			const phase = timeline.getModel().getMilestones()[0].getPhases()[0];
-		  	duration = model.getDuration();
-
-			//Création du viewer
-			let clientId = Config.autoDeskForgeSettings[Config.autoDeskAccount].clientId;
-			let clientSecret = Config.autoDeskForgeSettings[Config.autoDeskAccount].clientSecret;
-
-			if(Config["forgeRenderer"]){
-				return Utils.getAutodeskAuth(clientId, clientSecret);
-			}else{
-				throw new Error("Not an error, just not rendering forge")
-			}
-		})
-	.then(Utils.createForgeBucket)
-	.then( oAuth => Utils.uploadIFCFileToForge(oAuth, "datas/Project1.ifc"))
-	.then( datas => {
-
-		manifest = datas.manifest;
-		oAuth = datas.oAuth;
-
-	})
-	.catch( error => console.error(error));
-
 	//Touch gestures
 	Vue.directive("tap", {
 		bind: function(el, binding) 
@@ -182,23 +138,95 @@ async function init(){
 			svgdefs : V_svgDefs,
 		},
 		data:{
-			playerinit : playerInit,
-			timeline : timeline,
-			model : model,
-			duration : duration,
-			manifest : manifest,
-			oauth : oAuth
+			playerinit : null,
+			timeline : null,
+			model : null,
+			duration : null,
+			manifest : null,
+			oauth : null,
+			modelSelected : false,
  		},
+ 		methods:{
+ 			findGetParameter : function(parameterName) {
+			    var result = null,
+			        tmp = [];
+			    location.search
+			        .substr(1)
+			        .split("&")
+			        .forEach(function (item) {
+			          tmp = item.split("=");
+			          if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+			        });
+			    return result;
+			},
+ 			loadModel : function(modelName){
+ 				DataApi.isAvailable().then(available => {
+					if(available){
+						return DataApi.getModel(modelName);
+					}else{
+						return Promise.all([Utils.loadTextFile("datas/Project1v2.json"), Utils.loadTextFile("datas/Project1.ifc")])
+						.then( files => {
+							return Loader.fromJSONandIFC(files[0], files[1]);
+						})
+					}
+				})
+				.then( mod => {
+						//Model Loaded
+						this.model = mod;
+						if(this.model.getName() == "") this.model.setName("test");
+						this.timeline = new Timeline(this.model);
+						this.playerInit = 0;
+						const phase = this.timeline.getModel().getMilestones()[0].getPhases()[0];
+					  	this.duration = this.model.getDuration();
 
+
+						//Socket Server Connexion
+						const socket = openSocket(window.location.host.replace("3000", "3001"));
+						V_socketUtils.setSocket(socket);
+						this.modelSelected = true;
+
+						//Création du viewer
+						let clientId = Config.autoDeskForgeSettings[Config.autoDeskAccount].clientId;
+						let clientSecret = Config.autoDeskForgeSettings[Config.autoDeskAccount].clientSecret;
+						if(Config["forgeRenderer"]){
+							return Utils.getAutodeskAuth(clientId, clientSecret);
+						}else{
+							throw new Error("Not an error, just not rendering forge")
+						}
+
+					})
+				.then(Utils.createForgeBucket)
+				.then( oAuth => Utils.uploadIFCFileToForge(oAuth, "datas/Project1.ifc"))
+				.then( datas => {
+
+					this.manifest = datas.manifest;
+					this.oAuth = datas.oAuth;
+				})
+				.catch( error => console.error(error));
+ 			},
+ 			handleTap : function(){
+ 				this.loadModel("test");
+ 			}
+ 		},
+ 		created : function(){
+ 			const modelName = this.findGetParameter("model");
+ 			this.loadModel(modelName);
+ 		},
  		template : `
  		<div>
 	 		<div id="content">
-	 			<div id="viewerFrame">
+
+	 			<div v-if="!modelSelected" id="initSelect">
+	 				<p v-tap="handleTap"> No selected </p>
+	 			</div>
+
+	 			<div v-if="modelSelected" id="viewerFrame">
 	 				<filterpanel id="filterPanel" v-bind:model="model"></filterpanel>
 	 				<forgeviewer id="forgeViewer" v-bind:model="model" v-bind:timeline="timeline" v-bind:manifest="manifest" v-bind:oauth="oauth"></forgeviewer>
 	 				<player id="mainPlayer" v-bind:duration="duration" v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit"></player>
 	 			</div>
-	 			<tasktableframe id="taskTableFrame" v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit" v-bind:duration="duration"></tasktableframe>
+	 			<tasktableframe v-if="modelSelected" id="taskTableFrame" v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit" v-bind:duration="duration"></tasktableframe>
+
 	 		</div>
 	 		<svgdefs style="width : 0px; height: 0px;"></svgdefs>
 	 	</div>
