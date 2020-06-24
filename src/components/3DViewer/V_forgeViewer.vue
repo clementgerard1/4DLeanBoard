@@ -40,10 +40,25 @@ export default {
 	],
 	methods:{
 
-		// méthodes camera intéressantes : fitBounds(immediate : bool, bounds : THREE.Box3, reorient : bool)
+		// méthodes camera intéressantes : fitBounds(immediate : bool, bounds : THREE.Box3, reorient : bool) => se fera a chaque nouvelle selection
+
+		// a faire méthode highlight from player
+		// a faire désélection quand on clique sur un objet deja selectionné
+		//
+		// highlight elements with the time of the projects (of the player)
+		// bool a true met les couleurs en fonction du player, a false les enlèves
+		setPlayerState(date = newDate(), bool) {
+			if(bool) {
+				let start = this.timeline.getStartDate();
+
+			} else {
+				this.clearColors();
+			}
+		},
 
 		setContractorDisplayMode(bool){
 			if(bool) {
+				this.setPlayerState(false);
 				var mils = this.model.getMilestones();
 				for(let i in mils) {
 					var phases = mils[i].getPhases();
@@ -122,8 +137,8 @@ export default {
 			}
 			this.colored = [];
 		},
-		highlight(object4D){
-			this.clearHighlighting();
+		highlight(object4D, bool){
+			// this.clearHighlighting();
 			if(this.viewer != null){
 				// ^ peut être ajouter la couleur qu'on veut mettre à l'object3D en paramètre
 				// sous la forme d'un vecteur4 contenant (r, g, b, a)
@@ -134,12 +149,14 @@ export default {
 						if(this.tree.nodeAccess.nameSuffixes[s] == object3D.getUniqId()){
 							const index = this.getDbId(s);
 							const obj = this.objs[object3D.getId()];
-							if(!this.selected.includes(obj)){
+							if(!this.selected.includes(obj) && bool){
 								if(this.colored.includes(obj)) {
 									this.restore3DObject(obj);
 								}
 								this.color3DObject(obj, true);
 								this.viewer.fitToView(index[0], this.viewer.model);
+							} else if(this.selected.includes(obj) && !bool) {
+								this.restore3DObject(obj);
 							}
 						}
 					}
@@ -155,7 +172,7 @@ export default {
 					//const colorMap = fragList.db2ThemingColor;
 
 				}
-				console.log(this.viewer.getBoundingBox(false), this.nav.getCameraRightVector(false), this.nav.getEyeVector(), this.nav.getPosition());
+				console.log(this.nav.getCameraRightVector(false), this.nav.getEyeVector(), this.nav.getPosition());
 				//repositionne la caméra
 				// fonction pour cacher les objets passer en paramètre (ids) => hide()
 			}
@@ -189,6 +206,27 @@ export default {
 									    flatShading: true,
 									    transparent: true,
 									    opacity: 0.3,
+									    color: scssVariables[phs[j].getColorClass().replace("BG_", "").toLowerCase()],
+						      		});
+						      		const nextWeeks = new THREE.MeshBasicMaterial({
+									    reflectivity: 0.0,
+									    flatShading: true,
+									    transparent: true,
+									    opacity: 0.3,
+									    color: scssVariables[phs[j].getColorClass().replace("BG_", "").toLowerCase()],
+						      		});
+						      		const currWeek = new THREE.MeshBasicMaterial({
+									    reflectivity: 0.0,
+									    flatShading: true,
+									    transparent: true,
+									    opacity: a,
+									    color: scssVariables[phs[j].getColorClass().replace("BG_", "").toLowerCase()],
+						      		});
+						      		const currTask = new THREE.MeshBasicMaterial({
+									    reflectivity: 0.0,
+									    flatShading: true,
+									    transparent: true,
+									    opacity: a,
 									    color: scssVariables[phs[j].getColorClass().replace("BG_", "").toLowerCase()],
 						      		});
 									this.objs[o3D[l].getId()] = {
@@ -267,13 +305,18 @@ export default {
 			if(obj.colored || obj.needUpdate){
 				this.tree.enumNodeChildren(obj.dbId,
 					(node) => {
-
 						const newId = this.viewer.model.getFragmentList().fragments.fragId2dbId.indexOf(node);
 						if(newId != -1){
 							const materialId = this.viewer.model.getFragmentList().materialmap[ this.initialMaterials[newId].id ];
 							this.viewer.model.getFragmentList().setMaterial(newId, this.initialMaterials[newId]);
 							this.viewer.model.getFragmentList().materialids[newId] = materialId;
 							obj.colored = false;
+							if(this.colored.includes(obj)) {
+								delete this.colored[this.colored.indexOf(obj)];
+							}
+							if(this.selected.includes(obj)) {
+								delete this.selected[this.selected.indexOf(obj)];
+							}
 						}
 						this.viewer.impl.invalidate(true);
 
@@ -306,13 +349,15 @@ export default {
 		//
 		highlightTask() {
 			const selection = this.viewer.getSelection();
-			this.clearHighlighting();
-			this.viewer.clearSelection();
+			// this.clearHighlighting();
+			// this.viewer.clearSelection();
 			
 			for(let s in selection){
 				const objs = this.getObjByNodeId(selection[s]);
 				for(let o in objs){
 					if(this.colored.includes(objs[o])) {
+						this.restore3DObject(objs[o]);
+					} else if(this.selected.includes(objs[o])) {
 						this.restore3DObject(objs[o]);
 					}
 					this.color3DObject(objs[o], true);
@@ -416,10 +461,12 @@ export default {
 	  		});
 			const materials = this.viewer.impl.getMaterials();
 	  		materials.addMaterial(Utils.getGuid(), this.selectedMaterial, true);
+			console.log(this.fragList, this.map);
 			this.map3DObjs();
 			this.camera = this.viewer.getCamera();
 			this.nav = this.viewer.navigation;
-			console.log(this.viewer, this.viewer.getBoundingBox(false), this.nav.getCameraRightVector(false), this.nav.getEyeVector(), this.nav.getPosition());
+			this.setPlayerState(true);
+			console.log(this.viewer, this.nav.getCameraRightVector(false), this.nav.getEyeVector(), this.nav.getPosition());
 		},
 		onEnvInitialized(that){
 			Autodesk.Viewing.Document.load(
