@@ -7,6 +7,7 @@ import V_player from "./components/Player/V_player.vue";
 import V_filterPanel from "./components/FilterPanel/V_filterPanel.vue";
 import V_svgDefs from "./components/SixWeekView/V_SvgDefs.vue";
 import V_forgeViewer from "./components/3DViewer/V_forgeViewer.vue";
+import V_modelSelect from "./components/V_modelSelect.vue";
 import openSocket from "socket.io-client";
 
 //Hammer si already on viewer3D.min.js loaded on index.html
@@ -22,81 +23,7 @@ window.addEventListener("load", function(){
 	init();
 });
 
-async function init(){
-
-	//FPS TEST 
-	//Need add p with fps id on index.html
-	/*	let fpsLast = null;
-		let fpsTime = 0;
-		let fpsCount = 0;
-		let fpsDisplay = 150;
-		const p = document.getElementById("fps");
-		window.requestAnimationFrame(fps);
-
-		function fps(){
-			const now = new Date().getTime();
-			if(fpsLast != null){
-				fpsTime += (now - fpsLast);
-				fpsCount++;
-				if(fpsTime > fpsDisplay){
-					p.innerHTML = (fpsCount * (1000 / fpsTime)).toFixed(2);
-					fpsTime = 0;
-					fpsCount = 0;
-				}
-			}
-			fpsLast = now;
-			window.requestAnimationFrame(fps);
-		}*/
-	//FIN FPS TEST
-
-	let model = null;
-	let playerInit = null;
-	let duration = null;
-	let manifest = null;
-	let oAuth = null;
-	let timeline = null;
-
-	//Socket Server Connexion
-	const socket = openSocket(window.location.host.replace("3000", "3001"));
-	V_socketUtils.setSocket(socket);
-
-	await DataApi.isAvailable().then(available => {
-		if(available){
-			return DataApi.getModel("test");
-		}else{
-			return Promise.all([Utils.loadTextFile("datas/Project1v2.json"), Utils.loadTextFile("datas/Project1.ifc")])
-			.then( files => {
-				return Loader.fromJSONandIFC(files[0], files[1]);
-			})
-		}
-	})
-	.then( mod => {
-			//Model Loaded
-			model = mod;
-			timeline = new Timeline(model);;
-			playerInit = 0;
-			const phase = timeline.getModel().getMilestones()[0].getPhases()[0];
-		  	duration = model.getDuration();
-
-			//Création du viewer
-			let clientId = Config.autoDeskForgeSettings[Config.autoDeskAccount].clientId;
-			let clientSecret = Config.autoDeskForgeSettings[Config.autoDeskAccount].clientSecret;
-
-			if(Config["forgeRenderer"]){
-				return Utils.getAutodeskAuth(clientId, clientSecret);
-			}else{
-				throw new Error("Not an error, just not rendering forge")
-			}
-		})
-	.then(Utils.createForgeBucket)
-	.then( oAuth => Utils.uploadIFCFileToForge(oAuth, "datas/Project1.ifc"))
-	.then( datas => {
-
-		manifest = datas.manifest;
-		oAuth = datas.oAuth;
-
-	})
-	.catch( error => console.error(error));
+function init(){
 
 	//Touch gestures
 	Vue.directive("tap", {
@@ -180,6 +107,83 @@ async function init(){
 			forgeviewer : V_forgeViewer,
 			player : V_player,
 			svgdefs : V_svgDefs,
+			modelselect : V_modelSelect,
+		},
+		data:{
+			playerinit : null,
+			timeline : null,
+			model : null,
+			duration : null,
+			manifest : null,
+			oauth : null,
+			modelSelected : false,
+			selectPanel : false,
+ 		},
+		methods: {
+			findGetParameter : function(parameterName) {
+			    var result = null,
+			        tmp = [];
+			    location.search
+			        .substr(1)
+			        .split("&")
+			        .forEach(function (item) {
+			          tmp = item.split("=");
+			          if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+			        });
+			    return result;
+			},
+			setModel : function(modelName){
+				this.selectPanel = false;
+				this.loadModel(modelName);
+			},
+ 			loadModel : function(modelName){
+ 				DataApi.isAvailable().then(available => {
+					if(available){
+						return DataApi.getModel(modelName);
+					}else{
+						return Promise.all([Utils.loadTextFile("datas/Project1v2.json"), Utils.loadTextFile("datas/Project1.ifc")])
+						.then( files => {
+							return Loader.fromJSONandIFC(files[0], files[1]);
+						})
+					}
+				})
+				.then( mod => {
+						//Model Loaded
+						this.model = mod;
+						if(this.model.getName() == "") this.model.setName("test");
+						this.timeline = new Timeline(this.model);
+						this.playerInit = 0;
+						const phase = this.timeline.getModel().getMilestones()[0].getPhases()[0];
+					  	this.duration = this.model.getDuration();
+
+
+						//Socket Server Connexion
+						const socket = openSocket(window.location.host.replace("3000", "3001"));
+						V_socketUtils.setSocket(socket);
+						this.modelSelected = true;
+
+						//Création du viewer
+						let clientId = Config.autoDeskForgeSettings[Config.autoDeskAccount].clientId;
+						let clientSecret = Config.autoDeskForgeSettings[Config.autoDeskAccount].clientSecret;
+						if(Config["forgeRenderer"]){
+							return Utils.getAutodeskAuth(clientId, clientSecret);
+						}else{
+							throw new Error("Not an error, just not rendering forge")
+						}
+
+					})
+				.then(Utils.createForgeBucket)
+				.then( oAuth => Utils.uploadIFCFileToForge(oAuth, "datas/Project1.ifc"))
+				.then( datas => {
+
+					this.manifest = datas.manifest;
+					this.oAuth = datas.oAuth;
+				})
+				.catch( error => console.error(error));
+ 			},
+ 			handleTap : function(){
+ 				this.loadModel("test");
+ 			}
 		},
 		data:{
 			playerinit : playerInit,
@@ -187,13 +191,28 @@ async function init(){
 			model : model,
 			duration : duration,
 			manifest : manifest,
-			oauth : oAuth
+			oauth : oAuth,
+			modelSelected : false,
+			selectPanel : false,
  		},
-
+ 		created : function(){
+ 			const modelName = this.findGetParameter("model");
+ 			const type = this.findGetParameter("model"); // 3D, 6W, Player
+ 			if(modelName != null){
+ 				this.loadModel(modelName);
+ 			}else{
+ 				this.selectPanel = true;
+ 			}
+ 		},
  		template : `
  		<div>
 	 		<div id="content">
-	 			<div id="viewerFrame">
+
+	 			<modelselect id="modelSelect" v-if="selectPanel" v-on:setModel="setModel($event)">
+	 				<p v-tap="handleTap"> No selected </p>
+	 			</modelselect>
+
+	 			<div v-if="modelSelected" id="viewerFrame">
 	 				<filterpanel id="filterPanel" v-bind:model="model"></filterpanel>
 	 				<forgeviewer id="forgeViewer" v-bind:model="model" v-bind:timeline="timeline" v-bind:manifest="manifest" v-bind:oauth="oauth"></forgeviewer>
 	 				<player id="mainPlayer" v-bind:duration="duration" v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit"></player>

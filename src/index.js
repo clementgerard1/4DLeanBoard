@@ -9,6 +9,7 @@ import V_filterPanel from "./components/FilterPanel/V_filterPanel.vue";
 import V_svgDefs from "./components/SixWeekView/V_SvgDefs.vue";
 import V_taskTableFrame from "./components/SixWeekView/V_taskTableFrame.vue";
 import V_forgeViewer from "./components/3DViewer/V_forgeViewer.vue";
+import V_modelSelect from "./components/V_modelSelect.vue";
 import openSocket from "socket.io-client";
 
 //Hammer si already on viewer3D.min.js loaded on index.html
@@ -24,14 +25,7 @@ window.addEventListener("load", function(){
 	init();
 });
 
-async function init(){
-
-	let model = null;
-	let playerInit = null;
-	let duration = null;
-	let manifest = null;
-	let oAuth = null;
-	let timeline = null;
+function init(){
 
 	//Touch gestures
 	Vue.directive("tap", {
@@ -136,6 +130,7 @@ async function init(){
 			tasktableframe : V_taskTableFrame,
 			player : V_player,
 			svgdefs : V_svgDefs,
+			modelselect : V_modelSelect,
 		},
 		data:{
 			playerinit : null,
@@ -145,6 +140,7 @@ async function init(){
 			manifest : null,
 			oauth : null,
 			modelSelected : false,
+			selectPanel : false,
  		},
  		methods:{
  			findGetParameter : function(parameterName) {
@@ -158,6 +154,10 @@ async function init(){
 			          if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
 			        });
 			    return result;
+			},
+			setModel : function(modelName){
+				this.selectPanel = false;
+				this.loadModel(modelName);
 			},
  			loadModel : function(modelName){
  				DataApi.isAvailable().then(available => {
@@ -210,15 +210,20 @@ async function init(){
  		},
  		created : function(){
  			const modelName = this.findGetParameter("model");
- 			this.loadModel(modelName);
+ 			const type = this.findGetParameter("model"); // 3D, 6W, Player
+ 			if(modelName != null){
+ 				this.loadModel(modelName);
+ 			}else{
+ 				this.selectPanel = true;
+ 			}
  		},
  		template : `
  		<div>
 	 		<div id="content">
 
-	 			<div v-if="!modelSelected" id="initSelect">
+	 			<modelselect id="modelSelect" v-if="selectPanel" v-on:setModel="setModel($event)">
 	 				<p v-tap="handleTap"> No selected </p>
-	 			</div>
+	 			</modelselect>
 
 	 			<div v-if="modelSelected" id="viewerFrame">
 	 				<filterpanel id="filterPanel" v-bind:model="model"></filterpanel>

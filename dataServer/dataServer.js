@@ -43,6 +43,14 @@ app.post("/model", (req, res)=>{
 	res.send('Model saved');
 });
 
+app.get("/models", (req, res)=>{
+	const toReturn = [];
+	for(let m in models){
+		toReturn.push(m);
+	}
+	res.json(toReturn);
+});
+
 app.get("/model", (req, res)=>{
 	res.sendFile(__dirname + "/models/" + req.query.name + ".json");
 });

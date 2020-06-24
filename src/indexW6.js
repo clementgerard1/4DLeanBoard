@@ -6,6 +6,7 @@ import Timeline from "./class/Timeline.class.js";
 import V_player from "./components/Player/V_player.vue";
 import V_svgDefs from "./components/SixWeekView/V_SvgDefs.vue";
 import V_taskTableFrame from "./components/SixWeekView/V_taskTableFrame.vue";
+import V_modelSelect from "./components/V_modelSelect.vue";
 import openSocket from "socket.io-client";
 
 //Hammer si already on viewer3D.min.js loaded on index.html
@@ -21,63 +22,7 @@ window.addEventListener("load", function(){
 	init();
 });
 
-async function init(){
-
-	//FPS TEST 
-	//Need add p with fps id on index.html
-	/*	let fpsLast = null;
-		let fpsTime = 0;
-		let fpsCount = 0;
-		let fpsDisplay = 150;
-		const p = document.getElementById("fps");
-		window.requestAnimationFrame(fps);
-
-		function fps(){
-			const now = new Date().getTime();
-			if(fpsLast != null){
-				fpsTime += (now - fpsLast);
-				fpsCount++;
-				if(fpsTime > fpsDisplay){
-					p.innerHTML = (fpsCount * (1000 / fpsTime)).toFixed(2);
-					fpsTime = 0;
-					fpsCount = 0;
-				}
-			}
-			fpsLast = now;
-			window.requestAnimationFrame(fps);
-		}*/
-	//FIN FPS TEST
-
-	let model = null;
-	let playerInit = null;
-	let duration = null;
-	let manifest = null;
-	let oAuth = null;
-	let timeline = null;
-
-	//Socket Server Connexion
-	const socket = openSocket(window.location.host.replace("3000", "3001"));
-	V_socketUtils.setSocket(socket);
-
-	await DataApi.isAvailable().then(available => {
-		if(available){
-			return DataApi.getModel("test");
-		}else{
-			return Promise.all([Utils.loadTextFile("datas/Project1v2.json"), Utils.loadTextFile("datas/Project1.ifc")])
-			.then( files => {
-				return Loader.fromJSONandIFC(files[0], files[1]);
-			})
-		}
-	})
-	.then( mod => {
-			//Model Loaded
-			model = mod;
-			timeline = new Timeline(model);;
-			playerInit = 0;
-			const phase = timeline.getModel().getMilestones()[0].getPhases()[0];
-		  	duration = model.getDuration();
-		})
-	.catch( error => console.error(error));
+function init(){
 
 	//Touch gestures
 	Vue.directive("tap", {
@@ -157,18 +102,84 @@ async function init(){
 		components : {
 			tasktableframe : V_taskTableFrame,
 			svgdefs : V_svgDefs,
+			modelselect : V_modelSelect,
 		},
 		data:{
-			playerinit : playerInit,
-			timeline : timeline,
-			model : model,
-			duration : duration,
+			playerinit : null,
+			timeline : null,
+			model : null,
+			duration : null,
+			modelSelected : false,
+			selectPanel : false,
+ 		},
+ 		methods:{
+ 			findGetParameter : function(parameterName) {
+			    var result = null,
+			        tmp = [];
+			    location.search
+			        .substr(1)
+			        .split("&")
+			        .forEach(function (item) {
+			          tmp = item.split("=");
+			          if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+			        });
+			    return result;
+			},
+			setModel : function(modelName){
+				this.selectPanel = false;
+				this.loadModel(modelName);
+			},
+ 			loadModel : function(modelName){
+ 				DataApi.isAvailable().then(available => {
+					if(available){
+						return DataApi.getModel(modelName);
+					}else{
+						return Promise.all([Utils.loadTextFile("datas/Project1v2.json"), Utils.loadTextFile("datas/Project1.ifc")])
+						.then( files => {
+							return Loader.fromJSONandIFC(files[0], files[1]);
+						})
+					}
+				})
+				.then( mod => {
+						//Model Loaded
+						this.model = mod;
+						if(this.model.getName() == "") this.model.setName("test");
+						this.timeline = new Timeline(this.model);
+						this.playerInit = 0;
+						const phase = this.timeline.getModel().getMilestones()[0].getPhases()[0];
+					  	this.duration = this.model.getDuration();
+
+
+						//Socket Server Connexion
+						const socket = openSocket(window.location.host.replace("3000", "3001"));
+						V_socketUtils.setSocket(socket);
+						this.modelSelected = true;
+
+					})
+				.catch( error => console.error(error));
+ 			},
+ 			handleTap : function(){
+ 				this.loadModel("test");
+ 			}
+ 		},
+ 		created : function(){
+ 			const modelName = this.findGetParameter("model");
+ 			const type = this.findGetParameter("model"); // 3D, 6W, Player
+ 			if(modelName != null){
+ 				this.loadModel(modelName);
+ 			}else{
+ 				this.selectPanel = true;
+ 			}
  		},
 
  		template : `
  		<div>
 	 		<div id="content">
-	 			<tasktableframe id="taskTableFrame" v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit" v-bind:duration="duration"></tasktableframe>
+	 			<modelselect id="modelSelect" v-if="selectPanel" v-on:setModel="setModel($event)">
+	 				<p v-tap="handleTap"> No selected </p>
+	 			</modelselect>
+
+	 			<tasktableframe v-if="modelSelected" id="taskTableFrame" v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit" v-bind:duration="duration"></tasktableframe>
 	 		</div>
 	 		<svgdefs style="width : 0px; height: 0px;"></svgdefs>
 	 	</div>

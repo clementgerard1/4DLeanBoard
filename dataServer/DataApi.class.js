@@ -9,7 +9,7 @@ class DataApi{
 	static serverIp = 'localhost';
 	static serverUrl = 'http://' + DataApi.serverIp + ":" + DataApi.serverPort;
 
-	static async postModel(model, name=model.getName()){
+	static async postModel(model, name = model.getName()){
 		const json = model.serialize();
 
 		return await axios.post(DataApi.serverUrl + '/model', {
@@ -22,6 +22,7 @@ class DataApi{
 
 		return await axios.get(DataApi.serverUrl + '/model?name=' + name).then( (modelS) => {
 			const model = new Model();
+
 			model.deserialize(modelS.data);
 			return model;
 		});
@@ -38,6 +39,14 @@ class DataApi{
 
 	static async isAvailable(){
 		return axios.get(DataApi.serverUrl).then( () => {return true;}).catch( () => {return false;});
+	}
+
+	static async getModels(){
+		return axios.get(DataApi.serverUrl + '/models')
+		.then( (json) => {
+			return json.data;
+		})
+		.catch( () => {return false;});
 	}
 
 }
