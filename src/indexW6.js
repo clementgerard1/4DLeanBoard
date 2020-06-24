@@ -163,13 +163,20 @@ function init(){
  			}
  		},
  		created : function(){
- 			const modelName = this.findGetParameter("model");
- 			const type = this.findGetParameter("model"); // 3D, 6W, Player
- 			if(modelName != null){
- 				this.loadModel(modelName);
- 			}else{
- 				this.selectPanel = true;
- 			}
+ 			DataApi.isAvailable().then(available => {
+ 				if(available){
+		 			const modelName = this.findGetParameter("model");
+		 			const type = this.findGetParameter("model"); // 3D, 6W, Player
+		 			if(modelName != null){
+		 				this.loadModel(modelName);
+		 			}else{
+		 				this.selectPanel = true;
+		 			}
+		 		}else{
+		 			console.error("DATA SERVER DOESN'T AVAILABLE");
+		 			this.loadModel("");
+		 		}
+		 	});
  		},
 
  		template : `
