@@ -48,7 +48,9 @@ export default {
 						for(let k in objs4D) {
 							var objs3D = objs4D[k].getObjects3D();
 							for(let l in objs3D) {
-								if((phases[j].getContractor().getId() == this.shownContractor) || (this.shownContractor==null)) {
+								if(this.selected.includes(this.objs[objs3D[l].getId()])){
+									this.color3DObject(this.objs[objs3D[l].getId()], true);
+								} else if((phases[j].getContractor().getId() == this.shownContractor) || (this.shownContractor==null)) {
 									this.color3DObject(this.objs[objs3D[l].getId()]);
 								} else {
 									this.color3DObject(this.objs[objs3D[l].getId()], false, true);
@@ -98,6 +100,9 @@ export default {
 			if(this.viewer != null){
 				for(let i in this.selected){
 					this.restore3DObject(this.selected[i]);
+					if(this.colored.includes(this.selected[i])) {
+						this.color3DObject(this.selected[i]);
+					}
 					delete this.selected[i];
 				}
 			}
@@ -117,8 +122,6 @@ export default {
 			if(this.viewer != null){
 				// ^ peut être ajouter la couleur qu'on veut mettre à l'object3D en paramètre
 				// sous la forme d'un vecteur4 contenant (r, g, b, a)
-
-
 				const objects3D = object4D.getObjects3D();
 				for(let o in objects3D){
 					const object3D = objects3D[o];
@@ -126,11 +129,10 @@ export default {
 						if(this.tree.nodeAccess.nameSuffixes[s] == object3D.getUniqId()){
 							const index = this.getDbId(s);
 							const obj = this.objs[object3D.getId()];
-							if(this.colored.includes(index)) {
-								this.restore3DObject(obj);
-							}
-							if(!this.selected.includes(index)){
-								this.selected.push(obj);
+							if(!this.selected.includes(obj)){
+								if(this.colored.includes(obj)) {
+									this.restore3DObject(obj);
+								}
 								this.color3DObject(obj, true);
 								this.viewer.fitToView(index[0], this.viewer.model);
 							}
@@ -237,22 +239,23 @@ export default {
 						if(selectMode){
 							materialId = this.viewer.model.getFragmentList().materialmap[this.selectedMaterial.id];
 							this.viewer.model.getFragmentList().setMaterial(newId, this.selectedMaterial);
+							this.selected.push(obj);
 						}else if(shadowMode){
 							materialId = this.viewer.model.getFragmentList().materialmap[obj.sMat.id];
 							this.viewer.model.getFragmentList().setMaterial(newId, obj.sMat);
+							this.colored.push(obj);
 						}else{
 							materialId = this.viewer.model.getFragmentList().materialmap[obj.material.id];
 							this.viewer.model.getFragmentList().setMaterial(newId, obj.material);
+							this.colored.push(obj);
 						}
 						if(newId != -1){
 							this.viewer.model.getFragmentList().materialids[newId] = materialId;
 							obj.colored = true;
 						}
 						this.viewer.impl.invalidate(true);
-
 					}, 
 				true);
-				this.colored.push(obj);
 			}
 		},
 		restore3DObject(obj){
@@ -297,7 +300,6 @@ export default {
 
 		//
 		highlightTask() {
-
 			const selection = this.viewer.getSelection();
 			this.clearHighlighting();
 			this.viewer.clearSelection();
@@ -305,8 +307,10 @@ export default {
 			for(let s in selection){
 				const objs = this.getObjByNodeId(selection[s]);
 				for(let o in objs){
+					if(this.colored.includes(objs[o])) {
+						this.restore3DObject(objs[o]);
+					}
 					this.color3DObject(objs[o], true);
-					this.selected.push(objs[o]);
 					V_socketUtils.highlightTask(objs[o].obj3D.getParent().getTask());
 				}
 			}
