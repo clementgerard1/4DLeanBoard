@@ -28,6 +28,8 @@ export default {
 			"shownContractor" : null,
 			"fliterModeFlag" : false,
 			"colored" : [],
+			"camera" : null,
+			"nav" : null,
 		}
 	},
 	props:[
@@ -37,6 +39,8 @@ export default {
 		"model"
 	],
 	methods:{
+
+		// méthodes camera intéressantes : fitBounds(immediate : bool, bounds : THREE.Box3, reorient : bool)
 
 		setContractorDisplayMode(bool){
 			if(bool) {
@@ -50,6 +54,7 @@ export default {
 							for(let l in objs3D) {
 								if(this.selected.includes(this.objs[objs3D[l].getId()])){
 									this.color3DObject(this.objs[objs3D[l].getId()], true);
+									this.colored.push(this.objs[objs3D[l].getId()]);
 								} else if((phases[j].getContractor().getId() == this.shownContractor) || (this.shownContractor==null)) {
 									this.color3DObject(this.objs[objs3D[l].getId()]);
 								} else {
@@ -150,7 +155,7 @@ export default {
 					//const colorMap = fragList.db2ThemingColor;
 
 				}
-				
+				console.log(this.viewer.getBoundingBox(false), this.nav.getCameraRightVector(false), this.nav.getEyeVector(), this.nav.getPosition());
 				//repositionne la caméra
 				// fonction pour cacher les objets passer en paramètre (ids) => hide()
 			}
@@ -379,6 +384,7 @@ export default {
 			this.viewer.initialize();
 			this.viewer.loadModel(doc.getViewablePath(selectedItem));
 			this.viewer.loadExtension('Autodesk.ViewCubeUi');
+
 			this.viewer.setQualityLevel(false, false);
 
 			// important selon moi
@@ -411,6 +417,9 @@ export default {
 			const materials = this.viewer.impl.getMaterials();
 	  		materials.addMaterial(Utils.getGuid(), this.selectedMaterial, true);
 			this.map3DObjs();
+			this.camera = this.viewer.getCamera();
+			this.nav = this.viewer.navigation;
+			console.log(this.viewer, this.viewer.getBoundingBox(false), this.nav.getCameraRightVector(false), this.nav.getEyeVector(), this.nav.getPosition());
 		},
 		onEnvInitialized(that){
 			Autodesk.Viewing.Document.load(
