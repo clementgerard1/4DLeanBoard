@@ -164,10 +164,10 @@ function init(){
 			},
  			loadModel : function(modelName){
  				DataApi.isAvailable().then(available => {
-					if(available){
+					if(false && available){
 						return DataApi.getModel(modelName);
 					}else{
-						return Promise.all([Utils.loadTextFile("datas/Project1v2.json"), Utils.loadTextFile("datas/Project1.ifc")])
+						return Promise.all([Utils.loadTextFile("datas/Project1v3.json"), Utils.loadTextFile("datas/Project1.ifc")])
 						.then( files => {
 							return Loader.fromJSONandIFC(files[0], files[1]);
 						})
