@@ -105,6 +105,10 @@ $filterPanelHeight : 50px;
 
 /* 3D */
 $select3DColor : $greenbluish_light;
+// color for the player rendering
+$nextWeeks : $light;
+$currentWeek : $blackish;
+$currentTask : $green_transparent;
 
 :export{
 	taskSize : $taskSize;
