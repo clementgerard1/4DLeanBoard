@@ -125,6 +125,14 @@ export default {
 	},
 	created: function(){
 		V_taskTableUtils.addTask(this);
+		if(this.task != null){
+			this.selected = V_taskTableUtils.isTokenOwner(this);
+			if(this.selected){
+				V_socketUtils.highlightObject4D(this.task.getObject4D(), true);
+			}
+		}else{
+			this.selected = null;
+		}
 	},
 	updated: function(){
 		this.updateDatas();
@@ -369,10 +377,40 @@ export default {
 		},
 		handleReadyTap: function(event){
 			this.constraintTap = true;
+			this.task.setDone(false);
+			this.task.setPaused(false);
 			if(this.ready){
-				this.task.setDone(false);
-				this.task.setPaused(false);
 				V_socketUtils.setTaskState(this.model, this.task);
+			}else{
+				if(!this.task.getRequirement("constraint").getValue()){
+					this.task.getRequirement("constraint").setValue(true);
+					V_socketUtils.setRequirement(this.model, this.task.getRequirement("constraint"), this.task);
+				}
+				if(!this.task.getRequirement("information").getValue()){
+					this.task.getRequirement("information").setValue(true);
+					V_socketUtils.setRequirement(this.model, this.task.getRequirement("information"), this.task);
+				}
+				if(!this.task.getRequirement("materials").getValue()){
+					this.task.getRequirement("materials").setValue(true);
+					V_socketUtils.setRequirement(this.model, this.task.getRequirement("materials"), this.task);
+				}
+				if(!this.task.getRequirement("manpower").getValue()){
+					this.task.getRequirement("manpower").setValue(true);
+					V_socketUtils.setRequirement(this.model, this.task.getRequirement("manpower"), this.task);
+				}
+				if(!this.task.getRequirement("equipement").getValue()){
+					this.task.getRequirement("equipement").setValue(true);
+					V_socketUtils.setRequirement(this.model, this.task.getRequirement("equipement"), this.task);
+				}
+				if(!this.task.getRequirement("safety").getValue()){
+					this.task.getRequirement("safety").setValue(true);
+					V_socketUtils.setRequirement(this.model, this.task.getRequirement("safety"), this.task);
+				}
+				if(!this.task.getRequirement("space").getValue()){
+					this.task.getRequirement("space").setValue(true);
+					V_socketUtils.setRequirement(this.model, this.task.getRequirement("space"), this.task);
+				}
+				this.updateRequirements();
 			}
 		},
 		handleDoneTap: function(event){

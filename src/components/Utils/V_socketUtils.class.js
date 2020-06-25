@@ -30,7 +30,7 @@ class V_socketUtils{
 		});
 
 		this.socket.on("highlightTask", (datas) => {
-			V_taskTableUtils.highlightTaskById(datas.id);
+			V_taskTableUtils.highlightTaskById(datas.id, datas.value);
 		});
 
 		this.socket.on("setTime", (datas) => {
@@ -121,9 +121,9 @@ class V_socketUtils{
 		@param {Task} task 
 		@static
 	*/		
-	static highlightTask(task){
-		V_taskTableUtils.highlightTaskById(task.getId());
-  		this.socket.emit("highlightTask", { id : task.getId()});
+	static highlightTask(task, bool){
+		V_taskTableUtils.highlightTaskById(task.getId(), bool);
+  		this.socket.emit("highlightTask", { id : task.getId(), value : bool});
 	}
 
 
