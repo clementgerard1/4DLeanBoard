@@ -362,9 +362,11 @@ class Timeline{
 	getTasksBetweenTwoDates(start, end){
 		const toReturn = [];
 		for(let i = start; i < end ; i++){
-			const tasks = this.#steps[i].tasks;
-			for(let t in tasks){
-				if(!toReturn.includes(tasks[t])) toReturn.push(tasks[t]);
+			if(typeof this.#steps[i] != "undefined"){
+				const tasks = this.#steps[i].tasks;
+				for(let t in tasks){
+					if(!toReturn.includes(tasks[t])) toReturn.push(tasks[t]);
+				}
 			}
 		}
 		return toReturn;

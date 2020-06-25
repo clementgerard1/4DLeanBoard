@@ -8,6 +8,8 @@ import V_svgDefs from "./components/SixWeekView/V_SvgDefs.vue";
 import V_taskTableFrame from "./components/SixWeekView/V_taskTableFrame.vue";
 import V_modelSelect from "./components/V_modelSelect.vue";
 import openSocket from "socket.io-client";
+import V_timelineUtils from "./components/Utils/V_timelineUtils.class.js";
+import V_taskTableUtils from "./components/Utils/V_taskTableUtils.class.js";
 
 //Hammer si already on viewer3D.min.js loaded on index.html
 import Hammer from "hammerjs";
@@ -145,7 +147,15 @@ function init(){
 						this.model = mod;
 						if(this.model.getName() == "") this.model.setName("test");
 						this.timeline = new Timeline(this.model);
+
 						this.playerInit = 0;
+						V_timelineUtils.setTimeline(this.timeline);
+						V_taskTableUtils.clearTokens();
+						const selected = this.timeline.getTasksBetweenTwoDates(this.playerInit * 7, (this.playerInit * 7) + 7);
+						for(let s in selected){
+							V_taskTableUtils.setToken(selected[s], true);
+						}
+
 						const phase = this.timeline.getModel().getMilestones()[0].getPhases()[0];
 					  	this.duration = this.model.getDuration();
 

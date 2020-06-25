@@ -63,6 +63,14 @@ class V_taskTableUtils{
 		}
 	}
 
+	static getTokens(){
+		const toReturn = [];
+		for(let t in this.tokens){
+			toReturn.push(this.tokens[t].task);
+		}
+		return toReturn;
+	}
+
 	/**
 		Highlight a task with bool
 		@param {Task} task

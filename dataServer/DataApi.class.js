@@ -22,7 +22,6 @@ class DataApi{
 
 		return await axios.get(DataApi.serverUrl + '/model?name=' + name).then( (modelS) => {
 			const model = new Model();
-
 			model.deserialize(modelS.data);
 			return model;
 		});

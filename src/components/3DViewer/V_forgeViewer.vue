@@ -1,6 +1,7 @@
 import V_4DUtils from "../Utils/V_4DUtils.class.js";
 import V_socketUtils from "../Utils/V_socketUtils.class.js";
 import V_timelineUtils from "../Utils/V_timelineUtils.class.js";
+import V_taskTableUtils from "../Utils/V_taskTableUtils.class.js";
 import Config from "../../../config.js"
 import "./V_forgeViewer.scss";
 import scssVariables from "../SixWeekView/assets/_variables.scss";
@@ -430,13 +431,22 @@ export default {
 
 		watchTime : function(time){
 			this.time = time;
-			const selected = this.timeline.getTasksBetweenTwoDates(time * 7, (time * 7) + 7);
+			this.clearHighlighting();
+			const tasks = V_taskTableUtils.getTokens();
+			for(let t in tasks){
+				this.highlight(tasks[t].getObject4D());
+			}
 		}
 	},
 	created : function(){
+		this.clearHighlighting();
 		V_4DUtils.setForgeViewer(this);
 		V_socketUtils.addViewer();
 		V_timelineUtils.addListener("time", this, this.watchTime);
+		const tasks = V_taskTableUtils.getTokens();
+		for(let t in tasks){
+			this.highlight(tasks[t].getObject4D());
+		}
 	},
 	mounted : function(){
 		if(Config["forgeRenderer"]){
