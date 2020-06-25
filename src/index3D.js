@@ -168,7 +168,7 @@ function init(){
 
 
 						//Socket Server Connexion
-						const socket = openSocket(window.location.host.replace("3000", "3001"));
+						const socket = openSocket(window.location.host.replace("3000", "3001") + "?model=" + this.model.getName());
 						V_socketUtils.setSocket(socket);
 						this.modelSelected = true;
 
@@ -182,8 +182,8 @@ function init(){
 						}
 
 					})
-				.then(Utils.createForgeBucket)
-				.then( oAuth => Utils.uploadIFCFileToForge(oAuth, "datas/Project1.ifc"))
+				.then( oAuth => Utils.createForgeBucket(oAuth, "project1"))
+				.then( oAuth => Utils.uploadIFCFileToForge(oAuth, "project1", "datas/Project1.ifc"))
 				.then( datas => {
 
 					this.manifest = datas.manifest;

@@ -193,7 +193,7 @@ function init(){
 
 
 						//Socket Server Connexion
-						const socket = openSocket(window.location.host.replace("3000", "3001"));
+						const socket = openSocket(window.location.host.replace("3000", "3001") + "?model=" + this.model.getName());
 						V_socketUtils.setSocket(socket);
 						this.modelSelected = true;
 
