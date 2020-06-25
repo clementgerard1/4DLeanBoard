@@ -455,6 +455,7 @@ export default {
 			this.viewer.loadExtension('Autodesk.ViewCubeUi');
 
 			this.viewer.setQualityLevel(false, false);
+			this.viewer.setGhosting(false);
 
 			// important selon moi
 			this.viewer.setReverseZoomDirection(true);
