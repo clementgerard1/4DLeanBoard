@@ -313,7 +313,7 @@ export default {
 						this.restore3DObject(objs[o]);
 					}
 					this.color3DObject(objs[o], true);
-					V_socketUtils.highlightTask(objs[o].obj3D.getParent().getTask());
+					V_socketUtils.highlightTask(objs[o].obj3D.getParent().getTask(), true);
 				}
 			}
 		},

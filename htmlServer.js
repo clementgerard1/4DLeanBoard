@@ -77,13 +77,23 @@ if(process.argv[2] == "dev"){
 		}
 	});
 
-		app.get('/W6', function(req,res){
+	app.get('/W6', function(req,res){
 		if(config["socketConsole"]){
 			fs.readFile(__dirname + '/public/W6.html', "utf8", function(err, html){
 				res.send(html.slice(0, html.indexOf("<body>")) + logScript + html.slice(html.indexOf("<body>") + 6));
 			});
 		}else{
 			res.sendFile(__dirname + '/public/W6.html');
+		}
+	});
+
+	app.get('/backend', function(req,res){
+		if(config["socketConsole"]){
+			fs.readFile(__dirname + '/public/backend.html', "utf8", function(err, html){
+				res.send(html.slice(0, html.indexOf("<body>")) + logScript + html.slice(html.indexOf("<body>") + 6));
+			});
+		}else{
+			res.sendFile(__dirname + '/public/backend.html');
 		}
 	});
 
@@ -196,6 +206,10 @@ if(process.argv[2] == "dev"){
 
 	app.get('/W6', function(req,res){
 		res.sendFile(__dirname + '/dist/W6.html');
+	});
+
+	app.get('/backend', function(req,res){
+		res.sendFile(__dirname + '/dist/backend.html');
 	});
 
 	app.get('/:url',function(req,res){
