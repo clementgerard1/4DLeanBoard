@@ -667,6 +667,7 @@ class Model{
 				name : t.getName(),
 				workers : t.getWorkers(),
 				operationUnits : operationUnits,
+				color : t.getColorClass(),
 			}
 
 			jsonObj.taskTeams.push(taskTeam);
@@ -820,6 +821,7 @@ class Model{
 			const infos = datas.taskTeams[t];
 			const taskTeam = new TaskTeam(infos.name, infos.id);
 			taskTeam.setWorkers(infos.workers);
+			taskTeam.setColorClass(infos.color);
 			taskTeams[taskTeam.getId()] = taskTeam;
 		}
 		for(let o in datas.operationUnits){

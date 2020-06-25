@@ -378,18 +378,15 @@ class Timeline{
 	}
 
 	getTasksByTeamBetweenTwoDates(taskTeam, start, end){
-		console.log(start, end);
 		const toReturn = [];
 		for(let i = start; i <= end ; i++){
 			if(typeof this.#steps[i] != "undefined"){
 				const tasks = this.#steps[i].tasks;
 				for(let t in tasks){
-					console.log(i, tasks[t].getId(), tasks[t].getTaskTeam().getName(), taskTeam.getName());
 					if((!toReturn.includes(tasks[t])) && tasks[t].getTaskTeam() == taskTeam) toReturn.push(tasks[t]);
 				}
 			}
 		}
-		console.log("result", toReturn);
 		return toReturn;
 
 	}
@@ -412,7 +409,6 @@ class Timeline{
 			const tasks = this.getTasksByTeamBetweenTwoDates(taskTeam, start+ (((end - start + 1) / 6) * (i - 1)), start + (((end - start + 1) / 6) * i) - 1);		
 			for(let t in tasks){
 				const originNth = this.getOriginNth(taskTeam, tasks[t]);
-				console.log(originNth);
 				if(originNth == nth){
 					arrayReturn[i-1] = tasks[t];
 					count++;

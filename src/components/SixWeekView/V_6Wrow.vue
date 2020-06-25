@@ -41,7 +41,6 @@ export default {
 		},
 		tasks : function(){
 			const tasks = this.timeline.getTasksByTaskTeamAndNthBetweenTwoDates(this.taskteam, this.nth, this.tasktablestart * 7, (this.tasktablestart + 6) * 7 - 1);
-			console.log(tasks);
 			this.isOpen = (tasks.count != 0);
 			return tasks.array;
 		},

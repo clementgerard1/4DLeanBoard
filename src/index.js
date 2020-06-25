@@ -164,7 +164,7 @@ function init(){
 			},
  			loadModel : function(modelName){
  				DataApi.isAvailable().then(available => {
-					if(false && available){
+					if(available){
 						return DataApi.getModel(modelName);
 					}else{
 						return Promise.all([Utils.loadTextFile("datas/Project1v3.json"), Utils.loadTextFile("datas/Project1.ifc")])
@@ -176,6 +176,7 @@ function init(){
 				.then( mod => {
 						//Model Loaded
 						this.model = mod;
+						DataApi.postModel(mod, "test");
 						if(this.model.getName() == "") this.model.setName("test");
 						this.timeline = new Timeline(this.model);
 						this.playerInit = 0;
