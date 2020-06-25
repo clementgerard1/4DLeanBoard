@@ -75,9 +75,9 @@ class Utils{
 		@returns {oAuth2TwoLegged} oAuth
 		@static
 	*/
-	static async createForgeBucket(oAuth){
+	static async createForgeBucket(oAuth, name){
 		const bucketsApi = new ForgeSDK.BucketsApi();
-		await bucketsApi.createBucket({ 'bucketKey' : Utils.forgeBucketName, 'policyKey' : 'temporary' }, {}, oAuth, oAuth.getCredentials()).then(
+		await bucketsApi.createBucket({ 'bucketKey' : Utils.forgeBucketName + "-" + name, 'policyKey' : 'temporary' }, {}, oAuth, oAuth.getCredentials()).then(
 			bucket => {
 				console.log("Bucket created");
 			}
@@ -94,7 +94,7 @@ class Utils{
 		@returns {Object} oAuth2TwoLegged + urn
 		@static
 	*/
-	static async uploadIFCFileToForge(oAuth, url){
+	static async uploadIFCFileToForge(oAuth, name, url){
 
 		const derivativesApi = new ForgeSDK.DerivativesApi();
 		const objectsApi2 = new ForgeSDK.ObjectsApi();
@@ -102,7 +102,7 @@ class Utils{
 
 		await Utils.loadTextFile(url).then( file => {
 		  const objectsApi = new ForgeSDK.ObjectsApi();
-			return objectsApi.uploadObject(Utils.forgeBucketName, Utils.forgeFileName, file.length, file, {}, oAuth, oAuth.getCredentials())
+			return objectsApi.uploadObject(Utils.forgeBucketName + "-" + name, Utils.forgeFileName, file.length, file, {}, oAuth, oAuth.getCredentials())
 			.then(
 				response => {
 
