@@ -494,14 +494,14 @@ export default {
 		},
 		onEnvInitialized(that){
 			Autodesk.Viewing.Document.load(
-        "urn:" + that.manifest.urn,
-        function(doc) {
-          that.onDocumentLoaded (doc, that)
-        },
-        function (errCode){
-          that.onLoadError (errCode, that)
-        }
-      );
+				"urn:" + that.manifest.urn,
+				function(doc) {
+					that.onDocumentLoaded (doc, that)
+				},
+				function (errCode){
+					that.onLoadError (errCode, that)
+				}
+			);
 		},
 		onLoadError(errCode, that){
 	      console.log('Error loading document: ' + errCode)
@@ -512,7 +512,7 @@ export default {
 			this.clearHighlighting();
 			const tasks = V_taskTableUtils.getTokens();
 			for(let t in tasks){
-				this.highlight(tasks[t].getObject4D());
+				this.highlight(tasks[t].getObject4D(), true);
 			}
 		}
 	},
@@ -523,7 +523,8 @@ export default {
 		V_timelineUtils.addListener("time", this, this.watchTime);
 		const tasks = V_taskTableUtils.getTokens();
 		for(let t in tasks){
-			this.highlight(tasks[t].getObject4D());
+			const obj4D = tasks[t].getObject4D();
+			this.highlight(obj4D, true);
 		}
 	},
 	mounted : function(){
