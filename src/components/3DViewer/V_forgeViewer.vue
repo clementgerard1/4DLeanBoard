@@ -69,13 +69,15 @@ export default {
 						for(let k in objs4D) {
 							var objs3D = objs4D[k].getObjects3D();
 							for(let l in objs3D) {
-								if(this.selected.includes(this.objs[objs3D[l].getId()])){
-									this.color3DObject(this.objs[objs3D[l].getId()], true);
-									this.colored.push(this.objs[objs3D[l].getId()]);
+								const obj = this.objs[objs3D[l].getId()];
+								if(this.selected.includes(obj)){
+									this.color3DObject(obj, true);
+									this.colored.push(obj);
 								} else if((phases[j].getContractor().getId() == this.shownContractor) || (this.shownContractor==null)) {
-									this.color3DObject(this.objs[objs3D[l].getId()]);
+									this.color3DObject(obj);
 								} else {
-									this.color3DObject(this.objs[objs3D[l].getId()], false, true);
+									this.color3DObject(obj, false, true);
+									obj.shadowed = true;
 								}
 							}
 						}
@@ -133,33 +135,38 @@ export default {
 		clearColors(){
 			if(this.viewer != null){
 				for(let i in this.colored){
-					this.restore3DObject(this.colored[i]);
+					if(this.selected.includes(this.colored[i])) {
+						this.color3DObject(this.colored[i], true);
+					} else {
+						this.restore3DObject(this.colored[i]);
+					}
 					delete this.colored[i];
 				}
 			}
 			this.colored = [];
 		},
 		highlight(object4D, bool){
-			// this.clearHighlighting();
 			if(this.viewer != null){
-				// ^ peut être ajouter la couleur qu'on veut mettre à l'object3D en paramètre
-				// sous la forme d'un vecteur4 contenant (r, g, b, a)
 				const objects3D = object4D.getObjects3D();
 				for(let o in objects3D){
 					const object3D = objects3D[o];
 					for(let s in this.tree.nodeAccess.nameSuffixes){
 						if(this.tree.nodeAccess.nameSuffixes[s] == object3D.getUniqId()){
-							const index = this.getDbId(s);
 							const obj = this.objs[object3D.getId()];
-							if(!this.selected.includes(obj) && bool){
-								if(this.colored.includes(obj)) {
-									this.restore3DObject(obj);
+							if(!this.selected.includes(obj)){
+								if(bool) {
+									if(this.colored.includes(obj)) {
+										this.restore3DObject(obj);
+									}
+									this.color3DObject(obj, true);
 								}
-								this.color3DObject(obj, true);
-								this.viewer.fitToView(index[0], this.viewer.model);
 							} else if(this.selected.includes(obj) && !bool) {
 								this.restore3DObject(obj);
+								if (this.colored.includes(obj)) {
+									this.color3DObject(obj, false, obj.shadowed);
+								}
 							}
+							this.viewer.fitToView(this.getDbId(s)[0]);
 						}
 					}
 
@@ -174,7 +181,7 @@ export default {
 					//const colorMap = fragList.db2ThemingColor;
 
 				}
-				console.log(this.nav.getCameraRightVector(false), this.nav.getEyeVector(), this.nav.getPosition());
+				//console.log(this.nav.getCameraRightVector(false), this.nav.getEyeVector(), this.nav.getPosition());
 				//repositionne la caméra
 				// fonction pour cacher les objets passer en paramètre (ids) => hide()
 			}
@@ -210,7 +217,7 @@ export default {
 									    opacity: 0.3,
 									    color: scssVariables[phs[j].getColorClass().replace("BG_", "").toLowerCase()],
 						      		});
-						      		const nextWeeks = new THREE.MeshBasicMaterial({
+						      		/*const nextWeeks = new THREE.MeshBasicMaterial({
 									    reflectivity: 0.0,
 									    flatShading: true,
 									    transparent: true,
@@ -230,7 +237,7 @@ export default {
 									    transparent: true,
 									    opacity: a,
 									    color: scssVariables[phs[j].getColorClass().replace("BG_", "").toLowerCase()],
-						      		});
+						      		});*/
 									this.objs[o3D[l].getId()] = {
 										obj3D : o3D[l],
 										guId : o3D[l].getIFCId(),
@@ -246,6 +253,7 @@ export default {
 										initialMaterials : {},
 										nodes: [],
 										colored : false,
+										shadowed : false,
 										state : "initial", // Pour plus tard
 										needUpdate : false,
 									}
@@ -273,34 +281,37 @@ export default {
 			true);
 		},
 		color3DObject(obj, selectMode = false, shadowMode = false){
+			if(obj!=null) {
+				if(!obj.colored || obj.needUpdate){
+					this.tree.enumNodeChildren(obj.dbId,
+						(node) => { 
+							//const count = this.tree.getChildCount(node);
+							const newId = this.viewer.model.getFragmentList().fragments.fragId2dbId.indexOf(node);
 
-			if(!obj.colored || obj.needUpdate){
-				this.tree.enumNodeChildren(obj.dbId,
-					(node) => { 
-						//const count = this.tree.getChildCount(node);
-						const newId = this.viewer.model.getFragmentList().fragments.fragId2dbId.indexOf(node);
-
-						let materialId = null;
-						if(selectMode){
-							materialId = this.viewer.model.getFragmentList().materialmap[this.selectedMaterial.id];
-							this.viewer.model.getFragmentList().setMaterial(newId, this.selectedMaterial);
-							this.selected.push(obj);
-						}else if(shadowMode){
-							materialId = this.viewer.model.getFragmentList().materialmap[obj.sMat.id];
-							this.viewer.model.getFragmentList().setMaterial(newId, obj.sMat);
-							this.colored.push(obj);
-						}else{
-							materialId = this.viewer.model.getFragmentList().materialmap[obj.material.id];
-							this.viewer.model.getFragmentList().setMaterial(newId, obj.material);
-							this.colored.push(obj);
-						}
-						if(newId != -1){
-							this.viewer.model.getFragmentList().materialids[newId] = materialId;
-							obj.colored = true;
-						}
-						this.viewer.impl.invalidate(true);
-					}, 
-				true);
+							let materialId = null;
+							if(selectMode){
+								materialId = this.viewer.model.getFragmentList().materialmap[this.selectedMaterial.id];
+								this.viewer.model.getFragmentList().setMaterial(newId, this.selectedMaterial);
+							}else if(shadowMode){
+								materialId = this.viewer.model.getFragmentList().materialmap[obj.sMat.id];
+								this.viewer.model.getFragmentList().setMaterial(newId, obj.sMat);
+							}else{
+								materialId = this.viewer.model.getFragmentList().materialmap[obj.material.id];
+								this.viewer.model.getFragmentList().setMaterial(newId, obj.material);
+							}
+							if(newId != -1){
+								this.viewer.model.getFragmentList().materialids[newId] = materialId;
+								obj.colored = true;
+							}
+							this.viewer.impl.invalidate(true);
+						}, 
+					true);
+					if(selectMode){
+						this.selected.push(obj);
+					} else {
+						this.colored.push(obj);
+					}
+				}
 			}
 		},
 		restore3DObject(obj){
@@ -312,18 +323,21 @@ export default {
 							const materialId = this.viewer.model.getFragmentList().materialmap[ this.initialMaterials[newId].id ];
 							this.viewer.model.getFragmentList().setMaterial(newId, this.initialMaterials[newId]);
 							this.viewer.model.getFragmentList().materialids[newId] = materialId;
-							obj.colored = false;
-							if(this.colored.includes(obj)) {
-								delete this.colored[this.colored.indexOf(obj)];
-							}
-							if(this.selected.includes(obj)) {
-								delete this.selected[this.selected.indexOf(obj)];
-							}
 						}
 						this.viewer.impl.invalidate(true);
 
 					}, 
 				true);
+				obj.colored = false;
+				if(this.colored.includes(obj)) {
+					delete this.colored[this.colored.indexOf(obj)];
+				}
+				if ((this.fliterModeFlag) && (this.selected.includes(obj))) {
+					this.color3DObject(obj, false, obj.shadowed);
+				}
+				if(this.selected.includes(obj)) {
+					delete this.selected[this.selected.indexOf(obj)];
+				}
 			}
 		},
 
@@ -352,18 +366,26 @@ export default {
 		highlightTask() {
 			const selection = this.viewer.getSelection();
 			// this.clearHighlighting();
-			// this.viewer.clearSelection();
+			this.viewer.clearSelection();
 			
 			for(let s in selection){
 				const objs = this.getObjByNodeId(selection[s]);
 				for(let o in objs){
 					if(this.colored.includes(objs[o])) {
-						this.restore3DObject(objs[o]);
+						if(!this.selected.includes(objs[o])) {
+							this.restore3DObject(objs[o]);
+							this.color3DObject(objs[o], true);
+							V_socketUtils.highlightTask(objs[o].obj3D.getParent().getTask(), true);
+						} else {
+							this.color3DObject(objs[o], false, objs[o].shadowed);
+						}
 					} else if(this.selected.includes(objs[o])) {
 						this.restore3DObject(objs[o]);
+						V_socketUtils.highlightTask(objs[o].obj3D.getParent().getTask(), false);
+					} else {
+						this.color3DObject(objs[o], true);
+						V_socketUtils.highlightTask(objs[o].obj3D.getParent().getTask(), true);
 					}
-					this.color3DObject(objs[o], true);
-					V_socketUtils.highlightTask(objs[o].obj3D.getParent().getTask(), true);
 				}
 			}
 		},
@@ -463,12 +485,12 @@ export default {
 	  		});
 			const materials = this.viewer.impl.getMaterials();
 	  		materials.addMaterial(Utils.getGuid(), this.selectedMaterial, true);
-			console.log(this.fragList, this.map);
+			//console.log(this.fragList, this.map);
 			this.map3DObjs();
 			this.camera = this.viewer.getCamera();
 			this.nav = this.viewer.navigation;
 			this.setPlayerState(true);
-			console.log(this.viewer, this.nav.getCameraRightVector(false), this.nav.getEyeVector(), this.nav.getPosition());
+			//console.log(this.viewer, this.nav.getCameraRightVector(false), this.nav.getEyeVector(), this.nav.getPosition());
 		},
 		onEnvInitialized(that){
 			Autodesk.Viewing.Document.load(
