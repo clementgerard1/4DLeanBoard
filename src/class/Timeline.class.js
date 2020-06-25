@@ -304,7 +304,7 @@ class Timeline{
 	getMaxSimultaneousTasksByPhaseAndTaskTeamBetweenTwoDates(phase, taskTeam, start, end){
 		const phaseTasks = phase.getTasksByTaskTeam(taskTeam);
 		let max = 0;
-		for(let i = start; i < end ; i++){
+		for(let i = start; i <= end ; i++){
 			const tasks = this.#steps[i].tasks;
 			let count = 0;
 			for(let t in tasks){
@@ -318,25 +318,49 @@ class Timeline{
 	}
 
 	/*
-		get the max number of simultaneous tasks on a phase between two moments
+		get the max number of simultaneous tasks for a taskteam between two moments
 		@param {Phase} phase
 		@param {TaskTeam} taskTeam
-		@param {int} nth id of line for this taskTeam
+		@param {uint} start
+		@param {uint} end
+		@returns {int}
+	*/
+	getMaxSimultaneousTasksByTaskTeamBetweenTwoDates(taskTeam, start, end){
+		const phases = this.#model.getTasks();
+		let max = 0;
+		for(let i = start; i <= end ; i++){
+			const tasks = this.#steps[i].tasks;
+			let count = 0;
+			for(let t in tasks){
+				if(tasks[t].getTaskTeam() == taskTeam){
+					count++
+				}
+			}
+			if(max < count) max = count;
+		}
+		return max;
+	}
+
+	/*
+		get the tasks on a phase between two moments
+		@param {Phase} phase
+		@param {TaskTeam} taskTeam
+		@param {int} nth id of line for this taskTeam (for a phase)
 		@param {uint} start
 		@param {uint} end
 		@returns {object} array : tasks, count : number of tasks
 	*/
-	getTasksByPhaseTaskTeamAndNthBetweenTwoDates(phase, taskTeam, nth, start, end){
+	getTasksByPhaseTaskTeamAndNthBetweenTwoDates(taskTeam, nth, start, end){
 
 		const arrayReturn = Array(6);
 		let count = 0;
 
 		for(let i = 1 ; i <= 6 ; i++){
 
-			const tasks = this.getTasksByTeamAndPhaseBetweenTwoDates(phase, taskTeam, start+ (((end - start + 1) / 6) * (i - 1)), start + (((end - start + 1) / 6) * i) - 1);			
+			const tasks = this.getTasksByTeamBetweenTwoDates(taskTeam, start+ (((end - start + 1) / 6) * (i - 1)), start + (((end - start + 1) / 6) * i) - 1);			
 			
 			for(let t in tasks){
-				const originNth = this.getOriginNth(phase, taskTeam, tasks[t]);
+				const originNth = this.getOriginNthByPhase(phase, taskTeam, tasks[t]);
 				if(originNth == nth){
 					arrayReturn[i-1] = tasks[t];
 					count++;
@@ -353,6 +377,59 @@ class Timeline{
 		}
 	}
 
+	getTasksByTeamBetweenTwoDates(taskTeam, start, end){
+		console.log(start, end);
+		const toReturn = [];
+		for(let i = start; i <= end ; i++){
+			if(typeof this.#steps[i] != "undefined"){
+				const tasks = this.#steps[i].tasks;
+				for(let t in tasks){
+					console.log(i, tasks[t].getId(), tasks[t].getTaskTeam().getName(), taskTeam.getName());
+					if((!toReturn.includes(tasks[t])) && tasks[t].getTaskTeam() == taskTeam) toReturn.push(tasks[t]);
+				}
+			}
+		}
+		console.log("result", toReturn);
+		return toReturn;
+
+	}
+
+	/*
+		get task for a taskteam between two date
+		@param {TaskTeam} taskTeam
+		@param {int} nth id of line for this taskTeam
+		@param {uint} start
+		@param {uint} end
+		@returns {object} array : tasks, count : number of tasks
+	*/
+	getTasksByTaskTeamAndNthBetweenTwoDates(taskTeam, nth, start, end){
+
+		const arrayReturn = Array(6);
+		let count = 0;
+
+		for(let i = 1 ; i <= 6 ; i++){
+
+			const tasks = this.getTasksByTeamBetweenTwoDates(taskTeam, start+ (((end - start + 1) / 6) * (i - 1)), start + (((end - start + 1) / 6) * i) - 1);		
+			for(let t in tasks){
+				const originNth = this.getOriginNth(taskTeam, tasks[t]);
+				console.log(originNth);
+				if(originNth == nth){
+					arrayReturn[i-1] = tasks[t];
+					count++;
+					break;
+				}else{
+					arrayReturn[i-1] = null;
+				}
+			}
+
+		}
+
+		return {
+			array : arrayReturn,
+			count : count
+		}
+	}
+
 	/*
 		get tasks between two moments
 		@param {uint} start
@@ -361,7 +438,7 @@ class Timeline{
 	*/
 	getTasksBetweenTwoDates(start, end){
 		const toReturn = [];
-		for(let i = start; i < end ; i++){
+		for(let i = start; i <= end ; i++){
 			if(typeof this.#steps[i] != "undefined"){
 				const tasks = this.#steps[i].tasks;
 				for(let t in tasks){
@@ -376,10 +453,17 @@ class Timeline{
 		return (date.getTime() - this.#startDate.getTime()) / (1000 * 3600 * 24);
 	}
 
-	getOriginNth(phase, taskTeam, task){
+	getOriginNth(taskTeam, task){
 		const time = this.getTime(task.getStartDate());
 		const startWeekTime = Math.trunc(time / 7) * 7;
-		const tasks = this.getTasksByTeamAndPhaseBetweenTwoDates(phase, taskTeam, startWeekTime, startWeekTime + 6);
+		const tasks = this.getTasksByTeamBetweenTwoDates(taskTeam, startWeekTime, startWeekTime + 7);
+		return tasks.indexOf(task);
+	}
+
+	getOriginNthByPhase(phase, taskTeam, task){
+		const time = this.getTime(task.getStartDate());
+		const startWeekTime = Math.trunc(time / 7) * 7;
+		const tasks = this.getTasksByTeamAndPhaseBetweenTwoDates(phase, taskTeam, startWeekTime, startWeekTime + 7);
 		return tasks.indexOf(task);
 	}
 

@@ -1,7 +1,7 @@
 import "./V_6Wrow.scss";
 import TimelineUtils from "../Utils/V_timelineUtils.class.js";
-import phaseOpen from "./assets/phaseOpen.svg";
-import phaseClose from "./assets/phaseClose.svg";
+import lineOpen from "./assets/lineOpen.svg";
+import lineClose from "./assets/lineClose.svg";
 import V_Task from "./V_task.vue";
 import V_6Wrow_line from "./V_6Wrow_line.vue";
 
@@ -12,14 +12,13 @@ export default {
 	},
 	data : function(){
 		return {
-			"color" : "BG_" + this.phase.getColorClass(),
+			"color" : "BG_" + this.taskteam.getColorClass(),
 			"isOpen" : true, 
 			"maxheight" : "init"
 		}
 	},
 	props :[
 		"time",
-		"phase",
 		"taskteam",
 		"tasktablestart",
 		"nth"
@@ -35,13 +34,14 @@ export default {
 	computed:{
 		icon : function(){
 			if(this.isOpen){
-				return phaseOpen;
+				return lineOpen;
 			}else{
-				return phaseClose;
+				return lineClose;
 			}
 		},
 		tasks : function(){
-			const tasks = this.timeline.getTasksByPhaseTaskTeamAndNthBetweenTwoDates(this.phase, this.taskteam, this.nth, this.tasktablestart * 7, (this.tasktablestart + 6) * 7 - 1);
+			const tasks = this.timeline.getTasksByTaskTeamAndNthBetweenTwoDates(this.taskteam, this.nth, this.tasktablestart * 7, (this.tasktablestart + 6) * 7 - 1);
+			console.log(tasks);
 			this.isOpen = (tasks.count != 0);
 			return tasks.array;
 		},
@@ -50,9 +50,6 @@ export default {
 		},
 		_tasktablestart : function(){
 			return this.tasktablestart;
-		},
-		_phase : function(){
-			return this.phase;
 		},
 		_team : function(){
 			return this.taskteam;
@@ -71,7 +68,7 @@ export default {
 			}
 		},
 		tasktablestart: function(){
-			const tasks = this.timeline.getTasksByPhaseTaskTeamAndNthBetweenTwoDates(this.phase, this.taskteam, this.nth, this.tasktablestart * 7, (this.tasktablestart + 6) * 7 - 1);
+			const tasks = this.timeline.getTasksByTaskTeamAndNthBetweenTwoDates(this.taskteam, this.nth, this.tasktablestart * 7, (this.tasktablestart + 6) * 7 - 1);
 			this.isOpen = (tasks.count != 0);
 		}
 	},
@@ -96,7 +93,7 @@ export default {
 
 		<!-- tasks -->
 		<div v-bind:style="{maxHeight : maxheight}" class="tasksWrapper">
-			<task v-bind:color="color" v-bind:team="_team" nth=0 v-bind:phase="_phase" v-for="(task, i) in tasks" :key="i" v-bind:task="task" v-bind:isOpen="isOpen" v-bind:time="_tasktablestart + i"  ></task>
+			<task v-bind:color="color" v-bind:team="_team" nth=0 v-for="(task, i) in tasks" :key="i" v-bind:task="task" v-bind:isOpen="isOpen" v-bind:time="_tasktablestart + i"  ></task>
 		</div>
 
 		<!-- button -->

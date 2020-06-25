@@ -5,6 +5,7 @@ class TaskTeam extends Team{
 
 	#operationUnits;
 	#workers;
+	#colorClass;
 
 	/**
  		@class TaskTeam
@@ -20,6 +21,7 @@ class TaskTeam extends Team{
 		super(name, id);
 		this.#operationUnits = {};
 		this.#workers = null;
+		this.#colorClass = "defaultcolor";
 	}
 
 	/**
@@ -86,6 +88,22 @@ class TaskTeam extends Team{
 	getWorkers(){
 		return this.#workers;
 	}	
+
+	setColorClass(colorClass){
+		if(typeof colorClass == "undefined"){
+			console.error("setColorClass : need a string ; provided : " + colorClass);
+		}else{
+			this.#colorClass = colorClass;
+		}
+	}
+
+	/**
+		Get the color class attribuate to this phase
+		@returns {String} 
+	*/
+	getColorClass(){
+		return this.#colorClass;
+	}
 
 }
 export default TaskTeam;

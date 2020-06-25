@@ -114,7 +114,6 @@ export default {
 		"team",
 		"nth",
 		'time',
-		'phase',
 		"task",
 		"color",
 		"isOpen"

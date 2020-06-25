@@ -170,7 +170,10 @@ class Loader{
 							if(PstartDate == null || startDate < PstartDate) PstartDate = startDate;
 							if(PendDate == null || endDate > PendDate) PendDate = endDate;
 
-							if(typeof taskTeams[tasks[t]["Team"]] == "undefined") taskTeams[tasks[t]["Team"]] = new TaskTeam(tasks[t]["Team"]);
+							if(typeof taskTeams[tasks[t]["Team"]] == "undefined") {
+								taskTeams[tasks[t]["Team"]] = new TaskTeam(tasks[t]["Team"]);
+								taskTeams[tasks[t]["Team"]].setColorClass(phases[p]["color"]);
+							}
 							task.setTaskTeam(taskTeams[tasks[t]["Team"]]);
 							taskTeams[tasks[t]["Team"]].setWorkers(tasks[t]["Workers"]);
 							if(typeof zones[tasks[t]["Zone"]] == "undefined") zones[tasks[t]["Zone"]] = new Zone(tasks[t]["Zone"]);
