@@ -5,8 +5,8 @@ import axios from 'axios';
 
 class DataApi{
 
-	static serverPort = '3003';
-	static serverIp = '194.199.221.139';
+	static serverPort = Config.dataServerPort;
+	static serverIp = Config.dataServerIp;
 	static serverUrl = 'http://' + DataApi.serverIp + ":" + DataApi.serverPort;
 
 	static async postModel(model, name = model.getName()){
@@ -16,6 +16,10 @@ class DataApi{
 			name : name,
 			model : json
 		});
+	}
+
+	static async postCSVModel(csv){
+
 	}
 
 	static async getModel(name){

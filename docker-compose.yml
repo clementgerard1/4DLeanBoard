@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+
+  html:
+    container_name: html
+    image: nginx:alpine
+    networks : 
+      - global
+    volumes:
+      - ./dist:/usr/share/nginx/html
+    ports:
+      - "80:80"
+
+  socket:
+    container_name: socket
+    build:
+      context: .
+      dockerfile: ./socket.dockerfile
+    networks : 
+      - global
+    ports:
+      - "3001:3001"
+
+  dataserver:
+    container_name: dataserver
+    build:
+      context: .
+      dockerfile: ./dataserver.dockerfile
+    networks : 
+      - global
+    ports:
+      - "3003:3003"
+
+networks:
+  global:

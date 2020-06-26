@@ -4,4 +4,4 @@ dev
 dist
 src/class/doc
 src/class/jest/testReport.html
-dataServer/models
+dataServer/models/*

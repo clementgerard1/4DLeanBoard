@@ -4,13 +4,14 @@
   "description": "4D Lean Board",
   "private": true,
   "scripts": {
-    "prod": "MODE=prod; cp -r public/* dist; webpack --config ./webpack.prod.js  & node htmlServer.js $MODE",
+    "build": "MODE=prod; cp -r public/* dist; webpack --config ./webpack.prod.js",
+    "prod": "MODE=prod; npm run build  & node htmlServer.js $MODE",
     "dev": "MODE=dev; webpack --config ./webpack.dev.js  & node htmlServer.js $MODE",
     "test": "MODE=test; webpack --config ./webpack.test.js  & node htmlServer.js $MODE",
     "doc": "rm -rf ./src/class/doc; ./node_modules/.bin/jsdoc -r ./src/class -d ./src/class/doc",
     "jest": "jest src/class/jest --watch",
     "commit": "npm run doc; npm run jest; MODE=prod; cp -r public/* dist; webpack --config ./webpack.prod.js; git add --all; git commit -m ",
-    "deploy": "gh-pages -d dist",
+    "deploy": "npm run build & gh-pages -d dist",
     "socket": "node socketServer.js",
     "data-server": "babel-watch dataServer/dataServer.js",
     "prod:windows": "xcopy public dist /s /e /c & node htmlServer.js prod | webpack --config ./webpack.prod.js",
@@ -55,6 +56,7 @@
     "forge-apis": "^0.7.3",
     "hammerjs": "^2.0.8",
     "serialize-javascript": "^4.0.0",
+    "socket-io": "^1.0.0",
     "socket.io-client": "^2.3.0",
     "vue": "^2.6.11"
   }

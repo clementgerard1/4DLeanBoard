@@ -20,7 +20,7 @@ import Requirement from "./Requirement.class.js";
 
 class Loader{
 
-	static #latestCSVVersion = "0.1";
+	static #latestCSVVersion = "0.2";
 	static #latestJSONVersion = "0.3";
 	static #ifcBuildingElements = [
 		"IFCBUILDINGELEMENTPROXY", //Pas sur
@@ -78,6 +78,10 @@ class Loader{
 	*/
 	static fromJSONandIFC(json, ifc, jsonVersion = this.#latestJSONVersion){
 		return eval("this.json_v" + jsonVersion.replace(".", "_")  + "(json, ifc)");
+	}
+
+	static csv_v0_2(csv, ifc){
+		
 	}
 
 	//Version JSON O.3

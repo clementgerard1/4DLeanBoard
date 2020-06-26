@@ -1,4 +1,5 @@
 import Utils from "./Utils.class.js";
+import Property from "./interfaces/Property.class.js";
 import Milestone from './Milestone.class.js';
 import Phase from './Phase.class.js';
 import Task from './Task.class.js';
