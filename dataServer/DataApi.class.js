@@ -45,7 +45,7 @@ class DataApi{
 	}
 
 	static async getModels(){
-		return axios.get(DataApi.serverUrl + '/models/models_serialized')
+		return axios.get(DataApi.serverUrl + '/models')
 		.then( (json) => {
 			return json.data;
 		})

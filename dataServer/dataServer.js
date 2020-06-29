@@ -103,7 +103,7 @@ function launchServer(){
 	});
 
 	app.get("/model", (req, res)=>{
-		res.sendFile(__dirname + "/models/" + req.query.name + ".json");
+		res.sendFile(__dirname + "/models/models_serialized" + req.query.name + ".json");
 	});
 
 	app.patch("/requirement", (req, res)=>{
