@@ -1,0 +1,309 @@
+{
+   "milestones": {
+      "MilestoneID1": {
+         "Name": "ConstructionStart",
+         "Requirements": {
+            "requirement1": "LandRightsDelivered"
+         },
+         "phases": {
+            "PhaseID1": {
+               "name": "FirstPhase",
+               "contractor": "Masons 1",
+               "color": "Yellowish",
+               "tasks": [
+                  {
+                     "TID": 101,
+                     "4DID": 101,
+                     "Workers": 4,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKWyMH2W"
+                     ],
+                     "Requirements" : {
+                        "Constraint" : true,
+                        "Information" : true,
+                        "Materials" : true,
+                        "Manpower" : true,
+                        "Equipement" : true,
+                        "Safety" : true,
+                        "Space" : true
+                     },
+                     "Name": "Ground slab pouring",
+                     "Start": "01/02/2021",
+                     "End": "14/02/2021",
+                     "Duration": 14,
+                     "Previous": 0,
+                     "Next": 102,
+                     "Level": 0,
+                     "Zone": "A",
+                     "Team": "Masons 1"
+                  }
+               ]
+            },
+            "PhaseID2": {
+               "name": "phase2",
+               "contractor": "Masons 2",
+               "color": "Blueish",
+               "tasks": [
+                  {
+                     "TID": 102,
+                     "4DID": 102,
+                     "Workers": 4,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKWyMH18"
+                     ],
+                     "Requirements" : {
+                        "Constraint" : true,
+                        "Information" : true,
+                        "Materials" : true,
+                        "Manpower" : true,
+                        "Equipement" : true,
+                        "Safety" : true,
+                        "Space" : true
+                     },
+                     "Name": "Walls cladding North",
+                     "Start": "14/02/2021",
+                     "End": "18/02/2021",
+                     "Duration": 5,
+                     "Previous": 101,
+                     "Next": 103,
+                     "Level": 0,
+                     "Zone": "A",
+                     "Team": "Masons 2"
+                  }
+               ]
+            },
+            "PhaseID3": {
+               "name": "phase3",
+               "contractor": "Masons 1",
+               "color": "Yellowish",
+               "tasks": [
+                  {
+                     "TID": 103,
+                     "4DID": 103,
+                     "Workers": 4,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKWyMH1B"
+                     ],
+                     "Requirements" : {
+                        "Constraint" : false,
+                        "Information" : false,
+                        "Materials" : false,
+                        "Manpower" : true,
+                        "Equipement" : true,
+                        "Safety" : false,
+                        "Space" : false
+                     },
+                     "Name": "Walls cladding East",
+                     "Start": "14/02/2021",
+                     "End": "18/02/2021",
+                     "Duration": 5,
+                     "Previous": 101,
+                     "Next": 104,
+                     "Level": 0,
+                     "Zone": "A",
+                     "Team": "Masons 1"
+                  }
+               ]
+            },
+            "PhaseID4": {
+               "name": "phase4",
+               "contractor": "Masons 2",
+               "color": "Blueish",
+               "tasks": [
+                  {
+                     "TID": 104,
+                     "4DID": 104,
+                     "Workers": 4,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKWyMH1A"
+                     ],
+                     "Requirements" : {
+                        "Constraint" : true,
+                        "Information" : true,
+                        "Materials" : true,
+                        "Manpower" : true,
+                        "Equipement" : true,
+                        "Safety" : true,
+                        "Space" : true
+                     },
+                     "Name": "Walls cladding South",
+                     "Start": "26/02/2021",
+                     "End": "02/03/2021",
+                     "Duration": 5,
+                     "Previous": 102,
+                     "Next": 105,
+                     "Level": 0,
+                     "Zone": "A",
+                     "Team": "Masons 2"
+                  }
+               ]
+            },
+            "PhaseID5": {
+               "name": "phase5",
+               "contractor": "Masons 1",
+               "color": "Yellowish",
+               "tasks": [
+                  {
+                     "TID": 105,
+                     "4DID": 105,
+                     "Workers": 4,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKWyMH19"
+                     ],
+                     "Requirements" : {
+                        "Constraint" : false,
+                        "Information" : true,
+                        "Materials" : false,
+                        "Manpower" : true,
+                        "Equipement" : true,
+                        "Safety" : true,
+                        "Space" : true
+                     },
+                     "Name": "Walls cladding West",
+                     "Start": "26/02/2021",
+                     "End": "02/03/2021",
+                     "Duration": 5,
+                     "Previous": 101,
+                     "Next": 106,
+                     "Level": 0,
+                     "Zone": "A",
+                     "Team": "Masons 1"
+                  }
+               ]
+            },
+             "PhaseID6": {
+               "name": "phase6",
+               "contractor": "Carpenters 1",
+               "color": "Orange",
+               "tasks": [
+                  {
+                     "TID": 106,
+                     "4DID": 106,
+                     "Workers": 4,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKWyMH4v"
+                     ],
+                     "Requirements" : {
+                        "Constraint" : true,
+                        "Information" : true,
+                        "Materials" : false,
+                        "Manpower" : true,
+                        "Equipement" : true,
+                        "Safety" : false,
+                        "Space" : true
+                     },
+                     "Name": "Windows installation",
+                     "Start": "08/03/2021",
+                     "End": "12/03/2021",
+                     "Duration": 5,
+                     "Previous": 105,
+                     "Next": 107,
+                     "Level": 0,
+                     "Zone": "A",
+                     "Team": "Carpenters 1"
+                  }
+               ]
+            },
+             "PhaseID7": {
+               "name": "phase7",
+               "contractor": "Carpenters 2",
+               "color": "Redish",
+               "tasks": [
+                  {
+                     "TID": 107,
+                     "4DID": 107,
+                     "Workers": 4,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKWyMH4Y"
+                     ],
+                     "Requirements" : {
+                        "Constraint" : false,
+                        "Information" : false,
+                        "Materials" : false,
+                        "Manpower" : true,
+                        "Equipement" : true,
+                        "Safety" : false,
+                        "Space" : true
+                     },
+                     "Name": "Doors installation",
+                     "Start": "16/03/2021",
+                     "End": "21/03/2021",
+                     "Duration": 6,
+                     "Previous": 106,
+                     "Next": 108,
+                     "Level": 0,
+                     "Zone": "A",
+                     "Team": "Carpenters 2"
+                  }
+               ]
+            },
+            "PhaseID8": {
+               "name": "phase8",
+               "contractor": "Carpenters 1",
+               "color": "Orange",
+               "tasks": [
+                  {
+                     "TID": 108,
+                     "4DID": 108,
+                     "Workers": 4,
+                     "GUID" : [
+                        "2XqLaPqlL6pRaKaKeyMH3A",
+                        "2XqLaPqlL6pRaKaKqyMH3A", 
+                        "2XqLaPqlL6pRaKaKmyMH3A", 
+                        "2XqLaPqlL6pRaKaKiyMH3A"
+                     ],
+                     "Requirements" : {
+                        "Constraint" : false,
+                        "Information" : false,
+                        "Materials" : false,
+                        "Manpower" : true,
+                        "Equipement" : true,
+                        "Safety" : true,
+                        "Space" : true
+                     },
+                     "Name": "Roof installation",
+                     "Start": "16/03/2021",
+                     "End": "29/03/2021",
+                     "Duration": 14,
+                     "Previous": 107,
+                     "Next": 0,
+                     "Level": 1,
+                     "Zone": "A",
+                     "Team": "Carpenters 1"
+                  }
+               ]
+            }
+         },
+         "event" : false,
+         "eventDate" : null
+      },
+      "MilestoneID2": {
+         "Name": "Middle",
+         "phases": {
+         },
+         "event" : true,
+         "eventDate" : "11/02/2021"
+      },
+      "MilestoneID3": {
+         "Name": "Middle-end",
+         "phases": {
+         },
+         "event" : true,
+         "eventDate" : "01/03/2021"
+      },
+      "MilestoneID4": {
+         "Name": "End",
+         "phases": {
+         },
+         "event" : true,
+         "eventDate" : "20/03/2021"
+      },
+      "MilestoneID5": {
+         "Name": "Start",
+         "phases": {
+         },
+         "event" : true,
+         "eventDate" : "01/02/2021"
+      }
+   }
+}

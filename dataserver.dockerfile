@@ -2,17 +2,17 @@
 FROM node:12.2.0-alpine
 
 # set working directory
-WORKDIR .
+WORKDIR ./4DLeanBoard
 
-ADD . .
+RUN apk update && apk add git
+
+RUN git clone https://github.com/clementgerard1/4DLeanBoard.git .
 
 # add `/app/node_modules/.bin` to $PATH
 ENV PATH /app/node_modules/.bin:$PATH
 
 # install and cache app dependencies
-COPY package.json package.json
 RUN npm install
-
 
 # start app
 CMD ["npm", "run", "data-server"]

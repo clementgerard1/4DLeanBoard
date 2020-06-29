@@ -125,7 +125,7 @@ class Loader{
 		const milestones = infos["milestones"];
 		for(let m in milestones){
 
-			const milestone = null;
+			let milestone = null;
 			if(milestones[m]["event"]){
 				milestone = new Milestone(milestones[m]["Name"], true);
 			}else{
