@@ -1,17 +1,17 @@
 module.exports = {
 	//For transfert logs from tablette to nodejs console
 	"socketConsole" : false,
-	"socketConsoleIP" : "localhost",
+	"socketConsoleIP" : "0.0.0.0",
 	"socketConsolePort" : 3002,
 	//
 
 	"forgeRenderer" : true,
 
-	"socketServerIp" : "localhost",
-	"socketServerPort" : "3001",
+	"socketServerIp" : "0.0.0.0",
+	"socketServerPort" : 3001,
 
-	"dataServerIp" : "localhost",
-	"dataServerPort" : "3003",
+	"dataServerIp" : "0.0.0.0",
+	"dataServerPort" : 3003,
 
 	"autoDeskAccount" : "clement",
 
