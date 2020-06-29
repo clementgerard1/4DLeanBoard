@@ -10,11 +10,11 @@ import bodyParser from 'body-parser';
 // or failed.
 
 const models = [];
-getNewModels()
+getNewModels().then(getSerializedModels).then(launchServer);
 
-function getNewModels(){
+async function getNewModels(){
 
-	fs.readdir(__dirname + '/models/models', (err, files) => {
+	await fs.readdir(__dirname + '/models/models', (err, files) => {
 
 	  // On error, show it and return
 	  if(err) return console.error(err);
@@ -38,13 +38,11 @@ function getNewModels(){
 
 	});
 
-	getSerializedModels();
-
 }
 
-function getSerializedModels(){
+async function getSerializedModels(){
 
-	fs.readdir(__dirname + '/models/models_serialized', (err, files) => {
+	await fs.readdir(__dirname + '/models/models_serialized', (err, files) => {
 
 	  // On error, show it and return
 	  if(err) return console.error(err);
@@ -61,8 +59,6 @@ function getSerializedModels(){
 	  }
 
 	});
-
-	launchServer();
 
 }
 
