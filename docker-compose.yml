@@ -30,7 +30,7 @@ services:
     networks : 
       - global
     volumes:
-      - ./dataServer/models:/4DLeanBoard/dataServer/models
+      - ./dataServer/models/:/4DLeanBoard/dataServer/models/
     ports:
       - "3003:3003"
 
