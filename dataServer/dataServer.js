@@ -10,16 +10,18 @@ import bodyParser from 'body-parser';
 // or failed.
 
 const models = [];
-getNewModels().then(getSerializedModels).then(launchServer);
+getNewModels()
+launchServer();
 
-async function getNewModels(){
+function getNewModels(){
 
-	await fs.readdir(__dirname + '/models/models', (err, files) => {
+	fs.readdir(__dirname + '/models/models', (err, files) => {
 
 	  // On error, show it and return
 	  if(err) return console.error(err);
 
 	  // Display directory entries
+	  let count = 0;
 	  for(let f in files){
 
 	  	console.log("before", files[f]);
@@ -36,16 +38,22 @@ async function getNewModels(){
 
 					});
 			  }
+			  count++;
+			  if(count == files.length){
+			  	getSerializedModels();
+			  }
+
 		  }
 	  }
 
 	});
 
+
 }
 
-async function getSerializedModels(){
+function getSerializedModels(){
 
-	await fs.readdir(__dirname + '/models/models_serialized', (err, files) => {
+	fs.readdir(__dirname + '/models/models_serialized', (err, files) => {
 
 	  // On error, show it and return
 	  if(err) return console.error(err);
