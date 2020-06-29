@@ -21,6 +21,9 @@ async function getNewModels(){
 
 	  // Display directory entries
 	  for(let f in files){
+
+	  	console.log("before", files[f]);
+
 	  	if(!fs.lstatSync(__dirname + '/models/models' + '/' + files[f]).isDirectory()){
 	  		if(!fs.existsSync(__dirname + '/models/models_serialized' + '/' + files[f].split('.').slice(0, -1).join('.'))){
 			  	fs.readFile(__dirname + '/models/models' + '/' + files[f], 'utf8', (err, data)=>{
@@ -49,6 +52,8 @@ async function getSerializedModels(){
 
 	  // Display directory entries
 	  for(let f in files){
+
+	  	console.log("serialized", files[f]);
 	  	if(!fs.lstatSync(__dirname + '/models/models_serialized' + '/' + files[f]).isDirectory()){
 		  	fs.readFile(__dirname + '/models/models_serialized' + '/' + files[f], 'utf8', (err, data)=>{
 		  		const model = new Model();
