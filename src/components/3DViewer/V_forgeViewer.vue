@@ -531,7 +531,7 @@ export default {
 				reflectivity: 0.0,
 				flatShading: true,
 				transparent: true,
-				opacity: 0.3,
+				opacity: 0.1,
 				color: scssVariables["nextSixWeeks"],
 			});
 			this.currWeekMat = new THREE.MeshBasicMaterial({
