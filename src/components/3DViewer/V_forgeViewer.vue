@@ -33,7 +33,7 @@ export default {
 			"shownContractor" : null,
 			"fliterModeFlag" : false,
 			"colored" : [],
-			"played" : [],
+			"playing" : true,
 			"camera" : null,
 			"nav" : null,
 		}
@@ -67,20 +67,38 @@ export default {
 					if(this.timeline.isActiveBetweenTwoDate(obj.obj3D.getParent().getTask(), start6Weeks, start6Weeks+42)) {
 						if(this.timeline.isActiveBetweenTwoDate(obj.obj3D.getParent().getTask(), startActualWeek, startActualWeek+7)) {
 							this.color3DObject(obj, false, false, true);
+							obj.state = "currentWeek";
 						} else if(this.timeline.isActiveBetweenTwoDate(obj.obj3D.getParent().getTask(), start6Weeks, startActualWeek-1)) {
 							this.restore3DObject(obj);
+							obj.state = "builtOn6W";
 						} else {
 							this.color3DObject(obj, false, false, false, false, true);
+							obj.state = "toBuildOn6W";
 						}
 					} else if(this.timeline.isActiveBetweenTwoDate(obj.obj3D.getParent().getTask(), start, start6Weeks-1)) {
 						this.restore3DObject(obj);
+						obj.state = "built";
 					} else {
 						this.color3DObject(obj, false, false, false, true);
+						obj.state = "toBuild";
 					}
-					this.played.push(obj);
+					this.playing = true;
 				}
 			} else {
 				this.clearColors();
+				this.playing = false;
+			}
+		},
+
+		colorFromState(obj, state) {
+			if(state=="currentWeek") {
+				this.color3DObject(obj, false, false, true);
+			} else if(state=="toBuildOn6W") {
+				this.color3DObject(obj, false, false, false, false, true);
+			} else if(state=="toBuild") {
+				this.color3DObject(obj, false, false, false, true);
+			} else {
+				this.restore3DObject(obj);
 			}
 		},
 
@@ -189,10 +207,12 @@ export default {
 								}
 							} else if(this.selected.includes(obj) && !bool) {
 								this.restore3DObject(obj);
-								if (this.colored.includes(obj)) {
-									this.color3DObject(obj, false, obj.shadowed);
+								if(!this.playing) {
+									if (this.colored.includes(obj)) {
+										this.color3DObject(obj, false, obj.shadowed);
+									}
 								} else {
-									this.setPlayerState(true);
+									this.colorFromState(obj, obj.state);
 								}
 							}
 							this.viewer.fitToView(this.getDbId(s)[0]);
@@ -398,6 +418,9 @@ export default {
 						}
 					} else if(this.selected.includes(objs[o])) {
 						this.restore3DObject(objs[o]);
+						if(this.playing) {
+							this.colorFromState(objs[o], objs[o].state);
+						}
 						V_socketUtils.highlightTask(objs[o].obj3D.getParent().getTask(), false);
 					} else {
 						this.color3DObject(objs[o], true);
