@@ -34,14 +34,14 @@ export default {
 	template : `
 	<div class="filterPanel">
 		<div>
-	  	<label for="contractorCheckbox">Teams Layout <input type="checkbox" name="contractorCheckbox" id="contractorCheckbox" value="contractors" v-model="checkboxes"></label>
-	  	<select v-model="contractorSelected" name="contractorSelect" id="contractorSelect">
-			  <option value="all">All</option>
-			  <option v-for="contractor in contractors" v-bind:value="contractor.getId()" v-html="contractor.getName()"></option>
+			<label for="contractorCheckbox">Teams Layout <input type="checkbox" name="contractorCheckbox" id="contractorCheckbox" value="contractors" v-model="checkboxes"></label>
+			<select v-model="contractorSelected" name="contractorSelect" id="contractorSelect">
+				<option value="all">All</option>
+				<option v-for="contractor in contractors" v-bind:value="contractor.getId()" v-html="contractor.getName()"></option>
 			</select>
-	  </div>
-	  <div>
+		</div>
+		<div>
 
-	  </div>
+		</div>
 	</div>`,
 }
