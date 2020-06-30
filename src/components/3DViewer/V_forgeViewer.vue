@@ -128,11 +128,9 @@ export default {
 					}
 				}
 				this.fliterModeFlag = true;
-				this.viewer.setGroundShadow(false);
 			} else {
 				this.clearColors();
 				this.fliterModeFlag = false;
-				this.viewer.setGroundShadow(true);
 				this.setPlayerState(true);
 			}
 		},
@@ -496,6 +494,7 @@ export default {
 
 			this.viewer.setQualityLevel(false, false);
 			this.viewer.setGhosting(false);
+			this.viewer.setGroundShadow(false);
 
 			// important selon moi
 			this.viewer.setReverseZoomDirection(true);
@@ -516,6 +515,7 @@ export default {
 
 		},
 		onLoaded(that){
+			V_socketUtils.clearHighlighting();
 			this.tree = this.viewer.model.getInstanceTree();
 			this.selectedMaterial = new THREE.MeshBasicMaterial({
 			    reflectivity: 0.0,
@@ -546,20 +546,20 @@ export default {
 				color: scssVariables["currentSixWeeks"],
 			});
 			const materials = this.viewer.impl.getMaterials();
-			  materials.addMaterial(Utils.getGuid(), this.selectedMaterial, true);
-			  materials.addMaterial(Utils.getGuid(), this.sixWeeksMat, true);
-			  materials.addMaterial(Utils.getGuid(), this.nextsWeeksMat, true);
-			  materials.addMaterial(Utils.getGuid(), this.currWeekMat, true);
+			materials.addMaterial(Utils.getGuid(), this.selectedMaterial, true);
+			materials.addMaterial(Utils.getGuid(), this.sixWeeksMat, true);
+			materials.addMaterial(Utils.getGuid(), this.nextsWeeksMat, true);
+			materials.addMaterial(Utils.getGuid(), this.currWeekMat, true);
 			//console.log(this.fragList, this.map);
 			this.map3DObjs();
 			this.camera = this.viewer.getCamera();
 			this.nav = this.viewer.navigation;
 			this.setPlayerState(true);
-			const tasks = V_taskTableUtils.getTokens();
-			for(let t in tasks){
+			//const tasks = V_taskTableUtils.getTokens();
+			/*for(let t in tasks){
 				const obj4D = tasks[t].getObject4D();
 				this.highlight(obj4D, true);
-			}
+			}*/
 			//console.log(this.viewer, this.nav.getCameraRightVector(false), this.nav.getEyeVector(), this.nav.getPosition());
 		},
 		onEnvInitialized(that){
@@ -580,11 +580,11 @@ export default {
 		watchTime : function(time){
 			this.time = time;
 			this.clearHighlighting();
-			const tasks = V_taskTableUtils.getTokens();
+			//const tasks = V_taskTableUtils.getTokens();
 			this.setPlayerState(true);
-			for(let t in tasks){
+			/*for(let t in tasks){
 				this.highlight(tasks[t].getObject4D(), true);
-			}
+			}*/
 		}
 	},
 	created : function(){
