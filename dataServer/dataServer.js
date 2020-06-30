@@ -10,8 +10,42 @@ import bodyParser from 'body-parser';
 // or failed.
 
 const models = [];
-getNewModels()
+getNewIfcFiles();
 launchServer();
+
+function getNewIfcFiles(){
+
+	fs.readdir(__dirname + '/models/ifc', (err, files) => {
+
+	  // On error, show it and return
+	  if(err) return console.error(err);
+
+	  // Display directory entries
+	  let count = 0;
+	  for(let f in files){
+
+	  	if(!fs.lstatSync(__dirname + '/models/ifc' + '/' + files[f]).isDirectory()){
+	  		if(!fs.existsSync(__dirname + '/models/ifc_modified' + '/' + files[f].split('.').slice(0, -1).join('.'))){
+			  	fs.readFile(__dirname + '/models/ifc' + '/' + files[f], 'utf8', (err, data)=>{
+
+			  		fs.writeFile(__dirname + "/models/ifc_modified/" + files[f].split('.').slice(0, -1).join('.') + ".ifc", Loader.createIFCFileWithId(data), function (err) {
+					  if (err) throw err;
+					  console.log('IFC modified.');
+					});
+				});
+			}
+			count++;
+
+			if(count == files.length){
+				getNewModels();
+			}
+
+		  }
+	  }
+
+	});
+
+}
 
 function getNewModels(){
 
@@ -24,7 +58,6 @@ function getNewModels(){
 	  let count = 0;
 	  for(let f in files){
 
-	  	console.log("before", files[f]);
 
 	  	if(!fs.lstatSync(__dirname + '/models/models' + '/' + files[f]).isDirectory()){
 	  		if(!fs.existsSync(__dirname + '/models/models_serialized' + '/' + files[f].split('.').slice(0, -1).join('.'))){
@@ -61,7 +94,6 @@ function getSerializedModels(){
 	  // Display directory entries
 	  for(let f in files){
 
-	  	console.log("serialized", files[f]);
 	  	if(!fs.lstatSync(__dirname + '/models/models_serialized' + '/' + files[f]).isDirectory()){
 		  	fs.readFile(__dirname + '/models/models_serialized' + '/' + files[f], 'utf8', (err, data)=>{
 		  		const model = new Model();
@@ -91,6 +123,9 @@ function launchServer(){
 
 	app.post("/model", (req, res)=>{
 		saveModel(req.body.name, req.body.model);
+		models[req.body.name] = new Model();
+		models[req.body.name].setName(req.body.name);
+		models[req.body.name].deserialize(req.body.model);
 		res.send('Model saved');
 	});
 
@@ -103,7 +138,7 @@ function launchServer(){
 	});
 
 	app.get("/model", (req, res)=>{
-		res.sendFile(__dirname + "/models/models_serialized" + req.query.name + ".json");
+		res.sendFile(__dirname + "/models/models_serialized/" + req.query.name + ".json");
 	});
 
 	app.patch("/requirement", (req, res)=>{

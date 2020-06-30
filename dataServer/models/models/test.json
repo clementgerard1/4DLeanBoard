@@ -1,4 +1,5 @@
 {
+   "name" : "test",
    "milestones": {
       "MilestoneID1": {
          "Name": "ConstructionStart",

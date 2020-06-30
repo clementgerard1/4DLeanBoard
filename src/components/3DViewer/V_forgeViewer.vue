@@ -477,6 +477,7 @@ export default {
 		},
 		onLoaded(that){
 			this.tree = this.viewer.model.getInstanceTree();
+			console.log(this.tree);
 			this.selectedMaterial = new THREE.MeshBasicMaterial({
 			    reflectivity: 0.0,
 			    flatShading: true,

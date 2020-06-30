@@ -97,8 +97,8 @@ class Loader{
 		//Parse IFC file
 		let obj3Ds = {};
 		const IFClines = ifc.split('\n');
-		const ifcDef = /(IFC[A-Z]*)\(([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*)/g;
 		for(let l in IFClines){
+			const ifcDef = /(IFC[A-Z]*)\(([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*)/g;
 			const result = ifcDef.exec(IFClines[l]);
 			if(result != null && this.#ifcBuildingElements.includes(result[1])){
 				const temp = result[4].split(":");
@@ -550,6 +550,31 @@ class Loader{
 
 		return model;
 
+	}
+
+	//createIFCFileWithId
+	static createIFCFileWithId(ifcSource){
+		const IFClines = ifcSource.split('\n');
+		let newFile = "";
+		for(let l in IFClines){
+
+			const ifcDef = /(IFC[A-Z]*)\(/g;
+			let lineTemp = IFClines[l];
+			const result = ifcDef.exec(IFClines[l]);
+			if(result != null && this.#ifcBuildingElements.includes(result[1])){
+				const idDef = /(IFC[A-Z]*)\(([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*)/g;
+				const res = idDef.exec(IFClines[l]);
+				const index = IFClines[l].indexOf(res[4]);
+				const pos = index + res[4].length;
+				console.log(lineTemp, result, res);
+				if(res.input.charAt(pos) != ":"){
+					lineTemp = lineTemp.slice(0, pos - 1) + ":" + res[9].replace("'", "") + lineTemp.slice(pos);
+					console.log(lineTemp);
+				}
+			}
+			newFile += lineTemp + "\n";
+		}
+		return newFile;
 	}
 
 }

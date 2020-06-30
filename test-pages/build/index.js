@@ -205,7 +205,7 @@ eval("module.exports = function () {\n  window.addEventListener(\"load\", functi
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("module.exports = function () {\n  window.addEventListener(\"load\", function () {\n    init();\n  });\n};\n\nfunction init() {\n  DataApi.getModel(\"test\").then(function (model) {});\n  /*const model = tl.getModel();\n  DataApi.postModel(model, \"test\")\n  .then(()=>{\n  \tconsole.log(\"success\");\n  }).catch(()=>{\n  \tconsole.error(\"error\");\n  });*/\n}\n\n//# sourceURL=webpack:///./test-pages/src/serializeModel/serializeModel.js?");
+eval("module.exports = function () {\n  window.addEventListener(\"load\", function () {\n    init();\n  });\n};\n\nfunction init() {\n  // DataApi.getModel(\"test\").then(model =>{\n  // });\n  Promise.all([Utils.loadTextFile(\"datas/Project1.json\"), Utils.loadTextFile(\"datas/test2.ifc\")]).then(function (files) {\n    return Loader.createIFCFileWithId(files[1]);\n  });\n  /*const model = tl.getModel();\n  DataApi.postModel(model, \"test\")\n  .then(()=>{\n  \tconsole.log(\"success\");\n  }).catch(()=>{\n  \tconsole.error(\"error\");\n  });*/\n}\n\n//# sourceURL=webpack:///./test-pages/src/serializeModel/serializeModel.js?");
 
 /***/ }),
 

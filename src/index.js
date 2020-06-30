@@ -167,7 +167,7 @@ function init(){
 					if(available){
 						return DataApi.getModel(modelName);
 					}else{
-						return Promise.all([Utils.loadTextFile("datas/Project1v3.json"), Utils.loadTextFile("datas/Project1.ifc")])
+						return Promise.all([Utils.loadTextFile("datas/Project1v3.json"), Utils.loadTextFile("datas/test2.ifc")])
 						.then( files => {
 							return Loader.fromJSONandIFC(files[0], files[1]);
 						})
@@ -176,7 +176,7 @@ function init(){
 				.then( mod => {
 						//Model Loaded
 						this.model = mod;
-						DataApi.postModel(mod, "test");
+						//DataApi.postModel(mod, "testt");
 						if(this.model.getName() == "") this.model.setName("test");
 						this.timeline = new Timeline(this.model);
 						this.playerInit = 0;
@@ -207,8 +207,8 @@ function init(){
 						}
 
 					})
-				.then( oAuth => Utils.createForgeBucket(oAuth, "project1"))
-				.then( oAuth => Utils.uploadIFCFileToForge(oAuth, "project1", "datas/Project1.ifc"))
+				.then( oAuth => Utils.createForgeBucket(oAuth, "test2"))
+				.then( oAuth => Utils.uploadIFCFileToForge(oAuth, "test2", "datas/test2.ifc"))
 				.then( datas => {
 
 					this.manifest = datas.manifest;
