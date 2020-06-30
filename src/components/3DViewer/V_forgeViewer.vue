@@ -66,12 +66,14 @@ export default {
 					const obj = this.objs[i];
 					if(this.timeline.isActiveBetweenTwoDate(obj.obj3D.getParent().getTask(), start6Weeks, start6Weeks+42)) {
 						if(this.timeline.isActiveBetweenTwoDate(obj.obj3D.getParent().getTask(), startActualWeek, startActualWeek+7)) {
+							this.restore3DObject(obj);
 							this.color3DObject(obj, false, false, true);
 							obj.state = "currentWeek";
 						} else if(this.timeline.isActiveBetweenTwoDate(obj.obj3D.getParent().getTask(), start6Weeks, startActualWeek-1)) {
 							this.restore3DObject(obj);
 							obj.state = "builtOn6W";
 						} else {
+							this.restore3DObject(obj);
 							this.color3DObject(obj, false, false, false, false, true);
 							obj.state = "toBuildOn6W";
 						}
@@ -79,6 +81,7 @@ export default {
 						this.restore3DObject(obj);
 						obj.state = "built";
 					} else {
+						this.restore3DObject(obj);
 						this.color3DObject(obj, false, false, false, true);
 						obj.state = "toBuild";
 					}
