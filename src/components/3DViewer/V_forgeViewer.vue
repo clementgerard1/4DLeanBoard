@@ -562,6 +562,7 @@ export default {
 				const obj4D = tasks[t].getObject4D();
 				this.highlight(obj4D, true);
 			}
+			this.viewer.model.unconsolidate();
 			//console.log(this.viewer, this.nav.getCameraRightVector(false), this.nav.getEyeVector(), this.nav.getPosition());
 		},
 		onEnvInitialized(that){
@@ -583,7 +584,9 @@ export default {
 			this.time = time;
 			this.clearHighlighting();
 			const tasks = V_taskTableUtils.getTokens();
-			this.setPlayerState(true);
+			if(!this.fliterModeFlag) {
+				this.setPlayerState(true);
+			}
 			for(let t in tasks){
 				this.highlight(tasks[t].getObject4D(), true);
 			}
