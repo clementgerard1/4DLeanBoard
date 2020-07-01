@@ -9,78 +9,88 @@ import bodyParser from 'body-parser';
 // The callback will be invoked once the operation has either completed
 // or failed.
 
+
 const models = [];
-getNewIfcFiles();
-launchServer();
+init();
 
-function getNewIfcFiles(){
+function init(){
 
-	fs.readdir(__dirname + '/models/ifc', (err, files) => {
-
-	  // On error, show it and return
-	  if(err) return console.error(err);
-
-	  // Display directory entries
-	  let count = 0;
-	  for(let f in files){
-
-	  	if(!fs.lstatSync(__dirname + '/models/ifc' + '/' + files[f]).isDirectory()){
-	  		if(!fs.existsSync(__dirname + '/models/ifc_modified' + '/' + files[f].split('.').slice(0, -1).join('.'))){
-			  	fs.readFile(__dirname + '/models/ifc' + '/' + files[f], 'utf8', (err, data)=>{
-
-			  		fs.writeFile(__dirname + "/models/ifc_modified/" + files[f].split('.').slice(0, -1).join('.') + ".ifc", Loader.createIFCFileWithId(data), function (err) {
-					  if (err) throw err;
-					  console.log('IFC modified.');
-					});
-				});
-			}
-			count++;
-
-			if(count == files.length){
-				getNewModels();
-			}
-
-		  }
-	  }
-
-	});
+	getNewModels().then(getNewIfcFiles).then(launchServer);
 
 }
 
 function getNewModels(){
 
-	fs.readdir(__dirname + '/models/models', (err, files) => {
+	return new Promise((resolve, reject) => {
+		fs.readdir(__dirname + '/models/models', (err, files) => {
 
-	  // On error, show it and return
-	  if(err) return console.error(err);
+		  // On error, show it and return
+		  if(err) return console.error(err);
 
-	  // Display directory entries
-	  let count = 0;
-	  for(let f in files){
+		  // Display directory entries
+		  let count = 0;
+		  for(let f in files){
 
 
-	  	if(!fs.lstatSync(__dirname + '/models/models' + '/' + files[f]).isDirectory()){
-	  		if(!fs.existsSync(__dirname + '/models/models_serialized' + '/' + files[f].split('.').slice(0, -1).join('.'))){
-			  	fs.readFile(__dirname + '/models/models' + '/' + files[f], 'utf8', (err, data)=>{
+		  	if(!fs.lstatSync(__dirname + '/models/models' + '/' + files[f]).isDirectory()){
+		  		if(!fs.existsSync(__dirname + '/models/models_serialized' + '/' + files[f].split('.').slice(0, -1).join('.') + ".json")){
+				  	fs.readFile(__dirname + '/models/models' + '/' + files[f], 'utf8', (err, data)=>{
 
-			  		fs.readFile(__dirname + '/models/ifc' + '/' + files[f].split('.').slice(0, -1).join('.') + ".ifc", 'utf8', (err, data2)=>{
-							const model = Loader.fromJSONandIFC(data, data2);
-							const json = model.serialize();
-							saveModel(files[f].split('.').slice(0, -1).join('.'), json);
+				  		fs.readFile(__dirname + '/models/ifc' + '/' + files[f].split('.').slice(0, -1).join('.') + ".ifc", 'utf8', (err, data2)=>{
+								const model = Loader.fromJSONandIFC(data, data2);
+								const json = model.serialize();
+								saveModel(files[f].split('.').slice(0, -1).join('.'), json);
+							});
+
 						});
+				  }
+				  count++;
+				  if(count == files.length){
+				  	resolve();
+				  }
 
-					});
 			  }
-			  count++;
-			  if(count == files.length){
-			  	getSerializedModels();
-			  }
-
 		  }
-	  }
+
+		});
+	});
+}
+
+function getNewIfcFiles(){
+
+	return new Promise((resolve, reject) => {
+		fs.readdir(__dirname + '/models/ifc', (err, files) => {
+
+		  // On error, show it and return
+		  if(err) return console.error(err);
+
+		  // Display directory entries
+		  let count = 0;
+		  for(let f in files){
+
+		  	if(!fs.lstatSync(__dirname + '/models/ifc' + '/' + files[f]).isDirectory()){
+		  		if(!fs.existsSync(__dirname + '/models/ifc_modified' + '/' + files[f].split('.').slice(0, -1).join('.') + ".ifc")){
+				  	fs.readFile(__dirname + '/models/ifc' + '/' + files[f], 'utf8', (err, data)=>{
+
+				  		fs.writeFile(__dirname + "/models/ifc_modified/" + files[f].split('.').slice(0, -1).join('.') + ".ifc", Loader.createIFCFileWithId(data), function (err) {
+						  if (err) throw err;
+						  console.log('IFC modified.');
+							});
+						});
+					}
+					count++;
+				  if(count == files.length){
+				  	resolve();
+				  }
+
+			  }
+		  }
+
+		});
+
+
 
 	});
-
 
 }
 
