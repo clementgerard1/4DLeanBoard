@@ -105,30 +105,30 @@ function updateForge(){
 			oAuth => {
 				fs.readdir(__dirname + '/models/models_serialized', (err, files) => {
 
-					  // On error, show it and return
-					  if(err) return console.error(err);
+						  // On error, show it and return
+						  if(err) return console.error(err);
 
-					  // Display directory entries
-					  let count = 0;
-					  for(let f in files){
+						  // Display directory entries
+						  let count = 0;
+						  for(let f in files){
 
-					  	Utils.createForgeBucket(oAuth, files[f].split('.').slice(0, -1).join('.'))
-							.catch( error => {
-								console.error(error)
-							})
-							.then( oAuth => Utils.uploadIFCFileToForge(oAuth, files[f].split('.').slice(0, -1).join('.'), __dirname + '/models/ifc_modified' + '/' + files[f].split('.').slice(0, -1).join('.') + ".ifc"))
-							.then( datas => {
-								urns[files[f].replace(".json", "")] = datas.manifest.urn;
-							}).catch( error => {
-								console.error(error);
-							});
+						  	if(files[f].charAt(0) != "."){
+							  	Utils.createForgeBucket(oAuth, files[f].split('.').slice(0, -1).join('.'))
+									.then( oAuth => {
+										return Utils.uploadIFCFileToForge(oAuth, files[f].split('.').slice(0, -1).join('.'), __dirname + '/models/ifc_modified' + '/' + files[f].split('.').slice(0, -1).join('.') + ".ifc");
+									})
+									.then( datas => {
+										urns[files[f].replace(".json", "")] = datas.manifest.urn;
+									}).catch( error => {
+										console.error(error);
+									});
+								}
 
-					  }
-
-					  count++;
-					  if(count == files.length){
-					  	resolve();
-					  }
+								count++;
+							  if(count == files.length){
+							  	resolve();
+							  }
+						  }
 
 				});
 			}
@@ -142,27 +142,28 @@ function getSerializedModels(){
 	return new Promise((resolve, reject) => {
 
 		fs.readdir(__dirname + '/models/models_serialized', (err, files) => {
-
 		  // On error, show it and return
 		  if(err) return console.error(err);
 
-		  // Display directory entries
-		  let count = 0;
-		  for(let f in files){
+			  // Display directory entries
+			  let count = 0;
+			  for(let f in files){
 
-		  	if(!fs.lstatSync(__dirname + '/models/models_serialized' + '/' + files[f]).isDirectory()){
-			  	fs.readFile(__dirname + '/models/models_serialized' + '/' + files[f], 'utf8', (err, data)=>{
-			  		const model = new Model();
-			  		model.deserialize(data);
-			  		models[files[f].replace(".json", "")] = model;
-			  	});
+		  		if(files[f].charAt(0) != "."){
+				  	if(!fs.lstatSync(__dirname + '/models/models_serialized' + '/' + files[f]).isDirectory()){
+					  	fs.readFile(__dirname + '/models/models_serialized' + '/' + files[f], 'utf8', (err, data)=>{
+					  		const model = new Model();
+					  		model.deserialize(data);
+					  		models[files[f].replace(".json", "")] = model;
+					  	});
+					  }
+					}
+
+				  count++;
+				  if(count == files.length){
+				  	resolve();
+				  }
 			  }
-		  }
-
-		  count++;
-		  if(count == files.length){
-		  	resolve();
-		  }
 
 		});
 	});
