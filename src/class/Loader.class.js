@@ -556,6 +556,7 @@ class Loader{
 	static createIFCFileWithId(ifcSource){
 		const IFClines = ifcSource.split('\n');
 		let newFile = "";
+		let count = 0;
 		for(let l in IFClines){
 
 			const ifcDef = /(IFC[A-Z]*)\(/g;
@@ -566,10 +567,8 @@ class Loader{
 				const res = idDef.exec(IFClines[l]);
 				const index = IFClines[l].indexOf(res[4]);
 				const pos = index + res[4].length;
-				console.log(lineTemp, result, res);
 				if(res.input.charAt(pos) != ":"){
-					lineTemp = lineTemp.slice(0, pos - 1) + ":" + res[9].replace("'", "") + lineTemp.slice(pos);
-					console.log(lineTemp);
+					lineTemp = lineTemp.slice(0, pos - 1) + ":" + /*res[9].replace("'", "")*/ count++ + "'" + lineTemp.slice(pos);
 				}
 			}
 			newFile += lineTemp + "\n";

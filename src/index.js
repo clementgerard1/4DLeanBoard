@@ -167,7 +167,7 @@ function init(){
 					if(available){
 						return DataApi.getModel(modelName);
 					}else{
-						return Promise.all([Utils.loadTextFile("datas/Project1v3.json"), Utils.loadTextFile("datas/test2.ifc")])
+						return Promise.all([Utils.loadTextFile("datas/Project1v3.json"), Utils.loadTextFile("datas/test6.ifc")])
 						.then( files => {
 							return Loader.fromJSONandIFC(files[0], files[1]);
 						})
@@ -207,8 +207,8 @@ function init(){
 						}
 
 					})
-				.then( oAuth => Utils.createForgeBucket(oAuth, "test2"))
-				.then( oAuth => Utils.uploadIFCFileToForge(oAuth, "test2", "datas/test2.ifc"))
+				.then( oAuth => Utils.createForgeBucket(oAuth, "test6"))
+				.then( oAuth => Utils.uploadIFCFileToForge(oAuth, "test6", "datas/test6.ifc"))
 				.then( datas => {
 
 					this.manifest = datas.manifest;

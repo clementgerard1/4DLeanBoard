@@ -5,3 +5,4 @@ dist
 src/class/doc
 src/class/jest/testReport.html
 dataServer/models/models_serialized/*
+dataServer/models/ifc_modified/*
