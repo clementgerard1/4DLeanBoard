@@ -26,10 +26,14 @@ export default {
 			"geometryFlag" : false,
 			"treeFlag" : false,
 			"selectedMaterial" : null,
+			"sixWeeksMat" : null,
+			"currWeekMat" : null,
+			"nextsWeeksMat" : null,
 			"initialMaterials" : [],
 			"shownContractor" : null,
 			"fliterModeFlag" : false,
 			"colored" : [],
+			"playing" : true,
 			"camera" : null,
 			"nav" : null,
 		}
@@ -49,12 +53,55 @@ export default {
 		//
 		// highlight elements with the time of the projects (of the player)
 		// bool a true met les couleurs en fonction du player, a false les enlèves
-		setPlayerState(date = newDate(), bool) {
+		setPlayerState(bool) {
 			if(bool) {
-				let start = this.timeline.getStartDate();
-
+				let start = 0;
+				let startActualWeek = start;
+				let start6Weeks = start;
+				if(this.time!=undefined) {
+					startActualWeek += this.time*7;
+					start6Weeks += Math.trunc(this.time/6)*42;
+				}
+				for(let i in this.objs) {
+					const obj = this.objs[i];
+					if(this.timeline.isActiveBetweenTwoDate(obj.obj3D.getParent().getTask(), start6Weeks, start6Weeks+42)) {
+						if(this.timeline.isActiveBetweenTwoDate(obj.obj3D.getParent().getTask(), startActualWeek, startActualWeek+7)) {
+							this.restore3DObject(obj);
+							this.color3DObject(obj, false, false, true);
+							obj.state = "currentWeek";
+						} else if(this.timeline.isActiveBetweenTwoDate(obj.obj3D.getParent().getTask(), start6Weeks, startActualWeek-1)) {
+							this.restore3DObject(obj);
+							obj.state = "builtOn6W";
+						} else {
+							this.restore3DObject(obj);
+							this.color3DObject(obj, false, false, false, false, true);
+							obj.state = "toBuildOn6W";
+						}
+					} else if(this.timeline.isActiveBetweenTwoDate(obj.obj3D.getParent().getTask(), start, start6Weeks-1)) {
+						this.restore3DObject(obj);
+						obj.state = "built";
+					} else {
+						this.restore3DObject(obj);
+						this.color3DObject(obj, false, false, false, true);
+						obj.state = "toBuild";
+					}
+					this.playing = true;
+				}
 			} else {
 				this.clearColors();
+				this.playing = false;
+			}
+		},
+
+		colorFromState(obj, state) {
+			if(state=="currentWeek") {
+				this.color3DObject(obj, false, false, true);
+			} else if(state=="toBuildOn6W") {
+				this.color3DObject(obj, false, false, false, false, true);
+			} else if(state=="toBuild") {
+				this.color3DObject(obj, false, false, false, true);
+			} else {
+				this.restore3DObject(obj);
 			}
 		},
 
@@ -84,11 +131,10 @@ export default {
 					}
 				}
 				this.fliterModeFlag = true;
-				this.viewer.setGroundShadow(false);
 			} else {
 				this.clearColors();
 				this.fliterModeFlag = false;
-				this.viewer.setGroundShadow(true);
+				this.setPlayerState(true);
 			}
 		},
 
@@ -155,15 +201,19 @@ export default {
 							const obj = this.objs[object3D.getId()];
 							if(!this.selected.includes(obj)){
 								if(bool) {
-									if(this.colored.includes(obj)) {
+									if(this.colored.includes(obj) || this.played.includes(obj)) {
 										this.restore3DObject(obj);
 									}
 									this.color3DObject(obj, true);
 								}
 							} else if(this.selected.includes(obj) && !bool) {
 								this.restore3DObject(obj);
-								if (this.colored.includes(obj)) {
-									this.color3DObject(obj, false, obj.shadowed);
+								if(!this.playing) {
+									if (this.colored.includes(obj)) {
+										this.color3DObject(obj, false, obj.shadowed);
+									}
+								} else {
+									this.colorFromState(obj, obj.state);
 								}
 							}
 							this.viewer.fitToView(this.getDbId(s)[0]);
@@ -217,27 +267,6 @@ export default {
 									    opacity: 0.3,
 									    color: scssVariables[phs[j].getColorClass().replace("BG_", "").toLowerCase()],
 						      		});
-						      		/*const nextWeeks = new THREE.MeshBasicMaterial({
-									    reflectivity: 0.0,
-									    flatShading: true,
-									    transparent: true,
-									    opacity: 0.3,
-									    color: scssVariables[phs[j].getColorClass().replace("BG_", "").toLowerCase()],
-						      		});
-						      		const currWeek = new THREE.MeshBasicMaterial({
-									    reflectivity: 0.0,
-									    flatShading: true,
-									    transparent: true,
-									    opacity: a,
-									    color: scssVariables[phs[j].getColorClass().replace("BG_", "").toLowerCase()],
-						      		});
-						      		const currTask = new THREE.MeshBasicMaterial({
-									    reflectivity: 0.0,
-									    flatShading: true,
-									    transparent: true,
-									    opacity: a,
-									    color: scssVariables[phs[j].getColorClass().replace("BG_", "").toLowerCase()],
-						      		});*/
 									this.objs[o3D[l].getId()] = {
 										obj3D : o3D[l],
 										guId : o3D[l].getIFCId(),
@@ -280,7 +309,7 @@ export default {
 				}, 
 			true);
 		},
-		color3DObject(obj, selectMode = false, shadowMode = false){
+		color3DObject(obj, selectMode = false, shadowMode = false, currWeekMode = false, nextWeeksMode = false, sixWeeksMode = false){
 			if(obj!=null) {
 				if(!obj.colored || obj.needUpdate){
 					this.tree.enumNodeChildren(obj.dbId,
@@ -295,6 +324,15 @@ export default {
 							}else if(shadowMode){
 								materialId = this.viewer.model.getFragmentList().materialmap[obj.sMat.id];
 								this.viewer.model.getFragmentList().setMaterial(newId, obj.sMat);
+							}else if(currWeekMode){
+								materialId = this.viewer.model.getFragmentList().materialmap[this.currWeekMat.id];
+								this.viewer.model.getFragmentList().setMaterial(newId, this.currWeekMat);
+							}else if(sixWeeksMode){
+								materialId = this.viewer.model.getFragmentList().materialmap[this.sixWeeksMat.id];
+								this.viewer.model.getFragmentList().setMaterial(newId, this.sixWeeksMat);
+							}else if(nextWeeksMode){
+								materialId = this.viewer.model.getFragmentList().materialmap[this.nextsWeeksMat.id];
+								this.viewer.model.getFragmentList().setMaterial(newId, this.nextsWeeksMat);
 							}else{
 								materialId = this.viewer.model.getFragmentList().materialmap[obj.material.id];
 								this.viewer.model.getFragmentList().setMaterial(newId, obj.material);
@@ -381,6 +419,9 @@ export default {
 						}
 					} else if(this.selected.includes(objs[o])) {
 						this.restore3DObject(objs[o]);
+						if(this.playing) {
+							this.colorFromState(objs[o], objs[o].state);
+						}
 						V_socketUtils.highlightTask(objs[o].obj3D.getParent().getTask(), false);
 					} else {
 						this.color3DObject(objs[o], true);
@@ -456,6 +497,7 @@ export default {
 
 			this.viewer.setQualityLevel(false, false);
 			this.viewer.setGhosting(false);
+			this.viewer.setGroundShadow(false);
 
 			// important selon moi
 			this.viewer.setReverseZoomDirection(true);
@@ -476,6 +518,7 @@ export default {
 
 		},
 		onLoaded(that){
+			V_socketUtils.clearHighlighting();
 			this.tree = this.viewer.model.getInstanceTree();
 			this.selectedMaterial = new THREE.MeshBasicMaterial({
 			    reflectivity: 0.0,
@@ -483,14 +526,43 @@ export default {
 			    transparent: true,
 			    opacity: 0.8,
 			    color: scssVariables["select3DColor"],
-	  		});
+			});
+			this.nextsWeeksMat = new THREE.MeshBasicMaterial({
+				reflectivity: 0.0,
+				flatShading: true,
+				transparent: true,
+				opacity: 0.3,
+				color: scssVariables["nextSixWeeks"],
+			});
+			this.currWeekMat = new THREE.MeshBasicMaterial({
+				reflectivity: 0.0,
+				flatShading: true,
+				transparent: true,
+				opacity: 0.75,
+				color: scssVariables["currentWeek"],
+			});
+			this.sixWeeksMat = new THREE.MeshBasicMaterial({
+				reflectivity: 0.0,
+				flatShading: true,
+				transparent: true,
+				opacity: 0.75,
+				color: scssVariables["currentSixWeeks"],
+			});
 			const materials = this.viewer.impl.getMaterials();
-	  		materials.addMaterial(Utils.getGuid(), this.selectedMaterial, true);
+			materials.addMaterial(Utils.getGuid(), this.selectedMaterial, true);
+			materials.addMaterial(Utils.getGuid(), this.sixWeeksMat, true);
+			materials.addMaterial(Utils.getGuid(), this.nextsWeeksMat, true);
+			materials.addMaterial(Utils.getGuid(), this.currWeekMat, true);
 			//console.log(this.fragList, this.map);
 			this.map3DObjs();
 			this.camera = this.viewer.getCamera();
 			this.nav = this.viewer.navigation;
 			this.setPlayerState(true);
+			//const tasks = V_taskTableUtils.getTokens();
+			/*for(let t in tasks){
+				const obj4D = tasks[t].getObject4D();
+				this.highlight(obj4D, true);
+			}*/
 			//console.log(this.viewer, this.nav.getCameraRightVector(false), this.nav.getEyeVector(), this.nav.getPosition());
 		},
 		onEnvInitialized(that){
@@ -511,10 +583,11 @@ export default {
 		watchTime : function(time){
 			this.time = time;
 			this.clearHighlighting();
-			const tasks = V_taskTableUtils.getTokens();
-			for(let t in tasks){
+			//const tasks = V_taskTableUtils.getTokens();
+			this.setPlayerState(true);
+			/*for(let t in tasks){
 				this.highlight(tasks[t].getObject4D(), true);
-			}
+			}*/
 		}
 	},
 	created : function(){
@@ -522,11 +595,6 @@ export default {
 		V_4DUtils.setForgeViewer(this);
 		V_socketUtils.addViewer();
 		V_timelineUtils.addListener("time", this, this.watchTime);
-		const tasks = V_taskTableUtils.getTokens();
-		for(let t in tasks){
-			const obj4D = tasks[t].getObject4D();
-			this.highlight(obj4D, true);
-		}
 	},
 	mounted : function(){
 		if(Config["forgeRenderer"]){

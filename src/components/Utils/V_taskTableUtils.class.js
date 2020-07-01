@@ -50,7 +50,7 @@ class V_taskTableUtils{
 	}
 
 	/**
-		Check if the V_task has the toekn
+		Check if the V_task has the token
 		@param {V_task} obj which ask 
 		@returns {boolean}
 		@static
