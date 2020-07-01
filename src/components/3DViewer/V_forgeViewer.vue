@@ -7,14 +7,6 @@ import "./V_forgeViewer.scss";
 import scssVariables from "../SixWeekView/assets/_variables.scss";
 import Utils from "../../class/Utils.class.js"
 
-/**
-	* @vue-prop {Object} manifest forge Manifest
-	* @vue-prop {Object} oauth object contenant l'authentification
-	* @vue-prop {Timeline} timeline - Timeline Object 
-	* @vue-prop {Model} model - Model Object
-	* @vue-event {Number} increment - Emit counter's value after increment
-	* @vue-event {Number} decrement - Emit counter's value after decrement
-*/
 export default {
 	data: function(){
 		return {
@@ -39,7 +31,7 @@ export default {
 		}
 	},
 	props:[
-		"manifest",
+		"urn",
 		"oauth",
 		"timeline",
 		"model"
@@ -567,7 +559,7 @@ export default {
 		},
 		onEnvInitialized(that){
 			Autodesk.Viewing.Document.load(
-				"urn:" + that.manifest.urn,
+				"urn:" + that.urn,
 				function(doc) {
 					that.onDocumentLoaded (doc, that)
 				},
@@ -600,7 +592,7 @@ export default {
 		if(Config["forgeRenderer"]){
 			const that = this;
 			const initOptions = {
-			      documentId: "urn:" + this.manifest.urn,
+			      documentId: "urn:" + this.urn,
 			      env: 'AutodeskProduction',
 			      getAccessToken: function(onGetAccessToken) {
 			        return that.oauth.credentials.access_token;

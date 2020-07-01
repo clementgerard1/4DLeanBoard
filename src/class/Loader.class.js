@@ -567,7 +567,7 @@ class Loader{
 				const res = idDef.exec(IFClines[l]);
 				const index = IFClines[l].indexOf(res[4]);
 				const pos = index + res[4].length;
-				if(res.input.charAt(pos) != ":"){
+				if(res.input.charAt(index + res[4].length - res[9].length) != ":"){
 					lineTemp = lineTemp.slice(0, pos - 1) + ":" + /*res[9].replace("'", "")*/ count++ + "'" + lineTemp.slice(pos);
 				}
 			}
