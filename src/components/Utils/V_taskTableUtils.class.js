@@ -49,6 +49,12 @@ class V_taskTableUtils{
 		}
 	}
 
+	static setTokenByTaskId(taskId, bool){
+		for( let t in this.tasks){
+			if(this.tasks[t].task != null && this.tasks[t].task.getId() == taskId) V_taskTableUtils.setToken(this.tasks[t].task, bool);
+		}
+	}
+
 	/**
 		Check if the V_task has the token
 		@param {V_task} obj which ask 

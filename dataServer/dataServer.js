@@ -45,22 +45,22 @@ function getNewModels(){
 				  			const ext = files[f].split('.')[1];
 				  			if(ext == "json"){
 									model = Loader.fromJSONandIFC(data, data2);
+									const json = model.serialize();
+									//f2I[files[f].split('.').slice(0, -1).join('.')] = model.getFragToIdsArray();
+									saveModel(files[f].split('.').slice(0, -1).join('.'), json);
 								}else if(ext == "csv"){
-									model = Loader.fromCSVandIFC(data, data2);
+									//model = Loader.fromCSVandIFC(data, data2);
 								}
-								const json = model.serialize();
-								f2I[files[f].split('.').slice(0, -1).join('.')] = model.getFragToIdsArray();
-								saveModel(files[f].split('.').slice(0, -1).join('.'), json);
-							});
-
 						});
-				  }
-				  count++;
-				  if(count == files.length){
+
+					});
+				 }
+				 count++;
+				 if(count == files.length){
 				  	resolve({
 
 				  	});
-				  }
+				}
 
 			  }
 		  }

@@ -10,9 +10,23 @@ const players = [];
 const w6s = [];
 const filters = [];
 
+const models = [];
+
 io.on("connection", function(client){
 
     const model = client.handshake.query.model;
+    if(typeof models[model] == "undefined"){
+        models[model] = {
+            model : model,
+            playerTime : 0,
+            taskSelected : [],
+            pushed : [],
+            backgroundTasks : [],
+            first: true,
+        };
+    }else{
+        client.emit("sendInit", models[model]);
+    }
     
     client.on("addViewer", () => {
         viewers.push({
@@ -43,16 +57,29 @@ io.on("connection", function(client){
     });
 
     client.on("highlightObject4D", (datas) => {
+        if(datas.value && !models[model].taskSelected.includes(datas.taskId)){
+            models[model].taskSelected.push(datas.taskId);
+        }else if(!datas.value){
+            models[model].taskSelected.splice(models[model].taskSelected.indexOf(datas.taskId), 1);
+        }
+        console.log(models);
         broadcast(client, model, "highlightObject4D", datas);
         //client.broadcast.emit("highlightObject4D", datas);
     });
 
     client.on("highlightTask", (datas) => {
+        if(datas.value && !models[model].taskSelected.includes(datas.id)){
+            models[model].taskSelected.push(datas.id);
+        }else if(!datas.value){
+            models[model].taskSelected.splice(models.indexOf(datas.id), 1);
+        }
+        console.log(models);
         broadcast(client, model, "highlightTask", datas);
         //client.broadcast.emit("highlightTask", datas);
     });
 
     client.on("setTime", (datas) => {
+        models[model].playerTime = datas.time;
         broadcast(client, model, "setTime", datas);
         //client.broadcast.emit("setTime", datas);
     });

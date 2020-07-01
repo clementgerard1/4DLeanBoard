@@ -142,13 +142,14 @@ function init(){
 						})
 					}
 				})
-				.then( mod => {
+				.then( datas => {
 						//Model Loaded
-						this.model = mod;
+						this.model = datas.model;
+						//DataApi.postModel(mod, "testt");
 						if(this.model.getName() == "") this.model.setName("test");
 						this.timeline = new Timeline(this.model);
-
 						this.playerInit = 0;
+
 						V_timelineUtils.setTimeline(this.timeline);
 						V_taskTableUtils.clearTokens();
 						const selected = this.timeline.getTasksBetweenTwoDates(this.playerInit * 7, (this.playerInit * 7) + 7);
@@ -164,8 +165,7 @@ function init(){
 						const socket = openSocket("http://" + Config.socketServerIp + ":" + Config.socketServerPort + "?model=" + this.model.getName());
 						V_socketUtils.setSocket(socket);
 						this.modelSelected = true;
-
-					})
+				})
 				.catch( error => console.error(error));
  			},
  			handleTap : function(){

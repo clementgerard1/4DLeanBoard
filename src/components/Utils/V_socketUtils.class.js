@@ -33,6 +33,18 @@ class V_socketUtils{
 			V_taskTableUtils.highlightTaskById(datas.id, datas.value);
 		});
 
+		this.socket.on("sendInit", (datas) => {
+			V_timelineUtils.setTime(datas.playerTime);
+			//if(datas.taskSelected.length != 0){
+				V_taskTableUtils.clearTokens();
+				V_4DUtils.clearHighlighting();
+			//}
+			for(let d in datas.taskSelected){
+
+				V_taskTableUtils.setTokenByTaskId(datas.taskSelected[d], true);
+			}
+		});
+
 		this.socket.on("setTime", (datas) => {
 			V_timelineUtils.setTime(datas.time);
 		});
@@ -163,7 +175,7 @@ class V_socketUtils{
 	static highlightObject4D(object4D, bool){
 		V_taskTableUtils.setToken(object4D.getTask(), bool);
 		V_4DUtils.highlightObject4D(object4D, bool);
-		this.socket.emit("highlightObject4D", { objId : object4D.getId(), value:bool});
+		this.socket.emit("highlightObject4D", { taskId : object4D.getTask().getId(), objId : object4D.getId(), value:bool});
 	}
 
 	static clearHighlighting(){

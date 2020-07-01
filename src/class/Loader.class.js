@@ -56,6 +56,7 @@ class Loader{
 		@static
 	*/
 	static fromCSVandIFC(CSVFile, IFCFile, delimiterColumn = ";", delimiterArray = ",", csvVersion = this.#latestCSVVersion){
+
 		return eval("this.csv_v" + csvVersion.replace(".", "_")  + "(CSVFile, IFCFile,`" + delimiterColumn + "`,`" + delimiterArray + "`)");
 	}
 
@@ -81,7 +82,92 @@ class Loader{
 	}
 
 	static csv_v0_2(csv, ifc){
-		console.log(csv);
+
+		const json = {
+			name: null,
+			milestones : [],
+		}
+
+		let memoMilestone = null;
+		let memoPhase = null;
+		let memoTask = null;
+
+		const lines = csv.split('\n');
+		lines.forEach(function (value, i) {
+			const columns = value.split(';');
+			if(i==0){
+				json.name = columns[0];
+			}else if(i>2){
+
+				//New milestone
+				if(columns[0] != ''){
+					json.milestones[json.milestones.length] = {};
+					json.milestones[json.milestones.length - 1]["Num"] = columns[0];
+					json.milestones[json.milestones.length - 1]["Name"] = columns[1];
+					json.milestones[json.milestones.length - 1]["StartDate"] = columns[2];
+					json.milestones[json.milestones.length - 1]["EndDate"] = columns[3];
+					json.milestones[json.milestones.length - 1]["Previous"] = columns[4];
+					json.milestones[json.milestones.length - 1]["Next"] = columns[5];
+					if(columns[1] == columns[2]){
+						json.milestones[json.milestones.length - 1]["event"] = true;
+						json.milestones[json.milestones.length - 1]["Next"] = columns[1];
+					}else{
+						json.milestones[json.milestones.length - 1]["event"] = false;
+						json.milestones[json.milestones.length - 1]["Next"] = null;
+					}
+					json.milestones[json.milestones.length - 1]["Phases"] = [];
+					memoMilestone = json.milestones.length - 1;
+
+				}
+
+				//New phase
+				if(columns[6] != ''){
+					const milestone = json.milestones[memoMilestone];
+					milestone["Phases"][milestone["Phases"].length] = {};
+
+					milestone["Phases"][milestone["Phases"].length - 1]["num"] = columns[6];
+					milestone["Phases"][milestone["Phases"].length - 1]["name"] = columns[7];
+					milestone["Phases"][milestone["Phases"].length - 1]["startDate"] = columns[8];
+					milestone["Phases"][milestone["Phases"].length - 1]["endDate"] = columns[9];
+					milestone["Phases"][milestone["Phases"].length - 1]["requirements"] = columns[10];
+					milestone["Phases"][milestone["Phases"].length - 1]["tasks"] = [];
+
+					memoPhase = milestone["Phases"].length - 1;
+				}
+
+				//New task
+				if(columns[11] != ''){
+					const phase = json.milestones[memoMilestone]["Phases"][memoPhase];
+					phase["tasks"][phase["tasks"].length] = {};
+
+					phase["tasks"][phase["tasks"].length - 1]["Name"] = columns[11];
+					phase["tasks"][phase["tasks"].length - 1]["TID"] = columns[12];
+					phase["tasks"][phase["tasks"].length - 1]["Duration"] = columns[13];
+					phase["tasks"][phase["tasks"].length - 1]["Workers"] = columns[14];
+					phase["tasks"][phase["tasks"].length - 1]["Previous"] = columns[15];
+					phase["tasks"][phase["tasks"].length - 1]["Team"] = columns[16];
+					phase["tasks"][phase["tasks"].length - 1]["4DID"] = columns[17];
+					phase["tasks"][phase["tasks"].length - 1]["Zone"] = columns[19];
+					phase["tasks"][phase["tasks"].length - 1]["Level"] = columns[20];
+					phase["tasks"][phase["tasks"].length - 1]["Requirements"] = {
+						"Constraint" : columns[22] != "No", 
+						"Information" : columns[23] != "No",
+						"Materials" : columns[24] != "No",
+						"Manpower" : columns[25] != "No",
+						"Equipement" : columns[26] != "No",
+						"Safety" : columns[27] != "No",
+						"Space" : columns[28] != "No",
+					}
+					memoTask = phase["tasks"].length - 1;
+				}
+
+			}
+		});
+
+		return Loader.json_v0_4(JSON.stringify(json), ifc);
+	}
+	static json_v0_4(json, ifc){
+
 	}
 
 	//Version JSON O.3
@@ -131,6 +217,7 @@ class Loader{
 			}else{
 				milestone = new Milestone(milestones[m]["Name"]);
 			}
+			milestone.setNum(milestones[m]["Num"]);
 
 			model.addMilestone(milestone);
 			for(let r in milestones[m]["requirements"]){
@@ -150,10 +237,11 @@ class Loader{
 			}else{
 				const phases = milestones[m]["phases"];
 				for(let p in phases){
-					const phase = new Phase(phases[p]["Name"]);
+					const phase = new Phase(phases[p]["name"]);
 					phase.setColorClass(phases[p]["color"]);
 					if(typeof contractors[phases[p]["contractor"]] == "undefined") contractors[phases[p]["contractor"]] = new Contractor(phases[p]["contractor"]);
 					phase.setContractor(contractors[phases[p]["contractor"]]);
+					phase.setNum(phases[p]["num"]);
 					milestone.addPhase(phase);
 
 					const tasks = phases[p]["tasks"];

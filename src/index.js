@@ -202,7 +202,7 @@ function init(){
 						this.oauth = datas.oAuth;
 						this.forgeReady = true;
 
-				}).then()
+				})
 				.catch( error => console.error(error));
  			}
  		},

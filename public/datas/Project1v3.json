@@ -1,12 +1,14 @@
 {
    "milestones": {
       "MilestoneID1": {
+         "Num" : 1,
          "Name": "ConstructionStart",
          "Requirements": {
             "requirement1": "LandRightsDelivered"
          },
          "phases": {
             "PhaseID1": {
+               "num": 1,
                "name": "FirstPhase",
                "contractor": "Masons 1",
                "color": "Yellowish",
@@ -40,6 +42,7 @@
                ]
             },
             "PhaseID2": {
+               "num": 2,
                "name": "phase2",
                "contractor": "Masons 2",
                "color": "Blueish",
@@ -73,6 +76,7 @@
                ]
             },
             "PhaseID3": {
+               "num": 3,
                "name": "phase3",
                "contractor": "Masons 1",
                "color": "Yellowish",
@@ -106,6 +110,7 @@
                ]
             },
             "PhaseID4": {
+               "num": 4,
                "name": "phase4",
                "contractor": "Masons 2",
                "color": "Blueish",
@@ -139,6 +144,7 @@
                ]
             },
             "PhaseID5": {
+               "num": 5,
                "name": "phase5",
                "contractor": "Masons 1",
                "color": "Yellowish",
@@ -172,6 +178,7 @@
                ]
             },
              "PhaseID6": {
+               "num": 6,
                "name": "phase6",
                "contractor": "Carpenters 1",
                "color": "Orange",
@@ -205,6 +212,7 @@
                ]
             },
              "PhaseID7": {
+               "num": 7,
                "name": "phase7",
                "contractor": "Carpenters 2",
                "color": "Redish",
@@ -238,6 +246,7 @@
                ]
             },
             "PhaseID8": {
+               "num": 8,
                "name": "phase8",
                "contractor": "Carpenters 1",
                "color": "Orange",
@@ -278,6 +287,7 @@
          "eventDate" : null
       },
       "MilestoneID2": {
+         "Num" : 2,
          "Name": "Middle",
          "phases": {
          },
@@ -285,6 +295,7 @@
          "eventDate" : "11/02/2021"
       },
       "MilestoneID3": {
+         "Num" : 3,
          "Name": "Middle-end",
          "phases": {
          },
@@ -292,6 +303,7 @@
          "eventDate" : "01/03/2021"
       },
       "MilestoneID4": {
+         "Num" : 4,
          "Name": "End",
          "phases": {
          },
@@ -299,6 +311,7 @@
          "eventDate" : "20/03/2021"
       },
       "MilestoneID5": {
+         "Num" : 5,
          "Name": "Start",
          "phases": {
          },

@@ -134,3 +134,9 @@ test('setEndDate(date)', () => {
 	milestone.setEndDate(date);
 	expect(milestone.getEndDate()).toBe(date);
 });
+
+test('setNum(n)', () => {
+	const milestone = new Milestone();
+	milestone.setNum(2)
+	expect(milestone.getNum()).toBe(2);
+});
