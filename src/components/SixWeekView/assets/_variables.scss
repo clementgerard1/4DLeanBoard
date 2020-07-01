@@ -106,9 +106,9 @@ $filterPanelHeight : 50px;
 /* 3D */
 $select3DColor : $greenbluish_light;
 // color for the player rendering
-$nextWeeks : $light;
-$currentWeek : $blackish;
-$currentTask : $green_transparent;
+$nextSixWeeks : $light;
+$currentSixWeeks : $blackish;
+$currentWeek : $redish;
 
 :export{
 	taskSize : $taskSize;
@@ -131,6 +131,9 @@ $currentTask : $green_transparent;
 	black50 : $black50;
 	redish : $redish;
 	select3DColor : $select3DColor;
+	nextSixWeeks : $nextSixWeeks;
+	currentSixWeeks : $currentSixWeeks;
+	currentWeek : $currentWeek;
 	playerHeight : $playerHeight;
 	filterPanelHeight : $filterPanelHeight;
 }
