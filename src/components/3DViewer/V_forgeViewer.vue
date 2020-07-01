@@ -490,10 +490,7 @@ export default {
 			this.viewer.setQualityLevel(false, false);
 			this.viewer.setGhosting(false);
 			this.viewer.setGroundShadow(false);
-
-			// important selon moi
 			this.viewer.setReverseZoomDirection(true);
-
 			this.viewer.setLightPreset(12);
 
 			this.viewer.addEventListener(Autodesk.Viewing.OBJECT_TREE_CREATED_EVENT, () => this.fireLoadEvent("tree"));
@@ -539,6 +536,7 @@ export default {
 				opacity: 0.75,
 				color: scssVariables["currentSixWeeks"],
 			});
+			console.log(this.viewer.impl);
 			const materials = this.viewer.impl.getMaterials();
 			materials.addMaterial(Utils.getGuid(), this.selectedMaterial, true);
 			materials.addMaterial(Utils.getGuid(), this.sixWeeksMat, true);
@@ -548,7 +546,7 @@ export default {
 			this.map3DObjs();
 			this.camera = this.viewer.getCamera();
 			this.nav = this.viewer.navigation;
-			this.setPlayerState(true);
+			this.setPlayerState(!this.fliterModeFlag);
 			const tasks = V_taskTableUtils.getTokens();
 			for(let t in tasks){
 				const obj4D = tasks[t].getObject4D();
@@ -576,9 +574,7 @@ export default {
 			this.time = time;
 			this.clearHighlighting();
 			const tasks = V_taskTableUtils.getTokens();
-			if(!this.fliterModeFlag) {
-				this.setPlayerState(true);
-			}
+			this.setPlayerState(!this.fliterModeFlag);
 			for(let t in tasks){
 				this.highlight(tasks[t].getObject4D(), true);
 			}
