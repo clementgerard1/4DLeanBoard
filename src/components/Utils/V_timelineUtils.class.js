@@ -48,11 +48,11 @@ class V_timelineUtils{
 	*/
 	static setTime(time){
 		this.time = time;
-		/*V_taskTableUtils.clearTokens();
+		V_taskTableUtils.clearTokens();
 		const selected = this.timeline.getTasksBetweenTwoDates(time * 7, (time * 7) + 6);
 		for(let s in selected){
 			V_taskTableUtils.setToken(selected[s], true);
-		}*/
+		}
 		for(let l in this.listeners["time"]){
 			this.listeners["time"][l](this.time);
 		}
