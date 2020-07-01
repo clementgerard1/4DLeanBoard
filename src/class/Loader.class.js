@@ -81,7 +81,7 @@ class Loader{
 	}
 
 	static csv_v0_2(csv, ifc){
-		
+		console.log(csv);
 	}
 
 	//Version JSON O.3
@@ -553,7 +553,7 @@ class Loader{
 	}
 
 	//createIFCFileWithId
-	static createIFCFileWithId(ifcSource){
+	static createIFCFileWithId(ifcSource, fragToIdArray){
 		const IFClines = ifcSource.split('\n');
 		let newFile = "";
 		let count = 0;
