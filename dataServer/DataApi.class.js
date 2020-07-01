@@ -1,6 +1,7 @@
 import Config from "../config.js";
 import "regenerator-runtime/runtime";
 import Model from '../src/class/Model.class.js';
+import Utils from '../src/class/Utils.class.js';
 import axios from 'axios';
 
 class DataApi{
@@ -23,11 +24,23 @@ class DataApi{
 	}
 
 	static async getModel(name){
+		let clientId = Config.autoDeskForgeSettings[Config.autoDeskAccount].clientId;
+		let clientSecret = Config.autoDeskForgeSettings[Config.autoDeskAccount].clientSecret;
+		let oauth = null;
 
-		return await axios.get(DataApi.serverUrl + '/model?name=' + name).then( (modelS) => {
+		return await Utils.getAutodeskAuth(clientId, clientSecret)
+		.then( oAuth => {
+			oauth = oAuth
+			return axios.get(DataApi.serverUrl + '/model?name=' + name);
+		})
+		.then( (modelS) => {
 			const model = new Model();
-			model.deserialize(modelS.data);
-			return model;
+			model.deserialize(modelS.data.model);
+			return {
+				model : model,
+				urn : modelS.data.urn,
+				oAuth : oauth,
+			};
 		});
 
 	}
@@ -45,7 +58,7 @@ class DataApi{
 	}
 
 	static async getModels(){
-		return axios.get(DataApi.serverUrl + '/models/models_serialized')
+		return axios.get(DataApi.serverUrl + '/models')
 		.then( (json) => {
 			return json.data;
 		})

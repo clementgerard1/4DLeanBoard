@@ -44,7 +44,6 @@ class V_taskTableUtils{
 	}
 
 	static setTokenByObject4DId(obj4DId, bool){
-		console.log("hey");
 		for( let t in this.tasks){
 			if(this.tasks[t].task != null && this.tasks[t].task.getObject4D().getId() == obj4DId) V_taskTableUtils.setToken(this.tasks[t].task, bool);
 		}

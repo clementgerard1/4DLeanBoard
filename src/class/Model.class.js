@@ -430,6 +430,7 @@ class Model{
 	*/
 	serialize(){
 		let jsonObj = {
+			name : this.getName(),
 			milestones : [],	
 			phases : [],
 			tasks : [],
@@ -768,6 +769,7 @@ class Model{
 		const datas = eval('(' + json + ')');
 
 		//Init
+		this.setName(datas.name);
 		this.#milestones = [];
 		this.#duration = null;
 

@@ -1,5 +1,7 @@
 import "regenerator-runtime/runtime";
 import ForgeSDK from 'forge-apis';
+import fs from 'fs';
+import btoa from 'btoa';
 
 /**
  * @class Utils
@@ -8,8 +10,8 @@ import ForgeSDK from 'forge-apis';
  */
 class Utils{
 	
-	static forgeBucketName = '4d-lean-board';
-	static forgeFileName = '4d-lean-board-file.ifc';
+	static forgeBucketName = 'veronika_4dlb';
+	static forgeFileName = 'veronika_4dlb.ifc';
 	static ids = {
 		"default" : 0
 	}
@@ -25,17 +27,21 @@ class Utils{
 	static async loadTextFile(url){
 
 		let toReturn = null;
-		await fetch(url, {
-			method : 'GET',
-		}).then(response => {
-			 	if(!response.ok) {
-          throw Error(response.statusText);
-        }
-				toReturn = response.text();
-		}).catch((error) => { 
-			throw 'Error on fetching file : ' + url;
-		});
-		return toReturn;
+		if(typeof fetch != "undefined"){
+			await fetch(url, {
+				method : 'GET',
+			}).then(response => {
+				 	if(!response.ok) {
+	          throw Error(response.statusText);
+	        }
+					toReturn = response.text();
+			}).catch((error) => { 
+				throw 'Error on fetching file : ' + url;
+			});
+			return toReturn;
+		}else{
+	  	return fs.readFileSync(url, {encoding:'utf8'});
+		}
 	}
 
 	/**
