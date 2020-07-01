@@ -19,6 +19,11 @@ $black50 : rgba(0, 0, 0, 0.5);
 $redish : #FF8F80;
 
 
+// tests couleurs viewer
+$green: #91cc7f;
+$grey: #888888;
+
+
 .BG_Light{
 	background : $light;
 }
@@ -106,9 +111,9 @@ $filterPanelHeight : 50px;
 /* 3D */
 $select3DColor : $greenbluish_light;
 // color for the player rendering
-$nextSixWeeks : $light;
-$currentSixWeeks : $blackish;
-$currentWeek : $redish;
+$nextSixWeeks : $white;
+$currentSixWeeks : $grey;
+$currentWeek : $green;
 
 :export{
 	taskSize : $taskSize;

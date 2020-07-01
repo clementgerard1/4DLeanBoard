@@ -510,7 +510,6 @@ export default {
 
 		},
 		onLoaded(that){
-			V_socketUtils.clearHighlighting();
 			this.tree = this.viewer.model.getInstanceTree();
 			this.selectedMaterial = new THREE.MeshBasicMaterial({
 			    reflectivity: 0.0,
@@ -523,7 +522,7 @@ export default {
 				reflectivity: 0.0,
 				flatShading: true,
 				transparent: true,
-				opacity: 0.3,
+				opacity: 0.1,
 				color: scssVariables["nextSixWeeks"],
 			});
 			this.currWeekMat = new THREE.MeshBasicMaterial({
@@ -550,11 +549,11 @@ export default {
 			this.camera = this.viewer.getCamera();
 			this.nav = this.viewer.navigation;
 			this.setPlayerState(true);
-			//const tasks = V_taskTableUtils.getTokens();
-			/*for(let t in tasks){
+			const tasks = V_taskTableUtils.getTokens();
+			for(let t in tasks){
 				const obj4D = tasks[t].getObject4D();
 				this.highlight(obj4D, true);
-			}*/
+			}
 			//console.log(this.viewer, this.nav.getCameraRightVector(false), this.nav.getEyeVector(), this.nav.getPosition());
 		},
 		onEnvInitialized(that){
@@ -575,11 +574,11 @@ export default {
 		watchTime : function(time){
 			this.time = time;
 			this.clearHighlighting();
-			//const tasks = V_taskTableUtils.getTokens();
+			const tasks = V_taskTableUtils.getTokens();
 			this.setPlayerState(true);
-			/*for(let t in tasks){
+			for(let t in tasks){
 				this.highlight(tasks[t].getObject4D(), true);
-			}*/
+			}
 		}
 	},
 	created : function(){
