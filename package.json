@@ -12,7 +12,7 @@
     "jest": "jest src/class/jest --watch",
     "commit": "npm run doc; npm run jest; MODE=prod; cp -r public/* dist; webpack --config ./webpack.prod.js; git add --all; git commit -m ",
     "deploy": "npm run build & gh-pages -d dist",
-    "socket": "node socketServer.js",
+    "socket": "babel-watch socketServer.js",
     "data-server": "babel-watch dataServer/dataServer.js",
     "prod:windows": "xcopy public dist /s /e /c & node htmlServer.js prod | webpack --config ./webpack.prod.js",
     "dev:windows": "node htmlServer.js dev | webpack --config ./webpack.dev.js",

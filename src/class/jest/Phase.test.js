@@ -216,3 +216,8 @@ test('get3DObjectById(id)', () => {
 	expect(phase.get3DObjectById(obj3D.getId())).toStrictEqual(obj3D);
 });
 
+test('setNum(n)', () => {
+	const phase = new Phase();
+	phase.setNum(2)
+	expect(phase.getNum()).toBe(2);
+});

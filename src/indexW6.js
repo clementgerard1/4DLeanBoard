@@ -134,7 +134,7 @@ function init(){
  			loadModel : function(modelName){
  				DataApi.isAvailable().then(available => {
 					if(available){
-						return DataApi.getModel(modelName);
+						return DataApi.getModel(modelName, true);
 					}else{
 						return Promise.all([Utils.loadTextFile("datas/Project1v2.json"), Utils.loadTextFile("datas/Project1.ifc")])
 						.then( files => {
@@ -142,20 +142,15 @@ function init(){
 						})
 					}
 				})
-				.then( mod => {
+				.then( datas => {
 						//Model Loaded
-						this.model = mod;
+						this.model = datas.model;
+						//DataApi.postModel(mod, "testt");
 						if(this.model.getName() == "") this.model.setName("test");
 						this.timeline = new Timeline(this.model);
-
 						this.playerInit = 0;
-						V_timelineUtils.setTimeline(this.timeline);
-						V_taskTableUtils.clearTokens();
-						const selected = this.timeline.getTasksBetweenTwoDates(this.playerInit * 7, (this.playerInit * 7) + 7);
-						for(let s in selected){
-							V_taskTableUtils.setToken(selected[s], true);
-						}
 
+						V_timelineUtils.setTimeline(this.timeline);
 						const phase = this.timeline.getModel().getMilestones()[0].getPhases()[0];
 					  	this.duration = this.model.getDuration();
 
@@ -164,8 +159,7 @@ function init(){
 						const socket = openSocket("http://" + Config.socketServerIp + ":" + Config.socketServerPort + "?model=" + this.model.getName());
 						V_socketUtils.setSocket(socket);
 						this.modelSelected = true;
-
-					})
+				})
 				.catch( error => console.error(error));
  			},
  			handleTap : function(){
@@ -188,7 +182,10 @@ function init(){
 		 		}
 		 	});
  		},
-
+ 		mounted : function(){
+ 			V_socketUtils.setInitAppFlag(true);
+ 			V_socketUtils.initApp();
+ 		},
  		template : `
  		<div>
 	 		<div id="content">

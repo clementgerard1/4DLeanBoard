@@ -7,6 +7,7 @@ class Milestone extends PlanningObject{
 
 	#phases;
 	#event;
+	#num;
 
 	/**
 		
@@ -24,6 +25,7 @@ class Milestone extends PlanningObject{
 		super(name, id);
 		this.#phases = {};
 		this.#event = event;
+		this.#num = null;
 	}
 
 	/**
@@ -148,6 +150,26 @@ class Milestone extends PlanningObject{
 	*/
 	getPreviousMilestones(){
 		return super.getPrevious();
+	}
+
+	/**
+		Set the numero of the milestone
+		@params {int} num
+	*/
+	setNum(num){
+		if(typeof num == "undefined"){
+			console.error("setColorClass : need a string ; provided : " + num);
+		}else{
+			this.#num = num;
+		}
+	}
+
+	/**
+		Get the numero of the milestone
+		@returns {int} 
+	*/
+	getNum(){
+		return this.#num;
 	}
 
 }

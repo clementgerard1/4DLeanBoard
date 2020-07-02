@@ -32,6 +32,7 @@ function getNewModels(){
 
 		  // Display directory entries
 		  let count = 0;
+		  let f2I = []; 
 		  for(let f in files){
 
 
@@ -40,17 +41,26 @@ function getNewModels(){
 				  	fs.readFile(__dirname + '/models/models' + '/' + files[f], 'utf8', (err, data)=>{
 
 				  		fs.readFile(__dirname + '/models/ifc' + '/' + files[f].split('.').slice(0, -1).join('.') + ".ifc", 'utf8', (err, data2)=>{
-								const model = Loader.fromJSONandIFC(data, data2);
-								const json = model.serialize();
-								saveModel(files[f].split('.').slice(0, -1).join('.'), json);
-							});
-
+				  			let model = null;
+				  			const ext = files[f].split('.')[1];
+				  			if(ext == "json"){
+									model = Loader.fromJSONandIFC(data, data2);
+									const json = model.serialize();
+									//f2I[files[f].split('.').slice(0, -1).join('.')] = model.getFragToIdsArray();
+									saveModel(files[f].split('.').slice(0, -1).join('.'), json);
+								}else if(ext == "csv"){
+									//model = Loader.fromCSVandIFC(data, data2);
+								}
 						});
-				  }
-				  count++;
-				  if(count == files.length){
-				  	resolve();
-				  }
+
+					});
+				 }
+				 count++;
+				 if(count == files.length){
+				  	resolve({
+
+				  	});
+				}
 
 			  }
 		  }
@@ -59,7 +69,7 @@ function getNewModels(){
 	});
 }
 
-function getNewIfcFiles(){
+function getNewIfcFiles(fragToIds){
 
 	return new Promise((resolve, reject) => {
 		fs.readdir(__dirname + '/models/ifc', (err, files) => {
@@ -75,7 +85,7 @@ function getNewIfcFiles(){
 		  		if(!fs.existsSync(__dirname + '/models/ifc_modified' + '/' + files[f].split('.').slice(0, -1).join('.') + ".ifc")){
 				  	fs.readFile(__dirname + '/models/ifc' + '/' + files[f], 'utf8', (err, data)=>{
 
-				  		fs.writeFile(__dirname + "/models/ifc_modified/" + files[f].split('.').slice(0, -1).join('.') + ".ifc", Loader.createIFCFileWithId(data), function (err) {
+				  		fs.writeFile(__dirname + "/models/ifc_modified/" + files[f].split('.').slice(0, -1).join('.') + ".ifc", Loader.createIFCFileWithId(data, fragToIds), function (err) {
 						  	if (err) throw err;
 						  	console.log('Modified IFC created.');
 							});

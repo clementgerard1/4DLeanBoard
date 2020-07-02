@@ -28,6 +28,7 @@ export default {
 			"playing" : true,
 			"camera" : null,
 			"nav" : null,
+			"played": [],
 		}
 	},
 	props:[
@@ -193,6 +194,7 @@ export default {
 							const obj = this.objs[object3D.getId()];
 							if(!this.selected.includes(obj)){
 								if(bool) {
+
 									if(this.colored.includes(obj) || this.played.includes(obj)) {
 										this.restore3DObject(obj);
 									}

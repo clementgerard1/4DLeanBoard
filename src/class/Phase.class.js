@@ -12,7 +12,7 @@ class Phase extends PlanningObject{
 	#delivrables;
 	#contractor;
 	#colorClass;
-
+	#num;
 	/**
  		@class Phase
  		@extends PlanningObject
@@ -30,6 +30,7 @@ class Phase extends PlanningObject{
 		this.#delivrables = {};
 		this.#contractor = null;
 		this.#colorClass = "defaultcolor";
+		this.#num = null;
 	}
 
 	/**
@@ -247,20 +248,24 @@ class Phase extends PlanningObject{
 		return toReturn;
 	}
 
-	setColorClass(colorClass){
-		if(typeof colorClass == "undefined"){
-			console.error("setColorClass : need a string ; provided : " + colorClass);
+	/**
+		Set the numero of the phase
+		@params {int} num
+	*/
+	setNum(num){
+		if(typeof num == "undefined"){
+			console.error("setColorClass : need a string ; provided : " + num);
 		}else{
-			this.#colorClass = colorClass;
+			this.#num = num;
 		}
 	}
 
 	/**
-		Get the color class attribuate to this phase
-		@returns {String} 
+		Get the numero of the phase
+		@returns {int} 
 	*/
-	getColorClass(){
-		return this.#colorClass;
+	getNum(){
+		return this.#num;
 	}
 
 	/*
@@ -303,6 +308,26 @@ class Phase extends PlanningObject{
 			if(this.#tasks[t].getTaskTeam() == team) toReturn.push(this.#tasks[t]);
 		}
 		return toReturn;
+	}
+
+	/**
+		Set the colorClass of the phase
+		@params {int} num
+	*/
+	setColorClass(colorClass){
+		if(typeof colorClass == "undefined"){
+			console.error("setColorClass : need a string ; provided : " + colorClass);
+		}else{
+			this.#colorClass = colorClass;
+		}
+	}
+
+	/**
+		Get the color class attribuate to this phase
+		@returns {String} 
+	*/
+	getColorClass(){
+		return this.#colorClass;
 	}
 
 }

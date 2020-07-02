@@ -1,16 +1,19 @@
 {
-   "name" : "test",
    "milestones": {
       "MilestoneID1": {
+         "Num" : 1,
          "Name": "ConstructionStart",
          "Requirements": {
             "requirement1": "LandRightsDelivered"
          },
          "phases": {
             "PhaseID1": {
+               "num": 1,
                "name": "FirstPhase",
                "contractor": "Masons 1",
                "color": "Yellowish",
+               "requirements": {
+               },
                "tasks": [
                   {
                      "TID": 101,
@@ -41,9 +44,12 @@
                ]
             },
             "PhaseID2": {
+               "num": 2,
                "name": "phase2",
                "contractor": "Masons 2",
                "color": "Blueish",
+               "requirements": {
+               },
                "tasks": [
                   {
                      "TID": 102,
@@ -74,9 +80,12 @@
                ]
             },
             "PhaseID3": {
+               "num": 3,
                "name": "phase3",
                "contractor": "Masons 1",
                "color": "Yellowish",
+               "requirements": {
+               },
                "tasks": [
                   {
                      "TID": 103,
@@ -107,9 +116,12 @@
                ]
             },
             "PhaseID4": {
+               "num": 4,
                "name": "phase4",
                "contractor": "Masons 2",
                "color": "Blueish",
+               "requirements": {
+               },
                "tasks": [
                   {
                      "TID": 104,
@@ -140,9 +152,12 @@
                ]
             },
             "PhaseID5": {
+               "num": 5,
                "name": "phase5",
                "contractor": "Masons 1",
                "color": "Yellowish",
+               "requirements": {
+               },
                "tasks": [
                   {
                      "TID": 105,
@@ -173,9 +188,12 @@
                ]
             },
              "PhaseID6": {
+               "num": 6,
                "name": "phase6",
                "contractor": "Carpenters 1",
                "color": "Orange",
+               "requirements": {
+               },
                "tasks": [
                   {
                      "TID": 106,
@@ -206,9 +224,12 @@
                ]
             },
              "PhaseID7": {
+               "num": 7,
                "name": "phase7",
                "contractor": "Carpenters 2",
                "color": "Redish",
+               "requirements": {
+               },
                "tasks": [
                   {
                      "TID": 107,
@@ -239,9 +260,12 @@
                ]
             },
             "PhaseID8": {
+               "num": 8,
                "name": "phase8",
                "contractor": "Carpenters 1",
                "color": "Orange",
+               "requirements": {
+               },
                "tasks": [
                   {
                      "TID": 108,
@@ -279,28 +303,40 @@
          "eventDate" : null
       },
       "MilestoneID2": {
+         "Num" : 2,
          "Name": "Middle",
+         "Requirements": {
+         },
          "phases": {
          },
          "event" : true,
          "eventDate" : "11/02/2021"
       },
       "MilestoneID3": {
+         "Num" : 3,
          "Name": "Middle-end",
+         "Requirements": {
+         },
          "phases": {
          },
          "event" : true,
          "eventDate" : "01/03/2021"
       },
       "MilestoneID4": {
+         "Num" : 4,
          "Name": "End",
+         "Requirements": {
+         },
          "phases": {
          },
          "event" : true,
          "eventDate" : "20/03/2021"
       },
       "MilestoneID5": {
+         "Num" : 5,
          "Name": "Start",
+         "Requirements": {
+         },
          "phases": {
          },
          "event" : true,
