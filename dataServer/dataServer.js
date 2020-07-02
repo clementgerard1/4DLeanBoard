@@ -32,10 +32,8 @@ function getNewModels(){
 
 		  // Display directory entries
 		  let count = 0;
-		  let f2I = []; 
+		  let frag2ID = []; 
 		  for(let f in files){
-
-
 		  	if(!fs.lstatSync(__dirname + '/models/models' + '/' + files[f]).isDirectory()){
 		  		if(!fs.existsSync(__dirname + '/models/models_serialized' + '/' + files[f].split('.').slice(0, -1).join('.') + ".json")){
 				  	fs.readFile(__dirname + '/models/models' + '/' + files[f], 'utf8', (err, data)=>{
@@ -46,22 +44,25 @@ function getNewModels(){
 				  			if(ext == "json"){
 									model = Loader.fromJSONandIFC(data, data2);
 									const json = model.serialize();
-									//f2I[files[f].split('.').slice(0, -1).join('.')] = model.getFragToIdsArray();
+									frag2ID[files[f].split('.').slice(0, -1).join('.')] = model.getFragToIdsArray();
 									saveModel(files[f].split('.').slice(0, -1).join('.'), json);
 								}else if(ext == "csv"){
 									//model = Loader.fromCSVandIFC(data, data2);
+									frag2ID[files[f].split('.').slice(0, -1).join('.')] = null;
 								}
+
+								count++;
+								if(count == files.length){
+								  resolve(frag2ID);
+								}
+							});
+
 						});
-
-					});
-				 }
-				 count++;
-				 if(count == files.length){
-				  	resolve({
-
-				  	});
-				}
-
+				 	}else{
+				  	count++;
+				  }
+			  }else{
+			  	count++;
 			  }
 		  }
 
@@ -70,7 +71,6 @@ function getNewModels(){
 }
 
 function getNewIfcFiles(fragToIds){
-
 	return new Promise((resolve, reject) => {
 		fs.readdir(__dirname + '/models/ifc', (err, files) => {
 
@@ -85,10 +85,11 @@ function getNewIfcFiles(fragToIds){
 		  		if(!fs.existsSync(__dirname + '/models/ifc_modified' + '/' + files[f].split('.').slice(0, -1).join('.') + ".ifc")){
 				  	fs.readFile(__dirname + '/models/ifc' + '/' + files[f], 'utf8', (err, data)=>{
 
-				  		fs.writeFile(__dirname + "/models/ifc_modified/" + files[f].split('.').slice(0, -1).join('.') + ".ifc", Loader.createIFCFileWithId(data, fragToIds), function (err) {
+				  		fs.writeFile(__dirname + "/models/ifc_modified/" + files[f].split('.').slice(0, -1).join('.') + ".ifc", Loader.createIFCFileWithId(data, fragToIds[files[f].split('.').slice(0, -1).join('.')]), function (err) {
 						  	if (err) throw err;
 						  	console.log('Modified IFC created.');
 							});
+
 						});
 					}
 					count++;
