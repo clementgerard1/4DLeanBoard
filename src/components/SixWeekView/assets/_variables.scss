@@ -22,6 +22,7 @@ $redish : #FF8F80;
 // tests couleurs viewer
 $green: #91cc7f;
 $grey: #888888;
+$ligth_grey: #aaaaaa;
 
 
 .BG_Light{
@@ -111,7 +112,7 @@ $filterPanelHeight : 50px;
 /* 3D */
 $select3DColor : $greenbluish_light;
 // color for the player rendering
-$nextSixWeeks : $white;
+$nextSixWeeks : $ligth_grey;
 $currentSixWeeks : $grey;
 $currentWeek : $green;
 

@@ -212,6 +212,7 @@ function launchServer(){
 
 	app.get("/model", (req, res)=>{
 		res.sendFile(__dirname + "/models/models_serialized/" + req.query.name + ".json");
+		console.log(models, req.query.name);
 		const toReturn = {
 			model : models[req.query.name].serialize(),
 			urn : urns[req.query.name],
