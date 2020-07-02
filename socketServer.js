@@ -2,6 +2,9 @@ const express = require('express')
 const app = express();
 var http = require('http').createServer(app);
 const io = require('socket.io')(http);
+import DataApi from './dataServer/DataApi.class.js';
+import Model from './src/class/Model.class.js';
+import Timeline from './src/class/Timeline.class.js';
 
 const socketPort = 3001;
 
@@ -14,98 +17,127 @@ const models = [];
 
 io.on("connection", function(client){
 
-    const model = client.handshake.query.model;
-    if(typeof models[model] == "undefined"){
-        models[model] = {
-            model : model,
-            playerTime : 0,
-            taskSelected : [],
-            pushed : [],
-            backgroundTasks : [],
-            first: true,
-        };
+    const modelName = client.handshake.query.model;
+    if(typeof models[modelName] == "undefined"){
+        DataApi.getModel(modelName).then((data)=>{
+            const model = new Model();
+            model.deserialize(data)
+
+            const timeline = new Timeline(model);
+            const selected = timeline.getTasksBetweenTwoDates(0 * 7, (0 * 7) + 6);
+            let sel = [];
+            for(let s in selected){
+                sel.push(selected[s].getId());
+            }
+            models[modelName] = {
+                model : model,
+                playerTime : 0,
+                taskSelected : sel,
+                pushed : [],
+                backgroundTasks : [],
+                timeline : timeline,
+            };
+            client.emit("sendInit", models[modelName]);
+        }).catch(error => console.error(error));
+
     }else{
-        client.emit("sendInit", models[model]);
+        client.emit("sendInit", models[modelName]);
     }
     
     client.on("addViewer", () => {
         viewers.push({
             socket : client,
-            model : model
+            model : modelName
         });
     });
 
     client.on("addW6", () => {
         w6s.push({
             socket : client,
-            model : model
+            model : modelName
         });
     });
 
     client.on("addPlayer", () => {
         players.push({
             socket : client,
-            model : model
+            model : modelName
         });
     });
 
     client.on("addFilter", () => {
         filters.push({
             socket : client,
-            model : model
+            model : modelName
         });
     });
 
     client.on("highlightObject4D", (datas) => {
-        if(datas.value && !models[model].taskSelected.includes(datas.taskId)){
-            models[model].taskSelected.push(datas.taskId);
+        if(datas.value && !models[modelName].taskSelected.includes(datas.taskId)){
+            models[modelName].taskSelected.push(datas.taskId);
         }else if(!datas.value){
-            models[model].taskSelected.splice(models[model].taskSelected.indexOf(datas.taskId), 1);
+            models[modelName].taskSelected.splice(models[modelName].taskSelected.indexOf(datas.taskId), 1);
         }
-        console.log(models);
-        broadcast(client, model, "highlightObject4D", datas);
+        broadcast(client, modelName, "highlightObject4D", datas);
         //client.broadcast.emit("highlightObject4D", datas);
     });
 
     client.on("highlightTask", (datas) => {
-        if(datas.value && !models[model].taskSelected.includes(datas.id)){
-            models[model].taskSelected.push(datas.id);
+        if(datas.value && !models[modelName].taskSelected.includes(datas.id)){
+            models[modelName].taskSelected.push(datas.id);
         }else if(!datas.value){
-            models[model].taskSelected.splice(models.indexOf(datas.id), 1);
+            models[modelName].taskSelected.splice(models[modelName].indexOf(datas.id), 1);
         }
-        console.log(models);
-        broadcast(client, model, "highlightTask", datas);
+        broadcast(client, modelName, "highlightTask", datas);
         //client.broadcast.emit("highlightTask", datas);
     });
 
     client.on("setTime", (datas) => {
-        models[model].playerTime = datas.time;
-        broadcast(client, model, "setTime", datas);
+        models[modelName].playerTime = datas.time;
+        models[modelName].taskSelected = [];
+        const model = models[modelName].model;
+        const timeline = models[modelName].timeline;
+        const selected = timeline.getTasksBetweenTwoDates(datas.time * 7, (datas.time * 7) + 6);
+        for(let s in selected){
+            models[modelName].taskSelected.push(selected[s].getId());
+        }
+
+        broadcast(client, modelName, "setTime", datas);
         //client.broadcast.emit("setTime", datas);
     });
 
     client.on("setRequirement", (datas) => {
-        broadcast(client, model, "setRequirement", datas);
+        broadcast(client, modelName, "setRequirement", datas);
         //client.broadcast.emit("setRequirement", datas);
     })
 
     client.on("setTaskState", (datas) => {
-        broadcast(client, model, "setTaskState", datas);
+        broadcast(client, modelName, "setTaskState", datas);
         //client.broadcast.emit("setTaskState", datas);
     })
 
     client.on("pressHighlightTask", (datas) => {
-        broadcast(client, model, "pressHighlightTask", datas);
+        if(datas.value && !models[modelName].pushed.includes(datas.taskId)){
+            models[modelName].pushed.push(datas.taskId);
+        }else if(!datas.value){
+            models[modelName].pushed.splice(models[modelName].pushed.indexOf(datas.taskId), 1);
+        }
+        broadcast(client, modelName, "pressHighlightTask", datas);
         //client.broadcast.emit("pressHighlightTask", datas);
     })
 
     client.on("updateStateDisplay", (datas) => {
-        broadcast(client, model, "updateStateDisplay", datas);
+        if(datas.value && !models[modelName].backgroundTasks.includes(datas.taskId)){
+            models[modelName].backgroundTasks.push(datas.taskId);
+        }else if(!datas.value){
+            models[modelName].backgroundTasks.splice(models[modelName].backgroundTasks.indexOf(datas.taskId), 1);
+        }
+        broadcast(client, modelName, "updateStateDisplay", datas);
         //client.broadcast.emit("updateStateDisplay", datas);
     })
 
     client.on("clearHighlighting", (datas) => {
-        broadcast(client, model, "clearHighlighting", datas);
+        broadcast(client, modelName, "clearHighlighting", datas);
         //client.broadcast.emit("clearHighlighting", datas);
     })
 

@@ -126,9 +126,9 @@ export default {
 		V_taskTableUtils.addTask(this);
 		if(this.task != null){
 			this.selected = V_taskTableUtils.isTokenOwner(this);
-			if(this.selected){
-				V_socketUtils.highlightObject4D(this.task.getObject4D(), true);
-			}
+			//if(this.selected){
+				//V_socketUtils.highlightObject4D(this.task.getObject4D(), true);
+			//}
 		}else{
 			this.selected = null;
 		}
@@ -136,6 +136,16 @@ export default {
 	updated: function(){
 		this.updateDatas();
 		this.updateStateDiv();
+
+		V_taskTableUtils.updateTask(this);
+		if(this.task != null){
+			this.selected = V_taskTableUtils.isTokenOwner(this);
+			//if(this.selected){
+				//V_socketUtils.highlightObject4D(this.task.getObject4D(), true);
+			//}
+		}else{
+			this.selected = null;
+		}
 	},
 	computed:{
 		notEmpty : function(){
@@ -335,9 +345,9 @@ export default {
 				};
 			}
 		},
-		updateStateDisplay : function(){
+		updateStateDisplay : function(bool){
 			if(this.notEmpty){
-				if(!this.state){
+				if(bool){
 					this.state = true;
 					this.stateDiv.classList.add('animate__flipInY');
 					
@@ -355,7 +365,7 @@ export default {
 			}
 		},
 		handleDoubleTap: function(event){
-			V_socketUtils.updateStateDisplay(this.task);
+			V_socketUtils.updateStateDisplay(this.task, !this.state);
 		},
 		handlePress : function(event){
 			const display = event.type == "press";

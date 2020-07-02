@@ -4,19 +4,46 @@ class V_taskTableUtils{
 	//	taskId : null
 	//};
 	static tasks = [];
+	static taskObjects = [];
+
+	static setAllTasks(tasks){
+		for(let t in tasks){
+			this.taskObjects[tasks[t].getId()] = tasks[t];
+		}
+	}
 
 	/**
 		Add V_Task as listener of TaskTable Changement
 		@param {V_task} V_task which become reactive
 		@static
 	*/
-	static addTask(task){
-		this.tasks.push(task);
+	static addTask(vTask){
+		if(vTask.task != null){
+			this.tasks[vTask._uid] = {
+				task : this.taskObjects[vTask.task.getId()],
+				vTask : vTask
+			}
+		}
 	}	
 
 	/**
-		Set the token
-		@param {V_task} obj which ask for the token
+		Update V_Task listener
+		@param {V_task} 
+		@static
+	*/
+	static updateTask(vTask){
+		if(vTask.task != null){
+			this.tasks[vTask._uid] = {
+				task : this.taskObjects[vTask.task.getId()],
+				vTask : vTask
+			}
+		}
+	}
+
+	/**
+		Set the token activation
+		@param {Task} task which ask for the token
+		@param {bool} bool true if on false off
 		@static
 	*/
 	static setToken(task, bool){
@@ -29,8 +56,8 @@ class V_taskTableUtils{
 		}
 
 		for(let t in this.tasks){
-			if(this.tasks[t].task == task){
-				this.tasks[t].setSelectedValue(bool);
+			if(this.tasks[t].task == task && this.tasks[t].vTask != null){
+				this.tasks[t].vTask.setSelectedValue(bool);
 			}
 		}
 
@@ -50,8 +77,8 @@ class V_taskTableUtils{
 	}
 
 	static setTokenByTaskId(taskId, bool){
-		for( let t in this.tasks){
-			if(this.tasks[t].task != null && this.tasks[t].task.getId() == taskId) V_taskTableUtils.setToken(this.tasks[t].task, bool);
+		for( let t in this.taskObjects){
+			if(this.taskObjects[t] != null && this.taskObjects[t].getId() == taskId) V_taskTableUtils.setToken(this.taskObjects[t], bool);
 		}
 	}
 
@@ -86,25 +113,25 @@ class V_taskTableUtils{
 	static highlightTask(task, bool){
 
 		for( let t in this.tasks){
-			if(this.tasks[t].task == task) this.tasks[t].hightlight(bool);
+			if(this.tasks[t].task == task) this.tasks[t].vTask.hightlight(bool);
 		}
 	}
 
 	static highlightTaskByIdAndUpdate(taskId, bool){
 		for( let t in this.tasks){
-			if(this.tasks[t].task != null && this.tasks[t].task.getId() == taskId) this.tasks[t].hightlight(bool);
+			if(this.tasks[t].task != null && this.tasks[t].task.getId() == taskId) this.tasks[t].vTask.hightlight(bool);
 		}
 	}
 
-	static updateStateDisplay(task){
+	static updateStateDisplay(task, bool){
 		for( let t in this.tasks){
-			if(this.tasks[t].task == task) this.tasks[t].updateStateDisplay();
+			if(this.tasks[t].task == task) this.tasks[t].vTask.updateStateDisplay(bool);
 		}
 	}
 
-	static updateStateDisplayById(taskId){
+	static updateStateDisplayById(taskId, bool){
 		for( let t in this.tasks){
-			if(this.tasks[t].task != null && this.tasks[t].task.getId() == taskId) this.tasks[t].updateStateDisplay();
+			if(this.tasks[t].task != null && this.tasks[t].task.getId() == taskId) this.tasks[t].vTask.updateStateDisplay(bool);
 		}
 	}
 
@@ -126,13 +153,13 @@ class V_taskTableUtils{
 
 	static updateRequirements(task){
 		for( let t in this.tasks){
-			if(this.tasks[t].task == task) this.tasks[t].updateRequirements();
+			if(this.tasks[t].task == task) this.tasks[t].vTask.updateRequirements();
 		}
 	}
 
 	static updateTaskState(task){
 		for( let t in this.tasks){
-			if(this.tasks[t].task == task) this.tasks[t].updateTaskState();
+			if(this.tasks[t].task == task) this.tasks[t].vTask.updateTaskState();
 		}
 	}
 
@@ -140,7 +167,7 @@ class V_taskTableUtils{
 		for( let t in this.tasks){
 			if(this.tasks[t].task != null && this.tasks[t].task.getId() == taskId){
 				this.tasks[t].task.getRequirement(requirementName).setValue(value);
-				this.tasks[t].updateRequirements();
+				this.tasks[t].vTask.updateRequirements();
 			} 
 		}
 	}
@@ -161,7 +188,7 @@ class V_taskTableUtils{
 			if(this.tasks[t].task != null){
 				const previous = this.tasks[t].task.getPreviousTasks();
 				for(let p in previous){
-					if(previous[p] == task) this.tasks[t].updatePrevious();
+					if(previous[p] == task) this.tasks[t].vTask.updatePrevious();
 				}
 			}
 		}

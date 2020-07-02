@@ -23,25 +23,30 @@ class DataApi{
 
 	}
 
-	static async getModel(name){
+	static async getModel(name, forge = false){
 		let clientId = Config.autoDeskForgeSettings[Config.autoDeskAccount].clientId;
 		let clientSecret = Config.autoDeskForgeSettings[Config.autoDeskAccount].clientSecret;
 		let oauth = null;
-
-		return await Utils.getAutodeskAuth(clientId, clientSecret)
-		.then( oAuth => {
-			oauth = oAuth
-			return axios.get(DataApi.serverUrl + '/model?name=' + name);
-		})
-		.then( (modelS) => {
-			const model = new Model();
-			model.deserialize(modelS.data.model);
-			return {
-				model : model,
-				urn : modelS.data.urn,
-				oAuth : oauth,
-			};
-		});
+		if(forge){
+			return await Utils.getAutodeskAuth(clientId, clientSecret)
+			.then( oAuth => {
+				oauth = oAuth
+				return axios.get(DataApi.serverUrl + '/model?name=' + name);
+			})
+			.then( (modelS) => {
+				const model = new Model();
+				model.deserialize(modelS.data.model);
+				return {
+					model : model,
+					urn : modelS.data.urn,
+					oAuth : oauth,
+				};
+			});
+		}else{
+			return await axios.get(DataApi.serverUrl + '/model?name=' + name).then( datas => {
+				return datas.data.model;
+			});
+		}
 
 	}
 

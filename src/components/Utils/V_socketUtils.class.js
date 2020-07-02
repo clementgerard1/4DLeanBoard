@@ -6,6 +6,9 @@ import DataApi from "../../../dataServer/DataApi.class.js";
 class V_socketUtils{
 
 	static socket = null;
+	static socketInitFlag = false;
+	static appInitFlag = false;
+	static initDatas = null;
 	
 	/**
 		Set the socket object for connexion
@@ -17,13 +20,37 @@ class V_socketUtils{
 		this.initSocket();
 	}
 
+	static initApp(){
+		if(this.appInitFlag && this.socketInitFlag){
+			V_timelineUtils.setTime(this.initDatas.playerTime);
+
+			V_taskTableUtils.clearTokens();
+			V_4DUtils.clearHighlighting();
+
+			for(let d in this.initDatas.taskSelected){
+				V_taskTableUtils.setTokenByTaskId(this.initDatas.taskSelected[d], true);
+			}
+
+			for(let d in this.initDatas.pushed){
+				V_taskTableUtils.highlightTaskByIdAndUpdate(this.initDatas.pushed[d], true);
+			}
+
+			for(let d in this.initDatas.backgroundTasks){
+				V_taskTableUtils.updateStateDisplayById(this.initDatas.backgroundTasks[d], true);
+			}
+		}
+	}
+
+	static setInitAppFlag(bool){
+		this.appInitFlag = bool;
+	}
+
 	/**
 		Init the socket the socket object for connexion / Private
 		@static
 	*/
 	static initSocket(){
 		this.socket.on("highlightObject4D", (datas) => {
-
 			V_taskTableUtils.setTokenByObject4DId(datas.objId, datas.value);
 			V_4DUtils.highlightObject4DById(datas.objId, datas.value);
 
@@ -34,15 +61,9 @@ class V_socketUtils{
 		});
 
 		this.socket.on("sendInit", (datas) => {
-			V_timelineUtils.setTime(datas.playerTime);
-			//if(datas.taskSelected.length != 0){
-				V_taskTableUtils.clearTokens();
-				V_4DUtils.clearHighlighting();
-			//}
-			for(let d in datas.taskSelected){
-
-				V_taskTableUtils.setTokenByTaskId(datas.taskSelected[d], true);
-			}
+			this.socketInitFlag = true;
+			this.initDatas = datas;
+			this.initApp();
 		});
 
 		this.socket.on("setTime", (datas) => {
@@ -58,7 +79,7 @@ class V_socketUtils{
 		});
 
 		this.socket.on("updateStateDisplay", (datas) => {
-			V_taskTableUtils.updateStateDisplayById(datas.taskId);
+			V_taskTableUtils.updateStateDisplayById(datas.taskId, datas.value);
 		});
 
 		this.socket.on("pressHighlightTask", (datas) => {
@@ -213,10 +234,11 @@ class V_socketUtils{
 		});
 	}
 
-	static updateStateDisplay(task){
-		V_taskTableUtils.updateStateDisplay(task);
+	static updateStateDisplay(task, bool){
+		V_taskTableUtils.updateStateDisplay(task, bool);
 		this.socket.emit("updateStateDisplay", { 
 			taskId : task.getId(),
+			value : bool
 		});
 	}
 

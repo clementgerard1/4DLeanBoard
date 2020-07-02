@@ -134,7 +134,7 @@ function init(){
  			loadModel : function(modelName){
  				DataApi.isAvailable().then(available => {
 					if(available){
-						return DataApi.getModel(modelName);
+						return DataApi.getModel(modelName, true);
 					}else{
 						return Promise.all([Utils.loadTextFile("datas/Project1v2.json"), Utils.loadTextFile("datas/Project1.ifc")])
 						.then( files => {
@@ -151,12 +151,6 @@ function init(){
 						this.playerInit = 0;
 
 						V_timelineUtils.setTimeline(this.timeline);
-						V_taskTableUtils.clearTokens();
-						const selected = this.timeline.getTasksBetweenTwoDates(this.playerInit * 7, (this.playerInit * 7) + 7);
-						for(let s in selected){
-							V_taskTableUtils.setToken(selected[s], true);
-						}
-
 						const phase = this.timeline.getModel().getMilestones()[0].getPhases()[0];
 					  	this.duration = this.model.getDuration();
 
@@ -188,7 +182,10 @@ function init(){
 		 		}
 		 	});
  		},
-
+ 		mounted : function(){
+ 			V_socketUtils.setInitAppFlag(true);
+ 			V_socketUtils.initApp();
+ 		},
  		template : `
  		<div>
 	 		<div id="content">
