@@ -229,6 +229,17 @@ class Utils{
 
   };
 
+  static getFormatedDate(date){
+  	const temp = date.split("/");
+  	if(temp[0].length == 1){
+  		temp[0] = "0" + temp[0];
+  	}
+  	if(temp[1].length == 1){
+  		temp[1] = "0" + temp[1];
+  	}
+  	return temp.join("/");
+  }
+
 }
 
 export default Utils;

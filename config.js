@@ -7,10 +7,10 @@ module.exports = {
 
 	"forgeRenderer" : true,
 
-	"socketServerIp" : "localhost", //"194.199.221.148",
+	"socketServerIp" : "localhost", //"194.199.221.148",//"194.199.221.139", 
 	"socketServerPort" : 3001,
 
-	"dataServerIp" : "localhost", //"194.199.221.148",
+	"dataServerIp" : "localhost", ////"194.199.221.139", 
 	"dataServerPort" : 3003,
 
 	"autoDeskAccount" : "clement",

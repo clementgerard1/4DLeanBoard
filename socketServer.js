@@ -45,6 +45,7 @@ io.on("connection", function(client){
     }
     
     client.on("addViewer", () => {
+        console.log("addViewer", client.id);
         viewers.push({
             socket : client,
             model : modelName
@@ -52,6 +53,7 @@ io.on("connection", function(client){
     });
 
     client.on("addW6", () => {
+        console.log("addW6", client.id);
         w6s.push({
             socket : client,
             model : modelName
@@ -59,6 +61,7 @@ io.on("connection", function(client){
     });
 
     client.on("addPlayer", () => {
+        console.log("addPlayer", client.id);
         players.push({
             socket : client,
             model : modelName
@@ -66,6 +69,7 @@ io.on("connection", function(client){
     });
 
     client.on("addFilter", () => {
+        console.log("addFilter", client.id);
         filters.push({
             socket : client,
             model : modelName
@@ -142,6 +146,7 @@ io.on("connection", function(client){
     })
 
     client.on("disconnect", function(){
+        console.log("disconnect", client.id);
         for(let v in viewers){
             if(viewers[v].socket.id == client.id){
                 viewers.splice(v, 1);
@@ -166,28 +171,31 @@ io.on("connection", function(client){
 });
 
 function broadcast(client, model, message, datas){
+    console.log(model, message, datas, viewers.length, players.length, w6s.length, filters.length);
     const already = [];
     for(let v in viewers){
-        if(!already.includes(client.id) && viewers[v].model == model && viewers[v].socket.id != client.id){
+        if(!already.includes(viewers[v].socket.id) && viewers[v].model == model && viewers[v].socket.id != client.id){
             viewers[v].socket.emit(message, datas);
-            already.push(client.id);
+            already.push(viewers[v].socket.id);
         }
     }
     for(let p in players){
-        if(!already.includes(client.id) && players[p].model == model && players[p].socket.id != client.id){
+        if(!already.includes(players[p].socket.id) && players[p].model == model && players[p].socket.id != client.id){
             players[p].socket.emit(message, datas);
-            already.push(client.id);
+            already.push(players[p].socket.id);
         }
     }
     for(let w in w6s){
-        if(!already.includes(client.id) && w6s[w].model == model && w6s[w].socket.id != client.id){
+        if(!already.includes(w6s[w].socket.id) && w6s[w].model == model && w6s[w].socket.id != client.id){
+            console.log("w SENDED");
             w6s[w].socket.emit(message, datas);
-            already.push(client.id);
+            already.push(w6s[w].socket.id);
         }
     }for(let f in filters){
-        if(!already.includes(client.id) && filters[f].model == model && filters[f].socket.id != client.id){
+        if(!already.includes(filters[f].socket.id) && filters[f].model == model && filters[f].socket.id != client.id){
+            console.log("f SENDED");
             filters[f].socket.emit(message, datas);
-            already.push(client.id);
+            already.push(filters[f].socket.id);
         }
     }
 }

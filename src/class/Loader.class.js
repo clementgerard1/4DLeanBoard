@@ -11,6 +11,7 @@ import Level from "./Level.class.js";
 import Zone from "./Zone.class.js";
 import Contractor from "./Contractor.class.js";
 import Requirement from "./Requirement.class.js";
+import Utils from "./Utils.class.js";
 
 /**
  * @class Loader
@@ -109,12 +110,13 @@ class Loader{
 					json.milestones[json.milestones.length - 1]["Previous"] = columns[4];
 					json.milestones[json.milestones.length - 1]["Next"] = columns[5];
 					if(columns[1] == columns[2]){
-						json.milestones[json.milestones.length - 1]["event"] = true;
+						json.milestones[json.milestones.length - 1]["Event"] = true;
 						json.milestones[json.milestones.length - 1]["Next"] = columns[1];
 					}else{
-						json.milestones[json.milestones.length - 1]["event"] = false;
+						json.milestones[json.milestones.length - 1]["Event"] = false;
 						json.milestones[json.milestones.length - 1]["Next"] = null;
 					}
+					json.milestones[json.milestones.length - 1]["Requirements"] = [];
 					json.milestones[json.milestones.length - 1]["Phases"] = [];
 					memoMilestone = json.milestones.length - 1;
 
@@ -125,12 +127,13 @@ class Loader{
 					const milestone = json.milestones[memoMilestone];
 					milestone["Phases"][milestone["Phases"].length] = {};
 
-					milestone["Phases"][milestone["Phases"].length - 1]["num"] = columns[6];
-					milestone["Phases"][milestone["Phases"].length - 1]["name"] = columns[7];
-					milestone["Phases"][milestone["Phases"].length - 1]["startDate"] = columns[8];
-					milestone["Phases"][milestone["Phases"].length - 1]["endDate"] = columns[9];
-					milestone["Phases"][milestone["Phases"].length - 1]["requirements"] = columns[10];
-					milestone["Phases"][milestone["Phases"].length - 1]["tasks"] = [];
+					milestone["Phases"][milestone["Phases"].length - 1]["Num"] = columns[6];
+					milestone["Phases"][milestone["Phases"].length - 1]["Name"] = columns[7];
+					console.log(columns[8]);
+					milestone["Phases"][milestone["Phases"].length - 1]["StartDate"] = columns[8];
+					milestone["Phases"][milestone["Phases"].length - 1]["EndDate"] = columns[9];
+					milestone["Phases"][milestone["Phases"].length - 1]["Requirements"] = columns[10];
+					milestone["Phases"][milestone["Phases"].length - 1]["Tasks"] = [];
 
 					memoPhase = milestone["Phases"].length - 1;
 				}
@@ -138,18 +141,18 @@ class Loader{
 				//New task
 				if(columns[11] != ''){
 					const phase = json.milestones[memoMilestone]["Phases"][memoPhase];
-					phase["tasks"][phase["tasks"].length] = {};
+					phase["Tasks"][phase["Tasks"].length] = {};
 
-					phase["tasks"][phase["tasks"].length - 1]["Name"] = columns[11];
-					phase["tasks"][phase["tasks"].length - 1]["TID"] = columns[12];
-					phase["tasks"][phase["tasks"].length - 1]["Duration"] = columns[13];
-					phase["tasks"][phase["tasks"].length - 1]["Workers"] = columns[14];
-					phase["tasks"][phase["tasks"].length - 1]["Previous"] = columns[15];
-					phase["tasks"][phase["tasks"].length - 1]["Team"] = columns[16];
-					phase["tasks"][phase["tasks"].length - 1]["4DID"] = columns[17];
-					phase["tasks"][phase["tasks"].length - 1]["Zone"] = columns[19];
-					phase["tasks"][phase["tasks"].length - 1]["Level"] = columns[20];
-					phase["tasks"][phase["tasks"].length - 1]["Requirements"] = {
+					phase["Tasks"][phase["Tasks"].length - 1]["Name"] = columns[11];
+					phase["Tasks"][phase["Tasks"].length - 1]["TID"] = columns[12];
+					phase["Tasks"][phase["Tasks"].length - 1]["Duration"] = columns[13];
+					phase["Tasks"][phase["Tasks"].length - 1]["Workers"] = columns[14];
+					phase["Tasks"][phase["Tasks"].length - 1]["Previous"] = columns[15];
+					phase["Tasks"][phase["Tasks"].length - 1]["Team"] = columns[16];
+					phase["Tasks"][phase["Tasks"].length - 1]["4DID"] = columns[17];
+					phase["Tasks"][phase["Tasks"].length - 1]["Zone"] = columns[19];
+					phase["Tasks"][phase["Tasks"].length - 1]["Level"] = columns[20];
+					phase["Tasks"][phase["Tasks"].length - 1]["Requirements"] = {
 						"Constraint" : columns[22] != "No", 
 						"Information" : columns[23] != "No",
 						"Materials" : columns[24] != "No",
@@ -158,7 +161,7 @@ class Loader{
 						"Safety" : columns[27] != "No",
 						"Space" : columns[28] != "No",
 					}
-					memoTask = phase["tasks"].length - 1;
+					memoTask = phase["Tasks"].length - 1;
 				}
 
 			}
@@ -167,7 +170,89 @@ class Loader{
 		return Loader.json_v0_4(JSON.stringify(json), ifc);
 	}
 	static json_v0_4(json, ifc){
+		//Errors
+		if(json == null){
+			throw 'JsonFile needed for import model';
+		}
+		if(ifc == null){
+			throw 'IfcFile needed for import model';
+		}
 
+		//Parse IFC file
+		let obj3Ds = {};
+		const IFClines = ifc.split('\n');
+		for(let l in IFClines){
+			const ifcDef = /(IFC[A-Z]*)\(([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*)/g;
+			const result = ifcDef.exec(IFClines[l]);
+			if(result != null && this.#ifcBuildingElements.includes(result[1])){
+				const temp = result[4].split(":");
+				obj3Ds[result[2].replace(/['"]/gi, "")] = 
+					{
+						name : result[6].replace(/['"]/gi, ""),
+						id : temp[temp.length-1].replace(/['"]/gi, "")
+					}
+			}
+		}
+
+		const infos = JSON.parse(json);
+
+		const model = new Model();
+
+		const contractors = [];
+		const taskTeams = [];
+		const zones = [];
+
+
+		const tasksForPreviousNext = {};
+		const tasksCollection = [];
+
+		const milestones = infos["milestones"];
+
+		for(let m in milestones){
+
+			let milestone = null;
+			if(milestones[m]["Event"]){
+				milestone = new Milestone(milestones[m]["Name"], true);
+			}else{
+				milestone = new Milestone(milestones[m]["Name"]);
+			}
+			milestone.setNum(milestones[m]["Num"]);
+
+			model.addMilestone(milestone);
+			for(let r in milestones[m]["Requirements"]){
+				const requirement = new Requirement(milestones[m]["Requirements"][r]);
+				milestone.addRequirement(requirement);
+			}
+
+			const startDate = new Date(Utils.getFormatedDate(milestones[m]["StartDate"]));
+			milestone.setStartDate(startDate);
+			const endDate = new Date(Utils.getFormatedDate(milestones[m]["EndDate"]));
+			milestone.setEndDate(endDate);
+
+			const phases = milestones[m]["Phases"];
+			for(let p in phases){
+				
+				const phase = new Phase(phases[p]["Name"]);
+				phase.setColorClass("Yellowish");
+				if(typeof contractors["contractorName"] == "undefined") contractors["contractorName"] = new Contractor("contractorName");
+				phase.setContractor(contractors["contractorName"]);
+				phase.setNum(phases[p]["Num"]);
+				milestone.addPhase(phase);
+
+				const PstartDate = new Date(Utils.getFormatedDate(phases[p]["StartDate"]));
+				phase.setStartDate(PstartDate);
+				const PendDate = new Date(Utils.getFormatedDate(phases[p]["EndDate"]));
+				phase.setEndDate(PendDate);
+
+				const tasks = phases[p]["Tasks"];
+
+
+
+			}
+
+		}
+
+		return model;
 	}
 
 	//Version JSON O.3
@@ -642,7 +727,6 @@ class Loader{
 
 	//createIFCFileWithId
 	static createIFCFileWithId(ifcSource, fragToIdArray){
-		console.log("hey", fragToIdArray);
 		const IFClines = ifcSource.split('\n');
 		let newFile = "";
 		let count = 0;
