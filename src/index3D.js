@@ -157,6 +157,7 @@ function init(){
 						if(this.model.getName() == "") this.model.setName("test");
 						this.timeline = new Timeline(this.model);
 						this.playerInit = 0;
+						V_taskTableUtils.setAllTasks(this.model.getTasks());
 
 						V_timelineUtils.setTimeline(this.timeline);
 						const selected = this.timeline.getTasksBetweenTwoDates(this.playerInit * 7, (this.playerInit * 7) + 7);

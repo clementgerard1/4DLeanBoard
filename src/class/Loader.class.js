@@ -642,6 +642,7 @@ class Loader{
 
 	//createIFCFileWithId
 	static createIFCFileWithId(ifcSource, fragToIdArray){
+		console.log("hey", fragToIdArray);
 		const IFClines = ifcSource.split('\n');
 		let newFile = "";
 		let count = 0;

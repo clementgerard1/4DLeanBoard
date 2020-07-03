@@ -6,11 +6,13 @@ import V_6Wrow_header_date from "./V_6Wrow_header_date.vue";
 
 export default {
 	components:{
-		"date" : V_6Wrow_header_date
+		"date" : V_6Wrow_header_date,
+		"heightt" : "0px",
 	},
 	props:[
 		'time',
-		'tasktablestart'
+		'tasktablestart',
+		"tasksize"
 	],
 	inject : [
 		'timeline',
@@ -20,11 +22,6 @@ export default {
 		'timeline',
 		'model',
 	],
-	computed: {
-		"_time" : function(){
-			return this.time;
-		}
-	},
 	methods: {
 		clearSelection : function(){
 			V_socketUtils.clearHighlighting();
@@ -33,7 +30,7 @@ export default {
 	template : `
 
 		<div class="rowHeader" v-tap="clearSelection">
-			<date class="rowHeaderItem" v-for="i in 6" :key="i" v-bind:time="tasktablestart + (i-1)"></date>
+			<date v-bind:style="{ height: tasksize  + 'px' }" class="rowHeaderItem" v-for="i in 6" :key="i" v-bind:time="tasktablestart + (i-1)"></date>
 	 	</div>
 
 	`,

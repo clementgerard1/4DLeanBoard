@@ -6,8 +6,8 @@ export default {
 	data: function(){
 		return {
 			id : Utils.getId("milestonePlayer"),
-			size : scssVariables.playerHeight.replace("px", "") / 7,
-			size2 : scssVariables.playerHeight.replace("px", "") / 8
+			size : scssVariables.playerHeight.replace("px", "") / 4,
+			size2 : scssVariables.playerHeight.replace("px", "") / 4.5
 		}
 	},
 	props: [
@@ -32,7 +32,7 @@ export default {
 			const time = Math.ceil(((this.milestone.getEndDate().getTime() - this.model.getStartDate().getTime()) / (1000 * 3600 * 24)) + 1) - 1;
 			const duration = Math.ceil(this.model.getDuration() / 7) * 7;
 			const x = ((time / duration) * (this.widthh + 10)) - 19;// - (scssVariables.playerHeight.replace("px", "") / 9);
-			const y = (scssVariables.playerHeight.replace("px", "") * 0.57);
+			const y = (scssVariables.playerHeight.replace("px", "") * 0.36);
 			return "translate(" + x + "," + y + ")";
 		}
 	},

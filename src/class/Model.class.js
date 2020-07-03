@@ -1009,5 +1009,13 @@ class Model{
 		}		
 	}
 
+	/*
+		get a frag array conversion from Object4D Id of Excel to real id use in forge viewer
+		@returns {Array} 
+	*/
+	getFragToIdsArray(){
+		
+	}
+
 }
 export default Model;

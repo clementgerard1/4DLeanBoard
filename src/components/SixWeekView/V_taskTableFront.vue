@@ -13,7 +13,8 @@ export default {
 		"nbopened",
 		"nbclosed",
 		"time",
-		"tasktablestart"
+		"tasktablestart",
+		"tasksize"
 	],
 	computed:{
 		lineplayed : function(){
@@ -22,8 +23,8 @@ export default {
 	},
 	methods:{
 		handleResize : function(){
-			const heightOpened = Math.max(((document.getElementById("taskTableFrame").clientWidth - 30) / 6) - 20, scssVariables.taskSize.replace("px", ""));
-			this.heightcolumn =  (this.nbopened * heightOpened + this.nbclosed * (heightOpened * (scssVariables.taskHeightClosedPourcent.replace("%", "") / 100)));
+			const heightOpened = this.tasksize + 30;
+			this.heightcolumn =  (this.nbopened * heightOpened + this.nbclosed * (heightOpened * (scssVariables.taskHeightClosedPourcent.replace("%", "") / 100))) + 30;
 			this.minheightcolumn = "calc(100vh - " + (2 * heightOpened) + "px)";
 		}
 	},
@@ -44,6 +45,6 @@ export default {
 	},
 	template : `
 	<div>
-		<div v-for="c in 6" :key="c" v-bind:class='[c == lineplayed ? "played" : "", "frontcolumn"]' v-bind:style="{ height : heightcolumn + 'px', 'min-height' : minheightcolumn}"></div>
+		<div v-for="c in 6" :key="c" v-bind:class='[c == lineplayed ? "played" : "", "frontcolumn"]' v-bind:style="{ height : heightcolumn + 'px', minHeight : minheightcolumn}"></div>
 	</div>`,
 }

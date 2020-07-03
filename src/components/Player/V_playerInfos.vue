@@ -38,7 +38,6 @@ export default {
 	},
 	mounted : function(){
 		this.svg = document.querySelector(".svgPlayer" + this.id);
-		this.player
 	},
 	methods : {
 		windowUpdate : function(event){
@@ -102,11 +101,11 @@ export default {
 			<rect class="playerBackground" stroke-width="2"/>
 			<rect class="playerBackgroundFilled" v-bind:width="playerX" stroke-width="2"/>
 
+			<playermilestone v-bind:widthh="widthh" v-bind:time="time" v-for="m in milestones" :key="m.getId()" v-bind:milestone="m"></playermilestone>
+
 			<g filter="url(#filter0_d_playerButton)">
 				<circle class="playerButton" v-bind:cx="playerX" r="21" fill="#97D7C7"/>
 			</g>
-
-			<playermilestone v-bind:widthh="widthh" v-bind:time="time" v-for="m in milestones" :key="m.getId()" v-bind:milestone="m"></playermilestone>
 
 		</svg>
 	</div>`,
