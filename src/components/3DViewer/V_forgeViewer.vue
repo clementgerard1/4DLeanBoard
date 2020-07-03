@@ -193,6 +193,10 @@ export default {
 					for(let s in this.tree.nodeAccess.nameSuffixes){
 						if(this.tree.nodeAccess.nameSuffixes[s] == object3D.getUniqId()){
 							const obj = this.objs[object3D.getId()];
+							const dbid = obj.dbId;
+							this.viewer.select(dbid);
+							const selection = this.viewer.getSelection();
+							this.viewer.clearSelection();
 							if(!this.selected.includes(obj)){
 								if(bool) {
 
@@ -211,16 +215,12 @@ export default {
 									this.colorFromState(obj, obj.state);
 								}
 							}
-							/*const dbid = obj.dbId;
-							this.viewer.select(dbid);
-							const selection = this.viewer.getSelection();
 							let box = null;
 							if(selection.length>0) {
 								box = this.viewer.utilities.getBoundingBox(false);
 							}
 							console.log(selection, box);
 							this.nav.fitBounds(false, box, true);
-							this.viewer.clearSelection();*/
 						}
 					}
 
