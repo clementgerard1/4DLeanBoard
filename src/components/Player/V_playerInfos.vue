@@ -38,7 +38,6 @@ export default {
 	},
 	mounted : function(){
 		this.svg = document.querySelector(".svgPlayer" + this.id);
-		this.player
 	},
 	methods : {
 		windowUpdate : function(event){

@@ -18,11 +18,18 @@ export default {
 		updateTime : function(time){
 			this.time = time;
 			this.tasktablestart = Math.trunc(this.time / 6) * 6;
-		}
+		},
+		windowUpdate : function(event){
+			this.tasksize = (document.querySelector(".taskTableFrame").clientWidth - 80) / 6;
+		},
 	},
 	created : function(){
+		window.addEventListener("resize", this.windowUpdate);
 		TimelineUtils.addListener("time", this, this.updateTime);
 		V_socketUtils.addW6();
+	},
+	mounted : function(){
+		this.windowUpdate();
 	},
 	data: function(){
 			let taskTableStart = Math.trunc(this.playerinit / 6) * 6;
@@ -42,6 +49,7 @@ export default {
 				lines : lines,
 				nbopened : 0, //updated on row6w component
 				nbclosed : 0,	//updated on row6w component
+				tasksize : 0,
 			};
 	},	
 	provide: function(){
@@ -62,16 +70,16 @@ export default {
 			<div class="taskTableWrapper">
 
 				<!-- background -->
-				<tasktablebackground v-bind:tasktablestart="tasktablestart" v-bind:time="time" v-bind:nbopened="nbopened" v-bind:nbclosed="nbclosed" id="taskTableBackground"></tasktablebackground>
+				<tasktablebackground v-bind:tasksize="tasksize" v-bind:tasktablestart="tasktablestart" v-bind:time="time" v-bind:nbopened="nbopened" v-bind:nbclosed="nbclosed" id="taskTableBackground" v-bind:style="{paddingTop : tasksize + 'px', paddingBottom : tasksize + 'px' }"></tasktablebackground>
 
 				<!-- core -->
-				<row6wheader v-bind:tasktablestart="tasktablestart" v-bind:time="time" ></row6wheader>
+				<row6wheader v-bind:tasksize="tasksize" v-bind:tasktablestart="tasktablestart" v-bind:time="time" ></row6wheader>
 				<template v-for="line in lines">
-					<row6w v-bind:tasktablestart="tasktablestart" v-bind:time="time" v-for="i in line.nb" :key="line.taskteam.getId() + '-' + i" v-bind:taskteam="line.taskteam" v-bind:nth="i-1"></row6w>
+					<row6w v-bind:tasksize="tasksize" v-bind:tasktablestart="tasktablestart" v-bind:time="time" v-for="i in line.nb" :key="line.taskteam.getId() + '-' + i" v-bind:taskteam="line.taskteam" v-bind:nth="i-1"></row6w>
 				</template>
 
 				<!-- front -->
-				<tasktablefront v-bind:tasktablestart="tasktablestart" v-bind:time="time" v-bind:nbopened="nbopened" v-bind:nbclosed="nbclosed" id="taskTableFront"></tasktablefront>
+				<tasktablefront v-bind:tasksize="tasksize" v-bind:tasktablestart="tasktablestart" v-bind:time="time" v-bind:nbopened="nbopened" v-bind:nbclosed="nbclosed" id="taskTableFront" v-bind:style="{paddingTop : tasksize + 'px', paddingBottom : tasksize + 'px' }"></tasktablefront>
 			</div>
 	 	</div>
 	`,

@@ -21,7 +21,8 @@ export default {
 		"time",
 		"taskteam",
 		"tasktablestart",
-		"nth"
+		"nth",
+		"tasksize"
 	],
 	inject :[
 		"timeline",
@@ -91,7 +92,7 @@ export default {
 		<taskline class="phaseLine" v-bind:class="color"></taskline>
 
 		<!-- tasks -->
-		<div v-bind:style="{maxHeight : maxheight}" class="tasksWrapper">
+		<div v-bind:style="{maxHeight : maxheight, height : (tasksize - 30) + 'px'}" class="tasksWrapper">
 			<task v-bind:color="color" v-bind:team="_team" nth=0 v-for="(task, i) in tasks" :key="i" v-bind:task="task" v-bind:isOpen="isOpen" v-bind:time="_tasktablestart + i"  ></task>
 		</div>
 

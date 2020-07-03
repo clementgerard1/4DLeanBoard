@@ -12,6 +12,7 @@
 		justify-content: start;
 		align-items: flex-end;
 		flex:1;
+		min-height: v.$taskHeaderHeight + 10px;
 
 		svg{
 			width : 100%;
