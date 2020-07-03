@@ -149,6 +149,7 @@ function init(){
 						if(this.model.getName() == "") this.model.setName("test");
 						this.timeline = new Timeline(this.model);
 						this.playerInit = 0;
+						V_taskTableUtils.setAllTasks(this.model.getTasks());
 
 						V_timelineUtils.setTimeline(this.timeline);
 						const phase = this.timeline.getModel().getMilestones()[0].getPhases()[0];
