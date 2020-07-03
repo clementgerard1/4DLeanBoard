@@ -6,12 +6,13 @@
 	width: 100%;
 
 	.rowHeaderItem{
-		min-height : v.$taskSize;
-		min-width : v.$taskSize;
+		/*min-height : v.$taskSize;*/
+		/*min-width : v.$taskSize;*/
 		display: flex;
 		justify-content: start;
 		align-items: flex-end;
 		flex:1;
+		min-height: v.$taskHeaderHeight + 10px;
 
 		svg{
 			width : 100%;

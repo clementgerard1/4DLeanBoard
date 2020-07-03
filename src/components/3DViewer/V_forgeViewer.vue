@@ -2,16 +2,17 @@ import V_4DUtils from "../Utils/V_4DUtils.class.js";
 import V_socketUtils from "../Utils/V_socketUtils.class.js";
 import V_timelineUtils from "../Utils/V_timelineUtils.class.js";
 import V_taskTableUtils from "../Utils/V_taskTableUtils.class.js";
-import Config from "../../../config.js"
+import Config from "../../../config.js";
 import "./V_forgeViewer.scss";
 import scssVariables from "../SixWeekView/assets/_variables.scss";
-import Utils from "../../class/Utils.class.js"
+import Utils from "../../class/Utils.class.js";
 
 export default {
 	data: function(){
 		return {
 			"viewer" : null,
 			"tree" : null,
+			"viewCubeUiExt" : null,
 			"selected" : [],
 			"map" : [],
 			"objs" : [],
@@ -100,7 +101,7 @@ export default {
 
 		setContractorDisplayMode(bool){
 			if(bool) {
-				this.setPlayerState(false);
+				this.setPlayerState(this.fliterModeFlag);
 				var mils = this.model.getMilestones();
 				for(let i in mils) {
 					var phases = mils[i].getPhases();
@@ -127,7 +128,7 @@ export default {
 			} else {
 				this.clearColors();
 				this.fliterModeFlag = false;
-				this.setPlayerState(true);
+				this.setPlayerState(!this.fliterModeFlag);
 			}
 		},
 
@@ -487,7 +488,9 @@ export default {
 
 			this.viewer.initialize();
 			this.viewer.loadModel(doc.getViewablePath(selectedItem));
-			this.viewer.loadExtension('Autodesk.ViewCubeUi');
+			this.viewer.loadExtension('Autodesk.ViewCubeUi').then(cube => {
+				this.viewCubeUiExt = this.viewer.getExtension('Autodesk.ViewCubeUi');
+			});
 
 			this.viewer.setQualityLevel(false, false);
 			this.viewer.setGhosting(false);
@@ -496,11 +499,22 @@ export default {
 			// important selon moi
 			this.viewer.setReverseZoomDirection(true);
 
-			this.viewer.setLightPreset(12);
+			this.viewer.setLightPreset(7);
 
 			this.viewer.addEventListener(Autodesk.Viewing.OBJECT_TREE_CREATED_EVENT, () => this.fireLoadEvent("tree"));
 			this.viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, () => this.fireLoadEvent("geometry"));
 			this.viewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, this.highlightTask);
+			this.viewer.addEventListener(Autodesk.Viewing.CAMERA_CHANGE_EVENT, (cam) => this.info(cam));
+		},
+		info(cam) {
+			const pos = cam.camera.position;
+			if(pos.z<0-500) {
+				let newPos = THREE.Vector3(pos.xy, pos.z+10);
+				this.nav.setView(pos, cam.camera.target);
+				//this.viewer.navigation.setIsLocked(true);
+				//this.viewCubeUiExt.setViewCube("top back left");
+			}
+			//console.log(this.viewer.getCamera().target);
 		},
 		fireLoadEvent(type){
 			if(type == "geometry"){
@@ -524,7 +538,7 @@ export default {
 				reflectivity: 0.0,
 				flatShading: true,
 				transparent: true,
-				opacity: 0.1,
+				opacity: 0.3,
 				color: scssVariables["nextSixWeeks"],
 			});
 			this.currWeekMat = new THREE.MeshBasicMaterial({
@@ -546,16 +560,16 @@ export default {
 			materials.addMaterial(Utils.getGuid(), this.sixWeeksMat, true);
 			materials.addMaterial(Utils.getGuid(), this.nextsWeeksMat, true);
 			materials.addMaterial(Utils.getGuid(), this.currWeekMat, true);
-			//console.log(this.fragList, this.map);
 			this.map3DObjs();
 			this.camera = this.viewer.getCamera();
 			this.nav = this.viewer.navigation;
-			this.setPlayerState(true);
+			this.setPlayerState(!this.fliterModeFlag);
 			const tasks = V_taskTableUtils.getTokens();
 			for(let t in tasks){
 				const obj4D = tasks[t].getObject4D();
 				this.highlight(obj4D, true);
 			}
+			this.viewCubeUiExt.setViewCube("top back left");
 			//console.log(this.viewer, this.nav.getCameraRightVector(false), this.nav.getEyeVector(), this.nav.getPosition());
 		},
 		onEnvInitialized(that){
@@ -577,7 +591,7 @@ export default {
 			this.time = time;
 			this.clearHighlighting();
 			const tasks = V_taskTableUtils.getTokens();
-			this.setPlayerState(true);
+			this.setPlayerState(!this.fliterModeFlag);
 			for(let t in tasks){
 				this.highlight(tasks[t].getObject4D(), true);
 			}
@@ -585,6 +599,11 @@ export default {
 	},
 	created : function(){
 		this.clearHighlighting();
+		const tasks = V_taskTableUtils.getTokens();
+		this.setPlayerState(!this.fliterModeFlag);
+		for(let t in tasks){
+			this.highlight(tasks[t].getObject4D(), true);
+		}
 		V_4DUtils.setForgeViewer(this);
 		V_socketUtils.addViewer();
 		V_timelineUtils.addListener("time", this, this.watchTime);

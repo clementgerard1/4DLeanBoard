@@ -116,7 +116,8 @@ export default {
 		'time',
 		"task",
 		"color",
-		"isOpen"
+		"isOpen",
+		"maxheight"
 	],
 	mounted: function(){
 		this.updateStateDiv();
@@ -509,7 +510,7 @@ export default {
 	},
 	template : `
 	<div class="taskWrapper" v-bind:class='[highlighted ? "highlighted" : ""]'>
-		<div v-tap='handleTap' v-doubletap='handleDoubleTap' v-bind:class='[selected ? "selected" : "", "task"]'>
+		<div v-bind:style="{maxHeight : maxheight}" v-tap='handleTap' v-doubletap='handleDoubleTap' v-bind:class='[selected ? "selected" : "", "task"]'>
 			<div v-if="notEmpty" class='taskclass animate__animated animate__flipInY'>` + taskSVG + `</div>
 			<div v-if="notEmpty" v-show="state" v-bind:id="taskId + '-' + time" class="taskstate animate__animated animate__faster">` + taskStatusSVG + `</div>
 		</div>
