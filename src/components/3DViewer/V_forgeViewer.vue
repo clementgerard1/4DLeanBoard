@@ -28,7 +28,6 @@ export default {
 			"playing" : true,
 			"camera" : null,
 			"nav" : null,
-			"played": [],
 		}
 	},
 	props:[
@@ -57,8 +56,8 @@ export default {
 				}
 				for(let i in this.objs) {
 					const obj = this.objs[i];
-					if(this.timeline.isActiveBetweenTwoDate(obj.obj3D.getParent().getTask(), start6Weeks, start6Weeks+42)) {
-						if(this.timeline.isActiveBetweenTwoDate(obj.obj3D.getParent().getTask(), startActualWeek, startActualWeek+7)) {
+					if(this.timeline.isActiveBetweenTwoDate(obj.obj3D.getParent().getTask(), start6Weeks, start6Weeks+41)) {
+						if(this.timeline.isActiveBetweenTwoDate(obj.obj3D.getParent().getTask(), startActualWeek, startActualWeek+6)) {
 							this.restore3DObject(obj);
 							this.color3DObject(obj, false, false, true);
 							obj.state = "currentWeek";
@@ -128,6 +127,10 @@ export default {
 				this.clearColors();
 				this.fliterModeFlag = false;
 				this.setPlayerState(true);
+				for(i in this.selected) {
+					console.log(this.selected[i]);
+					this.color3DObject(this.selected[i], true);
+				}
 			}
 		},
 
@@ -195,7 +198,7 @@ export default {
 							if(!this.selected.includes(obj)){
 								if(bool) {
 
-									if(this.colored.includes(obj) || this.played.includes(obj)) {
+									if(this.colored.includes(obj)) {
 										this.restore3DObject(obj);
 									}
 									this.color3DObject(obj, true);
@@ -555,6 +558,8 @@ export default {
 				this.highlight(obj4D, true);
 			}
 			this.viewer.model.unconsolidate();
+			let box = this.viewer.utilities.getBoundingBox();
+			console.log(box);
 			//console.log(this.viewer, this.nav.getCameraRightVector(false), this.nav.getEyeVector(), this.nav.getPosition());
 		},
 		onEnvInitialized(that){
@@ -583,7 +588,6 @@ export default {
 		}
 	},
 	created : function(){
-		this.clearHighlighting();
 		V_4DUtils.setForgeViewer(this);
 		V_socketUtils.addViewer();
 		V_timelineUtils.addListener("time", this, this.watchTime);
