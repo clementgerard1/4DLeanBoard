@@ -27,9 +27,9 @@ export default {
 			"fliterModeFlag" : false,
 			"colored" : [],
 			"playing" : true,
-			"camera" : null,
 			"nav" : null,
-			"played": [],
+			"fragList": null,
+			"pivotPoint": null,
 		}
 	},
 	props:[
@@ -58,8 +58,8 @@ export default {
 				}
 				for(let i in this.objs) {
 					const obj = this.objs[i];
-					if(this.timeline.isActiveBetweenTwoDate(obj.obj3D.getParent().getTask(), start6Weeks, start6Weeks+42)) {
-						if(this.timeline.isActiveBetweenTwoDate(obj.obj3D.getParent().getTask(), startActualWeek, startActualWeek+7)) {
+					if(this.timeline.isActiveBetweenTwoDate(obj.obj3D.getParent().getTask(), start6Weeks, start6Weeks+41)) {
+						if(this.timeline.isActiveBetweenTwoDate(obj.obj3D.getParent().getTask(), startActualWeek, startActualWeek+6)) {
 							this.restore3DObject(obj);
 							this.color3DObject(obj, false, false, true);
 							obj.state = "currentWeek";
@@ -193,10 +193,14 @@ export default {
 					for(let s in this.tree.nodeAccess.nameSuffixes){
 						if(this.tree.nodeAccess.nameSuffixes[s] == object3D.getUniqId()){
 							const obj = this.objs[object3D.getId()];
+							const dbid = obj.dbId;
+							this.viewer.select(dbid);
+							const selection = this.viewer.getSelection();
+							this.viewer.clearSelection();
 							if(!this.selected.includes(obj)){
 								if(bool) {
 
-									if(this.colored.includes(obj) || this.played.includes(obj)) {
+									if(this.colored.includes(obj)) {
 										this.restore3DObject(obj);
 									}
 									this.color3DObject(obj, true);
@@ -211,7 +215,12 @@ export default {
 									this.colorFromState(obj, obj.state);
 								}
 							}
-							this.viewer.fitToView(this.getDbId(s)[0]);
+							let box = null;
+							if(selection.length>0) {
+								box = this.viewer.utilities.getBoundingBox(false);
+							}
+							console.log(selection, box);
+							this.nav.fitBounds(false, box, true);
 						}
 					}
 
@@ -261,7 +270,7 @@ export default {
 									    transparent: true,
 									    opacity: 0.3,
 									    color: scssVariables[phs[j].getColorClass().replace("BG_", "").toLowerCase()],
-						      		});
+									});
 									this.objs[o3D[l].getId()] = {
 										obj3D : o3D[l],
 										guId : o3D[l].getIFCId(),
@@ -394,11 +403,15 @@ export default {
 				}
 			}
 		},
-
 		//
 		highlightTask() {
 			const selection = this.viewer.getSelection();
-			// this.clearHighlighting();
+			let box = null;
+			if(selection.length>0) {
+				box = this.viewer.utilities.getBoundingBox(false);
+			}
+			console.log(selection, box);
+			this.nav.fitBounds(false, box, true);
 			this.viewer.clearSelection();
 			
 			for(let s in selection){
@@ -425,7 +438,15 @@ export default {
 				}
 			}
 		},
-
+		getModifiedWorldBoundingBox(fragIds) {
+			var fragbBox = new THREE.Box3();
+			var nodebBox = new THREE.Box3();
+			fragIds.forEach(function(fragId) {
+				this.fragList.getWorldBounds(fragId, fragbBox);
+				nodebBox.union(fragbBox);
+			});
+			return nodebBox;
+		},
 		//
 		selectionGetProperties() {
 
@@ -495,8 +516,6 @@ export default {
 			this.viewer.setQualityLevel(false, false);
 			this.viewer.setGhosting(false);
 			this.viewer.setGroundShadow(false);
-
-			// important selon moi
 			this.viewer.setReverseZoomDirection(true);
 
 			this.viewer.setLightPreset(7);
@@ -504,17 +523,14 @@ export default {
 			this.viewer.addEventListener(Autodesk.Viewing.OBJECT_TREE_CREATED_EVENT, () => this.fireLoadEvent("tree"));
 			this.viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, () => this.fireLoadEvent("geometry"));
 			this.viewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, this.highlightTask);
-			this.viewer.addEventListener(Autodesk.Viewing.CAMERA_CHANGE_EVENT, (cam) => this.info(cam));
+			this.viewer.addEventListener(Autodesk.Viewing.CAMERA_CHANGE_EVENT, () => this.info());
 		},
-		info(cam) {
-			const pos = cam.camera.position;
-			if(pos.z<0-500) {
-				let newPos = THREE.Vector3(pos.xy, pos.z+10);
-				this.nav.setView(pos, cam.camera.target);
-				//this.viewer.navigation.setIsLocked(true);
-				//this.viewCubeUiExt.setViewCube("top back left");
+		info() {
+			if(this.treeFlag && this.geometryFlag) {
+				this.nav.setPivotPoint(this.pivotPoint);
+				//this.nav.setTarget(this.pivotPoint);
+				//console.log(this.viewer.getCamera().target);
 			}
-			//console.log(this.viewer.getCamera().target);
 		},
 		fireLoadEvent(type){
 			if(type == "geometry"){
@@ -523,7 +539,6 @@ export default {
 				this.treeFlag = true;
 			}
 			if(this.treeFlag && this.geometryFlag) this.onLoaded();
-
 		},
 		onLoaded(that){
 			this.tree = this.viewer.model.getInstanceTree();
@@ -555,13 +570,13 @@ export default {
 				opacity: 0.75,
 				color: scssVariables["currentSixWeeks"],
 			});
+			console.log(this.viewer.impl);
 			const materials = this.viewer.impl.getMaterials();
 			materials.addMaterial(Utils.getGuid(), this.selectedMaterial, true);
 			materials.addMaterial(Utils.getGuid(), this.sixWeeksMat, true);
 			materials.addMaterial(Utils.getGuid(), this.nextsWeeksMat, true);
 			materials.addMaterial(Utils.getGuid(), this.currWeekMat, true);
 			this.map3DObjs();
-			this.camera = this.viewer.getCamera();
 			this.nav = this.viewer.navigation;
 			this.setPlayerState(!this.fliterModeFlag);
 			const tasks = V_taskTableUtils.getTokens();
@@ -569,7 +584,11 @@ export default {
 				const obj4D = tasks[t].getObject4D();
 				this.highlight(obj4D, true);
 			}
+			this.pivotPoint = this.viewer.utilities.getBoundingBox(true);
 			this.viewCubeUiExt.setViewCube("top back left");
+			this.fragList = this.viewer.model.getFragmentList();
+			console.log(this.nav.getEyeToCenterOfBoundsVec(this.pivotPoint));
+			//this.nav.setZoomOutLimitFactor(3);
 			//console.log(this.viewer, this.nav.getCameraRightVector(false), this.nav.getEyeVector(), this.nav.getPosition());
 		},
 		onEnvInitialized(that){
