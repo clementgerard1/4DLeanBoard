@@ -11,7 +11,6 @@ module.exports = {
   	bundle : './src/index.js',
   	bundle3D : './src/index3D.js',
   	bundleW6 : './src/indexW6.js',
-  	bundleBackend : './src/backend.js'
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

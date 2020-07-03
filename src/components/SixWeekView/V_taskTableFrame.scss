@@ -1,5 +1,8 @@
 @use "assets/variables" as v;
 
+/*$taskHeight : */
+
+
 .taskTableFrame{
 
 	background: v.$light;
@@ -12,7 +15,7 @@
 	.taskTableWrapper{
 		height: 100%;
 		position: relative;
-		width: fit-content;
+		width: 100%;/*fit-content;*/
 		min-width: 100%;
 	}
 

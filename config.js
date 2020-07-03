@@ -5,7 +5,7 @@ module.exports = {
 	"socketConsolePort" : 3002,
 	//
 
-	"forgeRenderer" : true,
+	"forgeRenderer" : false,
 
 	"socketServerIp" : "localhost", //"194.199.221.148",
 	"socketServerPort" : 3001,
