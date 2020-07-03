@@ -8,6 +8,7 @@ COPY . .
 
 RUN apk update && apk add git && apk add npm
 RUN npm install 
+RUN mkdir dist
 RUN npm run build
 
 RUN mv dist/* usr/share/nginx/html
