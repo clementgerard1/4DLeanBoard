@@ -311,7 +311,7 @@ class Phase extends PlanningObject{
 	}
 
 	/**
-		Set the colorClass of the phase
+		Set the colorClass of the phase - OLD 
 		@params {int} num
 	*/
 	setColorClass(colorClass){
@@ -323,7 +323,7 @@ class Phase extends PlanningObject{
 	}
 
 	/**
-		Get the color class attribuate to this phase
+		Get the color class attribuate to this phase - OLD 
 		@returns {String} 
 	*/
 	getColorClass(){

@@ -87,6 +87,7 @@ class Loader{
 		const json = {
 			name: null,
 			milestones : [],
+			teams : [],
 		}
 
 		let memoMilestone = null;
@@ -96,73 +97,85 @@ class Loader{
 		const lines = csv.split('\n');
 		lines.forEach(function (value, i) {
 			const columns = value.split(';');
-			if(i==0){
-				json.name = columns[0];
-			}else if(i>2){
+			if(columns.length > 1){
+				if(i==0){
+					json.name = columns[0];
+				}else if(i>2){
 
-				//New milestone
-				if(columns[0] != ''){
-					json.milestones[json.milestones.length] = {};
-					json.milestones[json.milestones.length - 1]["Num"] = columns[0];
-					json.milestones[json.milestones.length - 1]["Name"] = columns[1];
-					json.milestones[json.milestones.length - 1]["StartDate"] = columns[2];
-					json.milestones[json.milestones.length - 1]["EndDate"] = columns[3];
-					json.milestones[json.milestones.length - 1]["Previous"] = columns[4];
-					json.milestones[json.milestones.length - 1]["Next"] = columns[5];
-					if(columns[1] == columns[2]){
-						json.milestones[json.milestones.length - 1]["Event"] = true;
-						json.milestones[json.milestones.length - 1]["Next"] = columns[1];
-					}else{
-						json.milestones[json.milestones.length - 1]["Event"] = false;
-						json.milestones[json.milestones.length - 1]["Next"] = null;
+					//New milestone
+					if(columns[0] != ''){
+						json.milestones[json.milestones.length] = {};
+						json.milestones[json.milestones.length - 1]["Num"] = columns[0];
+						json.milestones[json.milestones.length - 1]["Name"] = columns[1];
+						json.milestones[json.milestones.length - 1]["StartDate"] = columns[2];
+						json.milestones[json.milestones.length - 1]["EndDate"] = columns[3];
+						json.milestones[json.milestones.length - 1]["Previous"] = columns[4];
+						json.milestones[json.milestones.length - 1]["Next"] = columns[5];
+						if(columns[1] == columns[2]){
+							json.milestones[json.milestones.length - 1]["Event"] = true;
+							json.milestones[json.milestones.length - 1]["Next"] = columns[1];
+						}else{
+							json.milestones[json.milestones.length - 1]["Event"] = false;
+							json.milestones[json.milestones.length - 1]["Next"] = null;
+						}
+						json.milestones[json.milestones.length - 1]["Requirements"] = [];
+						json.milestones[json.milestones.length - 1]["Phases"] = [];
+						memoMilestone = json.milestones.length - 1;
+
 					}
-					json.milestones[json.milestones.length - 1]["Requirements"] = [];
-					json.milestones[json.milestones.length - 1]["Phases"] = [];
-					memoMilestone = json.milestones.length - 1;
 
-				}
+					//New phase
+					if(columns[6] != ''){
+						const milestone = json.milestones[memoMilestone];
+						milestone["Phases"][milestone["Phases"].length] = {};
 
-				//New phase
-				if(columns[6] != ''){
-					const milestone = json.milestones[memoMilestone];
-					milestone["Phases"][milestone["Phases"].length] = {};
+						milestone["Phases"][milestone["Phases"].length - 1]["Num"] = columns[6];
+						milestone["Phases"][milestone["Phases"].length - 1]["Name"] = columns[7];
+						milestone["Phases"][milestone["Phases"].length - 1]["StartDate"] = columns[8];
+						milestone["Phases"][milestone["Phases"].length - 1]["EndDate"] = columns[9];
+						milestone["Phases"][milestone["Phases"].length - 1]["Requirements"] = columns[10];
+						milestone["Phases"][milestone["Phases"].length - 1]["Tasks"] = [];
 
-					milestone["Phases"][milestone["Phases"].length - 1]["Num"] = columns[6];
-					milestone["Phases"][milestone["Phases"].length - 1]["Name"] = columns[7];
-					milestone["Phases"][milestone["Phases"].length - 1]["StartDate"] = columns[8];
-					milestone["Phases"][milestone["Phases"].length - 1]["EndDate"] = columns[9];
-					milestone["Phases"][milestone["Phases"].length - 1]["Requirements"] = columns[10];
-					milestone["Phases"][milestone["Phases"].length - 1]["Tasks"] = [];
-
-					memoPhase = milestone["Phases"].length - 1;
-				}
-
-				//New task
-				if(columns[11] != ''){
-					const phase = json.milestones[memoMilestone]["Phases"][memoPhase];
-					phase["Tasks"][phase["Tasks"].length] = {};
-
-					phase["Tasks"][phase["Tasks"].length - 1]["Name"] = columns[11];
-					phase["Tasks"][phase["Tasks"].length - 1]["TID"] = columns[12];
-					phase["Tasks"][phase["Tasks"].length - 1]["Duration"] = columns[13];
-					phase["Tasks"][phase["Tasks"].length - 1]["Workers"] = columns[14];
-					phase["Tasks"][phase["Tasks"].length - 1]["Previous"] = columns[15];
-					phase["Tasks"][phase["Tasks"].length - 1]["Team"] = columns[16];
-					phase["Tasks"][phase["Tasks"].length - 1]["IDS4D"] = columns[17];
-					phase["Tasks"][phase["Tasks"].length - 1]["Zone"] = columns[19];
-					phase["Tasks"][phase["Tasks"].length - 1]["Level"] = columns[20];
-					phase["Tasks"][phase["Tasks"].length - 1]["Requirements"] = {
-						"Constraint" : columns[22] != "No", 
-						"Information" : columns[23] != "No",
-						"Materials" : columns[24] != "No",
-						"Manpower" : columns[25] != "No",
-						"Equipement" : columns[26] != "No",
-						"Safety" : columns[27] != "No",
-						"Space" : columns[28] != "No",
+						memoPhase = milestone["Phases"].length - 1;
 					}
-					memoTask = phase["Tasks"].length - 1;
-				}
 
+					//New task
+					if(columns[11] != ''){
+						const phase = json.milestones[memoMilestone]["Phases"][memoPhase];
+						phase["Tasks"][phase["Tasks"].length] = {};
+
+						phase["Tasks"][phase["Tasks"].length - 1]["Name"] = columns[11];
+						phase["Tasks"][phase["Tasks"].length - 1]["TID"] = columns[12];
+						phase["Tasks"][phase["Tasks"].length - 1]["Duration"] = columns[13];
+						phase["Tasks"][phase["Tasks"].length - 1]["Workers"] = columns[14];
+						phase["Tasks"][phase["Tasks"].length - 1]["Previous"] = columns[15];
+						phase["Tasks"][phase["Tasks"].length - 1]["Team"] = columns[16];
+						phase["Tasks"][phase["Tasks"].length - 1]["IDS4D"] = columns[17];
+						phase["Tasks"][phase["Tasks"].length - 1]["Zone"] = columns[20];
+						phase["Tasks"][phase["Tasks"].length - 1]["Level"] = columns[18];
+						phase["Tasks"][phase["Tasks"].length - 1]["Requirements"] = {
+							"Constraint" : columns[22] != "No", 
+							"Information" : columns[23] != "No",
+							"Materials" : columns[24] != "No",
+							"Manpower" : columns[25] != "No",
+							"Equipement" : columns[26] != "No",
+							"Safety" : columns[27] != "No",
+							"Space" : columns[28] != "No",
+						}
+						memoTask = phase["Tasks"].length - 1;
+					}
+
+
+					//Teams
+					if(columns[29] != '' && typeof columns[29] != "undefined"){
+
+						json.teams[json.teams.length] = {
+							name : columns[29],
+							color : columns[30].replace("\r", "")
+						}
+					}
+
+				}
 			}
 		});
 
@@ -206,6 +219,13 @@ class Loader{
 
 		const milestones = infos["milestones"];
 
+		//Teams
+		for(let i in infos.teams){
+			taskTeams[infos.teams[i].name] = new TaskTeam(infos.teams[i].name);
+			taskTeams[infos.teams[i].name].setColorClass(infos.teams[i].color);
+		}
+
+		//Model
 		for(let m in milestones){
 
 			let milestone = null;
@@ -231,9 +251,8 @@ class Loader{
 			for(let p in phases){
 				
 				const phase = new Phase(phases[p]["Name"]);
-				phase.setColorClass("Yellowish");
-				if(typeof contractors["contractorName"] == "undefined") contractors["contractorName"] = new Contractor("contractorName");
-				phase.setContractor(contractors["contractorName"]);
+				if(typeof contractors["facticeContractor"] == "undefined") contractors["facticeContractor"] = new Contractor("facticeContractor");
+				phase.setContractor(contractors["facticeContractor"]);
 				phase.setNum(phases[p]["Num"]);
 				milestone.addPhase(phase);
 
@@ -244,7 +263,6 @@ class Loader{
 
 				const tasks = phases[p]["Tasks"];
 				let actualDate = PstartDate;
-				console.log(actualDate);
 				for(let t in tasks){
 					if(tasks[t] != null){
 						const task = new Task(tasks[t]["Name"], tasks[t]["TID"]);
@@ -257,19 +275,14 @@ class Loader{
 						//const startDate = new Date(tasks[t]["Start"].slice(6, 10), parseInt(tasks[t]["Start"].slice(3, 5)) - 1, tasks[t]["Start"].slice(0, 2));
 						//console.log("hey", startDate);
 						task.setStartDate(startDate);
-						const endDate = Utils.addDaysToDate(startDate, parseInt(tasks[t]["Duration"]));
+						const endDate = Utils.addDaysToDate(startDate, parseInt(tasks[t]["Duration"]) - 1);
 						//const endDate = new Date(tasks[t]["End"].slice(6, 10), parseInt(tasks[t]["End"].slice(3, 5)) - 1, tasks[t]["End"].slice(0, 2));
 						task.setEndDate(endDate);
 
-						console.log(startDate, endDate);
 
 						actualDate = endDate;
 
-						if(typeof taskTeams[tasks[t]["Team"]] == "undefined") {
-							taskTeams[tasks[t]["Team"]] = new TaskTeam(tasks[t]["Team"]);
-							taskTeams[tasks[t]["Team"]].setColorClass("Yellowish");//taskTeams[tasks[t]["Team"]].setColorClass(phases[p]["color"]);
-
-						}
+						//const teams = taskTeams[tasks[t]["Team"]].split(",");
 						task.setTaskTeam(taskTeams[tasks[t]["Team"]]);
 						taskTeams[tasks[t]["Team"]].setWorkers(parseInt(tasks[t]["Workers"]));
 						if(typeof zones[tasks[t]["Zone"]] == "undefined") zones[tasks[t]["Zone"]] = new Zone(tasks[t]["Zone"]);

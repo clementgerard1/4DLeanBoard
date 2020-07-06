@@ -62,15 +62,19 @@ function getNewModels(){
 
 						});
 				 	}else{
-				  		count++;
-				  	}
-			  	}else{
-			  		count++;
+				  	count++;
 			  	}
+		  	}else{
+		  		count++;
 		  	}
+		  	if(count == files.length){
+				  resolve(frag2ID);
+				}
+	  	}
 
 		});
 	});
+	resolve(null);
 }
 
 function getNewIfcFiles(fragToIds){
@@ -108,7 +112,6 @@ function getNewIfcFiles(fragToIds){
 		  	}
 
 		});
-
 	});
 
 }
@@ -219,11 +222,11 @@ function launchServer(){
 
 	app.get("/model", (req, res)=>{
 		res.sendFile(__dirname + "/models/models_serialized/" + req.query.name + ".json");
-		console.log(models, req.query.name);
 		const toReturn = {
 			model : models[req.query.name].serialize(),
 			urn : urns[req.query.name],
 		}
+		console.log(toReturn);
 		res.json(toReturn);
 	});
 
@@ -260,6 +263,7 @@ function launchServer(){
 }
 
 function saveModel(name, json){
+	console.log(json);
 	// writeFile function with filename, content and callback function
 	fs.writeFile(__dirname + "/models/models_serialized/" + name + ".json", json, function (err) {
 	  if (err) throw err;
