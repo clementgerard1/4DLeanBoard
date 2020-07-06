@@ -48,7 +48,10 @@ function getNewModels(){
 										frag2ID[files[f].split('.').slice(0, -1).join('.')] = model.getFragToIdsArray();
 										saveModel(files[f].split('.').slice(0, -1).join('.'), json);
 									}else if(ext == "csv"){
-										//model = Loader.fromCSVandIFC(data, data2);
+										model = Loader.fromCSVandIFC(data, data2);
+										const json = model.serialize();
+										frag2ID[files[f].split('.').slice(0, -1).join('.')] = model.getFragToIdsArray();
+										saveModel(files[f].split('.').slice(0, -1).join('.'), json);
 									}
 								}
 								count++;

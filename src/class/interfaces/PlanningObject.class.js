@@ -258,6 +258,7 @@ class PlanningObject{
 	*/
 	setEndDate(date){
 		if(!(date instanceof Date)){
+			console.log(this);
 			console.error("setEndDate(date) need a Date ; provided : " + date);
 		}else{
 			this.#endDate = date;

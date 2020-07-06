@@ -129,7 +129,6 @@ class Loader{
 
 					milestone["Phases"][milestone["Phases"].length - 1]["Num"] = columns[6];
 					milestone["Phases"][milestone["Phases"].length - 1]["Name"] = columns[7];
-					console.log(columns[8]);
 					milestone["Phases"][milestone["Phases"].length - 1]["StartDate"] = columns[8];
 					milestone["Phases"][milestone["Phases"].length - 1]["EndDate"] = columns[9];
 					milestone["Phases"][milestone["Phases"].length - 1]["Requirements"] = columns[10];
@@ -149,7 +148,7 @@ class Loader{
 					phase["Tasks"][phase["Tasks"].length - 1]["Workers"] = columns[14];
 					phase["Tasks"][phase["Tasks"].length - 1]["Previous"] = columns[15];
 					phase["Tasks"][phase["Tasks"].length - 1]["Team"] = columns[16];
-					phase["Tasks"][phase["Tasks"].length - 1]["4DID"] = columns[17];
+					phase["Tasks"][phase["Tasks"].length - 1]["IDS4D"] = columns[17];
 					phase["Tasks"][phase["Tasks"].length - 1]["Zone"] = columns[19];
 					phase["Tasks"][phase["Tasks"].length - 1]["Level"] = columns[20];
 					phase["Tasks"][phase["Tasks"].length - 1]["Requirements"] = {
@@ -182,14 +181,13 @@ class Loader{
 		let obj3Ds = {};
 		const IFClines = ifc.split('\n');
 		for(let l in IFClines){
-			const ifcDef = /(IFC[A-Z]*)\(([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*)/g;
+			const ifcDef = /(IFC[A-Z]*)\(([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*)/g;
 			const result = ifcDef.exec(IFClines[l]);
 			if(result != null && this.#ifcBuildingElements.includes(result[1])){
-				const temp = result[4].split(":");
-				obj3Ds[result[2].replace(/['"]/gi, "")] = 
+				obj3Ds[result[9].replace(/['"]/gi, "")] = 
 					{
-						name : result[6].replace(/['"]/gi, ""),
-						id : temp[temp.length-1].replace(/['"]/gi, "")
+						name : result[4].replace(/['"]/gi, ""),
+						id : result[9].replace(/['"]/gi, "")
 					}
 			}
 		}
@@ -245,11 +243,99 @@ class Loader{
 				phase.setEndDate(PendDate);
 
 				const tasks = phases[p]["Tasks"];
+				let actualDate = PstartDate;
+				console.log(actualDate);
+				for(let t in tasks){
+					if(tasks[t] != null){
+						const task = new Task(tasks[t]["Name"], tasks[t]["TID"]);
+						const object4D = new Object4D(tasks[t]["TID"], tasks[t]["TID"]);
+						task.setObject4D(object4D);
+						object4D.setTask(task);
+						//task.setDuration(tasks[t]["Duration"]);
+						
+						const startDate = actualDate;
+						//const startDate = new Date(tasks[t]["Start"].slice(6, 10), parseInt(tasks[t]["Start"].slice(3, 5)) - 1, tasks[t]["Start"].slice(0, 2));
+						//console.log("hey", startDate);
+						task.setStartDate(startDate);
+						const endDate = Utils.addDaysToDate(startDate, parseInt(tasks[t]["Duration"]));
+						//const endDate = new Date(tasks[t]["End"].slice(6, 10), parseInt(tasks[t]["End"].slice(3, 5)) - 1, tasks[t]["End"].slice(0, 2));
+						task.setEndDate(endDate);
 
+						console.log(startDate, endDate);
+
+						actualDate = endDate;
+
+						if(typeof taskTeams[tasks[t]["Team"]] == "undefined") {
+							taskTeams[tasks[t]["Team"]] = new TaskTeam(tasks[t]["Team"]);
+							taskTeams[tasks[t]["Team"]].setColorClass("Yellowish");//taskTeams[tasks[t]["Team"]].setColorClass(phases[p]["color"]);
+
+						}
+						task.setTaskTeam(taskTeams[tasks[t]["Team"]]);
+						taskTeams[tasks[t]["Team"]].setWorkers(parseInt(tasks[t]["Workers"]));
+						if(typeof zones[tasks[t]["Zone"]] == "undefined") zones[tasks[t]["Zone"]] = new Zone(tasks[t]["Zone"]);
+						task.setZone(zones[tasks[t]["Zone"]]);
+
+						//Requirements
+						const constraint = new Requirement("constraint");
+						constraint.setValue(tasks[t]["Requirements"]["Constraint"]);
+						const information = new Requirement("information");
+						information.setValue(tasks[t]["Requirements"]["Information"]);
+						const materials = new Requirement("materials");
+						materials.setValue(tasks[t]["Requirements"]["Materials"]);
+						const manpower = new Requirement("manpower");
+						manpower.setValue(tasks[t]["Requirements"]["Manpower"]);
+						const equipement = new Requirement("equipement");
+						equipement.setValue(tasks[t]["Requirements"]["Equipement"]);
+						const safety = new Requirement("safety");
+						safety.setValue(tasks[t]["Requirements"]["Safety"]);
+						const space = new Requirement("space");
+						space.setValue(tasks[t]["Requirements"]["Space"]);
+						task.addRequirement("constraint", constraint);
+						task.addRequirement("information", information);
+						task.addRequirement("materials", materials);
+						task.addRequirement("manpower", manpower);
+						task.addRequirement("equipement", equipement);
+						task.addRequirement("safety", safety);
+						task.addRequirement("space", space);
+
+						const ids4D = tasks[t]["IDS4D"].split(",");
+						/*for(let o in ids4D){
+							const object3D = new Object3D(obj3Ds[ids4D[o].replace(/[ '"]/gi, "")].name, parseInt(obj3Ds[ids4D[o].replace(/[ '"]/gi, "")].id), ids4D[o].replace(/[ '"]/gi, ""));
+							object4D.addObject3D(object3D);
+							object3D.setParent(object4D);
+						}*/
+
+						phase.addTask(task);
+						task.setParentPhase(phase);
+						phase.addObject4D(object4D);
+						object4D.setPhase(phase);
+						tasksForPreviousNext[task.getId()] = {
+							"previous" : tasks[t]["Previous"],
+						}
+						tasksCollection[task.getId()] = task;
+					}
+
+				}
 
 
 			}
 
+		}
+
+		const phases = model.getPhases();
+		for(let p in phases){
+			const tasks = phases[p].getTasks();
+			for(let t in tasks){
+				const actualTask = tasks[t];
+
+				if(tasksForPreviousNext[actualTask.getId()].previous != 0 && tasksForPreviousNext[actualTask.getId()].previous != null && tasksForPreviousNext[actualTask.getId()].previous != ""){
+					const mults = tasksForPreviousNext[actualTask.getId()].previous.split(".");
+					for(let m in mults){
+						actualTask.addPreviousTask(tasksCollection[mults[m]]);
+						tasksCollection[mults[m]].addFollowingTask(actualTask);
+					}
+				} 
+			}
 		}
 
 		return model;
@@ -738,10 +824,12 @@ class Loader{
 			if(result != null && this.#ifcBuildingElements.includes(result[1])){
 				const idDef = /(IFC[A-Z]*)\(([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*)/g;
 				const res = idDef.exec(IFClines[l]);
-				const index = IFClines[l].indexOf(res[4]);
-				const pos = index + res[4].length;
-				if(res.input.charAt(index + res[4].length - res[9].length) != ":"){
-					lineTemp = lineTemp.slice(0, pos - 1) + ":" + /*res[9].replace("'", "")*/ count++ + "'" + lineTemp.slice(pos);
+				if(res != null){
+					const index = IFClines[l].indexOf(res[4]);
+					const pos = index + res[4].length;
+					if(res.input.charAt(index + res[4].length - res[9].length) != ":"){
+						lineTemp = lineTemp.slice(0, pos - 1) + ":" + /*res[9].replace("'", "")*/ count++ + "'" + lineTemp.slice(pos);
+					}
 				}
 			}
 			newFile += lineTemp + "\n";
