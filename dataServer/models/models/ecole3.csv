@@ -2,7 +2,7 @@ ENSA Nancy - Travaux de renforcement des structures;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Milestones;;;;;;Phases;;;;;Tasks;;;;;;;;;;;;;;;;;;;
 N;M.Name;M.StartDate;M.EndDate;Previous.M;Next.M;N;P.Name;P.StartDate;P.EndDate;P.Requirements;T.Name;ID;T.Duration;T.Men;T.Previous;T.Team;4DObject;T.Level;ObjectsCount;T.Zone;T.State;Constraint;Information;Materials;Man Power;Equipement;Safety;Space;;TeamColor
 1;Période de préparation;01/09/2020;10/11/2020;N/A;Travaux TCE;1;Période de préparation;01/09/2020;11/10/2020;Requirements Exemple Text;Préparation chantier;101;10;10;;Team E;3A09359C-29BA-42D8-B979-578CA26E9C16;Etage Jaune;;;Not Ready;No;No;No;No;No;No;No;Team A;Yellowish
-;;;;;;;;;;;Prototype File 18;102;20;8;101;Team E;3A09359C-29BA-42D8-B979-578CA26E9C16;Etage Bleu;;;Not Ready;No;No;No;No;No;No;No;Team B;Redish
+;;;;;;;;;;;Prototype File 18;102;20;8;101;Team E;3A09359C-29BA-42D8-B979-578CA26E9C16;Etage Bleu;;;Not Ready;Yes;Yes;Yes;No;No;No;No;Team B;Redish
 ;;;;;;;;;;;Conclusion Adaptation;103;10;2;102;Team E;E7F3642F-589A-4CF9-BEEF-210859EFCC71;Etage Bleu;;;Not Ready;No;No;No;No;No;No;No;Team C;Blueish
 2;Travaux TCE;11/09/2020;05/07/2021;Période de préparation;N/A;1;Reconstruction suite au sinistre;11/09/2020;09/12/2020;Requirements Exemple Text;Démolitions-Travaux préparatoires-Stabilité provisoire;104;5;4;101;Team A;194DBE1E-16B4-4FAC-BCF5-C67B154B3571;Etage Bleu;;A, B, C, D;Not Ready;No;No;No;No;No;No;No;Team D;Orange
 ;;;;;;;;;;;Fabrication et approvisionnement des panneaux/poteaux/poutres;105;60;4;101;Team B;F554A9F8-B7D8-4436-834A-DF2C64255CC6;Etage Bleu;;A, B, C, D;Not Ready;No;No;No;No;No;No;No;Team E;Dark

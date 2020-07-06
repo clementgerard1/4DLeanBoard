@@ -226,7 +226,7 @@ function launchServer(){
 			model : models[req.query.name].serialize(),
 			urn : urns[req.query.name],
 		}
-		console.log(toReturn);
+
 		res.json(toReturn);
 	});
 
@@ -234,7 +234,9 @@ function launchServer(){
 		const model = models[req.query.modelname];
 		const tasks = model.getTasks();
 		for(let t in tasks){
-			const requirement = tasks[t].getRequirementById(req.query.requirementid);
+
+			console.log(tasks[t].getRequirement("constraint").getId(), tasks[t].getRequirementById(tasks[t].getRequirement("constraint").getId()), req.query.requirementid, parseInt(req.query.requirementid));
+			const requirement = tasks[t].getRequirementById(parseInt(req.query.requirementid));
 			if(requirement != null) {
 				requirement.setValue(req.query.requirementvalue === "true");
 			};
@@ -263,7 +265,7 @@ function launchServer(){
 }
 
 function saveModel(name, json){
-	console.log(json);
+	console.log(json)
 	// writeFile function with filename, content and callback function
 	fs.writeFile(__dirname + "/models/models_serialized/" + name + ".json", json, function (err) {
 	  if (err) throw err;
