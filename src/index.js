@@ -115,6 +115,7 @@ function init(){
 					TouchGesturesUtils.addHammer(el, hammer);
 				} 
 
+				hammer.get('pan').set({threshold : 1});
 				hammer.on("panstart", binding.value);
 				hammer.on("panmove", binding.value);
 				hammer.on("panend", binding.value);

@@ -52,15 +52,16 @@ class Timeline{
 			}
 		}
 
+		//console.log(this.#steps);
+
 	}
 
 	#fillTimeline(object){
 		const startDate = object.getStartDate();
 		const endDate = object.getEndDate();
-		const startStepDate = this.getTime(startDate);
+		const startStepDate = Math.ceil(this.getTime(startDate));
 		const length = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
 		for(let i = startStepDate ; i <= startStepDate + length ; i++){
-
 			this.#initialiseStepArray(i);
 			if(object instanceof Milestone){
 				this.#steps[i]["milestones"].push(object);
