@@ -90,7 +90,7 @@ io.on("connection", function(client){
         if(datas.value && !models[modelName].taskSelected.includes(datas.id)){
             models[modelName].taskSelected.push(datas.id);
         }else if(!datas.value){
-            models[modelName].taskSelected.splice(models[modelName].indexOf(datas.id), 1);
+            models[modelName].taskSelected.splice(models[modelName].taskSelected.indexOf(datas.id), 1);
         }
         broadcast(client, modelName, "highlightTask", datas);
         //client.broadcast.emit("highlightTask", datas);

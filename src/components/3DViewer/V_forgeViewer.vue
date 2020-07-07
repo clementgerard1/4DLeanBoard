@@ -114,7 +114,7 @@ export default {
 								if(this.selected.includes(obj)){
 									this.color3DObject(obj, true);
 									this.colored.push(obj);
-								} else if((objs4D[k].getTaskTeam().getId() == this.shownTeam) || (this.shownTeam==null)) {
+								} else if((objs4D[k].getTask().getTaskTeam().getId() == this.shownTeam) || (this.shownTeam==null)) {
 									this.color3DObject(obj);
 								} else {
 									this.color3DObject(obj, false, true);
