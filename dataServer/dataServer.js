@@ -43,12 +43,13 @@ function getNewModels(){
 					  				let model = null;
 					  				if(ext == "json"){
 										model = Loader.fromJSONandIFC(data, data2);
-
+										model.setName(files[f].split('.').slice(0, -1));
 										const json = model.serialize();
 										frag2ID[files[f].split('.').slice(0, -1).join('.')] = model.getFragToIdsArray();
 										saveModel(files[f].split('.').slice(0, -1).join('.'), json);
 									}else if(ext == "csv"){
 										model = Loader.fromCSVandIFC(data, data2);
+										model.setName(files[f].split('.').slice(0, -1));
 										const json = model.serialize();
 										frag2ID[files[f].split('.').slice(0, -1).join('.')] = model.getFragToIdsArray();
 										saveModel(files[f].split('.').slice(0, -1).join('.'), json);
@@ -62,15 +63,19 @@ function getNewModels(){
 
 						});
 				 	}else{
-				  		count++;
-				  	}
-			  	}else{
-			  		count++;
+				  	count++;
 			  	}
+		  	}else{
+		  		count++;
 		  	}
+		  	if(count == files.length){
+				  resolve(frag2ID);
+				}
+	  	}
 
 		});
 	});
+	resolve(null);
 }
 
 function getNewIfcFiles(fragToIds){
@@ -108,7 +113,6 @@ function getNewIfcFiles(fragToIds){
 		  	}
 
 		});
-
 	});
 
 }
@@ -219,11 +223,11 @@ function launchServer(){
 
 	app.get("/model", (req, res)=>{
 		res.sendFile(__dirname + "/models/models_serialized/" + req.query.name + ".json");
-		console.log(models, req.query.name);
 		const toReturn = {
 			model : models[req.query.name].serialize(),
 			urn : urns[req.query.name],
 		}
+
 		res.json(toReturn);
 	});
 
@@ -231,7 +235,8 @@ function launchServer(){
 		const model = models[req.query.modelname];
 		const tasks = model.getTasks();
 		for(let t in tasks){
-			const requirement = tasks[t].getRequirementById(req.query.requirementid);
+
+			const requirement = tasks[t].getRequirementById(parseInt(req.query.requirementid));
 			if(requirement != null) {
 				requirement.setValue(req.query.requirementvalue === "true");
 			};

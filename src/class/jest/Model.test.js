@@ -173,6 +173,19 @@ test('getContractorById(id)', () => {
 	expect(model.getContractorById(0)).toStrictEqual(contractor);
 });
 
+test('getTaskTeamById(id)', () => {
+	const model = new Model();
+	const milestone = new Milestone();
+	const phase = new Phase();
+	const task = new Task();
+	const taskTeam = new TaskTeam();
+	task.setTaskTeam(taskTeam);
+	model.addMilestone(milestone);
+	milestone.addPhase(phase);
+	phase.addTask(task);
+	expect(model.getTaskTeamById(0)).toStrictEqual(taskTeam);
+});
+
 test('getTasks()', () => {
 	const model = new Model();
 	const milestone = new Milestone();

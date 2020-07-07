@@ -3,13 +3,13 @@ import V_socketUtils from "../Utils/V_socketUtils.class.js";
 
 export default {
 	data : function(){
-		const contractors = this.model.getContractors();
+		const teams = this.model.getTaskTeams();
 		return {
 			displayByTeam : false,
-			displayTeamSelect : 0, // = All contractors
+			displayTeamSelect : 0, // = All teams
 			checkboxes : [],
-			contractorSelected : "all",
-			contractors : contractors
+			teamSelected : "all",
+			teams : teams
 		}
 	},
 	created: function(){
@@ -19,25 +19,25 @@ export default {
 		"model"
 	],
 	watch : {
-		contractorSelected : function(){
-			if(this.contractor != "all"){
-				const contractor = this.model.getContractorById(this.contractorSelected);
-				V_socketUtils.setContractorDisplayed(contractor);
+		teamSelected : function(){
+			if(this.teamSelected != "all"){
+				const team = this.model.getTaskTeamById(this.teamSelected);
+				V_socketUtils.setTeamDisplayed(team);
 			}else{
-				V_socketUtils.setContractorDisplayed(null);
+				V_socketUtils.setTeamDisplayed(null);
 			}
 		},
 		checkboxes : function(){
-			V_socketUtils.setContractorDisplayMode(this.checkboxes.includes("contractors"));
+			V_socketUtils.setTeamDisplayMode(this.checkboxes.includes("teams"));
 		},
 	},
 	template : `
 	<div class="filterPanel">
 		<div>
-			<label for="contractorCheckbox">Teams Layout <input type="checkbox" name="contractorCheckbox" id="contractorCheckbox" value="contractors" v-model="checkboxes"></label>
-			<select v-model="contractorSelected" name="contractorSelect" id="contractorSelect">
+			<label for="teamCheckbox">Teams Layout <input type="checkbox" name="teamCheckbox" id="teamCheckbox" value="teams" v-model="checkboxes"></label>
+			<select v-model="teamSelected" name="teamSelect" id="teamSelect">
 				<option value="all">All</option>
-				<option v-for="contractor in contractors" v-bind:value="contractor.getId()" v-html="contractor.getName()"></option>
+				<option v-for="team in teams" v-bind:value="team.getId()" v-html="team.getName()"></option>
 			</select>
 		</div>
 		<div>

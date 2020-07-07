@@ -60,21 +60,21 @@ class V_4DUtils{
 		@param {string} Object4Did id of Object4D to hightlight
 		@static
 	*/
-	static setContractorDisplayedById(contractorId){
-		const contractor = this.viewer.model.getContractorById(contractorId);
-		if(contractor != null){
-			this.setContractorDisplayed(contractor);
+	static setTeamDisplayedById(teamId){
+		const taskTeam = this.viewer.model.getTaskTeamById(teamId);
+		if(taskTeam != null){
+			this.setTeamDisplayed(taskTeam);
 		}
 	}
 
 	/**
-		Set contractor displayed on Forge Viewer
-		@param {string} Object4Did id of Object4D to hightlight
+		Set taskteam displayed on Forge Viewer
+		@param {uid} taskTeam id
 		@static
 	*/
-	static setContractorDisplayed(contractor){
+	static setTeamDisplayed(taskTeam){
 		if(this.viewer != null){
-			this.viewer.setContractorDisplayed(contractor);
+			this.viewer.setTeamDisplayed(taskTeam);
 		}
 	}
 
@@ -83,9 +83,9 @@ class V_4DUtils{
 		@param {bool} bool
 		@static
 	*/
-	static setContractorDisplayMode(bool){
+	static setTeamDisplayMode(bool){
 		if(this.viewer != null){
-			this.viewer.setContractorDisplayMode(bool);
+			this.viewer.setTeamDisplayMode(bool);
 		}
 	}
 

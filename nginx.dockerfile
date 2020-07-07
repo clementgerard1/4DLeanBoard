@@ -4,9 +4,13 @@ FROM nginx:alpine
 # set working directory
 WORKDIR .
 
-RUN apk update && apk add git
+COPY . .
 
-# RUN git clone --single-branch --branch gh-pages https://github.com/clementgerard1/4DLeanBoard.git && mv 4DLeanBoard/* usr/share/nginx/html
-COPY dist usr/share/nginx/html
+RUN apk update && apk add git && apk add npm
+RUN npm install 
+RUN mkdir dist
+RUN npm run build
+
+RUN mv dist/* usr/share/nginx/html
 
 CMD ["nginx", "-g", "daemon off;"]

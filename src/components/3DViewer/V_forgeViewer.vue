@@ -27,9 +27,9 @@ export default {
 			"fliterModeFlag" : false,
 			"colored" : [],
 			"playing" : true,
-			"camera" : null,
 			"nav" : null,
-			"played": [],
+			"fragList": null,
+			"pivotPoint": null,
 		}
 	},
 	props:[
@@ -58,8 +58,8 @@ export default {
 				}
 				for(let i in this.objs) {
 					const obj = this.objs[i];
-					if(this.timeline.isActiveBetweenTwoDate(obj.obj3D.getParent().getTask(), start6Weeks, start6Weeks+42)) {
-						if(this.timeline.isActiveBetweenTwoDate(obj.obj3D.getParent().getTask(), startActualWeek, startActualWeek+7)) {
+					if(this.timeline.isActiveBetweenTwoDate(obj.obj3D.getParent().getTask(), start6Weeks, start6Weeks+41)) {
+						if(this.timeline.isActiveBetweenTwoDate(obj.obj3D.getParent().getTask(), startActualWeek, startActualWeek+6)) {
 							this.restore3DObject(obj);
 							this.color3DObject(obj, false, false, true);
 							obj.state = "currentWeek";
@@ -99,7 +99,7 @@ export default {
 			}
 		},
 
-		setContractorDisplayMode(bool){
+		setTeamDisplayMode(bool){
 			if(bool) {
 				this.setPlayerState(this.fliterModeFlag);
 				var mils = this.model.getMilestones();
@@ -114,7 +114,7 @@ export default {
 								if(this.selected.includes(obj)){
 									this.color3DObject(obj, true);
 									this.colored.push(obj);
-								} else if((phases[j].getContractor().getId() == this.shownContractor) || (this.shownContractor==null)) {
+								} else if((objs4D[k].getTask().getTaskTeam().getId() == this.shownTeam) || (this.shownTeam==null)) {
 									this.color3DObject(obj);
 								} else {
 									this.color3DObject(obj, false, true);
@@ -132,14 +132,14 @@ export default {
 			}
 		},
 
-		setContractorDisplayed(contractor){
-			if(contractor != null){
-				this.shownContractor = contractor.getId();
+		setTeamDisplayed(taskTeam){
+			if(taskTeam != null){
+				this.shownTeam = taskTeam.getId();
 			}else{
-				this.shownContractor = null;
+				this.shownTeam = null;
 			}
 			this.clearColors();
-			this.setContractorDisplayMode(this.fliterModeFlag);
+			this.setTeamDisplayMode(this.fliterModeFlag);
 		},
 
 		getObjByDbId(dbId){
@@ -193,10 +193,14 @@ export default {
 					for(let s in this.tree.nodeAccess.nameSuffixes){
 						if(this.tree.nodeAccess.nameSuffixes[s] == object3D.getUniqId()){
 							const obj = this.objs[object3D.getId()];
+							const dbid = obj.dbId;
+							this.viewer.select(dbid);
+							const selection = this.viewer.getSelection();
+							this.viewer.clearSelection();
 							if(!this.selected.includes(obj)){
 								if(bool) {
 
-									if(this.colored.includes(obj) || this.played.includes(obj)) {
+									if(this.colored.includes(obj)) {
 										this.restore3DObject(obj);
 									}
 									this.color3DObject(obj, true);
@@ -211,7 +215,11 @@ export default {
 									this.colorFromState(obj, obj.state);
 								}
 							}
-							this.viewer.fitToView(this.getDbId(s)[0]);
+							let box = null;
+							if(selection.length>0) {
+								box = this.viewer.utilities.getBoundingBox(false);
+							}
+							this.nav.fitBounds(false, box, true);
 						}
 					}
 
@@ -242,26 +250,27 @@ export default {
 						var o3D = o4D[k].getObjects3D();
 						for(let l in o3D) {
 							for(let s in this.tree.nodeAccess.nameSuffixes){
+
 								if(this.tree.nodeAccess.nameSuffixes[s] == o3D[l].getUniqId()){
 									const index = this.getDbId(s);
-									const r = parseInt(scssVariables[phs[j].getColorClass().replace("BG_", "").toLowerCase()].slice(1,3), 16) / 255;
-									const g = parseInt(scssVariables[phs[j].getColorClass().replace("BG_", "").toLowerCase()].slice(3,5), 16) / 255;
-									const b = parseInt(scssVariables[phs[j].getColorClass().replace("BG_", "").toLowerCase()].slice(5,7), 16) / 255;
+									const r = parseInt(scssVariables[o4D[k].getTask().getTaskTeam().getColorClass().replace("BG_", "").toLowerCase()].slice(1,3), 16) / 255;
+									const g = parseInt(scssVariables[o4D[k].getTask().getTaskTeam().getColorClass().replace("BG_", "").toLowerCase()].slice(3,5), 16) / 255;
+									const b = parseInt(scssVariables[o4D[k].getTask().getTaskTeam().getColorClass().replace("BG_", "").toLowerCase()].slice(5,7), 16) / 255;
 									const a = 0.75;
 									const material = new THREE.MeshBasicMaterial({
 									    reflectivity: 0.0,
 									    flatShading: true,
 									    transparent: true,
 									    opacity: a,
-									    color: scssVariables[phs[j].getColorClass().replace("BG_", "").toLowerCase()],
+									    color: scssVariables[o4D[k].getTask().getTaskTeam().getColorClass().replace("BG_", "").toLowerCase()],
 						      		});
 						      		const sMat = new THREE.MeshBasicMaterial({
 									    reflectivity: 0.0,
 									    flatShading: true,
 									    transparent: true,
 									    opacity: 0.3,
-									    color: scssVariables[phs[j].getColorClass().replace("BG_", "").toLowerCase()],
-						      		});
+									    color: scssVariables[o4D[k].getTask().getTaskTeam().getColorClass().replace("BG_", "").toLowerCase()],
+									});
 									this.objs[o3D[l].getId()] = {
 										obj3D : o3D[l],
 										guId : o3D[l].getIFCId(),
@@ -394,11 +403,14 @@ export default {
 				}
 			}
 		},
-
 		//
 		highlightTask() {
 			const selection = this.viewer.getSelection();
-			// this.clearHighlighting();
+			let box = null;
+			if(selection.length>0) {
+				box = this.viewer.utilities.getBoundingBox(false);
+			}
+			this.nav.fitBounds(false, box, true);
 			this.viewer.clearSelection();
 			
 			for(let s in selection){
@@ -425,7 +437,15 @@ export default {
 				}
 			}
 		},
-
+		getModifiedWorldBoundingBox(fragIds) {
+			var fragbBox = new THREE.Box3();
+			var nodebBox = new THREE.Box3();
+			fragIds.forEach(function(fragId) {
+				this.fragList.getWorldBounds(fragId, fragbBox);
+				nodebBox.union(fragbBox);
+			});
+			return nodebBox;
+		},
 		//
 		selectionGetProperties() {
 
@@ -495,8 +515,6 @@ export default {
 			this.viewer.setQualityLevel(false, false);
 			this.viewer.setGhosting(false);
 			this.viewer.setGroundShadow(false);
-
-			// important selon moi
 			this.viewer.setReverseZoomDirection(true);
 
 			this.viewer.setLightPreset(7);
@@ -504,17 +522,14 @@ export default {
 			this.viewer.addEventListener(Autodesk.Viewing.OBJECT_TREE_CREATED_EVENT, () => this.fireLoadEvent("tree"));
 			this.viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, () => this.fireLoadEvent("geometry"));
 			this.viewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, this.highlightTask);
-			this.viewer.addEventListener(Autodesk.Viewing.CAMERA_CHANGE_EVENT, (cam) => this.info(cam));
+			this.viewer.addEventListener(Autodesk.Viewing.CAMERA_CHANGE_EVENT, () => this.info());
 		},
-		info(cam) {
-			const pos = cam.camera.position;
-			if(pos.z<0-500) {
-				let newPos = THREE.Vector3(pos.xy, pos.z+10);
-				this.nav.setView(pos, cam.camera.target);
-				//this.viewer.navigation.setIsLocked(true);
-				//this.viewCubeUiExt.setViewCube("top back left");
+		info() {
+			if(this.treeFlag && this.geometryFlag) {
+				this.nav.setPivotPoint(this.pivotPoint);
+				//this.nav.setTarget(this.pivotPoint);
+				//console.log(this.viewer.getCamera().target);
 			}
-			//console.log(this.viewer.getCamera().target);
 		},
 		fireLoadEvent(type){
 			if(type == "geometry"){
@@ -523,7 +538,6 @@ export default {
 				this.treeFlag = true;
 			}
 			if(this.treeFlag && this.geometryFlag) this.onLoaded();
-
 		},
 		onLoaded(that){
 			this.tree = this.viewer.model.getInstanceTree();
@@ -561,7 +575,6 @@ export default {
 			materials.addMaterial(Utils.getGuid(), this.nextsWeeksMat, true);
 			materials.addMaterial(Utils.getGuid(), this.currWeekMat, true);
 			this.map3DObjs();
-			this.camera = this.viewer.getCamera();
 			this.nav = this.viewer.navigation;
 			this.setPlayerState(!this.fliterModeFlag);
 			const tasks = V_taskTableUtils.getTokens();
@@ -569,7 +582,10 @@ export default {
 				const obj4D = tasks[t].getObject4D();
 				this.highlight(obj4D, true);
 			}
+			this.pivotPoint = this.viewer.utilities.getBoundingBox(true);
 			this.viewCubeUiExt.setViewCube("top back left");
+			this.fragList = this.viewer.model.getFragmentList();
+			//this.nav.setZoomOutLimitFactor(3);
 			//console.log(this.viewer, this.nav.getCameraRightVector(false), this.nav.getEyeVector(), this.nav.getPosition());
 		},
 		onEnvInitialized(that){

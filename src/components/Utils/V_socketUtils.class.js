@@ -86,15 +86,15 @@ class V_socketUtils{
 			V_taskTableUtils.highlightTaskByIdAndUpdate(datas.taskId, datas.value);
 		});	
 
-		this.socket.on("setContractorDisplayed", (datas) => {
-			V_4DUtils.setContractorDisplayedById(datas.contractor);
+		this.socket.on("setTeamDisplayed", (datas) => {
+			V_4DUtils.setTeamDisplayedById(datas.team);
 		});
 
-		this.socket.on("setContractorDisplayMode", (datas) => {
-			V_4DUtils.setContractorDisplayMode(datas.bool);
+		this.socket.on("setTeamDisplayMode", (datas) => {
+			V_4DUtils.setTeamDisplayMode(datas.bool);
 		});
 		this.socket.on("setTaskState", (datas) => {
-			V_4DUtils.setContractorDisplayMode(datas.bool);
+			V_4DUtils.setTeamDisplayMode(datas.bool);
 		});
 		this.socket.on("clearHighlighting", (datas) => {
 			V_taskTableUtils.clearTokens();
@@ -162,27 +162,27 @@ class V_socketUtils{
 
 /* ---------------------------- 3D Filter INTERACTIONS ---------------------------- */
 	/**
-		Set the contractor displayed on viewer
-		@param {Contractor} contractor
+		Set the team displayed on viewer
+		@param {TaskTeam} team
 		@static
 	*/	
-	static setContractorDisplayed(contractor){
-		V_4DUtils.setContractorDisplayed(contractor);
-		if(contractor != null){
-			this.socket.emit("setContractorDisplayed", { contractor : contractor.getId()});
+	static setTeamDisplayed(team){
+		V_4DUtils.setTeamDisplayed(team);
+		if(team != null){
+			this.socket.emit("setTeamDisplayed", { team : team.getId()});
 		}else{
-			this.socket.emit("setContractorDisplayed", { contractor : null});
+			this.socket.emit("setTeamDisplayed", { team : null});
 		}
 	}
 
 	/**
-		Set the contractor mode of viewer
+		Set the team mode of viewer
 		@param {bool} active
 		@static
 	*/	
-	static setContractorDisplayMode(active){
-		V_4DUtils.setContractorDisplayMode(active);
-		this.socket.emit("setContractorDisplayMode", { bool : active});
+	static setTeamDisplayMode(active){
+		V_4DUtils.setTeamDisplayMode(active);
+		this.socket.emit("setTeamDisplayMode", { bool : active});
 	}
 
 	/* ---------------------------- W6 INTERACTIONS ---------------------------- */
