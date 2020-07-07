@@ -134,9 +134,11 @@ function updateForge(){
 						  let count = 0;
 						  for(let f in files){
 
+
 						  	if(files[f].charAt(0) != "."){
 							  	Utils.createForgeBucket(oAuth, files[f].split('.').slice(0, -1).join('.'))
 									.then( oAuth => {
+
 										return Utils.uploadIFCFileToForge(oAuth, files[f].split('.').slice(0, -1).join('.'), __dirname + '/models/ifc_modified' + '/' + files[f].split('.').slice(0, -1).join('.') + ".ifc");
 									})
 									.then( datas => {
@@ -227,7 +229,6 @@ function launchServer(){
 			model : models[req.query.name].serialize(),
 			urn : urns[req.query.name],
 		}
-
 		res.json(toReturn);
 	});
 

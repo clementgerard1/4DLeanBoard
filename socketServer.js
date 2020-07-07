@@ -171,7 +171,6 @@ io.on("connection", function(client){
 });
 
 function broadcast(client, model, message, datas){
-    console.log(model, message, datas, viewers.length, players.length, w6s.length, filters.length);
     const already = [];
     for(let v in viewers){
         if(!already.includes(viewers[v].socket.id) && viewers[v].model == model && viewers[v].socket.id != client.id){
@@ -187,13 +186,11 @@ function broadcast(client, model, message, datas){
     }
     for(let w in w6s){
         if(!already.includes(w6s[w].socket.id) && w6s[w].model == model && w6s[w].socket.id != client.id){
-            console.log("w SENDED");
             w6s[w].socket.emit(message, datas);
             already.push(w6s[w].socket.id);
         }
     }for(let f in filters){
         if(!already.includes(filters[f].socket.id) && filters[f].model == model && filters[f].socket.id != client.id){
-            console.log("f SENDED");
             filters[f].socket.emit(message, datas);
             already.push(filters[f].socket.id);
         }

@@ -312,11 +312,11 @@ class Loader{
 						task.addRequirement("space", space);
 
 						const ids4D = tasks[t]["IDS4D"].split(",");
-						for(let o in ids4D){
+						/*for(let o in ids4D){
 							const object3D = new Object3D(obj3Ds[ids4D[o].replace(/[ '"]/gi, "")].name, parseInt(obj3Ds[ids4D[o].replace(/[ '"]/gi, "")].id), ids4D[o].replace(/[ '"]/gi, ""));
 							object4D.addObject3D(object3D);
 							object3D.setParent(object4D);
-						}
+						}*/
 
 						phase.addTask(task);
 						task.setParentPhase(phase);

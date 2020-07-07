@@ -58,7 +58,7 @@ export default {
 
 		let previousColor = null;
 		if(previousTask != null){
-			previousColor =  scssVariables[previousTask.getParentPhase().getColorClass().replace("BG_", "").toLowerCase()];
+			previousColor =  scssVariables[previousTask.getTaskTeam().getColorClass().replace("BG_", "").toLowerCase()];
 		}
 
 		let ready = false
@@ -270,7 +270,7 @@ export default {
 
 			let previousColor = null;
 			if(previousTask != null){
-				previousColor =  scssVariables[previousTask.getParentPhase().getColorClass().replace("BG_", "").toLowerCase()];
+				previousColor =  scssVariables[previousTask.getTaskTeam().getColorClass().replace("BG_", "").toLowerCase()];
 			}
 
 			let ready = false
@@ -496,7 +496,7 @@ export default {
 		updatePrevious(){
 
 			if(this.previousTask != null){
-				this.previouscolor =  scssVariables[this.previousTask.getParentPhase().getColorClass().replace("BG_", "").toLowerCase()];
+				this.previouscolor =  scssVariables[this.previousTask.getTaskTeam().getColorClass().replace("BG_", "").toLowerCase()];
 			}
 
 			if(this.previousTask != null){

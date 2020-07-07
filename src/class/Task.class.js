@@ -284,10 +284,13 @@ class Task extends PlanningObject{
 		@returns {bool}
 	*/
 	isReady(){
-		const properties = super.getProperties();
-		for(let p in properties){
-			if(!properties[p].getValue()) return false;
-		}
+		if(!this.getRequirement("constraint").getValue()) return false;
+		if(!this.getRequirement("information").getValue()) return false;
+		if(!this.getRequirement("manpower").getValue()) return false;
+		if(!this.getRequirement("space").getValue()) return false;
+		if(!this.getRequirement("safety").getValue()) return false;
+		if(!this.getRequirement("materials").getValue()) return false;
+		if(!this.getRequirement("equipement").getValue()) return false;
 		return true;
 	}
 
