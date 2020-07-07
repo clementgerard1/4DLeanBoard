@@ -260,6 +260,7 @@ function launchServer(){
 }
 
 function saveModel(name, json){
+	console.log(name);
 	// writeFile function with filename, content and callback function
 	fs.writeFile(__dirname + "/models/models_serialized/" + name + ".json", json, function (err) {
 	  if (err) throw err;

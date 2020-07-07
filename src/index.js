@@ -177,6 +177,7 @@ function init(){
 						//Model Loaded
 						this.model = datas.model;
 						//DataApi.postModel(mod, "testt");
+						console.log("hey", this.model.getName());
 						if(this.model.getName() == "") this.model.setName("test");
 						this.timeline = new Timeline(this.model);
 						this.playerInit = 0;
