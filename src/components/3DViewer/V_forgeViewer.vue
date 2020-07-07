@@ -99,7 +99,7 @@ export default {
 			}
 		},
 
-		setContractorDisplayMode(bool){
+		setTeamDisplayMode(bool){
 			if(bool) {
 				this.setPlayerState(this.fliterModeFlag);
 				var mils = this.model.getMilestones();
@@ -114,7 +114,7 @@ export default {
 								if(this.selected.includes(obj)){
 									this.color3DObject(obj, true);
 									this.colored.push(obj);
-								} else if((phases[j].getContractor().getId() == this.shownContractor) || (this.shownContractor==null)) {
+								} else if((objs4D[k].getTaskTeam().getId() == this.shownTeam) || (this.shownTeam==null)) {
 									this.color3DObject(obj);
 								} else {
 									this.color3DObject(obj, false, true);
@@ -132,14 +132,14 @@ export default {
 			}
 		},
 
-		setContractorDisplayed(contractor){
-			if(contractor != null){
-				this.shownContractor = contractor.getId();
+		setTeamDisplayed(taskTeam){
+			if(taskTeam != null){
+				this.shownTeam = taskTeam.getId();
 			}else{
-				this.shownContractor = null;
+				this.shownTeam = null;
 			}
 			this.clearColors();
-			this.setContractorDisplayMode(this.fliterModeFlag);
+			this.setTeamDisplayMode(this.fliterModeFlag);
 		},
 
 		getObjByDbId(dbId){

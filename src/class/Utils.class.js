@@ -10,8 +10,8 @@ import btoa from 'btoa';
  */
 class Utils{
 	
-	static forgeBucketName = 'veronika_4dlb';
-	static forgeFileName = 'veronika_4dlb.ifc';
+	static forgeBucketName = 'veronikaa_4dlb';
+	static forgeFileName = 'veronikaa_4dlb.ifc';
 	static ids = {
 		"default" : 0
 	}
@@ -228,6 +228,26 @@ class Utils{
     return guid;
 
   };
+
+  static getFormatedDate(date){
+  	const temp = date.split("/");
+  	if(temp[0].length == 1){
+  		temp[0] = "0" + temp[0];
+  	}
+  	if(temp[1].length == 1){
+  		temp[1] = "0" + temp[1];
+  	}
+  	const tempp = temp[0];
+  	temp[0] = temp[1];
+  	temp[1] = tempp;
+  	return temp.join("/");
+  }
+
+  static addDaysToDate(dateInit, nb){
+    const date = new Date(dateInit.valueOf());
+    date.setDate(date.getDate() + nb);
+    return date;
+  }
 
 }
 

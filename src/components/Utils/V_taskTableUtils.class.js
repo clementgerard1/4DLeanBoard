@@ -71,6 +71,7 @@ class V_taskTableUtils{
 	}
 
 	static setTokenByObject4DId(obj4DId, bool){
+		console.log(obj4DId, bool);
 		for( let t in this.tasks){
 			if(this.tasks[t].task != null && this.tasks[t].task.getObject4D().getId() == obj4DId) V_taskTableUtils.setToken(this.tasks[t].task, bool);
 		}
@@ -141,6 +142,7 @@ class V_taskTableUtils{
 		@static
 	*/
 	static highlightTaskById(taskId, bool){
+
 		if(typeof this.tasks[0] != "undefined"){
 			const task = this.tasks[0].model.getTaskById(taskId);
 			this.setToken(task, bool);

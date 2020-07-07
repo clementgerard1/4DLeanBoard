@@ -17,7 +17,6 @@ const urns = [];
 init();
 
 function init(){
-
 	getNewModels().then(getNewIfcFiles).then(updateForge).then(getSerializedModels).then(launchServer).catch(error => console.error(error));
 
 }
@@ -36,21 +35,25 @@ function getNewModels(){
 		  for(let f in files){
 		  	if(!fs.lstatSync(__dirname + '/models/models' + '/' + files[f]).isDirectory()){
 		  		if(!fs.existsSync(__dirname + '/models/models_serialized' + '/' + files[f].split('.').slice(0, -1).join('.') + ".json")){
-				  	fs.readFile(__dirname + '/models/models' + '/' + files[f], 'utf8', (err, data)=>{
+				  		fs.readFile(__dirname + '/models/models' + '/' + files[f], 'utf8', (err, data)=>{
 
-				  		fs.readFile(__dirname + '/models/ifc' + '/' + files[f].split('.').slice(0, -1).join('.') + ".ifc", 'utf8', (err, data2)=>{
-				  			let model = null;
-				  			const ext = files[f].split('.')[1];
-				  			if(ext == "json"){
-									model = Loader.fromJSONandIFC(data, data2);
-									const json = model.serialize();
-									frag2ID[files[f].split('.').slice(0, -1).join('.')] = model.getFragToIdsArray();
-									saveModel(files[f].split('.').slice(0, -1).join('.'), json);
-								}else if(ext == "csv"){
-									//model = Loader.fromCSVandIFC(data, data2);
-									frag2ID[files[f].split('.').slice(0, -1).join('.')] = null;
+				  			fs.readFile(__dirname + '/models/ifc' + '/' + files[f].split('.').slice(0, -1).join('.') + ".ifc", 'utf8', (err, data2)=>{
+					  			const ext = files[f].split('.')[1];
+				  				if(ext == "json" || ext == "csv"){
+					  				let model = null;
+					  				if(ext == "json"){
+										model = Loader.fromJSONandIFC(data, data2);
+
+										const json = model.serialize();
+										frag2ID[files[f].split('.').slice(0, -1).join('.')] = model.getFragToIdsArray();
+										saveModel(files[f].split('.').slice(0, -1).join('.'), json);
+									}else if(ext == "csv"){
+										model = Loader.fromCSVandIFC(data, data2);
+										const json = model.serialize();
+										frag2ID[files[f].split('.').slice(0, -1).join('.')] = model.getFragToIdsArray();
+										saveModel(files[f].split('.').slice(0, -1).join('.'), json);
+									}
 								}
-
 								count++;
 								if(count == files.length){
 								  resolve(frag2ID);
@@ -60,48 +63,55 @@ function getNewModels(){
 						});
 				 	}else{
 				  	count++;
-				  }
-			  }else{
-			  	count++;
-			  }
-		  }
+			  	}
+		  	}else{
+		  		count++;
+		  	}
+		  	if(count == files.length){
+				  resolve(frag2ID);
+				}
+	  	}
 
 		});
 	});
+	resolve(null);
 }
 
 function getNewIfcFiles(fragToIds){
 	return new Promise((resolve, reject) => {
 		fs.readdir(__dirname + '/models/ifc', (err, files) => {
 
-		  // On error, show it and return
-		  if(err) return console.error(err);
+		  	// On error, show it and return
+		  	if(err) return console.error(err);
 
-		  // Display directory entries
-		  let count = 0;
-		  for(let f in files){
+		  	// Display directory entries
+		  	let count = 0;
+		  	for(let f in files){
 
-		  	if(!fs.lstatSync(__dirname + '/models/ifc' + '/' + files[f]).isDirectory()){
-		  		if(!fs.existsSync(__dirname + '/models/ifc_modified' + '/' + files[f].split('.').slice(0, -1).join('.') + ".ifc")){
-				  	fs.readFile(__dirname + '/models/ifc' + '/' + files[f], 'utf8', (err, data)=>{
 
-				  		fs.writeFile(__dirname + "/models/ifc_modified/" + files[f].split('.').slice(0, -1).join('.') + ".ifc", Loader.createIFCFileWithId(data, fragToIds[files[f].split('.').slice(0, -1).join('.')]), function (err) {
-						  	if (err) throw err;
-						  	console.log('Modified IFC created.');
+		  		if(!fs.lstatSync(__dirname + '/models/ifc' + '/' + files[f]).isDirectory()){
+		  			if(!fs.existsSync(__dirname + '/models/ifc_modified' + '/' + files[f].split('.').slice(0, -1).join('.') + ".ifc")){
+		  				if(files[f].split('.').slice(0, -1).join('.') != ""){
+					  		fs.readFile(__dirname + '/models/ifc' + '/' + files[f], 'utf8', (err, data)=>{
+
+
+					  			fs.writeFile(__dirname + "/models/ifc_modified/" + files[f].split('.').slice(0, -1).join('.') + ".ifc", Loader.createIFCFileWithId(data, fragToIds[files[f].split('.').slice(0, -1).join('.')]), function (err) {
+								  	if (err) throw err;
+								  	console.log('Modified IFC created.');
+								});
+
 							});
-
-						});
+					  	}
 					}
 					count++;
-				  if(count == files.length){
-				  	resolve();
-				  }
+					if(count == files.length){
+						resolve();
+					}
 
-			  }
-		  }
+			 	}
+		  	}
 
 		});
-
 	});
 
 }
@@ -212,11 +222,11 @@ function launchServer(){
 
 	app.get("/model", (req, res)=>{
 		res.sendFile(__dirname + "/models/models_serialized/" + req.query.name + ".json");
-		console.log(models, req.query.name);
 		const toReturn = {
 			model : models[req.query.name].serialize(),
 			urn : urns[req.query.name],
 		}
+
 		res.json(toReturn);
 	});
 
@@ -224,7 +234,9 @@ function launchServer(){
 		const model = models[req.query.modelname];
 		const tasks = model.getTasks();
 		for(let t in tasks){
-			const requirement = tasks[t].getRequirementById(req.query.requirementid);
+
+			console.log(tasks[t].getRequirement("constraint").getId(), tasks[t].getRequirementById(tasks[t].getRequirement("constraint").getId()), req.query.requirementid, parseInt(req.query.requirementid));
+			const requirement = tasks[t].getRequirementById(parseInt(req.query.requirementid));
 			if(requirement != null) {
 				requirement.setValue(req.query.requirementvalue === "true");
 			};
@@ -253,6 +265,7 @@ function launchServer(){
 }
 
 function saveModel(name, json){
+	console.log(json)
 	// writeFile function with filename, content and callback function
 	fs.writeFile(__dirname + "/models/models_serialized/" + name + ".json", json, function (err) {
 	  if (err) throw err;

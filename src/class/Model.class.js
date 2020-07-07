@@ -215,6 +215,19 @@ class Model{
 	}
 
 	/**
+		get a taskteam of the model by id
+		@params {uint} taskteam id 
+		@returns {Taskteam} return null if no contractor exist with this id
+	*/
+	getTaskTeamById(id){
+		const taskTeams = this.getTaskTeams();
+		for( let t in taskTeams){
+			if(taskTeams[t].getId() == id) return taskTeams[t];
+		}
+		return null;
+	}
+
+	/**
 		get duration of the model
 		@returns {int}
 	*/

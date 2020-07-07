@@ -13,7 +13,7 @@
     "commit": "npm run doc; npm run jest; MODE=prod; cp -r public/* dist; webpack --config ./webpack.prod.js; git add --all; git commit -m ",
     "deploy": "npm run build & gh-pages -d dist",
     "socket": "babel-watch socketServer.js",
-    "data-server": "babel-watch dataServer/dataServer.js",
+    "data-server": "babel-watch --watch dataServer/models/models --watch dataServer/models/ifc  dataServer/dataServer.js",
     "prod:windows": "xcopy public dist /s /e /c & node htmlServer.js prod | webpack --config ./webpack.prod.js",
     "dev:windows": "node htmlServer.js dev | webpack --config ./webpack.dev.js",
     "test:windows": "node htmlServer.js test | webpack --config ./webpack.test.js",

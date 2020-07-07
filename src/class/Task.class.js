@@ -18,6 +18,7 @@ class Task extends PlanningObject{
 	#parentPhase;
 	#paused;
 	#done;
+	#colorClass;
 
 	/**
  		@class Task
@@ -37,6 +38,7 @@ class Task extends PlanningObject{
 		this.#parentPhase = null;
 		this.#paused = false;
 		this.#done = false;
+		this.#colorClass = "defaultcolor";
 	}
 
 	/**
@@ -319,6 +321,26 @@ class Task extends PlanningObject{
 	*/
 	isPaused(){
 		return this.#paused;
+	}
+
+	/**
+		Set the colorClass of the task
+		@params {int} num
+	*/
+	setColorClass(colorClass){
+		if(typeof colorClass == "undefined"){
+			console.error("setColorClass : need a string ; provided : " + colorClass);
+		}else{
+			this.#colorClass = colorClass;
+		}
+	}
+
+	/**
+		Get the color class attribuate to this task
+		@returns {String} 
+	*/
+	getColorClass(){
+		return this.#colorClass;
 	}
 
 

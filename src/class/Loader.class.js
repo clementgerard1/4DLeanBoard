@@ -11,6 +11,7 @@ import Level from "./Level.class.js";
 import Zone from "./Zone.class.js";
 import Contractor from "./Contractor.class.js";
 import Requirement from "./Requirement.class.js";
+import Utils from "./Utils.class.js";
 
 /**
  * @class Loader
@@ -86,6 +87,7 @@ class Loader{
 		const json = {
 			name: null,
 			milestones : [],
+			teams : [],
 		}
 
 		let memoMilestone = null;
@@ -95,79 +97,261 @@ class Loader{
 		const lines = csv.split('\n');
 		lines.forEach(function (value, i) {
 			const columns = value.split(';');
-			if(i==0){
-				json.name = columns[0];
-			}else if(i>2){
+			if(columns.length > 1){
+				if(i==0){
+					json.name = columns[0];
+				}else if(i>2){
 
-				//New milestone
-				if(columns[0] != ''){
-					json.milestones[json.milestones.length] = {};
-					json.milestones[json.milestones.length - 1]["Num"] = columns[0];
-					json.milestones[json.milestones.length - 1]["Name"] = columns[1];
-					json.milestones[json.milestones.length - 1]["StartDate"] = columns[2];
-					json.milestones[json.milestones.length - 1]["EndDate"] = columns[3];
-					json.milestones[json.milestones.length - 1]["Previous"] = columns[4];
-					json.milestones[json.milestones.length - 1]["Next"] = columns[5];
-					if(columns[1] == columns[2]){
-						json.milestones[json.milestones.length - 1]["event"] = true;
-						json.milestones[json.milestones.length - 1]["Next"] = columns[1];
-					}else{
-						json.milestones[json.milestones.length - 1]["event"] = false;
-						json.milestones[json.milestones.length - 1]["Next"] = null;
+					//New milestone
+					if(columns[0] != ''){
+						json.milestones[json.milestones.length] = {};
+						json.milestones[json.milestones.length - 1]["Num"] = columns[0];
+						json.milestones[json.milestones.length - 1]["Name"] = columns[1];
+						json.milestones[json.milestones.length - 1]["StartDate"] = columns[2];
+						json.milestones[json.milestones.length - 1]["EndDate"] = columns[3];
+						json.milestones[json.milestones.length - 1]["Previous"] = columns[4];
+						json.milestones[json.milestones.length - 1]["Next"] = columns[5];
+						if(columns[1] == columns[2]){
+							json.milestones[json.milestones.length - 1]["Event"] = true;
+							json.milestones[json.milestones.length - 1]["Next"] = columns[1];
+						}else{
+							json.milestones[json.milestones.length - 1]["Event"] = false;
+							json.milestones[json.milestones.length - 1]["Next"] = null;
+						}
+						json.milestones[json.milestones.length - 1]["Requirements"] = [];
+						json.milestones[json.milestones.length - 1]["Phases"] = [];
+						memoMilestone = json.milestones.length - 1;
+
 					}
-					json.milestones[json.milestones.length - 1]["Phases"] = [];
-					memoMilestone = json.milestones.length - 1;
 
-				}
+					//New phase
+					if(columns[6] != ''){
+						const milestone = json.milestones[memoMilestone];
+						milestone["Phases"][milestone["Phases"].length] = {};
 
-				//New phase
-				if(columns[6] != ''){
-					const milestone = json.milestones[memoMilestone];
-					milestone["Phases"][milestone["Phases"].length] = {};
+						milestone["Phases"][milestone["Phases"].length - 1]["Num"] = columns[6];
+						milestone["Phases"][milestone["Phases"].length - 1]["Name"] = columns[7];
+						milestone["Phases"][milestone["Phases"].length - 1]["StartDate"] = columns[8];
+						milestone["Phases"][milestone["Phases"].length - 1]["EndDate"] = columns[9];
+						milestone["Phases"][milestone["Phases"].length - 1]["Requirements"] = columns[10];
+						milestone["Phases"][milestone["Phases"].length - 1]["Tasks"] = [];
 
-					milestone["Phases"][milestone["Phases"].length - 1]["num"] = columns[6];
-					milestone["Phases"][milestone["Phases"].length - 1]["name"] = columns[7];
-					milestone["Phases"][milestone["Phases"].length - 1]["startDate"] = columns[8];
-					milestone["Phases"][milestone["Phases"].length - 1]["endDate"] = columns[9];
-					milestone["Phases"][milestone["Phases"].length - 1]["requirements"] = columns[10];
-					milestone["Phases"][milestone["Phases"].length - 1]["tasks"] = [];
-
-					memoPhase = milestone["Phases"].length - 1;
-				}
-
-				//New task
-				if(columns[11] != ''){
-					const phase = json.milestones[memoMilestone]["Phases"][memoPhase];
-					phase["tasks"][phase["tasks"].length] = {};
-
-					phase["tasks"][phase["tasks"].length - 1]["Name"] = columns[11];
-					phase["tasks"][phase["tasks"].length - 1]["TID"] = columns[12];
-					phase["tasks"][phase["tasks"].length - 1]["Duration"] = columns[13];
-					phase["tasks"][phase["tasks"].length - 1]["Workers"] = columns[14];
-					phase["tasks"][phase["tasks"].length - 1]["Previous"] = columns[15];
-					phase["tasks"][phase["tasks"].length - 1]["Team"] = columns[16];
-					phase["tasks"][phase["tasks"].length - 1]["4DID"] = columns[17];
-					phase["tasks"][phase["tasks"].length - 1]["Zone"] = columns[19];
-					phase["tasks"][phase["tasks"].length - 1]["Level"] = columns[20];
-					phase["tasks"][phase["tasks"].length - 1]["Requirements"] = {
-						"Constraint" : columns[22] != "No", 
-						"Information" : columns[23] != "No",
-						"Materials" : columns[24] != "No",
-						"Manpower" : columns[25] != "No",
-						"Equipement" : columns[26] != "No",
-						"Safety" : columns[27] != "No",
-						"Space" : columns[28] != "No",
+						memoPhase = milestone["Phases"].length - 1;
 					}
-					memoTask = phase["tasks"].length - 1;
-				}
 
+					//New task
+					if(columns[11] != ''){
+						const phase = json.milestones[memoMilestone]["Phases"][memoPhase];
+						phase["Tasks"][phase["Tasks"].length] = {};
+
+						phase["Tasks"][phase["Tasks"].length - 1]["Name"] = columns[11];
+						phase["Tasks"][phase["Tasks"].length - 1]["TID"] = columns[12];
+						phase["Tasks"][phase["Tasks"].length - 1]["Duration"] = columns[13];
+						phase["Tasks"][phase["Tasks"].length - 1]["Workers"] = columns[14];
+						phase["Tasks"][phase["Tasks"].length - 1]["Previous"] = columns[15];
+						phase["Tasks"][phase["Tasks"].length - 1]["Team"] = columns[16];
+						phase["Tasks"][phase["Tasks"].length - 1]["IDS4D"] = columns[17];
+						phase["Tasks"][phase["Tasks"].length - 1]["Zone"] = columns[20];
+						phase["Tasks"][phase["Tasks"].length - 1]["Level"] = columns[18];
+						phase["Tasks"][phase["Tasks"].length - 1]["Requirements"] = {
+							"Constraint" : columns[22] != "No", 
+							"Information" : columns[23] != "No",
+							"Materials" : columns[24] != "No",
+							"Manpower" : columns[25] != "No",
+							"Equipement" : columns[26] != "No",
+							"Safety" : columns[27] != "No",
+							"Space" : columns[28] != "No",
+						}
+						memoTask = phase["Tasks"].length - 1;
+					}
+
+
+					//Teams
+					if(columns[29] != '' && typeof columns[29] != "undefined"){
+
+						json.teams[json.teams.length] = {
+							name : columns[29],
+							color : columns[30].replace("\r", "")
+						}
+					}
+
+				}
 			}
 		});
 
 		return Loader.json_v0_4(JSON.stringify(json), ifc);
 	}
 	static json_v0_4(json, ifc){
+		//Errors
+		if(json == null){
+			throw 'JsonFile needed for import model';
+		}
+		if(ifc == null){
+			throw 'IfcFile needed for import model';
+		}
 
+		//Parse IFC file
+		let obj3Ds = {};
+		const IFClines = ifc.split('\n');
+		for(let l in IFClines){
+			const ifcDef = /(IFC[A-Z]*)\(([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*)/g;
+			const result = ifcDef.exec(IFClines[l]);
+			if(result != null && this.#ifcBuildingElements.includes(result[1])){
+				obj3Ds[result[9].replace(/['"]/gi, "")] = 
+					{
+						name : result[4].replace(/['"]/gi, ""),
+						id : result[9].replace(/['"]/gi, "")
+					}
+			}
+		}
+
+		const infos = JSON.parse(json);
+
+		const model = new Model();
+
+		const contractors = [];
+		const taskTeams = [];
+		const zones = [];
+
+
+		const tasksForPreviousNext = {};
+		const tasksCollection = [];
+
+		const milestones = infos["milestones"];
+
+		//Teams
+		for(let i in infos.teams){
+			taskTeams[infos.teams[i].name] = new TaskTeam(infos.teams[i].name);
+			taskTeams[infos.teams[i].name].setColorClass(infos.teams[i].color);
+		}
+
+		//Model
+		for(let m in milestones){
+
+			let milestone = null;
+			if(milestones[m]["Event"]){
+				milestone = new Milestone(milestones[m]["Name"], true);
+			}else{
+				milestone = new Milestone(milestones[m]["Name"]);
+			}
+			milestone.setNum(milestones[m]["Num"]);
+
+			model.addMilestone(milestone);
+			for(let r in milestones[m]["Requirements"]){
+				const requirement = new Requirement(milestones[m]["Requirements"][r]);
+				milestone.addRequirement(requirement);
+			}
+
+			const startDate = new Date(Utils.getFormatedDate(milestones[m]["StartDate"]));
+			milestone.setStartDate(startDate);
+			const endDate = new Date(Utils.getFormatedDate(milestones[m]["EndDate"]));
+			milestone.setEndDate(endDate);
+
+			const phases = milestones[m]["Phases"];
+			for(let p in phases){
+				
+				const phase = new Phase(phases[p]["Name"]);
+				if(typeof contractors["facticeContractor"] == "undefined") contractors["facticeContractor"] = new Contractor("facticeContractor");
+				phase.setContractor(contractors["facticeContractor"]);
+				phase.setNum(phases[p]["Num"]);
+				milestone.addPhase(phase);
+
+				const PstartDate = new Date(Utils.getFormatedDate(phases[p]["StartDate"]));
+				phase.setStartDate(PstartDate);
+				const PendDate = new Date(Utils.getFormatedDate(phases[p]["EndDate"]));
+				phase.setEndDate(PendDate);
+
+				const tasks = phases[p]["Tasks"];
+				let actualDate = PstartDate;
+				for(let t in tasks){
+					if(tasks[t] != null){
+						const task = new Task(tasks[t]["Name"], tasks[t]["TID"]);
+						const object4D = new Object4D(tasks[t]["TID"], tasks[t]["TID"]);
+						task.setObject4D(object4D);
+						object4D.setTask(task);
+						//task.setDuration(tasks[t]["Duration"]);
+						
+						const startDate = actualDate;
+						//const startDate = new Date(tasks[t]["Start"].slice(6, 10), parseInt(tasks[t]["Start"].slice(3, 5)) - 1, tasks[t]["Start"].slice(0, 2));
+						//console.log("hey", startDate);
+						task.setStartDate(startDate);
+						const endDate = Utils.addDaysToDate(startDate, parseInt(tasks[t]["Duration"]) - 1);
+						//const endDate = new Date(tasks[t]["End"].slice(6, 10), parseInt(tasks[t]["End"].slice(3, 5)) - 1, tasks[t]["End"].slice(0, 2));
+						task.setEndDate(endDate);
+
+
+						actualDate = endDate;
+
+						//const teams = taskTeams[tasks[t]["Team"]].split(",");
+						task.setTaskTeam(taskTeams[tasks[t]["Team"]]);
+						taskTeams[tasks[t]["Team"]].setWorkers(parseInt(tasks[t]["Workers"]));
+						if(typeof zones[tasks[t]["Zone"]] == "undefined") zones[tasks[t]["Zone"]] = new Zone(tasks[t]["Zone"]);
+						task.setZone(zones[tasks[t]["Zone"]]);
+
+						//Requirements
+						const constraint = new Requirement("constraint");
+						constraint.setValue(tasks[t]["Requirements"]["Constraint"]);
+						const information = new Requirement("information");
+						information.setValue(tasks[t]["Requirements"]["Information"]);
+						const materials = new Requirement("materials");
+						materials.setValue(tasks[t]["Requirements"]["Materials"]);
+						const manpower = new Requirement("manpower");
+						manpower.setValue(tasks[t]["Requirements"]["Manpower"]);
+						const equipement = new Requirement("equipement");
+						equipement.setValue(tasks[t]["Requirements"]["Equipement"]);
+						const safety = new Requirement("safety");
+						safety.setValue(tasks[t]["Requirements"]["Safety"]);
+						const space = new Requirement("space");
+						space.setValue(tasks[t]["Requirements"]["Space"]);
+						task.addRequirement("constraint", constraint);
+						task.addRequirement("information", information);
+						task.addRequirement("materials", materials);
+						task.addRequirement("manpower", manpower);
+						task.addRequirement("equipement", equipement);
+						task.addRequirement("safety", safety);
+						task.addRequirement("space", space);
+
+						const ids4D = tasks[t]["IDS4D"].split(",");
+						/*for(let o in ids4D){
+							const object3D = new Object3D(obj3Ds[ids4D[o].replace(/[ '"]/gi, "")].name, parseInt(obj3Ds[ids4D[o].replace(/[ '"]/gi, "")].id), ids4D[o].replace(/[ '"]/gi, ""));
+							object4D.addObject3D(object3D);
+							object3D.setParent(object4D);
+						}*/
+
+						phase.addTask(task);
+						task.setParentPhase(phase);
+						phase.addObject4D(object4D);
+						object4D.setPhase(phase);
+						tasksForPreviousNext[task.getId()] = {
+							"previous" : tasks[t]["Previous"],
+						}
+						tasksCollection[task.getId()] = task;
+					}
+
+				}
+
+
+			}
+
+		}
+
+		const phases = model.getPhases();
+		for(let p in phases){
+			const tasks = phases[p].getTasks();
+			for(let t in tasks){
+				const actualTask = tasks[t];
+
+				if(tasksForPreviousNext[actualTask.getId()].previous != 0 && tasksForPreviousNext[actualTask.getId()].previous != null && tasksForPreviousNext[actualTask.getId()].previous != ""){
+					const mults = tasksForPreviousNext[actualTask.getId()].previous.split(".");
+					for(let m in mults){
+						actualTask.addPreviousTask(tasksCollection[mults[m]]);
+						tasksCollection[mults[m]].addFollowingTask(actualTask);
+					}
+				} 
+			}
+		}
+
+		return model;
 	}
 
 	//Version JSON O.3
@@ -642,7 +826,6 @@ class Loader{
 
 	//createIFCFileWithId
 	static createIFCFileWithId(ifcSource, fragToIdArray){
-		console.log("hey", fragToIdArray);
 		const IFClines = ifcSource.split('\n');
 		let newFile = "";
 		let count = 0;
@@ -654,10 +837,12 @@ class Loader{
 			if(result != null && this.#ifcBuildingElements.includes(result[1])){
 				const idDef = /(IFC[A-Z]*)\(([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*)/g;
 				const res = idDef.exec(IFClines[l]);
-				const index = IFClines[l].indexOf(res[4]);
-				const pos = index + res[4].length;
-				if(res.input.charAt(index + res[4].length - res[9].length) != ":"){
-					lineTemp = lineTemp.slice(0, pos - 1) + ":" + /*res[9].replace("'", "")*/ count++ + "'" + lineTemp.slice(pos);
+				if(res != null){
+					const index = IFClines[l].indexOf(res[4]);
+					const pos = index + res[4].length;
+					if(res.input.charAt(index + res[4].length - res[9].length) != ":"){
+						lineTemp = lineTemp.slice(0, pos - 1) + ":" + /*res[9].replace("'", "")*/ count++ + "'" + lineTemp.slice(pos);
+					}
 				}
 			}
 			newFile += lineTemp + "\n";

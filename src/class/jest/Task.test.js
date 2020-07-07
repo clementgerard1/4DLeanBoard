@@ -166,3 +166,9 @@ test('isReady()', () => {
 	task.addRequirement("req1", req1);
 	expect(task.isReady()).toBe(true);
 });
+
+test('setColorClass(color)', () => {
+	const task = new Task();
+	task.setColorClass("orange");
+	expect(task.getColorClass()).toBe("orange");
+});
