@@ -30,7 +30,7 @@ services:
     networks : 
       - global
     volumes:
-      - ./dataServer/models/:./dataServer/models/
+      - ./dataServer/models/:/dataServer/models/
     ports:
       - "3003:3003"
 
