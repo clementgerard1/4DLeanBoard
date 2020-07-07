@@ -517,8 +517,6 @@ export default {
 			this.viewer.setGroundShadow(false);
 			this.viewer.setReverseZoomDirection(true);
 
-			this.viewer.setLightPreset(7);
-
 			this.viewer.addEventListener(Autodesk.Viewing.OBJECT_TREE_CREATED_EVENT, () => this.fireLoadEvent("tree"));
 			this.viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, () => this.fireLoadEvent("geometry"));
 			this.viewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, this.highlightTask);
@@ -529,7 +527,13 @@ export default {
 				this.nav.setPivotPoint(this.pivotPoint);
 				//this.nav.setTarget(this.pivotPoint);
 				//console.log(this.viewer.getCamera().target);
+
 			}
+		},
+		setBackgroundColor(){
+				console.log("HEY");
+				this.viewer.setBackgroundColor(255,255,255,255,255,255);
+				this.viewer.setBackgroundOpacity(0.0);
 		},
 		fireLoadEvent(type){
 			if(type == "geometry"){
@@ -537,7 +541,9 @@ export default {
 			}else{
 				this.treeFlag = true;
 			}
-			if(this.treeFlag && this.geometryFlag) this.onLoaded();
+			if(this.treeFlag && this.geometryFlag) {
+				this.onLoaded();
+			}
 		},
 		onLoaded(that){
 			this.tree = this.viewer.model.getInstanceTree();

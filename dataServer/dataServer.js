@@ -43,12 +43,13 @@ function getNewModels(){
 					  				let model = null;
 					  				if(ext == "json"){
 										model = Loader.fromJSONandIFC(data, data2);
-
+										model.setName(files[f].split('.').slice(0, -1).join('.'));
 										const json = model.serialize();
 										frag2ID[files[f].split('.').slice(0, -1).join('.')] = model.getFragToIdsArray();
 										saveModel(files[f].split('.').slice(0, -1).join('.'), json);
 									}else if(ext == "csv"){
 										model = Loader.fromCSVandIFC(data, data2);
+										model.setName(files[f].split('.').slice(0, -1).join('.'));
 										const json = model.serialize();
 										frag2ID[files[f].split('.').slice(0, -1).join('.')] = model.getFragToIdsArray();
 										saveModel(files[f].split('.').slice(0, -1).join('.'), json);
@@ -133,9 +134,11 @@ function updateForge(){
 						  let count = 0;
 						  for(let f in files){
 
+
 						  	if(files[f].charAt(0) != "."){
 							  	Utils.createForgeBucket(oAuth, files[f].split('.').slice(0, -1).join('.'))
 									.then( oAuth => {
+
 										return Utils.uploadIFCFileToForge(oAuth, files[f].split('.').slice(0, -1).join('.'), __dirname + '/models/ifc_modified' + '/' + files[f].split('.').slice(0, -1).join('.') + ".ifc");
 									})
 									.then( datas => {
@@ -226,7 +229,6 @@ function launchServer(){
 			model : models[req.query.name].serialize(),
 			urn : urns[req.query.name],
 		}
-
 		res.json(toReturn);
 	});
 

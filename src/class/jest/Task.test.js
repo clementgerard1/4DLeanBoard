@@ -161,9 +161,27 @@ test('setEndDate(date)', () => {
 
 test('isReady()', () => {
 	const task = new Task();
-	const req1 = new Requirement("req1");
+	const req1 = new Requirement("constraint");
+	const req2 = new Requirement("equipement");
+	const req3 = new Requirement("space");
+	const req4 = new Requirement("safety");
+	const req5 = new Requirement("materials");
+	const req6 = new Requirement("manpower");
+	const req7 = new Requirement("information");
 	req1.setValue(true);
-	task.addRequirement("req1", req1);
+	req2.setValue(true);
+	req3.setValue(true);
+	req4.setValue(true);
+	req5.setValue(true);
+	req6.setValue(true);
+	req7.setValue(true);
+	task.addRequirement("constraint", req1);
+	task.addRequirement("equipement", req2);
+	task.addRequirement("space", req3);
+	task.addRequirement("safety", req4);
+	task.addRequirement("materials", req5);
+	task.addRequirement("manpower", req6);
+	task.addRequirement("information", req7);
 	expect(task.isReady()).toBe(true);
 });
 

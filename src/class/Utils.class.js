@@ -113,7 +113,6 @@ class Utils{
 				response => {
 
 					const urn = this.getEncodedUrn(response.body.objectId).replace("urn:", "");
-
 					const job = {
 						input : 
 						{

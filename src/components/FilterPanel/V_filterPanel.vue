@@ -1,5 +1,6 @@
 import "./V_filterPanel.scss";
 import V_socketUtils from "../Utils/V_socketUtils.class.js";
+import MenuStart from "./assets/MenuStart.svg";
 
 export default {
 	data : function(){
@@ -9,7 +10,8 @@ export default {
 			displayTeamSelect : 0, // = All teams
 			checkboxes : [],
 			teamSelected : "all",
-			teams : teams
+			teams : teams,
+			menuOpen : false,
 		}
 	},
 	created: function(){
@@ -18,6 +20,11 @@ export default {
 	props : [
 		"model"
 	],
+	methods:{
+		handleMenuTap : function(e){
+			this.menuOpen = !this.menuOpen
+		}
+	},
 	watch : {
 		teamSelected : function(){
 			if(this.teamSelected != "all"){
@@ -33,15 +40,15 @@ export default {
 	},
 	template : `
 	<div class="filterPanel">
-		<div>
+		<div v-tap="handleMenuTap" class="filterMenu">
+			` + MenuStart +  `
+		</div>
+		<div v-if="menuOpen">
 			<label for="teamCheckbox">Teams Layout <input type="checkbox" name="teamCheckbox" id="teamCheckbox" value="teams" v-model="checkboxes"></label>
 			<select v-model="teamSelected" name="teamSelect" id="teamSelect">
 				<option value="all">All</option>
 				<option v-for="team in teams" v-bind:value="team.getId()" v-html="team.getName()"></option>
 			</select>
-		</div>
-		<div>
-
 		</div>
 	</div>`,
 }

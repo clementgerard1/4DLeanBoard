@@ -161,6 +161,36 @@ export default {
 				<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
 				</filter>
 				
+				<filter id="filter0_d_menuStart" x="0" y="0" width="50" height="45" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+				<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+				<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
+				<feOffset dx="2" dy="4"/>
+				<feGaussianBlur stdDeviation="2"/>
+				<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0"/>
+				<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+				<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+				</filter>
+
+				<filter id="filter0_d_menuStartPressed" x="0" y="0" width="50" height="45" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+				<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+				<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
+				<feOffset dx="2" dy="4"/>
+				<feGaussianBlur stdDeviation="2"/>
+				<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0"/>
+				<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+				<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+				</filter>
+
+				<filter id="filter0_d_3DMenuPressed" x="0" y="0" width="50" height="50" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+				<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+				<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
+				<feOffset dx="2" dy="4"/>
+				<feGaussianBlur stdDeviation="2"/>
+				<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0"/>
+				<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+				<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+				</filter>
+				
 				<linearGradient id="paint0_linear_playermilestonedone" x1="17.9099" y1="22.5" x2="17.9099" y2="54.3198" gradientUnits="userSpaceOnUse">
 				<stop/>
 				<stop offset="1" stop-opacity="0"/>
