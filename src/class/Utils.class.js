@@ -134,10 +134,13 @@ class Utils{
 				}
 			).then( 
 				response => {
+					//console.log(response);
 					return derivativesApi.getManifest(response.body.urn, {}, oAuth, oAuth.getCredentials());
 				}
 			).then( 
 				result => {
+
+					//console.log(result);
 					manifest = result.body;
 				})
 			.catch(

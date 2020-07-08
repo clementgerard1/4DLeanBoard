@@ -23,7 +23,7 @@ export default {
 			"currWeekMat" : null,
 			"nextsWeeksMat" : null,
 			"initialMaterials" : [],
-			"shownContractor" : null,
+			"shownTeam" : null,
 			"fliterModeFlag" : false,
 			"colored" : [],
 			"playing" : true,
