@@ -11,7 +11,7 @@ export default {
 		}
 	},
 	template : `
-		<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+		<svg v-bind:id="id" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
 			<g v-if="condition" filter="url(#filter0_d_standardItemActive)">
 				<circle v-bind:id="id" cx="18" cy="16" r="16" fill="#97D7C7"/>
 			</g>

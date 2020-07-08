@@ -146,8 +146,7 @@ export default {
 
 		handleTeamSelected : function(e){
 			const team = this.model.getTaskTeamById(parseInt(e.target.id.replace("teamitem-", "")));
-			V_socketUtils.setTeamDisplayed(team, !
-				this.colorTeams[team.getId()].display);
+			V_socketUtils.setTeamDisplayed(team, !this.colorTeams[team.getId()].display);
 		},
 
 		setIfcMenuChange : function(archi, struct, mep, construct){

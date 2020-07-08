@@ -107,8 +107,8 @@ class V_socketUtils{
 		});
 
 		this.socket.on("updateDisplayMenu", (datas) => {
-			V_4DUtils.setTeamDisplayMode(datas.choice == 2);
 			V_filterMenuUtils.setDisplayMenuChange(datas.choice);
+			V_4DUtils.setTeamDisplayMode(datas.choice == 2);
 		});
 
 		this.socket.on("clearHighlighting", (datas) => {

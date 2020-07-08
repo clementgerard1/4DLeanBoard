@@ -19,6 +19,8 @@ export default {
 	},
 	watch : {
 		time : function(){
+
+			console.log(time);
 			V_socketUtils.setTime(this.time);
 		}
 	},
@@ -32,6 +34,14 @@ export default {
 		return {
 			'timeline' : this.timeline,
 			'model' : this.model,
+		}
+	},
+	methods:{
+		handleStartButtonTap : function(){
+			V_socketUtils.setTime(0);
+		},
+		handleEndButtonTap : function(){
+			V_socketUtils.setTime(Math.trunc((this.duration - 1) / 7));
 		}
 	},
 	computed:{
@@ -53,10 +63,10 @@ export default {
 	template : `
 	<div class="player">
 		<div class="backgroundPlayer">
-			<div class="date"><p class="r90">{{startdate}}</p></div>
+			<div v-tap="handleStartButtonTap" class="date"><p class="r90">{{startdate}}</p></div>
 
 			<timelinePlayer v-bind:playerinit="_playerinit" v-bind:nbweek="nbweek" id="timelinePlayer"></timelinePlayer>
-			<div class="date" ><p class="r90">{{enddate}}</p></div>
+			<div v-tap="handleEndButtonTap" class="date" ><p class="r90">{{enddate}}</p></div>
 		</div>
 		<playerinfos v-bind:playerinit="_playerinit" class="svgPlayer" v-bind:nbweek="nbweek"></playerinfos>
 
