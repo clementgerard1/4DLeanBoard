@@ -19,8 +19,6 @@ export default {
 	},
 	watch : {
 		time : function(){
-
-			console.log(time);
 			V_socketUtils.setTime(this.time);
 		}
 	},

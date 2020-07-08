@@ -160,7 +160,6 @@ io.on("connection", function(client){
     })
 
     client.on("clearHighlighting", (datas) => {
-        models[modelName].ifcmenu = datas.choice;
         broadcast(client, modelName, "clearHighlighting", datas);
         //client.broadcast.emit("clearHighlighting", datas);
     })

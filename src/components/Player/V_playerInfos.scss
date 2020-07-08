@@ -12,6 +12,7 @@
 			y : 57%;
 			stroke: v.$blackish;
 			fill: "rgba(0,0,0,0)";
+			pointer-events: none;
 		}
 
 		.playerBackgroundFilled{
@@ -20,15 +21,12 @@
 			y : 57%;
 			stroke: v.$blackish;
 			fill: v.$blackish;
+			pointer-events: none;
 		}
 
 		.playerButton{
 			fill: v.$greenbluish_light;
 			cy : 57%;
-		}
-
-		*{
-			pointer-events:none;
 		}
 
 	}

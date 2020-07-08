@@ -331,6 +331,7 @@ class Timeline{
 		let max = 0;
 		for(let i = start; i <= end ; i++){
 			const tasks = this.#steps[i].tasks;
+
 			let count = 0;
 			for(let t in tasks){
 				if(tasks[t].getTaskTeam() == taskTeam){

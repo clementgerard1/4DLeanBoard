@@ -14,6 +14,7 @@ export default {
 		return {
 			"color" : "BG_" + this.taskteam.getColorClass(),
 			"isOpen" : true, 
+			"isVisible" : true,
 			"maxheight" : "init"
 		}
 	},
@@ -43,6 +44,7 @@ export default {
 		tasks : function(){
 			const tasks = this.timeline.getTasksByTaskTeamAndNthBetweenTwoDates(this.taskteam, this.nth, this.tasktablestart * 7, (this.tasktablestart + 6) * 7 - 1);
 			this.isOpen = (tasks.count != 0);
+			this.isVisible = (tasks.count != 0);
 			return tasks.array;
 		},
 		_time : function(){
@@ -70,6 +72,7 @@ export default {
 		tasktablestart: function(){
 			const tasks = this.timeline.getTasksByTaskTeamAndNthBetweenTwoDates(this.taskteam, this.nth, this.tasktablestart * 7, (this.tasktablestart + 6) * 7 - 1);
 			this.isOpen = (tasks.count != 0);
+			this.isVisible = (tasks.count != 0);
 		}
 	},
 	created: function(){
@@ -89,15 +92,15 @@ export default {
 	<div class="phaserow">
 
 		<!-- line -->
-		<taskline class="phaseLine" v-bind:class="color"></taskline>
+		<taskline v-if="isVisible" class="phaseLine" v-bind:class="color"></taskline>
 
 		<!-- tasks -->
-		<div v-bind:style="{maxHeight : maxheight, height : (tasksize - 30) + 'px'}" class="tasksWrapper">
+		<div v-if="isVisible" v-bind:style="{maxHeight : maxheight, height : (tasksize - 30) + 'px'}" class="tasksWrapper">
 			<task v-bind:style="{maxHeight : maxheight}" v-bind:maxheight="maxheight" v-bind:color="color" v-bind:team="_team" nth=0 v-for="(task, i) in tasks" :key="i" v-bind:task="task" v-bind:isOpen="isOpen" v-bind:time="_tasktablestart + i"  ></task>
 		</div>
 
 		<!-- button -->
-		<div v-bind:class='[isOpen ? "open" : "close"]' v-tap="handleOpenPhase" v-html="icon" class="phaseButton"></div>
+		<div v-if="isVisible" v-bind:class='[isOpen ? "open" : "close"]' v-tap="handleOpenPhase" v-html="icon" class="phaseButton"></div>
 
 
 

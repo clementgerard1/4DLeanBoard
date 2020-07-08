@@ -47,6 +47,6 @@ export default {
 	},
 	template : `
 	<div>
-		<div v-for="c in 6" :key="c" class="backgroundcolumn" v-bind:style="{ height : heightcolumn + 'px', minHeight : minheightcolumn}"></div>
+		<div v-for="c in 6" :key="c" v-bind:class='[c == lineplayed ? "played" : "", "backgroundcolumn"]' v-bind:style="{ height : heightcolumn + 'px', minHeight : minheightcolumn}"></div>
 	</div>`,
 }

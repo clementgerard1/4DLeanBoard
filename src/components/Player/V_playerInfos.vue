@@ -60,7 +60,7 @@ export default {
 			const x = event.srcEvent.clientX - this.svg.getBoundingClientRect().x;
 			const weekWidth = (this.svg.clientWidth) / this.nbweek;
 
-			if(event.type == "panstart" && (x > (this.time * weekWidth) && (x < ((this.time + 1) * weekWidth)))) this.playerflag = true;
+			if(event.target.classList.contains("playerButton") || event.type == "panstart" && (x > (this.time * weekWidth) && (x < ((this.time + 1) * weekWidth)))) this.playerflag = true;
 
 			if(this.playerflag){
 				if(event.type == "panmove" || event.type == "panstart"){
@@ -104,7 +104,7 @@ export default {
 			<playermilestone v-bind:widthh="widthh" v-bind:time="time" v-for="m in milestones" :key="m.getId()" v-bind:milestone="m"></playermilestone>
 
 			<g filter="url(#filter0_d_playerButton)">
-				<circle class="playerButton" v-bind:cx="playerX" r="21" fill="#97D7C7"/>
+				<circle class="playerButton" v-bind:cx="playerX" r="21" stroke-width="2" stroke="white" fill="#97D7C7"/>
 			</g>
 
 		</svg>
