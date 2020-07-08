@@ -13,6 +13,7 @@ import V_modelSelect from "./components/V_modelSelect.vue";
 import openSocket from "socket.io-client";
 import V_timelineUtils from "./components/Utils/V_timelineUtils.class.js";
 import V_taskTableUtils from "./components/Utils/V_taskTableUtils.class.js";
+import V_filterMenuUtils from "./components/Utils/V_filterMenuUtils.class.js";
 
 //Hammer si already on viewer3D.min.js loaded on index.html
 //import Hammer from "hammerjs";
@@ -182,6 +183,7 @@ function init(){
 						this.timeline = new Timeline(this.model);
 						this.playerInit = 0;
 						V_taskTableUtils.setAllTasks(this.model.getTasks());
+						V_filterMenuUtils.setAllTeams(this.model.getTaskTeams());
 						V_timelineUtils.setTimeline(this.timeline);
 
 						const phase = this.timeline.getModel().getMilestones()[0].getPhases()[0];

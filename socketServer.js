@@ -19,9 +19,24 @@ io.on("connection", function(client){
 
     const modelName = client.handshake.query.model;
     if(typeof models[modelName] == "undefined"){
+
+        //Initialisation
         DataApi.getModel(modelName).then((data)=>{
             const model = new Model();
             model.deserialize(data)
+
+            //IFC Menu
+            //Play menu
+            //Team Display
+            //Teams    
+            /*for(let d in this.initDatas.teamDisplayed){
+
+            }*/
+            const teams = model.getTaskTeams();
+            const teamDisplayed = [];
+            for(let t in teams){
+                teamDisplayed.push(teams[t].getId());
+            }
 
             const timeline = new Timeline(model);
             const selected = timeline.getTasksBetweenTwoDates(0 * 7, (0 * 7) + 6);
@@ -36,6 +51,10 @@ io.on("connection", function(client){
                 pushed : [],
                 backgroundTasks : [],
                 timeline : timeline,
+                ifcmenu : [true, true, true, true],
+                playmenu : 4,
+                teamdisplay : 1,
+                teamDisplayed : teamDisplayed
             };
             client.emit("sendInit", models[modelName]);
         }).catch(error => console.error(error));
@@ -141,7 +160,34 @@ io.on("connection", function(client){
     })
 
     client.on("clearHighlighting", (datas) => {
+        models[modelName].ifcmenu = datas.choice;
         broadcast(client, modelName, "clearHighlighting", datas);
+        //client.broadcast.emit("clearHighlighting", datas);
+    })
+
+
+    client.on("updateIfcMenu", (datas) => {
+        models[modelName].ifcmenu = [datas.archi, datas.struct, datas.mep, datas.construction];
+        broadcast(client, modelName, "updateIfcMenu", datas);
+        //client.broadcast.emit("clearHighlighting", datas);
+    })
+    client.on("updatePlanningMenu", (datas) => {
+        models[modelName].playmenu = datas.choice;
+        broadcast(client, modelName, "updatePlanningMenu", datas);
+        //client.broadcast.emit("clearHighlighting", datas);
+    })
+    client.on("updateDisplayMenu", (datas) => {
+        models[modelName].teamdisplay = datas.choice;
+        broadcast(client, modelName, "updateDisplayMenu", datas);
+        //client.broadcast.emit("clearHighlighting", datas);
+    })
+    client.on("updateTeamDisplayed", (datas) => {
+        if(datas.value && !models[modelName].teamDisplayed.includes(datas.team)){
+            models[modelName].teamDisplayed.push(datas.team);
+        }else if(!datas.value){
+            models[modelName].teamDisplayed.splice(models[modelName].teamDisplayed.indexOf(datas.team), 1);
+        }
+        broadcast(client, modelName, "updateTeamDisplayed", datas);
         //client.broadcast.emit("clearHighlighting", datas);
     })
 

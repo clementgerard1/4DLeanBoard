@@ -1,6 +1,3 @@
-import V_taskTableUtils from "./V_taskTableUtils.class.js";
-import V_socketUtils from "./V_socketUtils.class.js";
-
 class V_4DUtils{
 
 
@@ -60,10 +57,10 @@ class V_4DUtils{
 		@param {string} Object4Did id of Object4D to hightlight
 		@static
 	*/
-	static setTeamDisplayedById(teamId){
-		const taskTeam = this.viewer.model.getTaskTeamById(teamId);
+	static setTeamDisplayedById(teamId, bool){
+		const taskTeam = this.viewer.model.getTaskTeamById(teamId, bool);
 		if(taskTeam != null){
-			this.setTeamDisplayed(taskTeam);
+			this.setTeamDisplayed(taskTeam, bool);
 		}
 	}
 
@@ -72,9 +69,9 @@ class V_4DUtils{
 		@param {uid} taskTeam id
 		@static
 	*/
-	static setTeamDisplayed(taskTeam){
+	static setTeamDisplayed(taskTeam, bool){
 		if(this.viewer != null){
-			this.viewer.setTeamDisplayed(taskTeam);
+			this.viewer.setTeamDisplayed(taskTeam, bool);
 		}
 	}
 

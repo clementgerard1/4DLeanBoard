@@ -1,4 +1,5 @@
 import V_4DUtils from "./V_4DUtils.class.js";
+import V_filterMenuUtils from "./V_filterMenuUtils.class.js";
 import V_taskTableUtils from "./V_taskTableUtils.class.js";
 import V_timelineUtils from "./V_timelineUtils.class.js";
 import DataApi from "../../../dataServer/DataApi.class.js";
@@ -37,6 +38,20 @@ class V_socketUtils{
 
 			for(let d in this.initDatas.backgroundTasks){
 				V_taskTableUtils.updateStateDisplayById(this.initDatas.backgroundTasks[d], true);
+			}
+
+			//filter menu		
+			//IFC Menu
+			V_filterMenuUtils.setIfcMenuChange(this.initDatas.ifcmenu[0], this.initDatas.ifcmenu[1], this.initDatas.ifcmenu[2], this.initDatas.ifcmenu[3]);
+			//Play menu
+			V_filterMenuUtils.setPlanningMenuChange(this.initDatas.playmenu);
+			//Team Display
+			V_filterMenuUtils.setDisplayMenuChange(this.initDatas.teamdisplay);
+			V_4DUtils.setTeamDisplayMode(this.initDatas.teamdisplay == 2);
+			//Teams	
+			for(let d in this.initDatas.teamDisplayed){
+				V_filterMenuUtils.setTeamDisplayedById(this.initDatas.teamDisplayed[d], true);
+				V_4DUtils.setTeamDisplayedById(this.initDatas.teamDisplayed[d], true);
 			}
 		}
 	}
@@ -86,19 +101,25 @@ class V_socketUtils{
 			V_taskTableUtils.highlightTaskByIdAndUpdate(datas.taskId, datas.value);
 		});	
 
-		this.socket.on("setTeamDisplayed", (datas) => {
-			V_4DUtils.setTeamDisplayedById(datas.team);
+		this.socket.on("updateTeamDisplayed", (datas) => {
+			V_4DUtils.setTeamDisplayedById(datas.team, datas.value);
+			V_filterMenuUtils.setTeamDisplayed(datas.team, datas.value);
 		});
 
-		this.socket.on("setTeamDisplayMode", (datas) => {
-			V_4DUtils.setTeamDisplayMode(datas.bool);
+		this.socket.on("updateDisplayMenu", (datas) => {
+			V_4DUtils.setTeamDisplayMode(datas.choice == 2);
+			V_filterMenuUtils.setDisplayMenuChange(datas.choice);
 		});
-		this.socket.on("setTaskState", (datas) => {
-			V_4DUtils.setTeamDisplayMode(datas.bool);
-		});
+
 		this.socket.on("clearHighlighting", (datas) => {
 			V_taskTableUtils.clearTokens();
 			V_4DUtils.clearHighlighting();
+		});
+		this.socket.on("updateIfcMenu", (datas) => {
+			V_filterMenuUtils.setIfcMenuChange(datas.archi, datas.struct, datas.mep, datas.construction);
+		});
+		this.socket.on("updatePlanningMenu", (datas) => {
+			V_filterMenuUtils.setPlanningMenuChange(datas.choice);
 		});
 
 	}
@@ -156,22 +177,23 @@ class V_socketUtils{
 	*/		
 	static highlightTask(task, bool){
 		V_taskTableUtils.highlightTaskById(task.getId(), bool);
-  		this.socket.emit("highlightTask", { id : task.getId(), value : bool});
+  	this.socket.emit("highlightTask", { id : task.getId(), value : bool});
 	}
 
 
-/* ---------------------------- 3D Filter INTERACTIONS ---------------------------- */
+/* ---------------------------- 3D filter INTERACTIONS ---------------------------- */
 	/**
 		Set the team displayed on viewer
 		@param {TaskTeam} team
 		@static
 	*/	
-	static setTeamDisplayed(team){
-		V_4DUtils.setTeamDisplayed(team);
+	static setTeamDisplayed(team, bool){
+		V_filterMenuUtils.setTeamDisplayed(team, bool);
+		V_4DUtils.setTeamDisplayed(team, bool);
 		if(team != null){
-			this.socket.emit("setTeamDisplayed", { team : team.getId()});
+			this.socket.emit("updateTeamDisplayed", { team : team.getId(), value : bool});
 		}else{
-			this.socket.emit("setTeamDisplayed", { team : null});
+			this.socket.emit("updateTeamDisplayed", { team : null, value : null});
 		}
 	}
 
@@ -182,7 +204,16 @@ class V_socketUtils{
 	*/	
 	static setTeamDisplayMode(active){
 		V_4DUtils.setTeamDisplayMode(active);
-		this.socket.emit("setTeamDisplayMode", { bool : active});
+		if(active){
+			V_filterMenuUtils.setDisplayMenuChange(2);
+		}else{
+			V_filterMenuUtils.setDisplayMenuChange(1);
+		}
+		if(active){
+			this.socket.emit("updateDisplayMenu", { choice : 2});
+		}else{
+			this.socket.emit("updateDisplayMenu", { choice : 1});
+		}
 	}
 
 	/* ---------------------------- W6 INTERACTIONS ---------------------------- */
@@ -239,6 +270,32 @@ class V_socketUtils{
 		this.socket.emit("updateStateDisplay", { 
 			taskId : task.getId(),
 			value : bool
+		});
+	}
+
+	/* ---------------------------- FILTER MENU INTERACTIONS ---------------------------- */
+
+	static setIfcMenuChange(archi, struct, mep, construction){
+		V_filterMenuUtils.setIfcMenuChange(archi, struct, mep, construction);
+		this.socket.emit("updateIfcMenu", { 
+			archi : archi,
+			struct : struct,
+			mep : mep,
+			construction : construction,
+		});
+	}
+
+	static setPlanningMenuChange(choice){
+		V_filterMenuUtils.setPlanningMenuChange(choice);
+		this.socket.emit("updatePlanningMenu", { 
+			choice : choice
+		});
+	}
+
+	static setDisplayMenuChange(choice){
+		V_filterMenuUtils.setDisplayMenuChange(choice);
+		this.socket.emit("updateDisplayMenu", { 
+			choice : choice
 		});
 	}
 

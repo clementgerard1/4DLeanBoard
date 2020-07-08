@@ -110,8 +110,7 @@ class V_taskTableUtils{
 		@param {bool} bool
 		@static
 	*/
-	static highlightTask(task, bool){
-
+	static highlightTask(task, bool){;
 		for( let t in this.tasks){
 			if(this.tasks[t].task == task) this.tasks[t].vTask.hightlight(bool);
 		}
@@ -141,9 +140,16 @@ class V_taskTableUtils{
 		@static
 	*/
 	static highlightTaskById(taskId, bool){
-
-		if(typeof this.tasks[0] != "undefined"){
-			const task = this.tasks[0].model.getTaskById(taskId);
+		let test = true;
+		let i = 0;
+		while(test){
+			if(typeof this.tasks[i] != "undefined"){
+				test = false;
+			}
+			i++;
+		}
+		if(typeof this.tasks[i - 1] != "undefined"){
+			const task = this.tasks[i - 1].vTask.model.getTaskById(taskId);
 			this.setToken(task, bool);
 		}
 	}

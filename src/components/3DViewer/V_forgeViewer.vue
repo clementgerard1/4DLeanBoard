@@ -132,7 +132,7 @@ export default {
 			}
 		},
 
-		setTeamDisplayed(taskTeam){
+		setTeamDisplayed(taskTeam, bool){
 			if(taskTeam != null){
 				this.shownTeam = taskTeam.getId();
 			}else{
