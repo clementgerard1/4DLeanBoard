@@ -522,7 +522,7 @@ export default {
 			this.viewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, this.highlightTask);
 			this.viewer.addEventListener(Autodesk.Viewing.CAMERA_CHANGE_EVENT, () => this.info());
 		},
-		info() {
+		info(){
 			if(this.treeFlag && this.geometryFlag) {
 				this.nav.setPivotPoint(this.pivotPoint);
 				//this.nav.setTarget(this.pivotPoint);
@@ -547,6 +547,10 @@ export default {
 		},
 		onLoaded(that){
 			this.tree = this.viewer.model.getInstanceTree();
+			const names = this.tree.nodeAccess.nameSuffixes;
+			for(let n in names){
+				console.log(n, names[n]);
+			}
 			this.selectedMaterial = new THREE.MeshBasicMaterial({
 			    reflectivity: 0.0,
 			    flatShading: true,

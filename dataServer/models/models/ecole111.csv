@@ -1,0 +1,69 @@
+ENSA Nancy - Travaux de renforcement des structures;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+Milestones;;;;;;Phases;;;;;Tasks;;;;;;;;;;;;;;;;;;;
+N;M.Name;M.StartDate;M.EndDate;Previous.M;Next.M;N;P.Name;P.StartDate;P.EndDate;P.Requirements;T.Name;ID;T.Duration;T.Men;T.Previous;T.Team;4DObject;T.Level;ObjectsCount;T.Zone;T.State;Constraint;Information;Materials;Man Power;Equipement;Safety;Space;;TeamColor
+1;P‚riode de pr‚paration;01/09/2020;10/11/2020;N/A;Travaux TCE;1;P‚riode de pr‚paration;01/09/2020;11/10/2020;Requirements Exemple Text;Pr‚paration chantier;101;10;10;;Team E;46B50AC5-8862-46E5-B028-331478A4A483;Etage Jaune;;;Not Ready;No;No;No;No;No;No;No;Team A;Yellowish
+;;;;;;;;;;;Prototype File 18;102;20;8;101;Team E;Later;Etage Bleu;;;Not Ready;Yes;Yes;Yes;No;No;No;No;Team B;Redish
+;;;;;;;;;;;Conclusion Adaptation;103;10;2;102;Team E;Later;Etage Bleu;;;Not Ready;No;No;No;No;No;No;No;Team C;Blueish
+2;Travaux TCE;11/09/2020;05/07/2021;P‚riode de pr‚paration;N/A;1;Reconstruction suite au sinistre;11/09/2020;09/12/2020;Requirements Exemple Text;D‚molitions-Travaux pr‚paratoires-Stabilit‚ provisoire;104;5;4;101;Team A;Later;Etage Bleu;;A, B, C, D;Not Ready;No;No;No;No;No;No;No;Team D;Orange
+;;;;;;;;;;;Fabrication et approvisionnement des panneaux/poteaux/poutres;105;60;4;101;Team B;Later;Etage Bleu;;A, B, C, D;Not Ready;No;No;No;No;No;No;No;Team E;Dark
+;;;;;;;;;;;Travaux pr‚paratoires de S/Sol au RdC;106;6;4;104;Team C;Later;Etage Bleu;;A, B, C, D;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;D‚pose du bardage;107;5;4;106;Team C;Later;Etage Bleu;;A, B, C, D;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Remplacement du linteau;108;5;4;107;Team A;Later;Etage Bleu;;A, B, C, D;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Pose File 1;109;15;4;105;Team A;Later;Etage Bleu;;A, B, C, D;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Pose escalier entre RdC et Etage;110;10;5;109.111;Team A;Later;Etage Bleu;;A, B, C, D;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Pose File 0;111;15;5;105;Team A;Later;Etage Bleu;;A, B, C, D;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;2;Travaux File 18;16/09/2020;16/12/2020;Requirements Exemple Text;Echafaudage 1;112;5;4;104;Team C;0423AE3C-71FD-4C4A-BC5F-50F50CCD39BD;Etage Bleu;;A;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;D‚pose couvertines;113;2;4;112;Team C;Later;Etage Bleu;;A;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;D‚pose des scotchs 1;114;3;4;113;Team C;Later;Etage Bleu;;A;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Solidarisation des panneaux sur structures;115;15;4;114;Team A;Later;Etage Bleu;;A;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Injection r‚sine appuis panneaux;116;30;4;115;Team B;Later;Etage Bleu;;A;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Rebouchage mortier et pose de scotch;117;10;5;116;Team B;Later;Etage Bleu;;A;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Nettoyage fa‡ade - R‚fections ponctuelles - A‚rogommage;118;15;4;117;Team D;Later;Etage Bleu;;A;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Pose couvertines et bardage 1;119;5;4;117;Team A;Later;Etage Bleu;;A;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Peintures/Lasure;120;10;4;118.119;Team D;Later;Etage Bleu;;A;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;D‚pose ‚chaffaudage et nettoyage;121;5;4;120;Team C;Later;Etage Bleu;;A;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;3;Renforcement panneaux ajour‚s;16/09/2020;10/10/2020;Requirements Exemple Text;Etaiement;122;5;4;104;Team C;Later;Etage Bleu;;A;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;D‚pose des scotchs 2;123;2;4;122;Team C;Later;Etage Bleu;;A;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Remplacement des platines;124;10;4;123;Team D;Later;Etage Bleu;;A;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Peinture intumescente 1;125;3;4;124;Team D;Later;Etage Bleu;;A;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Pose couvertines et bardage 2;126;3;4;125;Team D;Later;Etage Bleu;;A;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Capotage 1;127;2;4;126;Team D;Later;Etage Bleu;;A;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;4;Travaux File 0;17/12/2020;31/01/2021;Requirements Exemple Text;Echafaudage 2;128;5;4;121;Team C;Later;Etage Bleu;;B;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;A‚rogommage-R‚fections ponctuelles;129;7;4;128;Team D;Later;Etage Bleu;;B;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Renforcement des appuis-Mise en oeuvre UPE;130;7;4;129;Team A;Later;Etage Bleu;;B;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Renforcement des fa‡ades - Equerres;131;10;5;130;Team A;Later;Etage Bleu;;B;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Peinture intumescente 2;132;5;4;130;Team D;Later;Etage Bleu;;B;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Capotage 2;133;2;4;131.132;Team D;Later;Etage Bleu;;B;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;5;Renforcement local et espace technique;17/01/2021;31/01/2021;Requirements Exemple Text;Equerres;134;3;4;133;Team A;Later;Etage Bleu;;B;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Peinture intumescente 3;135;2;4;134;Team D;Later;Etage Bleu;;B;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Mise en oeuvre de mortier joints horizontaux;136;3;4;135;Team A;Later;Etage Bleu;;B;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Remplacement des joints Verticaux;137;2;4;135;Team A;Later;Etage Bleu;;B;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Peinture/lasure-Capotage;138;5;4;136.137;Team D;Later;Etage Bleu;;B;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;D‚pose ‚chaffaudage File 0 et nettoyage;139;2;4;138;Team C;Later;Toiture;;B;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;6;Travaux File 1;01/02/2021;28/03/2021;Requirements Exemple Text;D‚pose couvertines-Relev‚s d'‚tanch‚it‚-Batardeaux-Protections;140;2;4;139;Team C;Later;Toiture;;C;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;7;Renforcement des panneaux;29/03/2021;30/04/2021;None;Stabilisation provisoire 1;141;3;4;140;Team B;Later;Toiture;;C;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;D‚pose des scotchs 3;142;3;4;141;Team C;Later;Toiture;;C;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Mise en oeuvre des ‚querres et des profil‚s;143;10;5;142;Team A;Later;Etage Rouge;;C;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Joints mortier;144;4;4;143;Team A;Later;Etage Rouge;;C;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Traitement des joints Verticaux 1;145;4;4;144;Team A;Later;Etage Rouge;;C;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;R‚fection ‚tanch‚it‚;146;5;4;145;Team B;Later;Etage Rouge;;C;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;8;Renforcement des panneaux des patios entre File 1 et 0;03/05/2021;10/05/2021;None;Stabilisation provisoire 2;147;3;4;146;Team B;Later;Etage Rouge;;C;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;D‚pose des structures existantes;148;3;4;147;Team C;Later;Etage Rouge;;C;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;9;Renforcement des paliers;11/05/2021;30/05/2021;None;Mise en oeuvre profil‚s-Chevillage;149;5;4;148;Team A;Later;Etage Rouge;;C;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Peinture intumescente 4;150;3;4;149;Team D;Later;Etage Rouge;;C;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Traitement des joints Verticaux 2;151;3;4;150;Team A;Later;Etage Rouge;;C;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;D‚pose ‚chaffaudage entre File 0 et 1;152;2;4;151;Team C;Later;Etage Rouge;;C;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Travaux sur paliers dalles escaliers ext‚rieurs;153;6;4;152;Team D;Later;Etage Rouge;;C;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;10;Travaux sur entr‚e de garage;31/05/2021;20/06/2021;None;Travaux pr‚paratoires - D‚poses diverses;154;2;4;139;Team C;Later;Etage Rouge;;D;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;D‚pose des finitions et protections lourdes;155;2;4;154;Team C;Later;Etage Rouge;;D;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Cr‚ation de relev‚s BA;156;5;4;155;Team B;Later;Etage Rouge;;D;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Cr‚ation EP - Carottage;157;2;4;156;Team B;Later;Etage Rouge;;D;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Forme de pente;158;1;2;157;Team D;Later;Etage Jaune;;D;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Etanch‚it‚;159;4;4;158;Team D;Later;Etage Jaune;;D;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Traitement JD;160;1;4;159;Team D;Later;Etage Jaune;;D;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Raccordement des EP;161;1;4;160;Team D;Later;Etage Jaune;;D;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Protection lourde Finition asphalte-Bordures;162;3;4;161;Team B;Later;Etage Jaune;;D;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;11;R‚paration des ouvrages BA;21/06/2021;05/07/2021;;Sondages - Repiquage des surfaces;163;5;4;162;Team C;Later;Etage Jaune;;A, B, C, D;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Passivation des fers;164;4;4;162;Team B;Later;Etage Jaune;;A, B, C, D;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Mortier de r‚paration;165;3;4;164;Team D;Later;Etage Jaune;;A, B, C, D;Not Ready;No;No;No;No;No;No;No;;
+;;;;;;;;;;;Mise en oeuvre de capotages;166;2;4;165;Team C;Later;Etage Jaune;;A, B, C, D;Not Ready;No;No;No;No;No;No;No;;
