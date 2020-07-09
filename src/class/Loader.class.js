@@ -45,6 +45,7 @@ class Loader{
 		"IFCFOOTING", // Pas sur
 		"IFCBUILDINGELEMENTCOMPONENT", // Pas sur
 		"IFCPLATE", // Pas sur
+		"IFCSTAIR"
 	]
 
 	/**

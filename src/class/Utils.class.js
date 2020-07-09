@@ -108,7 +108,7 @@ class Utils{
 
 		await Utils.loadTextFile(url).then( file => {
 		  const objectsApi = new ForgeSDK.ObjectsApi();
-			return objectsApi.uploadObject(Utils.forgeBucketName + "-" + name, Utils.forgeFileName, file.length, file, {}, oAuth, oAuth.getCredentials())
+			return objectsApi.uploadObject(Utils.forgeBucketName + "-" + name, /*Utils.forgeFileName*/ name + ".ifc", file.length, file, {}, oAuth, oAuth.getCredentials())
 			.then(
 				response => {
 
@@ -134,13 +134,12 @@ class Utils{
 				}
 			).then( 
 				response => {
-					//console.log(response);
+					//console.log(response.body.status);
 					return derivativesApi.getManifest(response.body.urn, {}, oAuth, oAuth.getCredentials());
 				}
 			).then( 
 				result => {
-
-					//console.log(result);
+					console.log(result.body.derivatives[0].name  + " : " + result.body.status);
 					manifest = result.body;
 				})
 			.catch(

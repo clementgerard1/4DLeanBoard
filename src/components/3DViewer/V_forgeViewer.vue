@@ -241,6 +241,7 @@ export default {
 
 		},
 		map3DObjs() {
+			//console.log(this.tree.nodeAccess);
 			var mils = this.model.getMilestones();
 			for(let i in mils) {
 				var phs = mils[i].getPhases();
@@ -248,12 +249,20 @@ export default {
 					var o4D = phs[j].getObjects4D();
 					for(let k in o4D){
 						var o3D = o4D[k].getObjects3D();
+						//console.log(o3D);
 						for(let l in o3D) {
+							//console.log(o3D[l].getUniqId());
+							console.log("--");
+							console.log(o3D[l].getUniqId());
+							console.log(o3D[l].getName());
+							console.log(o3D[l].getIFCId())
+							console.log(this.tree.nodeAccess.nameSuffixes.indexOf(o3D[l].getUniqId()));
 							for(let s in this.tree.nodeAccess.nameSuffixes){
-
+								//console.log(o3D[l].getUniqId());
 								if(this.tree.nodeAccess.nameSuffixes[s] == o3D[l].getUniqId()){
-									const index = this.getDbId(s);
-									const r = parseInt(scssVariables[o4D[k].getTask().getTaskTeam().getColorClass().replace("BG_", "").toLowerCase()].slice(1,3), 16) / 255;
+
+									//const index = this.getDbId(s);
+									/*const r = parseInt(scssVariables[o4D[k].getTask().getTaskTeam().getColorClass().replace("BG_", "").toLowerCase()].slice(1,3), 16) / 255;
 									const g = parseInt(scssVariables[o4D[k].getTask().getTaskTeam().getColorClass().replace("BG_", "").toLowerCase()].slice(3,5), 16) / 255;
 									const b = parseInt(scssVariables[o4D[k].getTask().getTaskTeam().getColorClass().replace("BG_", "").toLowerCase()].slice(5,7), 16) / 255;
 									const a = 0.75;
@@ -295,6 +304,7 @@ export default {
 									materials.addMaterial(Utils.getGuid(), sMat, true);
 									this.getNodeInfos(this.objs[o3D[l].getId()]);
 									//this.color3DObject(this.objs[o3D[l].getId()]);
+									*/
 								}
 							}
 						}
@@ -470,11 +480,13 @@ export default {
 			}
 		},
 		getDbId(id){
+			console.log("hey", id)
 			var dbId;
 			const that = this;
-			dbId = parseInt(Object.keys(this.tree.nodeAccess.dbIdToIndex).filter(function(key) {
-			    return that.tree.nodeAccess.dbIdToIndex[key] == id;
-			})[0]);
+			// dbId = parseInt(Object.keys(this.tree.nodeAccess.dbIdToIndex).filter(function(key) {
+			//     return that.tree.nodeAccess.dbIdToIndex[key] == id;
+			// })[0]);
+			console.log(dbId);
 			return dbId;
 		},
 		getUniqueId(dbid){
@@ -531,7 +543,6 @@ export default {
 			}
 		},
 		setBackgroundColor(){
-				console.log("HEY");
 				this.viewer.setBackgroundColor(255,255,255,255,255,255);
 				this.viewer.setBackgroundOpacity(0.0);
 		},
@@ -549,7 +560,7 @@ export default {
 			this.tree = this.viewer.model.getInstanceTree();
 			const names = this.tree.nodeAccess.nameSuffixes;
 			for(let n in names){
-				console.log(n, names[n]);
+				//console.log(n, names[n]);
 			}
 			this.selectedMaterial = new THREE.MeshBasicMaterial({
 			    reflectivity: 0.0,
@@ -595,7 +606,7 @@ export default {
 			this.pivotPoint = this.viewer.utilities.getBoundingBox(true);
 			this.viewCubeUiExt.setViewCube("top back left");
 			this.fragList = this.viewer.model.getFragmentList();
-			//this.nav.setZoomOutLimitFactor(3);
+			this.nav.setZoomOutLimitFactor(3);
 			//console.log(this.viewer, this.nav.getCameraRightVector(false), this.nav.getEyeVector(), this.nav.getPosition());
 		},
 		onEnvInitialized(that){
