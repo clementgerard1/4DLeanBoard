@@ -260,52 +260,52 @@ export default {
 							//for(let s in this.tree.nodeAccess.nameSuffixes){
 								//console.log(o3D[l].getUniqId());
 								//if(this.tree.nodeAccess.nameSuffixes[s] == o3D[l].getUniqId()){
-									if(this.tree.nodeAccess.nameSuffixes.indexOf(o3D[l].getUniqId()) != -1){
-										const index = this.getDbId(/*s*/this.tree.nodeAccess.nameSuffixes.indexOf(o3D[l].getUniqId()));
-										//console.log(index);
-										const r = parseInt(scssVariables[o4D[k].getTask().getTaskTeam().getColorClass().replace("BG_", "").toLowerCase()].slice(1,3), 16) / 255;
-										const g = parseInt(scssVariables[o4D[k].getTask().getTaskTeam().getColorClass().replace("BG_", "").toLowerCase()].slice(3,5), 16) / 255;
-										const b = parseInt(scssVariables[o4D[k].getTask().getTaskTeam().getColorClass().replace("BG_", "").toLowerCase()].slice(5,7), 16) / 255;
-										const a = 0.75;
-										const material = new THREE.MeshBasicMaterial({
-										    reflectivity: 0.0,
-										    flatShading: true,
-										    transparent: true,
-										    opacity: a,
-										    color: scssVariables[o4D[k].getTask().getTaskTeam().getColorClass().replace("BG_", "").toLowerCase()],
-							      		});
-							      		const sMat = new THREE.MeshBasicMaterial({
-										    reflectivity: 0.0,
-										    flatShading: true,
-										    transparent: true,
-										    opacity: 0.3,
-										    color: scssVariables[o4D[k].getTask().getTaskTeam().getColorClass().replace("BG_", "").toLowerCase()],
-										});
-										this.objs[o3D[l].getId()] = {
-											obj3D : o3D[l],
-											guId : o3D[l].getIFCId(),
-											dbId : index,
-											color : {
-												r : r,
-												g : g,
-												b : b,
-												a : a
-											},
-											material : material,
-											sMat : sMat,
-											initialMaterials : {},
-											nodes: [],
-											colored : false,
-											shadowed : false,
-											state : "initial", // Pour plus tard
-											needUpdate : false,
-										}
-										const materials = this.viewer.impl.getMaterials();
-										materials.addMaterial(Utils.getGuid(), material, true);
-										materials.addMaterial(Utils.getGuid(), sMat, true);
-										this.getNodeInfos(this.objs[o3D[l].getId()]);
-										//this.color3DObject(this.objs[o3D[l].getId()]);
-									}
+									// if(this.tree.nodeAccess.nameSuffixes.indexOf(o3D[l].getUniqId()) != -1){
+									// 	const index = this.getDbId(/*s*/this.tree.nodeAccess.nameSuffixes.indexOf(o3D[l].getUniqId()));
+									// 	//console.log(index);
+									// 	const r = parseInt(scssVariables[o4D[k].getTask().getTaskTeam().getColorClass().replace("BG_", "").toLowerCase()].slice(1,3), 16) / 255;
+									// 	const g = parseInt(scssVariables[o4D[k].getTask().getTaskTeam().getColorClass().replace("BG_", "").toLowerCase()].slice(3,5), 16) / 255;
+									// 	const b = parseInt(scssVariables[o4D[k].getTask().getTaskTeam().getColorClass().replace("BG_", "").toLowerCase()].slice(5,7), 16) / 255;
+									// 	const a = 0.75;
+									// 	const material = new THREE.MeshBasicMaterial({
+									// 	    reflectivity: 0.0,
+									// 	    flatShading: true,
+									// 	    transparent: true,
+									// 	    opacity: a,
+									// 	    color: scssVariables[o4D[k].getTask().getTaskTeam().getColorClass().replace("BG_", "").toLowerCase()],
+							  //     		});
+							  //     		const sMat = new THREE.MeshBasicMaterial({
+									// 	    reflectivity: 0.0,
+									// 	    flatShading: true,
+									// 	    transparent: true,
+									// 	    opacity: 0.3,
+									// 	    color: scssVariables[o4D[k].getTask().getTaskTeam().getColorClass().replace("BG_", "").toLowerCase()],
+									// 	});
+									// 	this.objs[o3D[l].getId()] = {
+									// 		obj3D : o3D[l],
+									// 		guId : o3D[l].getIFCId(),
+									// 		dbId : index,
+									// 		color : {
+									// 			r : r,
+									// 			g : g,
+									// 			b : b,
+									// 			a : a
+									// 		},
+									// 		material : material,
+									// 		sMat : sMat,
+									// 		initialMaterials : {},
+									// 		nodes: [],
+									// 		colored : false,
+									// 		shadowed : false,
+									// 		state : "initial", // Pour plus tard
+									// 		needUpdate : false,
+									// 	}
+									// 	const materials = this.viewer.impl.getMaterials();
+									// 	materials.addMaterial(Utils.getGuid(), material, true);
+									// 	materials.addMaterial(Utils.getGuid(), sMat, true);
+									// 	this.getNodeInfos(this.objs[o3D[l].getId()]);
+									// 	//this.color3DObject(this.objs[o3D[l].getId()]);
+									// }
 									
 								//}
 							//}

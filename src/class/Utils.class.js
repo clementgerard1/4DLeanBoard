@@ -194,18 +194,18 @@ class Utils{
 	*/
 	static getMonthString(monthNumber){
 		switch(monthNumber){
-			case 1 : return "January";
-			case 2 : return "February";
-			case 3 : return "March";
-			case 4 : return "April";
-			case 5 : return "May";
-			case 6 : return "June";
-			case 7 : return "July";
-			case 8 : return "August";
-			case 9 : return "September";
-			case 10 : return "October";
-			case 11 : return "November";
-			case 12 : return "December";
+			case 1 : return "Janvier";//return "January";
+			case 2 : return "Février";//return "February";
+			case 3 : return "Mars";//return "March";
+			case 4 : return "Avril";//return "April";
+			case 5 : return "Mai";//return "May";
+			case 6 : return "Juin";//return "June";
+			case 7 : return "Juillet";//return "July";
+			case 8 : return "Août";//return "August";
+			case 9 : return "Septembre";//return "September";
+			case 10 : return "Octobre";//return "October";
+			case 11 : return "Novembre";//return "November";
+			case 12 : return "Décembre";//return "December";
 		}
 	}
 

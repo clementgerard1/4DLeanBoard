@@ -2,6 +2,7 @@ import "./V_player.scss";
 import V_socketUtils from "../Utils/V_socketUtils.class.js";
 import V_timelinePlayer from "./V_timelinePlayer.vue";
 import V_playerInfos from "./V_playerInfos.vue";
+import V_playerUtils from "../Utils/V_playerUtils.class.js";
 
 export default {
 	components:{
@@ -11,10 +12,12 @@ export default {
 	data : function(){
 		return {
 				time : this.playerinit,
-				maximum : Math.trunc(this.duration / 7)
+				maximum : Math.trunc(this.duration / 7),
+				displayM : true,
 		}
 	},
 	created : function(){
+		V_playerUtils.addPlayer(this);
 		V_socketUtils.addPlayer();
 	},
 	watch : {
@@ -40,6 +43,9 @@ export default {
 		},
 		handleEndButtonTap : function(){
 			V_socketUtils.setTime(Math.trunc((this.duration - 1) / 7));
+		},
+		displayMilestones : function(bool){
+			this.displayM = bool;
 		}
 	},
 	computed:{
@@ -66,7 +72,7 @@ export default {
 			<timelinePlayer v-bind:playerinit="_playerinit" v-bind:nbweek="nbweek" id="timelinePlayer"></timelinePlayer>
 			<div v-tap="handleEndButtonTap" class="date" ><p class="r90">{{enddate}}</p></div>
 		</div>
-		<playerinfos v-bind:playerinit="_playerinit" class="svgPlayer" v-bind:nbweek="nbweek"></playerinfos>
+		<playerinfos v-bind:displayM="displayM" v-bind:playerinit="_playerinit" class="svgPlayer" v-bind:nbweek="nbweek"></playerinfos>
 
 	</div>`,
 }

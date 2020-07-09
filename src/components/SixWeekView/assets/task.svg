@@ -60,6 +60,16 @@
 	<path style="pointer-events:none" d="M35 159L28 166L35 173" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
 </g>
 
-<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="14" font-weight="500" letter-spacing="0em"><tspan x="92.6797" y="26.328">{{dr}}</tspan></text>
+<g>
+	<rect x="71" y="13" width="5" height="4" fill="#808080"/>
+	<rect x="71" y="19" width="5" height="4" fill="#808080"/>
+	<rect x="65" y="13" width="5" height="4" fill="#808080"/>
+	<rect x="65" y="19" width="5" height="4" fill="#808080"/>
+	<rect x="77" y="13" width="5" height="4" fill="#808080"/>
+	<path fill-rule="evenodd" clip-rule="evenodd" d="M81 26C83.2091 26 85 24.2091 85 22C85 19.7909 83.2091 18 81 18C78.7909 18 77 19.7909 77 22C77 24.2091 78.7909 26 81 26ZM80.5 18.6667V21.7929L78.6464 23.6464L79.3536 24.3536L81.3536 22.3536L81.5 22.2071V22V18.6667H80.5Z" fill="#808080"/>
+</g>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="14" font-weight="500" letter-spacing="0em"><tspan x="90.6797" y="26.328">{{dr}}</tspan></text>
+<path d="M148 21C145.239 21 143 23.2386 143 26L153 26C153 23.2386 150.761 21 148 21Z" fill="#808080"/>
+<ellipse cx="148" cy="16.5" rx="3" ry="3.5" fill="#808080"/>
 <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="14" font-weight="500" letter-spacing="0em"><tspan x="162.814" y="26.328">{{mn}}</tspan></text>
 </svg>

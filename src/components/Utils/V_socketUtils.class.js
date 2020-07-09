@@ -1,5 +1,6 @@
 import V_4DUtils from "./V_4DUtils.class.js";
 import V_filterMenuUtils from "./V_filterMenuUtils.class.js";
+import V_playerUtils from "./V_playerUtils.class.js";
 import V_taskTableUtils from "./V_taskTableUtils.class.js";
 import V_timelineUtils from "./V_timelineUtils.class.js";
 import DataApi from "../../../dataServer/DataApi.class.js";
@@ -45,6 +46,7 @@ class V_socketUtils{
 			V_filterMenuUtils.setIfcMenuChange(this.initDatas.ifcmenu[0], this.initDatas.ifcmenu[1], this.initDatas.ifcmenu[2], this.initDatas.ifcmenu[3]);
 			//Play menu
 			V_filterMenuUtils.setPlanningMenuChange(this.initDatas.playmenu);
+			V_playerUtils.displayMilestones(this.initDatas.playmenu > 1);
 			//Team Display
 			V_filterMenuUtils.setDisplayMenuChange(this.initDatas.teamdisplay);
 			V_4DUtils.setTeamDisplayMode(this.initDatas.teamdisplay == 2);
@@ -120,6 +122,7 @@ class V_socketUtils{
 		});
 		this.socket.on("updatePlanningMenu", (datas) => {
 			V_filterMenuUtils.setPlanningMenuChange(datas.choice);
+			V_playerUtils.displayMilestones(datas.choice > 1);
 		});
 
 	}
@@ -287,6 +290,7 @@ class V_socketUtils{
 
 	static setPlanningMenuChange(choice){
 		V_filterMenuUtils.setPlanningMenuChange(choice);
+		V_playerUtils.displayMilestones(choice > 1);
 		this.socket.emit("updatePlanningMenu", { 
 			choice : choice
 		});

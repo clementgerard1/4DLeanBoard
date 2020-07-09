@@ -19,7 +19,7 @@ export default {
 		weeknumber : function(){
 			let date = new Date(this.timeline.getStartDate());
 			date.setDate(date.getDate() + (this.time * 7));
-			return "WE " + Utils.getWeekNumber(date);
+			return "Semaine " + Utils.getWeekNumber(date);
 		}
 	},
 	template : `
