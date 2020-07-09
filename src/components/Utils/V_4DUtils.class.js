@@ -70,6 +70,7 @@ class V_4DUtils{
 		@static
 	*/
 	static setTeamDisplayed(taskTeam, bool){
+		console.log("brou", taskTeam.getName(), bool);
 		if(this.viewer != null){
 			this.viewer.setTeamDisplayed(taskTeam, bool);
 		}

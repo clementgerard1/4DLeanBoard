@@ -30,6 +30,7 @@ export default {
 			"nav" : null,
 			"fragList": null,
 			"pivotPoint": null,
+			"teamMaterials" : {},
 		}
 	},
 	props:[
@@ -58,26 +59,45 @@ export default {
 				}
 				for(let i in this.objs) {
 					const obj = this.objs[i];
+					console.log(obj.state);
 					if(this.timeline.isActiveBetweenTwoDate(obj.obj3D.getParent().getTask(), start6Weeks, start6Weeks+41)) {
 						if(this.timeline.isActiveBetweenTwoDate(obj.obj3D.getParent().getTask(), startActualWeek, startActualWeek+6)) {
-							this.restore3DObject(obj);
-							this.color3DObject(obj, false, false, true);
-							obj.state = "currentWeek";
+							if(obj.state != "currentWeek"){
+								obj.needUpdate = true;
+								this.restore3DObject(obj);
+								obj.needUpdate = true;
+								this.color3DObject(obj, false, false, true);
+								obj.state = "currentWeek";
+							}
 						} else if(this.timeline.isActiveBetweenTwoDate(obj.obj3D.getParent().getTask(), start6Weeks, startActualWeek-1)) {
-							this.restore3DObject(obj);
-							obj.state = "builtOn6W";
+							if(obj.state != "builtOn6W"){
+								obj.needUpdate = true;
+								this.restore3DObject(obj);
+								obj.state = "builtOn6W";
+							}
 						} else {
-							this.restore3DObject(obj);
-							this.color3DObject(obj, false, false, false, false, true);
-							obj.state = "toBuildOn6W";
+							if(obj.state != "toBuildOn6W"){
+								obj.needUpdate = true;
+								this.restore3DObject(obj);
+								obj.needUpdate = true;
+								this.color3DObject(obj, false, false, false, false, true);
+								obj.state = "toBuildOn6W";
+							}
 						}
 					} else if(this.timeline.isActiveBetweenTwoDate(obj.obj3D.getParent().getTask(), start, start6Weeks-1)) {
-						this.restore3DObject(obj);
-						obj.state = "built";
+						if(obj.state != "built"){
+							obj.needUpdate = true;
+							this.restore3DObject(obj);
+							obj.state = "built";
+						}
 					} else {
-						this.restore3DObject(obj);
-						this.color3DObject(obj, false, false, false, true);
-						obj.state = "toBuild";
+						if(obj.state != "toBuild"){
+							obj.needUpdate = true;
+							this.restore3DObject(obj);
+							obj.needUpdate = true;
+							this.color3DObject(obj, false, false, false, true);
+							obj.state = "toBuild";
+						}
 					}
 					this.playing = true;
 				}
@@ -85,9 +105,11 @@ export default {
 				this.clearColors();
 				this.playing = false;
 			}
+			console.log("DONE");
 		},
 
 		colorFromState(obj, state) {
+			obj.needUpdate = true;
 			if(state=="currentWeek") {
 				this.color3DObject(obj, false, false, true);
 			} else if(state=="toBuildOn6W") {
@@ -101,7 +123,7 @@ export default {
 
 		setTeamDisplayMode(bool){
 			if(bool) {
-				this.setPlayerState(this.fliterModeFlag);
+				//this.setPlayerState(this.fliterModeFlag);
 				var mils = this.model.getMilestones();
 				for(let i in mils) {
 					var phases = mils[i].getPhases();
@@ -111,14 +133,19 @@ export default {
 							var objs3D = objs4D[k].getObjects3D();
 							for(let l in objs3D) {
 								const obj = this.objs[objs3D[l].getId()];
-								if(this.selected.includes(obj)){
-									this.color3DObject(obj, true);
-									this.colored.push(obj);
-								} else if((objs4D[k].getTask().getTaskTeam().getId() == this.shownTeam) || (this.shownTeam==null)) {
-									this.color3DObject(obj);
-								} else {
-									this.color3DObject(obj, false, true);
-									obj.shadowed = true;
+								if(typeof obj != "undefined"){
+									if(this.selected.includes(obj)){
+										obj.needUpdate = true;
+										this.color3DObject(obj, true);
+										this.colored.push(obj);
+									} else if((objs4D[k].getTask().getTaskTeam().getId() == this.shownTeam) || (this.shownTeam==null)) {
+										obj.needUpdate = true;
+										this.color3DObject(obj);
+									} else {
+										obj.needUpdate = true;
+										this.color3DObject(obj, false, true);
+										obj.shadowed = true;
+									}
 								}
 							}
 						}
@@ -128,11 +155,13 @@ export default {
 			} else {
 				this.clearColors();
 				this.fliterModeFlag = false;
+				console.log("2");
 				this.setPlayerState(!this.fliterModeFlag);
 			}
 		},
 
 		setTeamDisplayed(taskTeam, bool){
+
 			if(taskTeam != null){
 				this.shownTeam = taskTeam.getId();
 			}else{
@@ -162,12 +191,18 @@ export default {
 		//
 		clearHighlighting(){
 			if(this.viewer != null){
+				//console.log("HEY");
 				for(let i in this.selected){
-					this.restore3DObject(this.selected[i]);
-					if(this.colored.includes(this.selected[i])) {
-						this.color3DObject(this.selected[i]);
+					if(typeof this.selected[i] != "undefined"){
+						//console.log(this.selected[i].needUpdate);
+						//this.selected[i].needUpdate = true;
+						this.restore3DObject(this.selected[i]);
+						if(this.colored.includes(this.selected[i])) {
+							//his.selected[i].needUpdate = true;
+							this.color3DObject(this.selected[i]);
+						}
+						delete this.selected[i];
 					}
-					delete this.selected[i];
 				}
 			}
 			this.selected = [];
@@ -176,8 +211,10 @@ export default {
 			if(this.viewer != null){
 				for(let i in this.colored){
 					if(this.selected.includes(this.colored[i])) {
+						this.colored[i].needUpdate = true;
 						this.color3DObject(this.colored[i], true);
 					} else {
+						this.colored[i].needUpdate = true;
 						this.restore3DObject(this.colored[i]);
 					}
 					delete this.colored[i];
@@ -190,37 +227,42 @@ export default {
 				const objects3D = object4D.getObjects3D();
 				for(let o in objects3D){
 					const object3D = objects3D[o];
-					for(let s in this.tree.nodeAccess.nameSuffixes){
-						if(this.tree.nodeAccess.nameSuffixes[s] == object3D.getUniqId()){
+					//for(let s in this.tree.nodeAccess.nameSuffixes){
+						//if(this.tree.nodeAccess.nameSuffixes[s] == object3D.getUniqId()){
+						//if(this.tree.nodeAccess.nameSuffixes.indexOf(o3D[l].getUniqId()) != -1){
+							//const index = this.getDbId(/*s*/this.tree.nodeAccess.nameSuffixes.indexOf(o3D[l].getUniqId()));
 							const obj = this.objs[object3D.getId()];
-							const dbid = obj.dbId;
-							this.viewer.select(dbid);
-							const selection = this.viewer.getSelection();
-							this.viewer.clearSelection();
-							if(!this.selected.includes(obj)){
-								if(bool) {
-
-									if(this.colored.includes(obj)) {
-										this.restore3DObject(obj);
+							if(typeof obj != "undefined"){
+								const dbid = obj.dbId;
+								this.viewer.select(dbid);
+								const selection = this.viewer.getSelection();
+								this.viewer.clearSelection();
+								if(!this.selected.includes(obj) && bool){
+										if(this.colored.includes(obj)) {
+											obj.needUpdate = true;
+											this.restore3DObject(obj);
+										}
+										obj.needUpdate = true;
+										this.color3DObject(obj, true);
+								} else if(this.selected.includes(obj) && !bool) {
+									obj.needUpdate = true;
+									this.restore3DObject(obj);
+									if(!this.playing) {
+										if (this.colored.includes(obj)) {
+											obj.needUpdate = true;
+											this.color3DObject(obj, false, obj.shadowed);
+										}
+									} else {
+										this.colorFromState(obj, obj.state);
 									}
-									this.color3DObject(obj, true);
 								}
-							} else if(this.selected.includes(obj) && !bool) {
-								this.restore3DObject(obj);
-								if(!this.playing) {
-									if (this.colored.includes(obj)) {
-										this.color3DObject(obj, false, obj.shadowed);
-									}
-								} else {
-									this.colorFromState(obj, obj.state);
+								let box = null;
+								if(selection.length>0) {
+									box = this.viewer.utilities.getBoundingBox(false);
 								}
-							}
-							let box = null;
-							if(selection.length>0) {
-								box = this.viewer.utilities.getBoundingBox(false);
-							}
-							this.nav.fitBounds(false, box, true);
-						}
+								this.nav.fitBounds(false, box, true);
+							//}
+						//}
 					}
 
 					// sélectionne si pas sélectionner, sinon désélectionne
@@ -233,10 +275,87 @@ export default {
 					//const fragList = this.viewer.model.getFragmentList();
 					//const colorMap = fragList.db2ThemingColor;
 
+					//break;
 				}
 				//console.log(this.nav.getCameraRightVector(false), this.nav.getEyeVector(), this.nav.getPosition());
 				//repositionne la caméra
 				// fonction pour cacher les objets passer en paramètre (ids) => hide()
+			}
+
+		},
+		createMaterials(model){
+
+
+			this.selectedMaterial = new THREE.MeshBasicMaterial({
+			    reflectivity: 0.0,
+			    flatShading: true,
+			    transparent: true,
+			    opacity: 0.8,
+			    color: scssVariables["select3DColor"],
+			});
+			this.nextsWeeksMat = new THREE.MeshBasicMaterial({
+				reflectivity: 0.0,
+				flatShading: true,
+				transparent: true,
+				opacity: 0.3,
+				color: scssVariables["nextSixWeeks"],
+			});
+			this.currWeekMat = new THREE.MeshBasicMaterial({
+				reflectivity: 0.0,
+				flatShading: true,
+				transparent: true,
+				opacity: 0.75,
+				color: scssVariables["currentWeek"],
+			});
+			this.sixWeeksMat = new THREE.MeshBasicMaterial({
+				reflectivity: 0.0,
+				flatShading: true,
+				transparent: true,
+				opacity: 0.75,
+				color: scssVariables["currentSixWeeks"],
+			});
+
+			const materials = this.viewer.impl.getMaterials();
+			materials.addMaterial(Utils.getGuid(), this.selectedMaterial, true);
+			materials.addMaterial(Utils.getGuid(), this.sixWeeksMat, true);
+			materials.addMaterial(Utils.getGuid(), this.nextsWeeksMat, true);
+			materials.addMaterial(Utils.getGuid(), this.currWeekMat, true);
+
+			const teams = model.getTaskTeams();
+
+			for(let t in teams){
+				
+				const r = parseInt(scssVariables[teams[t].getColorClass().replace("BG_", "").toLowerCase()].slice(1,3), 16) / 255;
+				const g = parseInt(scssVariables[teams[t].getColorClass().replace("BG_", "").toLowerCase()].slice(3,5), 16) / 255;
+				const b = parseInt(scssVariables[teams[t].getColorClass().replace("BG_", "").toLowerCase()].slice(5,7), 16) / 255;
+				const a = 0.75;
+
+				const material = new THREE.MeshBasicMaterial({
+				    reflectivity: 0.0,
+				    flatShading: true,
+				    transparent: true,
+				    opacity: a,
+				    color: scssVariables[teams[t].getColorClass().replace("BG_", "").toLowerCase()],
+	      		});
+	      const sMat = new THREE.MeshBasicMaterial({
+				    reflectivity: 0.0,
+				    flatShading: true,
+				    transparent: true,
+				    opacity: 0.3,
+				    color: scssVariables[teams[t].getColorClass().replace("BG_", "").toLowerCase()],
+				});
+
+				materials.addMaterial(Utils.getGuid(), material, true);
+				materials.addMaterial(Utils.getGuid(), sMat, true);
+				this.teamMaterials[teams[t].getId()] = {
+					r : r,
+					g : g,
+					b : b,
+					a : a,
+					sMat : sMat,
+					material : material,
+				}
+
 			}
 
 		},
@@ -249,85 +368,62 @@ export default {
 					var o4D = phs[j].getObjects4D();
 					for(let k in o4D){
 						var o3D = o4D[k].getObjects3D();
-						//console.log(o3D);
 						for(let l in o3D) {
-							//console.log(o3D[l].getUniqId());
-							//console.log("--");
-							//console.log(o3D[l].getUniqId());
-							//console.log(o3D[l].getName());
-							//console.log(o3D[l].getId())
-							//console.log(this.tree.nodeAccess.nameSuffixes.indexOf(o3D[l].getUniqId()));
-							//for(let s in this.tree.nodeAccess.nameSuffixes){
-								//console.log(o3D[l].getUniqId());
-								//if(this.tree.nodeAccess.nameSuffixes[s] == o3D[l].getUniqId()){
-									// if(this.tree.nodeAccess.nameSuffixes.indexOf(o3D[l].getUniqId()) != -1){
-									// 	const index = this.getDbId(/*s*/this.tree.nodeAccess.nameSuffixes.indexOf(o3D[l].getUniqId()));
-									// 	//console.log(index);
-									// 	const r = parseInt(scssVariables[o4D[k].getTask().getTaskTeam().getColorClass().replace("BG_", "").toLowerCase()].slice(1,3), 16) / 255;
-									// 	const g = parseInt(scssVariables[o4D[k].getTask().getTaskTeam().getColorClass().replace("BG_", "").toLowerCase()].slice(3,5), 16) / 255;
-									// 	const b = parseInt(scssVariables[o4D[k].getTask().getTaskTeam().getColorClass().replace("BG_", "").toLowerCase()].slice(5,7), 16) / 255;
-									// 	const a = 0.75;
-									// 	const material = new THREE.MeshBasicMaterial({
-									// 	    reflectivity: 0.0,
-									// 	    flatShading: true,
-									// 	    transparent: true,
-									// 	    opacity: a,
-									// 	    color: scssVariables[o4D[k].getTask().getTaskTeam().getColorClass().replace("BG_", "").toLowerCase()],
-							  //     		});
-							  //     		const sMat = new THREE.MeshBasicMaterial({
-									// 	    reflectivity: 0.0,
-									// 	    flatShading: true,
-									// 	    transparent: true,
-									// 	    opacity: 0.3,
-									// 	    color: scssVariables[o4D[k].getTask().getTaskTeam().getColorClass().replace("BG_", "").toLowerCase()],
-									// 	});
-									// 	this.objs[o3D[l].getId()] = {
-									// 		obj3D : o3D[l],
-									// 		guId : o3D[l].getIFCId(),
-									// 		dbId : index,
-									// 		color : {
-									// 			r : r,
-									// 			g : g,
-									// 			b : b,
-									// 			a : a
-									// 		},
-									// 		material : material,
-									// 		sMat : sMat,
-									// 		initialMaterials : {},
-									// 		nodes: [],
-									// 		colored : false,
-									// 		shadowed : false,
-									// 		state : "initial", // Pour plus tard
-									// 		needUpdate : false,
-									// 	}
-									// 	const materials = this.viewer.impl.getMaterials();
-									// 	materials.addMaterial(Utils.getGuid(), material, true);
-									// 	materials.addMaterial(Utils.getGuid(), sMat, true);
-									// 	this.getNodeInfos(this.objs[o3D[l].getId()]);
-									// 	//this.color3DObject(this.objs[o3D[l].getId()]);
-									// }
+							for(let s in this.tree.nodeAccess.nameSuffixes){
+								if(this.tree.nodeAccess.nameSuffixes[s] == o3D[l].getUniqId()){
+									if(this.tree.nodeAccess.nameSuffixes.indexOf(o3D[l].getUniqId()) != -1){
+										//console.log(this.tree.nodeAccess.nameSuffixes.indexOf(o3D[l].getUniqId()), s);
+										const index = this.getDbId(s/*this.tree.nodeAccess.nameSuffixes.indexOf(o3D[l].getUniqId())*/);
+
+							      const materialsInfos = this.teamMaterials[o4D[k].getTask().getTaskTeam().getId()];
+
+										this.objs[o3D[l].getId()] = {
+											obj3D : o3D[l],
+											guId : o3D[l].getIFCId(),
+											dbId : index,
+											color : {
+												r : materialsInfos.r,
+												g : materialsInfos.g,
+												b : materialsInfos.b,
+												a : materialsInfos.a
+											},
+											material : materialsInfos.material,
+											sMat : materialsInfos.sMat,
+											initialMaterials : {},
+											nodes: [],
+											colored : false,
+											shadowed : false,
+											state : "initial", // Pour plus tard
+											needUpdate : true,
+										}
+
+										this.getNodeInfos(this.objs[o3D[l].getId()]);
+									}
 									
-								//}
-							//}
+								}
+							}
 						}
 					}
 				}
 			}
 		},
 		getNodeInfos(obj){
+			const fragList = this.viewer.model.getFragmentList();
 			this.tree.enumNodeChildren(obj.dbId,
 				(node) => { 
 					const newId = this.viewer.model.getFragmentList().fragments.fragId2dbId.indexOf(node);
 					if(newId != -1 && typeof this.initialMaterials[newId] == "undefined"){
-						this.initialMaterials[newId] = this.viewer.model.getFragmentList().getMaterial(newId);
+						this.initialMaterials[newId] = fragList.getMaterial(newId);
 					} 
 					if(!obj.nodes.includes(node)) obj.nodes.push(node);
 				}, 
 			true);
 		},
+
+
 		color3DObject(obj, selectMode = false, shadowMode = false, currWeekMode = false, nextWeeksMode = false, sixWeeksMode = false){
 			if(obj!=null) {
-				if(!obj.colored || obj.needUpdate){
+				if(true || obj.needUpdate){
 					this.tree.enumNodeChildren(obj.dbId,
 						(node) => { 
 							//const count = this.tree.getChildCount(node);
@@ -355,7 +451,6 @@ export default {
 							}
 							if(newId != -1){
 								this.viewer.model.getFragmentList().materialids[newId] = materialId;
-								obj.colored = true;
 							}
 							this.viewer.impl.invalidate(true);
 						}, 
@@ -365,11 +460,12 @@ export default {
 					} else {
 						this.colored.push(obj);
 					}
+					obj.needUpdate = false;
 				}
 			}
 		},
 		restore3DObject(obj){
-			if(obj.colored || obj.needUpdate){
+			if(true || obj.needUpdate){
 				this.tree.enumNodeChildren(obj.dbId,
 					(node) => {
 						const newId = this.viewer.model.getFragmentList().fragments.fragId2dbId.indexOf(node);
@@ -382,7 +478,6 @@ export default {
 
 					}, 
 				true);
-				obj.colored = false;
 				if(this.colored.includes(obj)) {
 					delete this.colored[this.colored.indexOf(obj)];
 				}
@@ -392,6 +487,7 @@ export default {
 				if(this.selected.includes(obj)) {
 					delete this.selected[this.selected.indexOf(obj)];
 				}
+				obj.needUpdate = false;
 			}
 		},
 
@@ -430,19 +526,29 @@ export default {
 				for(let o in objs){
 					if(this.colored.includes(objs[o])) {
 						if(!this.selected.includes(objs[o])) {
+
+							objs[o].needUpdate = true;
 							this.restore3DObject(objs[o]);
+							objs[o].needUpdate = true;
 							this.color3DObject(objs[o], true);
 							V_socketUtils.highlightTask(objs[o].obj3D.getParent().getTask(), true);
 						} else {
+
+							objs[o].needUpdate = true;
 							this.color3DObject(objs[o], false, objs[o].shadowed);
 						}
 					} else if(this.selected.includes(objs[o])) {
+
+						objs[o].needUpdate = true;
 						this.restore3DObject(objs[o]);
 						if(this.playing) {
+							objs[o].needUpdate = true;
 							this.colorFromState(objs[o], objs[o].state);
 						}
 						V_socketUtils.highlightTask(objs[o].obj3D.getParent().getTask(), false);
 					} else {
+
+						objs[o].needUpdate = true;
 						this.color3DObject(objs[o], true);
 						V_socketUtils.highlightTask(objs[o].obj3D.getParent().getTask(), true);
 					}
@@ -483,14 +589,10 @@ export default {
 		},
 		getDbId(id){
 			var dbId;
-			//console.log(id);
 			const that = this;
-			dbId = this.tree.nodeAccess.dbIdToIndex[id];
-			//dbId = Object.keys(this.tree.nodeAccess.dbIdToIndex)[id];
-			//console.log(dbId);
-			 // dbId = parseInt(Object.keys(this.tree.nodeAccess.dbIdToIndex).filter(function(key) {
-			 //     return that.tree.nodeAccess.dbIdToIndex[key] == id;
-			 // })[0]);
+			  dbId = parseInt(Object.keys(this.tree.nodeAccess.dbIdToIndex).filter(function(key) {
+			      return that.tree.nodeAccess.dbIdToIndex[key] == id;
+			  })[0]);
 			return dbId;
 		},
 		getUniqueId(dbid){
@@ -563,44 +665,12 @@ export default {
 		onLoaded(that){
 			this.tree = this.viewer.model.getInstanceTree();
 			const names = this.tree.nodeAccess.nameSuffixes;
-			for(let n in names){
-				//console.log(n, names[n]);
-			}
-			this.selectedMaterial = new THREE.MeshBasicMaterial({
-			    reflectivity: 0.0,
-			    flatShading: true,
-			    transparent: true,
-			    opacity: 0.8,
-			    color: scssVariables["select3DColor"],
-			});
-			this.nextsWeeksMat = new THREE.MeshBasicMaterial({
-				reflectivity: 0.0,
-				flatShading: true,
-				transparent: true,
-				opacity: 0.3,
-				color: scssVariables["nextSixWeeks"],
-			});
-			this.currWeekMat = new THREE.MeshBasicMaterial({
-				reflectivity: 0.0,
-				flatShading: true,
-				transparent: true,
-				opacity: 0.75,
-				color: scssVariables["currentWeek"],
-			});
-			this.sixWeeksMat = new THREE.MeshBasicMaterial({
-				reflectivity: 0.0,
-				flatShading: true,
-				transparent: true,
-				opacity: 0.75,
-				color: scssVariables["currentSixWeeks"],
-			});
-			const materials = this.viewer.impl.getMaterials();
-			materials.addMaterial(Utils.getGuid(), this.selectedMaterial, true);
-			materials.addMaterial(Utils.getGuid(), this.sixWeeksMat, true);
-			materials.addMaterial(Utils.getGuid(), this.nextsWeeksMat, true);
-			materials.addMaterial(Utils.getGuid(), this.currWeekMat, true);
+			this.createMaterials(this.model);
+			console.log("1");
 			this.map3DObjs();
+			console.log("2");
 			this.nav = this.viewer.navigation;
+			console.log("3", this.nav);
 			this.setPlayerState(!this.fliterModeFlag);
 			const tasks = V_taskTableUtils.getTokens();
 			for(let t in tasks){
@@ -629,19 +699,21 @@ export default {
 		},
 
 		watchTime : function(time){
-			this.time = time;
-			this.clearHighlighting();
-			const tasks = V_taskTableUtils.getTokens();
-			this.setPlayerState(!this.fliterModeFlag);
-			for(let t in tasks){
-				this.highlight(tasks[t].getObject4D(), true);
+			if(this.time != time){
+				this.time = time;
+				this.clearHighlighting();
+				const tasks = V_taskTableUtils.getTokens();
+				console.log("4");
+				this.setPlayerState(!this.fliterModeFlag);
+				for(let t in tasks){
+					this.highlight(tasks[t].getObject4D(), true);
+				}
 			}
 		}
 	},
 	created : function(){
 		this.clearHighlighting();
 		const tasks = V_taskTableUtils.getTokens();
-		this.setPlayerState(!this.fliterModeFlag);
 		for(let t in tasks){
 			this.highlight(tasks[t].getObject4D(), true);
 		}

@@ -23,7 +23,7 @@ class Object4D{
 	constructor(name = "", id = Utils.getId("object4D")){
 		this.#id = id;
 		this.#name = name;
-		this.#objects3D = [];
+		this.#objects3D = {};
 		this.#phase = null;
 		this.#task = null;
 	}
