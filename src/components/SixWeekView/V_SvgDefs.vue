@@ -141,7 +141,7 @@ export default {
 				<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
 				</filter>
 
-				<filter id="filter0_d_ms_player" x="0" y="0" width="530" height="530" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+				<filter id="filter0_d_ms_player" x="0" y="-30" width="530" height="730" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 				<feFlood flood-opacity="0" result="BackgroundImageFix"/>
 				<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
 				<feOffset dx="2" dy="4"/>
@@ -151,7 +151,7 @@ export default {
 				<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
 				</filter>
 
-				<filter id="filter0_d_playermilestonedone" x="0" y="0" width="530" height="530" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+				<filter id="filter0_d_playermilestonedone" x="0" y="-30" width="530" height="730" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 				<feFlood flood-opacity="0" result="BackgroundImageFix"/>
 				<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
 				<feOffset dx="2" dy="4"/>
@@ -252,6 +252,16 @@ export default {
 				</filter>
 
 				<filter id="filter0_d_standardItem" x="0" y="0" width="40" height="40" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+				<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+				<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
+				<feOffset dx="2" dy="4"/>
+				<feGaussianBlur stdDeviation="2"/>
+				<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0"/>
+				<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+				<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+				</filter>
+
+				<filter id="filter0_d_milestoneName" x="0.242676" y="39.2427" width="65.5147" height="65.5147" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 				<feFlood flood-opacity="0" result="BackgroundImageFix"/>
 				<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
 				<feOffset dx="2" dy="4"/>
