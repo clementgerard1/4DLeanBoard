@@ -104,8 +104,18 @@ export default {
 	                preserveView : true,
 	            });
 
-	            this.viewer.loadModel(viewerDocument.getViewablePath(viewables.getDefaultGeometry()), {}, (model) => { 
+	            this.viewer.loadModel(viewerDocument.getViewablePath(viewables.getDefaultGeometry()), {}, (model) => {
+
+	            	setTimeout(()=>{ 
+	            		const tree = model.getInstanceTree();
+	            		console.log(tree, model.instanceTree); 
+	            		tree.enumNodeFragments(2403, (node)=>{
+	            			//console.log(2403, node);
+	            		}, true);
+	            	}, 1000);
+
 	            	function userFunction(pdb) {
+
 
 	            		//console.log("extern", pdb.getExternalIdMapping());
 
@@ -116,11 +126,14 @@ export default {
 					    });
 					   	
 	            		pdb.enumObjects(function(dbId){
-
+	            			console.log(dbId, pdb.getObjectProperties(dbId));
 						    // For each part, iterate over their properties.
 						    pdb.enumObjectProperties(dbId, function(attrId, valId){
 
-						    	console.log(pdb.getObjectProperties(dbId));
+						    	
+
+						    	//console.log(pdb.getObjectProperties(dbId));
+
 						    	return true;
 
 						        // Only process 'Mass' property.

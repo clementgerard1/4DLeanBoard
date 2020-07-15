@@ -50,6 +50,7 @@ function getNewModels(){
 										frag2ID[files[f].split('.').slice(0, -1).join('.')] = model.getFragToIdsArray();
 										saveModel(files[f].split('.').slice(0, -1).join('.'), json);
 									}else if(ext == "csv"){
+										console.log("br", files[f]);
 										model = Loader.fromCSVandIFC(data, data2);
 										model.setName(files[f].split('.').slice(0, -1));
 										const json = model.serialize();
@@ -143,7 +144,6 @@ function updateForge(){
 									})
 									.then( datas => {
 										urns[files[f].replace(".json", "")] = datas.manifest.urn;
-										console.log(datas.manifest.urn);
 									}).catch( error => {
 										console.error(error);
 									});
