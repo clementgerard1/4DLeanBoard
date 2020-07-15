@@ -117,7 +117,7 @@ function init(){
 			timeline : null,
 			model : null,
 			duration : null,
-			urn : null,
+			urns : null,
 			oauth : null,
 			modelSelected : false,
 			selectPanel : false,
@@ -176,7 +176,7 @@ function init(){
 						this.modelSelected = true;
 
 
-						this.urn = datas.urn;
+						this.urns = [datas.urn];
 						this.oauth = datas.oAuth;
 						this.forgeReady = true;
 
@@ -217,7 +217,7 @@ function init(){
 
 	 			<div v-if="forgeReady" id="viewerFrame">
 	 				<filterpanel id="filterPanel" v-bind:model="model"></filterpanel>
-	 				<forgeviewer id="forgeViewer" v-bind:model="model" v-bind:timeline="timeline" v-bind:urn="urn" v-bind:oauth="oauth"></forgeviewer>
+	 				<forgeviewer id="forgeViewer" v-bind:model="model" v-bind:timeline="timeline" v-bind:urns="urns" v-bind:oauth="oauth"></forgeviewer>
 	 				<player id="mainPlayer" v-bind:duration="duration" v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit"></player>
 	 			</div>
 	 		</div>

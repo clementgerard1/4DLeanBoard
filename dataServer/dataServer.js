@@ -143,6 +143,7 @@ function updateForge(){
 									})
 									.then( datas => {
 										urns[files[f].replace(".json", "")] = datas.manifest.urn;
+										console.log(datas.manifest.urn);
 									}).catch( error => {
 										console.error(error);
 									});

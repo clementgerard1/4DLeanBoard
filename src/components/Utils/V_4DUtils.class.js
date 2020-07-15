@@ -48,8 +48,10 @@ class V_4DUtils{
 		@static
 	*/
 	static highlightObject4DById(object4Did, bool){
-		const object4D = this.viewer.model.get4DObjectById(object4Did);
-		this.highlightObject4D(object4D, bool);
+		if(this.viewer != null){
+			const object4D = this.viewer.model.get4DObjectById(object4Did);
+			this.highlightObject4D(object4D, bool);
+		}
 	}
 
 	/**
@@ -58,9 +60,11 @@ class V_4DUtils{
 		@static
 	*/
 	static setTeamDisplayedById(teamId, bool){
-		const taskTeam = this.viewer.model.getTaskTeamById(teamId, bool);
-		if(taskTeam != null){
-			this.setTeamDisplayed(taskTeam, bool);
+		if(this.viewer != null){
+			const taskTeam = this.viewer.model.getTaskTeamById(teamId, bool);
+			if(taskTeam != null){
+				this.setTeamDisplayed(taskTeam, bool);
+			}
 		}
 	}
 
@@ -70,7 +74,6 @@ class V_4DUtils{
 		@static
 	*/
 	static setTeamDisplayed(taskTeam, bool){
-		console.log("brou", taskTeam.getName(), bool);
 		if(this.viewer != null){
 			this.viewer.setTeamDisplayed(taskTeam, bool);
 		}
