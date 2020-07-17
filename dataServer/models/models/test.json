@@ -2,7 +2,7 @@
    "milestones": {
       "MilestoneID1": {
          "Num" : 1,
-         "Name": "ConstructionStart",
+         "Name": "Envelope closed",
          "Requirements": {
             "requirement1": "LandRightsDelivered"
          },
@@ -302,19 +302,19 @@
          "event" : false,
          "eventDate" : null
       },
-      "MilestoneID2": {
+      "Construction Start": {
          "Num" : 2,
-         "Name": "Middle",
+         "Name": "Construction Start",
          "Requirements": {
          },
          "phases": {
          },
          "event" : true,
-         "eventDate" : "11/02/2021"
+         "eventDate" : "02/02/2021"
       },
-      "MilestoneID3": {
+      "Structure back": {
          "Num" : 3,
-         "Name": "Middle-end",
+         "Name": "Structure Back",
          "Requirements": {
          },
          "phases": {
@@ -322,25 +322,15 @@
          "event" : true,
          "eventDate" : "01/03/2021"
       },
-      "MilestoneID4": {
+      "Structure front": {
          "Num" : 4,
-         "Name": "End",
+         "Name": "Structure Front",
          "Requirements": {
          },
          "phases": {
          },
          "event" : true,
          "eventDate" : "20/03/2021"
-      },
-      "MilestoneID5": {
-         "Num" : 5,
-         "Name": "Start",
-         "Requirements": {
-         },
-         "phases": {
-         },
-         "event" : true,
-         "eventDate" : "01/02/2021"
       }
    }
 }

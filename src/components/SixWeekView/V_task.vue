@@ -150,6 +150,7 @@ export default {
 	},
 	computed:{
 		notEmpty : function(){
+			if(typeof this.task != "undefined" && this.task != null && this.task.getId() == 6) console.log("hey");
 			return this.task != null;
 		},
 		tid : function(){
@@ -308,6 +309,7 @@ export default {
 			this.previousready = previousready;
 		},
 		hightlight: function(bool){
+			console.log(this);
 			this.highlighted = bool;
 		},
 		updateStateButtons: function(){
@@ -329,20 +331,20 @@ export default {
 			}
 		},
 		getTwoLineFormat: function(str){
-			if(str.length <= 11){
+			if(str.length <= 15){
 				return {
 					l1: str,
 					l2: ""
 				};
-			}else if(str.length <= 22){
+			}else if(str.length <= 30){
 				return {
-					l1: str.slice(0, 11),
-					l2: str.slice(11, 22)
+					l1: str.slice(0, 15),
+					l2: str.slice(15, 30)
 				};
 			}else{
 				return {
-					l1: str.slice(0, 11),
-					l2: str.slice(11, 20) + "..."
+					l1: str.slice(0, 15),
+					l2: str.slice(15, 28) + "..."
 				};
 			}
 		},

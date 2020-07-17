@@ -58,6 +58,12 @@ export default {
 			'model' : this.model,
 		}
 	},
+	watch : {
+		tasktablestart : function(){
+			this.$forceUpdate();
+			console.log(this.tasktablestart);
+		}
+	},
 	props:[
 		'model',
 		'timeline',
@@ -75,11 +81,11 @@ export default {
 				<!-- core -->
 				<row6wheader v-bind:tasksize="tasksize" v-bind:tasktablestart="tasktablestart" v-bind:time="time" ></row6wheader>
 				<template v-for="line in lines">
-					<row6w v-bind:tasksize="tasksize" v-bind:tasktablestart="tasktablestart" v-bind:time="time" v-for="i in line.nb" :key="line.taskteam.getId() + '-' + i" v-bind:taskteam="line.taskteam" v-bind:nth="i-1"></row6w>
+					<row6w v-bind:tasksize="tasksize" v-bind:tasktablestart="tasktablestart" v-bind:time="time" v-for="i in line.nb" :key="line.taskteam.getId() + '-' + (tasktablestart + i)" v-bind:taskteam="line.taskteam" v-bind:nth="i-1"></row6w>
 				</template>
 
 				<!-- front -->
-				<tasktablefront v-bind:tasksize="tasksize" v-bind:tasktablestart="tasktablestart" v-bind:time="time" v-bind:nbopened="nbopened" v-bind:nbclosed="nbclosed" id="taskTableFront" v-bind:style="{paddingTop : tasksize + 'px', paddingBottom : tasksize + 'px' }"></tasktablefront>
+				<!--<tasktablefront v-bind:tasksize="tasksize" v-bind:tasktablestart="tasktablestart" v-bind:time="time" v-bind:nbopened="nbopened" v-bind:nbclosed="nbclosed" id="taskTableFront" v-bind:style="{paddingTop : tasksize + 'px', paddingBottom : tasksize + 'px' }"></tasktablefront>-->
 			</div>
 	 	</div>
 	`,

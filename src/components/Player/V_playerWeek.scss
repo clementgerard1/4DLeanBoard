@@ -7,7 +7,8 @@
 }
 
 .playerWeek.selected{
-	border: 2px solid v.$greenbluish_light;
+	/*border: 2px solid v.$greenbluish_light;*/
+	background : v.$greenbluish_light !important;
 	margin:0px;
 }
 

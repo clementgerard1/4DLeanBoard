@@ -24,6 +24,7 @@ function init(){
 function getNewModels(){
 
 	return new Promise((resolve, reject) => {
+
 		fs.readdir(__dirname + '/models/models', (err, files) => {
 
 		  // On error, show it and return
@@ -38,6 +39,7 @@ function getNewModels(){
 				  		fs.readFile(__dirname + '/models/models' + '/' + files[f], 'utf8', (err, data)=>{
 
 				  			fs.readFile(__dirname + '/models/ifc' + '/' + files[f].split('.').slice(0, -1).join('.') + ".ifc", 'utf8', (err, data2)=>{
+
 					  			const ext = files[f].split('.')[1];
 				  				if(ext == "json" || ext == "csv"){
 					  				let model = null;
@@ -88,8 +90,6 @@ function getNewIfcFiles(fragToIds){
 		  	// Display directory entries
 		  	let count = 0;
 		  	for(let f in files){
-
-
 		  		if(!fs.lstatSync(__dirname + '/models/ifc' + '/' + files[f]).isDirectory()){
 		  			if(!fs.existsSync(__dirname + '/models/ifc_modified' + '/' + files[f].split('.').slice(0, -1).join('.') + ".ifc")){
 		  				if(files[f].split('.').slice(0, -1).join('.') != ""){
