@@ -25,12 +25,17 @@ export default {
 	methods: {
 		clearSelection : function(){
 			V_socketUtils.clearHighlighting();
+		},
+
+		selectWeek : function(i){
+			V_socketUtils.setTime(this.tasktablestart + i);
 		}
+
 	},
 	template : `
 
-		<div class="rowHeader" v-tap="clearSelection">
-			<date v-bind:style="{ height: tasksize  + 'px' }" class="rowHeaderItem" v-for="i in 6" :key="i" v-bind:time="tasktablestart + (i-1)"></date>
+		<div class="rowHeader" >
+			<date v-bind:style="{ height: tasksize  + 'px' }" class="rowHeaderItem" v-for="i in 6" :key="i" v-tap="()=>{selectWeek(i-1)}" v-bind:time="tasktablestart + (i-1)"></date>
 	 	</div>
 
 	`,
