@@ -39,7 +39,7 @@ function getNewModels(){
 				  		fs.readFile(__dirname + '/models/models' + '/' + files[f], 'utf8', (err, data)=>{
 
 				  			fs.readFile(__dirname + '/models/ifc' + '/' + files[f].split('.').slice(0, -1).join('.') + ".ifc", 'utf8', (err, data2)=>{
-
+				  				
 					  			const ext = files[f].split('.')[1];
 				  				if(ext == "json" || ext == "csv"){
 					  				let model = null;
@@ -50,7 +50,6 @@ function getNewModels(){
 										frag2ID[files[f].split('.').slice(0, -1).join('.')] = model.getFragToIdsArray();
 										saveModel(files[f].split('.').slice(0, -1).join('.'), json);
 									}else if(ext == "csv"){
-										console.log("br", files[f]);
 										model = Loader.fromCSVandIFC(data, data2);
 										model.setName(files[f].split('.').slice(0, -1));
 										const json = model.serialize();
