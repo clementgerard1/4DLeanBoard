@@ -6,6 +6,8 @@ class Memory{
 	static #textures = [];
 	static #viewer = null;
 	static #selected = {};
+	static #forgeObjects = {};
+	static #forgeObjectsNotLinked = {}
 
 	static addMaterial(material, init = false, name = this.#viewer.model.getFragmentList().materialmap[material.id]){
 		if(init){
@@ -13,8 +15,13 @@ class Memory{
 		}
 		const id = this.#viewer.model.getFragmentList().materialmap[material.id];
 		if(typeof this.#materials[id] == "undefined") {
+			if(typeof name == "undefined") name = Utils.getGuid("materialName");
 			this.#materials[name] = material;
 		}
+	}
+
+	static setState(forgeObject, state){
+		forgeObject.setState(state);
 	}
 
 	static setViewer(viewer){
@@ -36,8 +43,25 @@ class Memory{
 
 	static clearSelection(){
 		for(let s in this.#selected){
-			this.#selected[s]
+			this.select(this.#selected[s], false);
 		}
+	}
+
+	static getForgeObject(dbId){
+		return this.#forgeObjects[dbId];
+	}
+
+	static addForgeObject(forgeObject, linked){
+		//console.log(forgeObject.getId());
+		if(linked){
+			this.#forgeObjects[forgeObject.getId()] = forgeObject;
+		}else{
+			this.#forgeObjectsNotLinked[forgeObject.getId()] = forgeObject;
+		}
+	}
+
+	static refresh(){
+		this.#viewer.impl.invalidate(true);
 	}
 
 

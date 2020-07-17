@@ -13,7 +13,7 @@ class Document{
 		this.#model = null;
 	}
 
-	loadModels(viewer, callback){
+	loadModels(viewer, objs, callback){
 
 		const that = this;
 		//Plus tard les multiples viewables            
@@ -22,7 +22,7 @@ class Document{
 		this.#model = new Model();
 		const path = this.#doc.getViewablePath(this.#doc.getRoot().getDefaultGeometry());
 
-		this.#model.load(viewer, path, callback);
+		this.#model.load(viewer, path, objs, callback);
 
 	}
 

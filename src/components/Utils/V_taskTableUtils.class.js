@@ -142,7 +142,7 @@ class V_taskTableUtils{
 	static highlightTaskById(taskId, bool){
 		let test = true;
 		let i = 0;
-		while(test){
+		while(test && i < this.tasks.length){
 			if(typeof this.tasks[i] != "undefined"){
 				test = false;
 			}

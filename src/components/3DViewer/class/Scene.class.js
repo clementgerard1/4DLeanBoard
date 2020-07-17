@@ -29,11 +29,12 @@ class Scene{
 
 	}
 
-	init(oauth, urns, callback){
+	init(oauth, urns, objs, callback){
 		this.#initInfos = {
 			callback : callback,
 			oauth : oauth,
 			urns : urns,
+			objs : objs
 		}
 
 		var options = {
@@ -66,12 +67,13 @@ class Scene{
 
 	    const docObj = new Document(doc);
 	    that.#documents.push(docObj);
-	    docObj.loadModels(that.#viewer, ()=>{that._endOfInit(that)});
+	    docObj.loadModels(that.#viewer, that.#initInfos.objs, ()=>{that._endOfInit(that)});
 
 	}
 
 	_endOfInit(that){
-
+		
+	    that.#viewer.setGroundShadow(false);
 	    that.#initInfos.callback();
 
 	}
@@ -81,6 +83,14 @@ class Scene{
 			this.#documents[d].setAllMaterials(materialName);
 		}
 		this.#viewer.impl.invalidate(true);
+	}
+
+	addListener(event, callback){
+		this.#viewer.addEventListener(event, callback);
+	}
+
+	getViewer(){
+		return this.#viewer;
 	}
 
 }

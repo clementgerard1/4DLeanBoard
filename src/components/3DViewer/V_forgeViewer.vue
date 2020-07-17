@@ -41,7 +41,7 @@ export default {
 				reflectivity: 0.0,
 				flatShading: true,
 				transparent: true,
-				opacity: 0.3,
+				opacity: 0.5,
 				color: scssVariables["nextSixWeeks"],
 			});
 			Memory.addMaterial(nextsWeeksMat, true, "nextsWeeksMat");
@@ -66,8 +66,8 @@ export default {
 
 		},
 
-		allSelected(){
-			this.scene.setAllMaterials("selectedMaterial");
+		allTransparent(){
+			this.scene.setAllMaterials("ignoredMaterial");
 		},
 
 		watchTime : function(time){
@@ -76,7 +76,7 @@ export default {
 				this.time = time;
 
 				//State
-				const startActualWeek = this.time*7;
+				const startActualWeek = this.time * 7;
 
 				const start6Weeks = Math.trunc(this.time / 6) * 42;
 				const previousTasks = this.timeline.getTasksBetweenTwoDates(0, start6Weeks);
@@ -88,57 +88,77 @@ export default {
 					for(let o in objs){
 						const forges = objs[o].getForgeObjects();
 						for(let f in forges){
-							Memory.setState(forges[f], "built", false);
+							Memory.setState(forges[f], "built");
 						}
 					}
 				}
 
 				for(let n in nextTasks){
-					const objs = nextTasks[t].getObject4D().getObjects3D()
+					const objs = nextTasks[n].getObject4D().getObjects3D()
 					for(let o in objs){
 						const forges = objs[o].getForgeObjects();
 						for(let f in forges){
-							Memory.setState(forges[f], "toBuild", false);
+							Memory.setState(forges[f], "toBuild");
 						}
 					}
 				}
 
 				for(let w in weeksTasks){
-					const state = null;
+					let state = null;
 					if(this.timeline.isActiveBetweenTwoDate(weeksTasks[w], startActualWeek, startActualWeek + 6)){
 						state = "currentWeek";
 					}else{
 						state = "builtOn6W";
 					}
 
-					const objs = nextTasks[t].getObject4D().getObjects3D()
+					const objs = weeksTasks[w].getObject4D().getObjects3D()
 					for(let o in objs){
 						const forges = objs[o].getForgeObjects();
 						for(let f in forges){
-							Memory.setState(forges[f], state, false);
+							Memory.setState(forges[f], state);
 						}
 					}
 				}		
 
-				Memory.update();
-
 				//Selection
+				this.clearSelection();
 				const tasks = V_taskTableUtils.getTokens();
 				for(let t in tasks){
 					this.select(tasks[t].getObject4D(), true);
 				}
 
+				Memory.refresh();
+
 			}
 		},
 
 		highlightTask() {
-			const selection = this.viewer.getSelection();
-			this.viewer.clearSelection();
-			for(let s in selection){
-				const dbId = selection[s];
-				const task = Memory.getForgeObject(dbId).getObject3D().getParent().getTask();
-				V_socketUtils.highlightTask(task, true);
+			const selection = this.scene.getViewer().getSelection();
+			if(selection.length != 0){
+				this.scene.getViewer().clearSelection();
+				for(let s in selection){
+					const dbId = selection[s];
+					const fObject = Memory.getForgeObject(dbId);
+					const object4D = fObject.getObject3D().getObject4D();
+					const objects3D = object4D.getObjects3D();
+
+					for(let obj in objects3D){
+						const fObjs = objects3D[obj].getForgeObjects();
+						for( let o in fObjs){
+							if(fObjs[o] != null){	
+								const b = fObjs[o].getSelected();
+								Memory.select(fObjs[o], !b)
+							}
+						}
+					}
+
+
+					//const task = fObjs[o].getObject3D().getParent().getTask();
+					V_socketUtils.highlightTask(task, !b);
+
+				}
 			}
+			Memory.refresh();
 		},
 
 		select(object4D, bool){
@@ -149,33 +169,38 @@ export default {
 					Memory.select(fobjs[f], false);
 				}
 			}
-			Memory.update();
+			Memory.refresh();
 		},
 
 		clearSelection(){
 			Memory.clearSelection();
+			Memory.refresh();
 		},
 
 		setTeamDisplayed(taskTeam, bool){
 			Memory.setTeamSelected(taskTeam, bool);
+			Memory.refresh();
 		},
 
 		setTeamDisplayMode(bool){
 			Memory.setTeamDisplayMode();
+			Memory.refresh();
 		}
 
 	},
 	mounted : function(){
 
 		this.scene = new Scene();
-		this.scene.init(this.oauth, this.urns, ()=>{
+		this.objs = this.model.getObjects3D();
+		this.scene.init(this.oauth, this.urns, this.objs, ()=>{
 			console.log("init done");
 			this.createCustumMaterials();
-			this.allSelected();
+			this.allTransparent();
 			const tasks = V_taskTableUtils.getTokens();
 			for(let t in tasks){
 				this.select(tasks[t].getObject4D(), true);
 			}
+			this.scene.addListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, this.highlightTask);
 			V_4DUtils.setForgeViewer(this);
 			V_socketUtils.addViewer();
 			V_timelineUtils.addListener("time", this, this.watchTime);

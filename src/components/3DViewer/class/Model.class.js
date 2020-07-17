@@ -10,16 +10,19 @@ class Model{
 	#loaded;
 	#dbObjects;
 	#model;
+	#planningObjects;
 
 	constructor(id = Utils.getId("forgeModel")){
 		this.#id = id;
 		this.#loaded = true;
 		this.#dbObjects = {};
 		this.#model = null;
+		this.#planningObjects = null;
 	}
 
-	load(viewer, path, callback){
+	load(viewer, path, objs, callback){
 		const that = this;
+		this.#planningObjects = objs;
 		viewer.loadModel(path, {}, (model)=> {this._onModelLoaded(model, that, callback)});
 	}
 
@@ -27,6 +30,22 @@ class Model{
 		for(let d in this.#dbObjects){
 			this.#dbObjects[d].setAllMaterials(materialName);
 		}
+	}
+
+	getIFCTag(dbObjects, id){
+		if(id == null){
+			return null;
+		}
+		let parent = null;
+		for(let p in dbObjects[id].properties){
+			const prop = dbObjects[id].properties[p];
+			if(prop.displayName == "TAG" && prop.displayCategory == "IFC"){
+				return prop.displayValue;
+			}else if(prop.displayName == "parent"){
+				parent = prop.displayValue;
+			}
+		}
+		return this.getIFCTag(dbObjects, parent);
 	}
 
 	_onModelLoaded(model, that, callback){
@@ -53,48 +72,40 @@ class Model{
 
 		};
 
+		//Link to planning 
+		const ifcId2Obj3D = {};
+		for(let p in this.#planningObjects){
+			ifcId2Obj3D[this.#planningObjects[p].getIFCId()] = this.#planningObjects[p];
+		}
+
 		model.getPropertyDb().executeUserFunction(userFunction, [])
 			.then(function(dbObjects){
-
-				const ifcBuildingElements = [
-					"IFCBUILDINGELEMENTPROXY", //Pas sur
-					"IFCCOVERING", //2
-					"IFCBEAM", // Pas sur
-					"IFCOLUMN", // Pas sur
-					"IFCCURTAINWALL", // Pas sur
-					"IFCDOOR", //2 (attention c'est le début d'autres mots)
-					"IFCMEMBER", // Pas sur
-					"IFCRAILING", // Pas sur
-					"IFCRAMP", // Pas sur
-					"IFCRAMPFLIGHT", //Pas sur
-					"IFCWALL", //Pas sur
-					"IFCWALLSTANDARDCASE", //2
-					"IFCSLAB",  //2
-					"IFCSTAIRFLIGHT",// Pas sur
-					"IFCWINDOW", //2
-					"IFCSTAIR", // Pas sur
-					"IFCROOF", // 2
-					"IFCPILE", // Pas sur
-					"IFCFOOTING", // Pas sur
-					"IFCBUILDINGELEMENTCOMPONENT", // Pas sur
-					"IFCPLATE", // Pas sur
-					"IFCSTAIR"
-				];
 
 				for(let d in dbObjects){
 
 					let isVisible = false;
 					for(let p in dbObjects[d].properties){
-						if(dbObjects[d].properties[p].displayName == "Type" && ifcBuildingElements.includes(dbObjects[d].properties[p].displayValue)) isVisible = true;
+						if(dbObjects[d].properties[p].displayName == "Icon" && dbObjects[d].properties[p].displayValue == "Geometry") isVisible = true;
 					}
 					if(isVisible){
 
 						//IFC Props
+						const tag = that.getIFCTag(dbObjects, d);
+
 						that.#dbObjects[dbObjects[d].dbId] = new ForgeObject(dbObjects[d].dbId);
-						that.#dbObjects[dbObjects[d].dbId].setModel(that.#model);
-						for(let p in dbObjects[d].properties){
-							const property = new IFCProperty(dbObjects[d].properties[p].displayName, dbObjects[d].properties[p]);
-							that.#dbObjects[dbObjects[d].dbId].addProperty(property);
+
+						if(typeof ifcId2Obj3D[tag] != "undefined"){
+							that.#dbObjects[dbObjects[d].dbId].setObject3D(ifcId2Obj3D[tag]);
+							ifcId2Obj3D[tag].addForgeObject(that.#dbObjects[dbObjects[d].dbId]);
+							Memory.addForgeObject(that.#dbObjects[dbObjects[d].dbId], true);
+							that.#dbObjects[dbObjects[d].dbId].setModel(that.#model);
+							for(let p in dbObjects[d].properties){
+								const property = new IFCProperty(dbObjects[d].properties[p].displayName, dbObjects[d].properties[p]);
+								that.#dbObjects[dbObjects[d].dbId].addProperty(property);
+							}
+
+						}else{
+							Memory.addForgeObject(that.#dbObjects[dbObjects[d].dbId], false);
 						}
 
 						//Materials / Fragments
@@ -102,10 +113,27 @@ class Model{
 						tree.enumNodeFragments(dbObjects[d].dbId, (node)=>{
 			    			const material  = model.getFragmentList().getMaterial(node);
 			    			Memory.addMaterial(material);
-			    			const fragment = new Fragment(node, material);
+			    			const ignoredMaterial = new THREE.MeshBasicMaterial({
+							    reflectivity: 0.0,
+							    flatShading: true,
+							    transparent: false,
+							    color: "#FFFFFF",
+							});
+							const darkness = 0.55;
+							ignoredMaterial.color = {
+						    	r: material.color.r * darkness, 
+			    				g: material.color.g * darkness, 
+			    				b: material.color.b * (darkness /*+ 0.1*/)
+						    }
+			    			const fragment = new Fragment(node, material, ignoredMaterial);
 							that.#dbObjects[dbObjects[d].dbId].addFragment(fragment);
 							fragment.setModel(model);
+			    			Memory.addMaterial(ignoredMaterial, true, "ignored-" + material.id);
 			    		}, true);
+
+					}else{
+
+						//console.log(dbObjects[d].dbId, dbObjects[d].properties);
 					}
 				}
 

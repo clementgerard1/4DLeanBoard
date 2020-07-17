@@ -180,7 +180,7 @@ class V_socketUtils{
 	*/		
 	static highlightTask(task, bool){
 		V_taskTableUtils.highlightTaskById(task.getId(), bool);
-  	this.socket.emit("highlightTask", { id : task.getId(), value : bool});
+   		this.socket.emit("highlightTask", { id : task.getId(), value : bool});
 	}
 
 

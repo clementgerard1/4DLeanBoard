@@ -6,11 +6,15 @@ class Fragment{
 	#fragId;
 	#id;
 	#material;
+	#initMaterial;
+	#ignoredMaterial;
 	#model;
 
-	constructor(fragId ,material, id = Utils.getId("forgeFragments")){
+	constructor(fragId ,material, ignored, id = Utils.getId("forgeFragments")){
 		this.#fragId = fragId;
 		this.#id = id;
+		this.#initMaterial = material;
+		this.#ignoredMaterial = ignored;
 		this.#material = material;
 		this.#model = null;
 	}
@@ -20,12 +24,26 @@ class Fragment{
 	}
 
 	setMaterial(materialName){
-		const material = Memory.getMaterial(materialName);
-		this.#model.getFragmentList().setMaterial(this.#fragId, material);
+		let material = null;
+		if(materialName == "ignoredMaterial"){
+			material = this.#ignoredMaterial;
+		}else if(materialName == "init"){
+			material = this.#initMaterial;
+		}else{
+			material = Memory.getMaterial(materialName);
+		}
+		if(material.id != this.#material.id){
+			this.#model.getFragmentList().setMaterial(this.#fragId, material);
+			this.#material = material;
+		}
 	}
 
 	setModel(model){
 		this.#model = model;
+	}
+
+	getFragId(){
+		return this.#fragId;
 	}
 
 }
