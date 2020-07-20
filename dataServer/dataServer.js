@@ -39,7 +39,7 @@ function getNewModels(){
 				  		fs.readFile(__dirname + '/models/models' + '/' + files[f], 'utf8', (err, data)=>{
 
 				  			fs.readFile(__dirname + '/models/ifc' + '/' + files[f].split('.').slice(0, -1).join('.') + ".ifc", 'utf8', (err, data2)=>{
-
+				  				
 					  			const ext = files[f].split('.')[1];
 				  				if(ext == "json" || ext == "csv"){
 					  				let model = null;

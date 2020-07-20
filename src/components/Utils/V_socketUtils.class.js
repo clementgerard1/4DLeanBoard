@@ -52,8 +52,8 @@ class V_socketUtils{
 			V_4DUtils.setTeamDisplayMode(this.initDatas.teamdisplay == 2);
 			//Teams	
 			for(let d in this.initDatas.teamDisplayed){
-				V_filterMenuUtils.setTeamDisplayedById(this.initDatas.teamDisplayed[d], true);
-				V_4DUtils.setTeamDisplayedById(this.initDatas.teamDisplayed[d], true);
+				V_filterMenuUtils.setTeamDisplayedById(d, this.initDatas.teamDisplayed[d]);
+				V_4DUtils.setTeamDisplayedById(d, this.initDatas.teamDisplayed[d]);
 			}
 		}
 	}
@@ -180,7 +180,7 @@ class V_socketUtils{
 	*/		
 	static highlightTask(task, bool){
 		V_taskTableUtils.highlightTaskById(task.getId(), bool);
-  	this.socket.emit("highlightTask", { id : task.getId(), value : bool});
+   		this.socket.emit("highlightTask", { id : task.getId(), value : bool});
 	}
 
 

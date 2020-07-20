@@ -16,6 +16,11 @@ body{
 		box-sizing: border-box;
 	}
 
+	#filterPanel{
+		position: absolute;
+		z-index:10;
+	}
+
 	#taskTableFrame{
 		box-sizing: border-box;
 		*{
@@ -33,6 +38,15 @@ body{
 		align-items:center;
 		width : 100vw;
 		height : 100vh;
+	}
+
+	#copyright{
+		position : absolute;
+		top : calc(100vh - 25px);
+		right : 5px;
+		font-size: 10px;
+		padding: 5px;
+		background-color: rgba(255,255,255,0.4);
 	}
 
 }

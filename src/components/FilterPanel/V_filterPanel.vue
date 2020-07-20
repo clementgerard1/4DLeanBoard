@@ -5,6 +5,7 @@ import MenuStart from "./assets/MenuStart.svg";
 import Menu3D from "./assets/Menu3D.svg";
 import MenuPlanning from "./assets/MenuPlanning.svg";
 import MenuDisplay from "./assets/MenuDisplay.svg";
+import scssVariables from "../SixWeekView/assets/_variables.scss";
 
 import StandardButton from "./V_standardButton.vue";
 
@@ -18,7 +19,8 @@ export default {
 		for(let t in teams){
 			colorTeams[teams[t].getId()] = {
 				team : teams[t],
-				display : true
+				display : true,
+				color : scssVariables[teams[t].getColorClass().replace("BG_", "").toLowerCase()]
 			};
 		}
 		return {
@@ -269,7 +271,7 @@ export default {
 					<div class="offsetTeamDisplay"></div>
 					<div>
 						<div v-tap="handleTeamSelected" class="teamItems" v-for="team in colorTeams" v-bind:id="'teamitem-' + team.team.getId()" :key="'teamDisplay' + team.team.getId()">
-							<standardbutton v-bind:id="'teamitem-' + team.team.getId()" v-bind:condition="team.display"></standardbutton>
+							<standardbutton v-bind:color="team.color" v-bind:id="'teamitem-' + team.team.getId()" v-bind:condition="team.display"></standardbutton>
 							<p v-bind:id="'teamitem-' + team.team.getId()" v-html="team.team.getName()"></p>
 						</div>
 					</div>

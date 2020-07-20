@@ -6,6 +6,7 @@ class TaskTeam extends Team{
 	#operationUnits;
 	#workers;
 	#colorClass;
+	#abr;
 
 	/**
  		@class TaskTeam
@@ -17,11 +18,12 @@ class TaskTeam extends Team{
 		@param {string} [name=""] Name of taskteam.
 		@param {int} [id=automaticaly generated] id of the requirement taskteam
 	*/
-	constructor(name = "", id){
+	constructor(name = "", abr = name.substring(0,3), id){
 		super(name, id);
 		this.#operationUnits = {};
 		this.#workers = null;
 		this.#colorClass = "defaultcolor";
+		this.#abr = abr.toUpperCase();
 	}
 
 	/**
@@ -103,6 +105,10 @@ class TaskTeam extends Team{
 	*/
 	getColorClass(){
 		return this.#colorClass;
+	}
+
+	getAbr(){
+		return this.#abr;
 	}
 
 }

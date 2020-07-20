@@ -11,6 +11,10 @@ import openSocket from "socket.io-client";
 import V_timelineUtils from "./components/Utils/V_timelineUtils.class.js";
 import V_taskTableUtils from "./components/Utils/V_taskTableUtils.class.js";
 
+
+import V_filterPanel from "./components/FilterPanel/V_filterPanel.vue";
+import V_filterMenuUtils from "./components/Utils/V_filterMenuUtils.class.js";
+
 //Hammer si already on viewer3D.min.js loaded on index.html
 import Hammer from "hammerjs";
 
@@ -105,6 +109,7 @@ function init(){
 			tasktableframe : V_taskTableFrame,
 			svgdefs : V_svgDefs,
 			modelselect : V_modelSelect,
+			filterpanel : V_filterPanel,
 		},
 		data:{
 			playerinit : null,
@@ -150,7 +155,7 @@ function init(){
 						this.timeline = new Timeline(this.model);
 						this.playerInit = 0;
 						V_taskTableUtils.setAllTasks(this.model.getTasks());
-
+						V_filterMenuUtils.setAllTeams(this.model.getTaskTeams());
 						V_timelineUtils.setTimeline(this.timeline);
 						const phase = this.timeline.getModel().getMilestones()[0].getPhases()[0];
 					  	this.duration = this.model.getDuration();
@@ -189,12 +194,13 @@ function init(){
  		},
  		template : `
  		<div>
-	 		<div id="content">
+	 		<div id="content" v-if="model != null">
 	 			<modelselect id="modelSelect" v-if="selectPanel" v-on:setModel="setModel($event)">
 	 				<p v-tap="handleTap"> No selected </p>
 	 			</modelselect>
-
+	 			<filterpanel id="filterPanel" v-bind:model="model"></filterpanel>
 	 			<tasktableframe v-if="modelSelected" id="taskTableFrame" v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit" v-bind:duration="duration"></tasktableframe>
+	 			<p id="copyright">UMR 3495 MAP-CRAI © 2020</p>
 	 		</div>
 	 		<svgdefs style="width : 0px; height: 0px;"></svgdefs>
 	 	</div>

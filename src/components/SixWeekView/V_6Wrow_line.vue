@@ -4,9 +4,12 @@ import Utils from "../../class/Utils.class.js";
 import "./V_6Wrow_line.scss";
 
 export default {
+	props: [
+		"team"
+	],
 	template : `
 
-		<div></div>
+		<div class="teamLine"><p class="teamAbr" v-html="team.getAbr()"></p></div>
 
 	`,
 }

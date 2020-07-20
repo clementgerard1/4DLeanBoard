@@ -303,6 +303,7 @@ class Timeline{
 		@returns {int}
 	*/
 	getMaxSimultaneousTasksByPhaseAndTaskTeamBetweenTwoDates(phase, taskTeam, start, end){
+		console.log(start, end);
 		const phaseTasks = phase.getTasksByTaskTeam(taskTeam);
 		let max = 0;
 		for(let i = start; i <= end ; i++){

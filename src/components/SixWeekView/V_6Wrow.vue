@@ -44,7 +44,7 @@ export default {
 		tasks : function(){
 			const tasks = this.timeline.getTasksByTaskTeamAndNthBetweenTwoDates(this.taskteam, this.nth, this.tasktablestart * 7, (this.tasktablestart + 6) * 7 - 1);
 			this.isOpen = (tasks.count != 0);
-			this.isVisible = (tasks.count != 0);
+			this.isVisible = !(tasks.count == 0  && this.nth != 0);
 			return tasks.array;
 		},
 		_time : function(){
@@ -92,11 +92,11 @@ export default {
 	<div class="phaserow">
 
 		<!-- line -->
-		<taskline v-if="isVisible" class="phaseLine" v-bind:class="color"></taskline>
+		<taskline v-if="isVisible" class="phaseLine" v-tap="handleOpenPhase" v-bind:team="_team" v-bind:class="color"></taskline>
 
 		<!-- tasks -->
 		<div v-if="isVisible" v-bind:style="{maxHeight : maxheight, height : (tasksize - 30) + 'px'}" class="tasksWrapper">
-			<task v-bind:style="{maxHeight : maxheight}" v-bind:maxheight="maxheight" v-bind:color="color" v-bind:team="_team" nth=0 v-for="(task, i) in tasks" :key="i" v-bind:task="task" v-bind:isOpen="isOpen" v-bind:time="_tasktablestart + i"  ></task>
+			<task v-bind:style="{maxHeight : maxheight}" v-bind:maxheight="maxheight" v-bind:color="color" v-bind:team="_team" nth=0 v-for="(task, i) in tasks" :key="i" v-bind:isopen="isOpen" v-bind:task="task" v-bind:isOpen="isOpen" v-bind:time="_tasktablestart + i"  ></task>
 		</div>
 
 		<!-- button -->

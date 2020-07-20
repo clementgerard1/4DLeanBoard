@@ -8,6 +8,7 @@ class Object3D{
 	#objId;
 	#parentObject4D;
 	#ifcId;
+	#forgeObjects;
 
 	/**
 	 	@class Object3D 
@@ -25,6 +26,7 @@ class Object3D{
 		this.#objId = objId;
 		this.#parentObject4D = null;
 		this.#ifcId = ifcId;
+		this.#forgeObjects = [];
 	}
 
 	/**
@@ -49,6 +51,14 @@ class Object3D{
 	*/
 	getIFCId(){
 		return this.#ifcId;
+	}
+
+	addForgeObject(forgeObject){
+		this.#forgeObjects.push(forgeObject);
+	}
+
+	getForgeObjects(){
+		return this.#forgeObjects;
 	}
 
 	/**

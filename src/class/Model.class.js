@@ -680,6 +680,7 @@ class Model{
 			const taskTeam = {
 				id : t.getId(),
 				name : t.getName(),
+				abr : t.getAbr(),
 				workers : t.getWorkers(),
 				operationUnits : operationUnits,
 				color : t.getColorClass(),
@@ -835,7 +836,7 @@ class Model{
 		}
 		for(let t in datas.taskTeams){
 			const infos = datas.taskTeams[t];
-			const taskTeam = new TaskTeam(infos.name, infos.id);
+			const taskTeam = new TaskTeam(infos.name, infos.abr, infos.id);
 			taskTeam.setWorkers(infos.workers);
 			taskTeam.setColorClass(infos.color);
 			taskTeams[taskTeam.getId()] = taskTeam;

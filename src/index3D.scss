@@ -22,8 +22,8 @@ body{
 		max-height: 100vh;
 
 		#filterPanel{
-			height : v.$filterPanelHeight;
-			width : 100%;
+			position: absolute;
+			z-index:10;
 		}
 
 		#forgeViewer{
@@ -44,6 +44,13 @@ body{
 		align-items:center;
 		width : 100vw;
 		height : 100vh;
+	}
+
+	#copyright{
+		position : absolute;
+		top : calc(100vh - #{v.$playerHeight + 15px});
+		left : 5px;
+		font-size: 10px;
 	}
 
 }
