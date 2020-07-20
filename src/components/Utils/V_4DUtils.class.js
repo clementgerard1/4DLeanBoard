@@ -4,6 +4,12 @@ class V_4DUtils{
 	//static viewers = [];
 	static viewer = null;
 	static highlighted = [];
+	static waitViewer = {
+		teamDisplayMode : null,
+		teamsDisplayed : [],
+		teamsDisplayedId : [],
+	};
+	static needInit = false;
 
 	/**
 		Add ForgeViewer as listener of TaskTable Changement
@@ -13,6 +19,16 @@ class V_4DUtils{
 	static setForgeViewer(viewer){
 		//this.viewers.push(viewer);
 		this.viewer = viewer;
+		if(this.needInit){
+			this.setTeamDisplayMode(this.waitViewer.teamDisplayMode);
+			for(let t in this.waitViewer.teamsDisplayed){
+				this.setTeamDisplayed(this.waitViewer.teamsDisplayed[t].taskTeam, this.waitViewer.teamsDisplayed[t].bool);
+			}
+			for(let t in this.waitViewer.teamsDisplayedId){
+				this.setTeamDisplayedById(this.waitViewer.teamsDisplayedId[t].taskTeamId, this.waitViewer.teamsDisplayedId[t].bool);
+			}
+		}
+		this.needInit = false;
 	}	
 
 	/**
@@ -29,7 +45,7 @@ class V_4DUtils{
 			//const objects3D = object4D.getObjects3D();
 			//for(let o in objects3D){
 			//this.viewers[v].highlight(object4D);
-			this.viewer.highlight(object4D, bool);
+			this.viewer.select(object4D, bool);
 			//}
 		//}
 		}
@@ -37,7 +53,7 @@ class V_4DUtils{
 
 	static clearHighlighting(){
 		if(this.viewer != null){
-			this.viewer.clearHighlighting();
+			this.viewer.clearSelection();
 		}
 	}
 
@@ -65,6 +81,11 @@ class V_4DUtils{
 			if(taskTeam != null){
 				this.setTeamDisplayed(taskTeam, bool);
 			}
+		}else{
+			this.waitViewer.teamsDisplayedId[this.waitViewer.teamsDisplayedId.length] = {
+				taskTeamId : teamId,
+				bool : bool
+			}
 		}
 	}
 
@@ -76,6 +97,12 @@ class V_4DUtils{
 	static setTeamDisplayed(taskTeam, bool){
 		if(this.viewer != null){
 			this.viewer.setTeamDisplayed(taskTeam, bool);
+		}else{
+			this.waitViewer.teamsDisplayed[this.waitViewer.teamsDisplayed.length] = {
+				taskTeam : taskTeam,
+				bool : bool
+			}
+			this.needInit = true;
 		}
 	}
 
@@ -87,6 +114,9 @@ class V_4DUtils{
 	static setTeamDisplayMode(bool){
 		if(this.viewer != null){
 			this.viewer.setTeamDisplayMode(bool);
+		}else{
+			this.waitViewer.teamDisplayMode = bool;
+			this.needInit = true;
 		}
 	}
 

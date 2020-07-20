@@ -35,7 +35,7 @@ io.on("connection", function(client){
             const teams = model.getTaskTeams();
             const teamDisplayed = [];
             for(let t in teams){
-                teamDisplayed.push(teams[t].getId());
+                teamDisplayed[teams[t].getId()] = true;
             }
 
             const timeline = new Timeline(model);
@@ -181,10 +181,11 @@ io.on("connection", function(client){
         //client.broadcast.emit("clearHighlighting", datas);
     })
     client.on("updateTeamDisplayed", (datas) => {
+        console.log(datas);
         if(datas.value && !models[modelName].teamDisplayed.includes(datas.team)){
-            models[modelName].teamDisplayed.push(datas.team);
+            models[modelName].teamDisplayed[datas.team] = true;
         }else if(!datas.value){
-            models[modelName].teamDisplayed.splice(models[modelName].teamDisplayed.indexOf(datas.team), 1);
+            models[modelName].teamDisplayed[datas.team] = false;
         }
         broadcast(client, modelName, "updateTeamDisplayed", datas);
         //client.broadcast.emit("clearHighlighting", datas);

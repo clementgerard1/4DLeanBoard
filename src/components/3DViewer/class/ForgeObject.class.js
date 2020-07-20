@@ -9,6 +9,8 @@ class ForgeObject{
 	#selected;
 	#state;
 	#object3D;
+	#teamDisplayed;
+	#teamSelected;
 
 	constructor(id = Utils.getId("forgeObjects")){
 		this.#id = id;
@@ -18,6 +20,8 @@ class ForgeObject{
 		this.#selected = false;
 		this.#state = "toBuild";
 		this.#object3D = null;
+		this.#teamDisplayed = false;
+		this.#teamSelected = true;
 	}
 
 	addProperty(property){
@@ -36,6 +40,21 @@ class ForgeObject{
 		for(let f in this.#fragments){
 			this.#fragments[f].setMaterial(materialName);
 		}
+	}
+
+	isTeamSelected(teams){
+
+		if(typeof teams[this.#object3D.getParent().getTask().getTaskTeam().getId()] != "undefined"){
+			this.#teamSelected = true;
+		}else{
+			this.#teamSelected = false;
+		}
+		this.updateMaterial();
+	}
+
+	isTeamDisplayed(bool){
+		this.#teamDisplayed = bool;
+		this.updateMaterial();
 	}
 
 	getId(){
@@ -57,17 +76,26 @@ class ForgeObject{
 	}
 
 	updateMaterial(){
-		let materialName = "init";
-		if(this.#selected){
-			materialName = "selectedMaterial";
-		}else if(this.#state == "toBuild"){
-			materialName = "nextsWeeksMat";
-		}else if(this.#state == "built"){
-			materialName = "init";
-		}else if(this.#state == "currentWeek"){
-			materialName = "currWeekMat";
-		}else if(this.#state == "builtOn6W"){
-			materialName = "sixWeeksMat";
+
+		let materialName = null;
+		if(this.#teamDisplayed){
+			if(this.#teamSelected){
+				materialName = this.#object3D.getParent().getTask().getTaskTeam().getId() + "-team";
+			}else{	
+				materialName = this.#object3D.getParent().getTask().getTaskTeam().getId() + "-not-team";
+			}
+		}else{
+			if(this.#selected){
+				materialName = "selectedMaterial";
+			}else if(this.#state == "toBuild"){
+				materialName = "nextsWeeksMat";
+			}else if(this.#state == "built"){
+				materialName = "init";
+			}else if(this.#state == "currentWeek"){
+				materialName = "currWeekMat";
+			}else if(this.#state == "builtOn6W"){
+				materialName = "sixWeeksMat";
+			}
 		}
 
 		for(let f in this.#fragments){

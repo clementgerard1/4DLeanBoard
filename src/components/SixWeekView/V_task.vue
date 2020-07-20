@@ -117,7 +117,8 @@ export default {
 		"task",
 		"color",
 		"isOpen",
-		"maxheight"
+		"maxheight",
+		"isopen"
 	],
 	mounted: function(){
 		this.updateStateDiv();
@@ -309,7 +310,6 @@ export default {
 			this.previousready = previousready;
 		},
 		hightlight: function(bool){
-			console.log(this);
 			this.highlighted = bool;
 		},
 		updateStateButtons: function(){
@@ -368,7 +368,9 @@ export default {
 			}
 		},
 		handleDoubleTap: function(event){
-			V_socketUtils.updateStateDisplay(this.task, !this.state);
+			if(this.isopen){
+				V_socketUtils.updateStateDisplay(this.task, !this.state);
+			}
 		},
 		handlePress : function(event){
 			const display = event.type == "press";

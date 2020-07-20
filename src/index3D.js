@@ -217,8 +217,9 @@ function init(){
 
 	 			<div v-if="forgeReady" id="viewerFrame">
 	 				<filterpanel id="filterPanel" v-bind:model="model"></filterpanel>
-	 				<forgeviewer id="forgeViewer" v-bind:model="model" v-bind:timeline="timeline" v-bind:urns="urns" v-bind:oauth="oauth"></forgeviewer>
-	 				<player id="mainPlayer" v-bind:duration="duration" v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit"></player>
+	 				<forgeviewer id="forgeViewer" v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit" v-bind:urns="urns" v-bind:oauth="oauth"></forgeviewer>
+	 				<p id="copyright">UMR 3495 MAP-CRAI © 2020</p>
+	 				<player id="mainPlayer" v-bind:duration="duration" v-bind:model="model" v-bind:timeline="timeline"></player>
 	 			</div>
 	 		</div>
 	 		<svgdefs style="width : 0px; height: 0px;"></svgdefs>

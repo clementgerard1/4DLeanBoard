@@ -17,6 +17,7 @@ export default {
 		return {
 			scene : null,
 			time : null,
+			playerinit : null,
 		}
 	},
 	props : [
@@ -29,11 +30,10 @@ export default {
 
 		createCustumMaterials(){
 			const selectedMaterial = new THREE.MeshBasicMaterial({
-			    reflectivity: 0.0,
-			    flatShading: true,
-			    transparent: true,
-			    opacity: 0.8,
 			    color: scssVariables["select3DColor"],
+			    emissive : scssVariables["select3DColor"],
+			    specular : scssVariables["select3DColor"],
+			    shininess : 0,
 			});
 			Memory.addMaterial(selectedMaterial, true, "selectedMaterial");
 
@@ -64,6 +64,27 @@ export default {
 			});
 			Memory.addMaterial(sixWeeksMat, true, "sixWeeksMat");
 
+			const teams = this.model.getTaskTeams();
+			for(let t in teams){
+
+				const teamMaterial = new THREE.MeshBasicMaterial({
+					reflectivity: 0.0,
+					flatShading: true,
+					transparent: true,
+					opacity: 0.75,
+					color: scssVariables[teams[t].getColorClass().replace("BG_", "").toLowerCase()],
+				});
+				Memory.addMaterial(teamMaterial , true, teams[t].getId() + "-team");
+				const teamNotMaterial = new THREE.MeshBasicMaterial({
+					reflectivity: 0.0,
+					flatShading: true,
+					transparent: true,
+					opacity: 0.35,
+					color: scssVariables[teams[t].getColorClass().replace("BG_", "").toLowerCase()],
+				});
+				Memory.addMaterial(teamNotMaterial , true, teams[t].getId() + "-not-team");
+				
+			}
 		},
 
 		allTransparent(){
@@ -139,22 +160,24 @@ export default {
 				for(let s in selection){
 					const dbId = selection[s];
 					const fObject = Memory.getForgeObject(dbId);
-					const object4D = fObject.getObject3D().getObject4D();
-					const objects3D = object4D.getObjects3D();
+					if(typeof fObject != "undefined"){
+						const object4D = fObject.getObject3D().getParent();
+						const objects3D = object4D.getObjects3D();
 
-					for(let obj in objects3D){
-						const fObjs = objects3D[obj].getForgeObjects();
-						for( let o in fObjs){
-							if(fObjs[o] != null){	
-								const b = fObjs[o].getSelected();
-								Memory.select(fObjs[o], !b)
+						for(let obj in objects3D){
+							const fObjs = objects3D[obj].getForgeObjects();
+							for( let o in fObjs){
+								if(fObjs[o] != null){	
+									const b = fObjs[o].getSelected();
+									Memory.select(fObjs[o], !b)
+								}
 							}
 						}
 					}
 
 
 					//const task = fObjs[o].getObject3D().getParent().getTask();
-					V_socketUtils.highlightTask(task, !b);
+					//V_socketUtils.highlightTask(task, !b);
 
 				}
 			}
@@ -166,7 +189,7 @@ export default {
 			for(let o in objs){
 				const fobjs = objs[o].getForgeObjects();
 				for(let f in fobjs){
-					Memory.select(fobjs[f], false);
+					Memory.select(fobjs[f], bool);
 				}
 			}
 			Memory.refresh();
@@ -183,8 +206,11 @@ export default {
 		},
 
 		setTeamDisplayMode(bool){
-			Memory.setTeamDisplayMode();
+			Memory.setTeamDisplayMode(bool);
 			Memory.refresh();
+		},
+		setTime(time){
+			this.playerinit = time;
 		}
 
 	},
@@ -192,6 +218,8 @@ export default {
 
 		this.scene = new Scene();
 		this.objs = this.model.getObjects3D();
+
+		V_timelineUtils.addListener("time", this, this.setTime);
 		this.scene.init(this.oauth, this.urns, this.objs, ()=>{
 			console.log("init done");
 			this.createCustumMaterials();
@@ -202,8 +230,10 @@ export default {
 			}
 			this.scene.addListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, this.highlightTask);
 			V_4DUtils.setForgeViewer(this);
-			V_socketUtils.addViewer();
+			V_timelineUtils.removeListener("time", this);
 			V_timelineUtils.addListener("time", this, this.watchTime);
+			this.watchTime(this.playerinit);
+			V_socketUtils.addViewer();
 		})
 
 	},

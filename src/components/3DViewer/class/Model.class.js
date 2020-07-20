@@ -125,6 +125,17 @@ class Model{
 			    				g: material.color.g * darkness, 
 			    				b: material.color.b * (darkness /*+ 0.1*/)
 						    }
+						 // 	material.map = null;
+						 // 	const ignoredMaterial = new THREE.MeshPhongMaterial({
+						 // 		color : new THREE.Color(material.color.r, material.color.g, material.color.b),
+						 // 		emissive : new THREE.Color(material.color.r, material.color.g, material.color.b),
+						 // 		specular : new THREE.Color(material.color.r, material.color.g, material.color.b),
+						 // 		side : THREE.DoubleSide,
+						 // 		shininess : 0
+						 // 	});
+						 	material.needsUpdate = true;
+						 	ignoredMaterial.needsUpdate = true;
+
 			    			const fragment = new Fragment(node, material, ignoredMaterial);
 							that.#dbObjects[dbObjects[d].dbId].addFragment(fragment);
 							fragment.setModel(model);

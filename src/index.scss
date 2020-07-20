@@ -68,4 +68,11 @@ body{
 		height : 100vh;
 	}
 
+	#copyright{
+		position : absolute;
+		top : calc(100vh - #{v.$playerHeight + 15px});
+		left : 5px;
+		font-size: 10px;
+	}
+
 }

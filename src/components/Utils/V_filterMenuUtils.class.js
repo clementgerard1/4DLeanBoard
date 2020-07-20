@@ -22,8 +22,10 @@ class V_filterMenuUtils{
 		@static
 	*/
 	static setTeamDisplayedById(teamId, bool){
-		for( let t in this.teams){
-			if(this.teams[t] != null && this.teams.getId() == teamId) V_filterMenuTils.setTeamDisplayed(this.teams[t], bool);
+		for( let t in this.teamsDisplayed){
+			if(this.teamsDisplayed[t] != null && t == teamId) {
+				V_filterMenuUtils.setTeamDisplayed(this.teamsDisplayed[t], bool);
+			}
 		}
 	}
 

@@ -8,10 +8,19 @@ class Memory{
 	static #selected = {};
 	static #forgeObjects = {};
 	static #forgeObjectsNotLinked = {}
+	static #teamDisplay = false;
+	static #teamSelected = {};
 
 	static addMaterial(material, init = false, name = this.#viewer.model.getFragmentList().materialmap[material.id]){
 		if(init){
-			this.#viewer.impl.getMaterials().addMaterial(Utils.getGuid(), material, true);
+			//material.envMap = null;
+			//material.reflectivity = 0;
+			this.#viewer.impl.getMaterials().addMaterial(name, material, true);
+			//console.log(name);
+			//material.envMap = null;
+			//material.reflectivity = 0;
+			//material.needsUpdate = true;
+			//console.log(this.#viewer.impl.matman());
 		}
 		const id = this.#viewer.model.getFragmentList().materialmap[material.id];
 		if(typeof this.#materials[id] == "undefined") {
@@ -30,6 +39,26 @@ class Memory{
 
 	static getMaterial(name){
 		return this.#materials[name];
+	}
+
+	static setTeamSelected(team, bool){
+		if(bool){
+			this.#teamSelected[team.getId()] = true;
+		}else{
+			delete this.#teamSelected[team.getId()];
+		}
+		for(let f in this.#forgeObjects){
+			this.#forgeObjects[f].isTeamSelected(this.#teamSelected);
+		}
+	}
+
+	static setTeamDisplayMode(bool){
+		if(this.#teamDisplay != bool){
+			this.#teamDisplay = bool;
+			for(let f in this.#forgeObjects){
+				this.#forgeObjects[f].isTeamDisplayed(bool);
+			}
+		}
 	}
 
 	static select(forgeObject, bool){
@@ -52,7 +81,6 @@ class Memory{
 	}
 
 	static addForgeObject(forgeObject, linked){
-		//console.log(forgeObject.getId());
 		if(linked){
 			this.#forgeObjects[forgeObject.getId()] = forgeObject;
 		}else{

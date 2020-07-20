@@ -61,7 +61,6 @@ export default {
 	watch : {
 		tasktablestart : function(){
 			this.$forceUpdate();
-			console.log(this.tasktablestart);
 		}
 	},
 	props:[

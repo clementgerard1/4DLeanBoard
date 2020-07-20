@@ -5,7 +5,7 @@ class V_timelineUtils{
 	static time = null;
 	static timeline = null;
 	static listeners = {
-		"time" : [],
+		"time" : {},
 	};
 
 	static setTimeline(timeline){
@@ -34,7 +34,7 @@ class V_timelineUtils{
 		@static
 	*/
 	static removeListener(event, obj){
-		if(typeof this.listeners[event][obj] != "undefined"){
+		if(typeof this.listeners[event][obj] == "undefined"){
 			delete this.listeners[event][obj];
 		}else{
 			console.error("event " + event + " unknowed or obj isn't on the list : ", obj);
