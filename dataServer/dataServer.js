@@ -63,7 +63,7 @@ function getNewModels(){
 								}
 							});
 
-							fs.readFile(__dirname + '/models/ifc' + '/' + files[f].split('.').slice(0, -1).join('.') + ".rvt", 'utf8', (err, data2)=>{
+							/*fs.readFile(__dirname + '/models/ifc' + '/' + files[f].split('.').slice(0, -1).join('.') + ".rvt", 'utf8', (err, data2)=>{
 				  				
 					  			const ext = files[f].split('.')[1];
 				  				if(ext == "json" || ext == "csv"){
@@ -86,7 +86,7 @@ function getNewModels(){
 								if(count == files.length){
 								  resolve(frag2ID);
 								}
-							});
+							});*/
 
 						});
 				 	}else{
