@@ -11,6 +11,7 @@ class Model{
 	#dbObjects;
 	#model;
 	#planningObjects;
+	#viewer;
 
 	constructor(id = Utils.getId("forgeModel")){
 		this.#id = id;
@@ -18,11 +19,13 @@ class Model{
 		this.#dbObjects = {};
 		this.#model = null;
 		this.#planningObjects = null;
+		this.#viewer = null;
 	}
 
 	load(viewer, path, objs, callback){
 		const that = this;
 		this.#planningObjects = objs;
+		this.#viewer = viewer;
 		viewer.loadModel(path, {}, (model)=> {this._onModelLoaded(model, that, callback)});
 	}
 
@@ -105,6 +108,7 @@ class Model{
 							}
 
 						}else{
+							that.#viewer.lockSelection(dbObjects[d].dbId, true, model)
 							Memory.addForgeObject(that.#dbObjects[dbObjects[d].dbId], false);
 						}
 

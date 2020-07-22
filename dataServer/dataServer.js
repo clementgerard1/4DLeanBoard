@@ -272,7 +272,7 @@ function launchServer(){
 	});
 
 	app.get("/model", (req, res)=>{
-		res.sendFile(__dirname + "/models/models_serialized/" + req.query.name + ".json");
+		//res.sendFile(__dirname + "/models/models_serialized/" + req.query.name + ".json");
 		const toReturn = {
 			model : models[req.query.name].serialize(),
 			urn : urns[req.query.name],

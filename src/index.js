@@ -114,12 +114,39 @@ function init(){
 				if(hammer == null){
 					hammer = new Hammer(el);
 					TouchGesturesUtils.addHammer(el, hammer);
-				} 
+				};
 
 				hammer.get('pan').set({threshold : 1});
 				hammer.on("panstart", binding.value);
 				hammer.on("panmove", binding.value);
 				hammer.on("panend", binding.value);
+				hammer.on("pandown", binding.value);
+				hammer.on("panup", binding.value);
+
+				TouchGesturesUtils.updateHammer(el);
+			}
+		}
+	});
+
+	Vue.directive("doublePan", {
+		bind: function(el, binding) 
+		{
+			if(el.getAttribute("hammerid") == null){
+				el.setAttribute("hammerid", Utils.getId("hammer"));
+			}
+			if (typeof binding.value === "function") {
+				let hammer = TouchGesturesUtils.getHammer(el);
+				if(hammer == null){
+					hammer = new Hammer(el);
+					TouchGesturesUtils.addHammer(el, hammer);
+				} 
+
+				const doublePan = new Hammer.Pan(
+					{event: 'doublepan', pointers : 2 }
+				);
+				doublePan.recognizeWith(hammer.recognizers)
+				hammer.add(doublePan);
+				hammer.on("doublepan", binding.value);
 
 				TouchGesturesUtils.updateHammer(el);
 			}

@@ -8,7 +8,7 @@ class Scene{
 	#viewer;
 	#initInfos;
 	#documents;
-
+	#viewCubeUiExt;
 	/**
 		@class Scene
 		@classdesc Scene represents the forge viewer
@@ -26,6 +26,7 @@ class Scene{
 			urns : null,
 		}
 		this.#documents = [];
+		this.#viewCubeUiExt = null;
 
 	}
 
@@ -41,6 +42,8 @@ class Scene{
 		    env: 'AutodeskProduction',
 		    api: 'derivativeV2',  // for models uploaded to EMEA change this option to 'derivativeV2_EU'
 		    accessToken : this.#initInfos.oauth.credentials.access_token,
+		    groundReflection : true,
+		    edgeRendering : true
 		};
 		const that = this;
 		Autodesk.Viewing.Initializer(options, () => {this._onInitialisationSuccess(that)});
@@ -94,6 +97,22 @@ class Scene{
 
 	setLightPreset(index){
 		this.#viewer.setLightPreset(index);
+	}
+
+	setCube(bool){
+
+		if(this.#viewCubeUiExt == null){
+			this.#viewer.loadExtension('Autodesk.ViewCubeUi').then(cube => {
+				this.#viewCubeUiExt = this.#viewer.getExtension('Autodesk.ViewCubeUi');
+				this.#viewCubeUiExt.setVisible(bool);
+				this.#viewCubeUiExt.displayHomeButton(true);
+				this.#viewCubeUiExt.refreshCube();
+			});
+		}else{
+			//this.#viewCubeUiExt.setVisible(bool);
+			//this.#viewCubeUiExt.displayHomeButton(bool);
+		}
+
 	}
 
 }

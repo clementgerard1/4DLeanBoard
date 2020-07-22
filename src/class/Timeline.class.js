@@ -51,7 +51,6 @@ class Timeline{
 				}
 			}
 		}
-		//console.log(this.#steps);
 
 	}
 

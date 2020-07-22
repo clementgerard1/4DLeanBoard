@@ -10,6 +10,8 @@ import Utils from "../../class/Utils.class.js";
 import Scene from "./class/Scene.class.js";
 import Memory from "./class/Memory.class.js";
 
+import Tool from "./Tool.js";
+
 
 
 export default {
@@ -231,6 +233,13 @@ export default {
 			}
 			this.scene.addListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, this.highlightTask);
 			this.scene.setLightPreset(7);
+
+			this.scene.setCube(true);
+
+			const tool = new Tool(this.scene.getViewer());
+			this.scene.getViewer().toolController.registerTool(tool);
+			this.scene.getViewer().toolController.activateTool('tool');
+
 			V_4DUtils.setForgeViewer(this);
 			V_timelineUtils.removeListener("time", this);
 			V_timelineUtils.addListener("time", this, this.watchTime);
