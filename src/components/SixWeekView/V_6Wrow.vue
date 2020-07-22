@@ -15,6 +15,7 @@ export default {
 			"color" : "BG_" + this.taskteam.getColorClass(),
 			"isOpen" : true, 
 			"isVisible" : true,
+			"teamDescription" : false,
 			"maxheight" : "init"
 		}
 	},
@@ -55,6 +56,17 @@ export default {
 		},
 		_team : function(){
 			return this.taskteam;
+		},
+		zIndex : function(){
+			if(this.teamDescription){
+				return {
+					zIndex : 2,
+				}
+			}else{
+				return {
+					zIndex : 0,
+				}
+			}
 		}
 	},
 	watch: {
@@ -71,8 +83,8 @@ export default {
 		},
 		tasktablestart: function(){
 			const tasks = this.timeline.getTasksByTaskTeamAndNthBetweenTwoDates(this.taskteam, this.nth, this.tasktablestart * 7, (this.tasktablestart + 6) * 7 - 1);
-			this.isOpen = (tasks.count != 0);
-			this.isVisible = (tasks.count != 0);
+			//this.isOpen = (tasks.count != 0);
+			this.isVisible = (tasks.count != 0  && this.nth != 0);
 		}
 	},
 	created: function(){
@@ -83,8 +95,10 @@ export default {
 		}
 	},
 	methods: {
-		handleOpenPhase : function(){
-			this.isOpen = !this.isOpen;
+		handleOpenPhase : function(event){
+			if(event.target.tagName != "P" && !(event.target.classList.contains("teamAbr"))){
+				this.isOpen = !this.isOpen;
+			}
 		}
 	}
 	,
@@ -92,7 +106,7 @@ export default {
 	<div class="phaserow">
 
 		<!-- line -->
-		<taskline v-if="isVisible" class="phaseLine" v-tap="handleOpenPhase" v-bind:team="_team" v-bind:class="color"></taskline>
+		<taskline v-if="isVisible" class="phaseLine" v-tap="handleOpenPhase" v-bind:team="_team" v-bind:class="color" v-bind:teamdescription="teamDescription" v-bind:style='zIndex'></taskline>
 
 		<!-- tasks -->
 		<div v-if="isVisible" v-bind:style="{maxHeight : maxheight, height : (tasksize - 30) + 'px'}" class="tasksWrapper">

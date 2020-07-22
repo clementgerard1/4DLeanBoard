@@ -296,6 +296,16 @@ export default {
 				<stop offset="1" stop-opacity="0"/>
 				</linearGradient>
 
+				<pattern id="pattern0_teamName" patternContentUnits="objectBoundingBox" width="1" height="1">
+				<use xlink:href="#image0_teamName" transform="scale(0.0333333)"/>
+				</pattern>
+				<image id="image0_teamName" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAAAeUlEQVRIie2TQQqAMAwER3/gW/w/BatH3+IT6sWDmooYKpGagRwSEhaWLDh/ZALSqWJpkSYzSw921bSKm4h05K6EYxphDcLFT1k9ZmbFn8sBz7HEc6zCc2yKaY4XYN76HugudouSgLDrA8dPrzPHJlbnrBzeFnXqYwWXzFIX08PMwgAAAABJRU5ErkJggg=="/>
+
+				<pattern id="pattern0_schedule" patternContentUnits="objectBoundingBox" width="1" height="1">
+				<use xlink:href="#image0_schedule" transform="scale(0.0333333)"/>
+				</pattern>
+				<image id="image0_schedule" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAABRklEQVRIie2WS2oCQRCGPyVLA5IBc4JcIolE3YgEyVGyCsGdJ4qvQ4RAAoo3UBfuxEBWImbR1cxoeh7dtm4mPxRaNUV9VNV0M/CvPOoRWAA7TzYHWlnAc49QbbMsYJ3sS8Z6RY8AK+UPfJHwzOee/yh/o7YB3wHVI3xncBEoHOHvyfTgVC/VHuucOw7SEvQVdwvcW/hptgTaGpLUsesO+0ANKInVgQFwDbwBzbSOXewlUucDeI/4r5KzAso+wb2YOlENJdZJAtvu+CEDuC6xsc8df8XUqUT+f8rvjSnRddSlgzpTiU8Jj9KlxNYmsOunT83QqYY/S6whvnE6LUd431ArEOiV+CPJ7ZrAtgpQl8MOdWTi1CE8Tqm3WFa1gY0UHqLeXn2BNAg73QJPvqBaTVQ3catYnQKqVUaNdAL8AN+oI9TlYLy/q1/LqxMmH2wAAAAASUVORK5CYII="/>
+
 			</defs>
 		</svg>
 

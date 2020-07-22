@@ -51,7 +51,6 @@ class Timeline{
 				}
 			}
 		}
-
 		//console.log(this.#steps);
 
 	}
@@ -303,7 +302,6 @@ class Timeline{
 		@returns {int}
 	*/
 	getMaxSimultaneousTasksByPhaseAndTaskTeamBetweenTwoDates(phase, taskTeam, start, end){
-		console.log(start, end);
 		const phaseTasks = phase.getTasksByTaskTeam(taskTeam);
 		let max = 0;
 		for(let i = start; i <= end ; i++){
@@ -409,7 +407,7 @@ class Timeline{
 
 		for(let i = 1 ; i <= 6 ; i++){
 
-			const tasks = this.getTasksByTeamBetweenTwoDates(taskTeam, start+ (((end - start + 1) / 6) * (i - 1)), start + (((end - start + 1) / 6) * i) - 1);		
+			const tasks = this.getTasksByTeamBetweenTwoDates(taskTeam, start+ (((end - start + 1) / 6) * (i - 1)), start + (((end - start + 1) / 6) * i) - 1);	
 			for(let t in tasks){
 				const originNth = this.getOriginNth(taskTeam, tasks[t]);
 				if(originNth == nth){
@@ -455,14 +453,22 @@ class Timeline{
 	getOriginNth(taskTeam, task){
 		const time = this.getTime(task.getStartDate());
 		const startWeekTime = Math.trunc(time / 7) * 7;
-		const tasks = this.getTasksByTeamBetweenTwoDates(taskTeam, startWeekTime, startWeekTime + 7);
-		return tasks.indexOf(task);
+		const tasks = this.getTasksByTeamBetweenTwoDates(taskTeam, startWeekTime, startWeekTime + 6);
+		let offset = 0;
+		for(let t in tasks){
+			if(tasks[t] == task){
+				return (offset + parseInt(t)) % tasks.length
+			}else{
+				offset += this.getOriginNth(taskTeam, tasks[t]);
+			}
+		}
+		return null;
 	}
 
 	getOriginNthByPhase(phase, taskTeam, task){
 		const time = this.getTime(task.getStartDate());
 		const startWeekTime = Math.trunc(time / 7) * 7;
-		const tasks = this.getTasksByTeamAndPhaseBetweenTwoDates(phase, taskTeam, startWeekTime, startWeekTime + 7);
+		const tasks = this.getTasksByTeamAndPhaseBetweenTwoDates(phase, taskTeam, startWeekTime, startWeekTime + 6);
 		return tasks.indexOf(task);
 	}
 

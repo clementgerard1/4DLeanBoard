@@ -63,6 +63,31 @@ function getNewModels(){
 								}
 							});
 
+							fs.readFile(__dirname + '/models/ifc' + '/' + files[f].split('.').slice(0, -1).join('.') + ".rvt", 'utf8', (err, data2)=>{
+				  				
+					  			const ext = files[f].split('.')[1];
+				  				if(ext == "json" || ext == "csv"){
+					  				let model = null;
+					  				if(ext == "json"){
+										model = Loader.fromJSONandRVT(data, data2);
+										model.setName(files[f].split('.').slice(0, -1));
+										const json = model.serialize();
+										frag2ID[files[f].split('.').slice(0, -1).join('.')] = model.getFragToIdsArray();
+										saveModel(files[f].split('.').slice(0, -1).join('.'), json);
+									}else if(ext == "csv"){
+										model = Loader.fromJSONandRVT(data, data2);
+										model.setName(files[f].split('.').slice(0, -1));
+										const json = model.serialize();
+										frag2ID[files[f].split('.').slice(0, -1).join('.')] = model.getFragToIdsArray();
+										saveModel(files[f].split('.').slice(0, -1).join('.'), json);
+									}
+								}
+								count++;
+								if(count == files.length){
+								  resolve(frag2ID);
+								}
+							});
+
 						});
 				 	}else{
 				  	count++;
@@ -91,19 +116,29 @@ function getNewIfcFiles(fragToIds){
 		  	let count = 0;
 		  	for(let f in files){
 		  		if(!fs.lstatSync(__dirname + '/models/ifc' + '/' + files[f]).isDirectory()){
-		  			if(!fs.existsSync(__dirname + '/models/ifc_modified' + '/' + files[f].split('.').slice(0, -1).join('.') + ".ifc")){
-		  				if(files[f].split('.').slice(0, -1).join('.') != ""){
-					  		fs.readFile(__dirname + '/models/ifc' + '/' + files[f], 'utf8', (err, data)=>{
+		  			const ext = files[f].split('.')[1];
+		  			if(ext == "ifc"){
+		  				if(!fs.existsSync(__dirname + '/models/ifc_modified' + '/' + files[f].split('.').slice(0, -1).join('.') + ".ifc")){
+			  				if(files[f].split('.').slice(0, -1).join('.') != ""){
+						  		fs.readFile(__dirname + '/models/ifc' + '/' + files[f], 'utf8', (err, data)=>{
 
 
-					  			fs.writeFile(__dirname + "/models/ifc_modified/" + files[f].split('.').slice(0, -1).join('.') + ".ifc", Loader.createIFCFileWithId(data, fragToIds[files[f].split('.').slice(0, -1).join('.')]), function (err) {
-								  	if (err) throw err;
-								  	console.log('Modified IFC created.');
+						  			fs.writeFile(__dirname + "/models/ifc_modified/" + files[f].split('.').slice(0, -1).join('.') + ".ifc", Loader.createIFCFileWithId(data, fragToIds[files[f].split('.').slice(0, -1).join('.')]), function (err) {
+									  	if (err) throw err;
+									  	console.log('Modified IFC created.');
+									});
+
 								});
-
+						  	}
+						}
+		  			}else if(ext == "rvt"){
+		  				if(!fs.existsSync(__dirname + '/models/ifc_modified' + '/' + files[f].split('.').slice(0, -1).join('.') + ".rvt")){
+			  				fs.copyFile(__dirname + '/models/ifc' + '/' + files[f].split('.').slice(0, -1).join('.') + ".rvt", __dirname + '/models/ifc_modified' + '/' + files[f].split('.').slice(0, -1).join('.') + ".rvt", (err) => {
+							  if (err) throw err;
+							  console.log('source.txt was copied to destination.txt');
 							});
-					  	}
-					}
+						}
+		  			}
 					count++;
 					if(count == files.length){
 						resolve();
@@ -125,7 +160,7 @@ function updateForge(){
 		let clientSecret = Config.autoDeskForgeSettings[Config.autoDeskAccount].clientSecret;
 		Utils.getAutodeskAuth(clientId, clientSecret).then(
 			oAuth => {
-				fs.readdir(__dirname + '/models/models_serialized', (err, files) => {
+				fs.readdir(__dirname + '/models/ifc_modified', (err, files) => {
 
 						  // On error, show it and return
 						  if(err) return console.error(err);
@@ -134,24 +169,39 @@ function updateForge(){
 						  let count = 0;
 						  for(let f in files){
 
+						  	const ext = files[f].split('.')[1];
+		  					if(ext == "ifc"){
 
-						  	if(files[f].charAt(0) != "."){
-							  	Utils.createForgeBucket(oAuth, files[f].split('.').slice(0, -1).join('.'))
-									.then( oAuth => {
+						  		if(files[f].charAt(0) != "."){
+								  	Utils.createForgeBucket(oAuth, files[f].split('.').slice(0, -1).join('.'))
+										.then( oAuth => {
 
-										return Utils.uploadIFCFileToForge(oAuth, files[f].split('.').slice(0, -1).join('.'), __dirname + '/models/ifc_modified' + '/' + files[f].split('.').slice(0, -1).join('.') + ".ifc");
-									})
-									.then( datas => {
-										urns[files[f].replace(".json", "")] = datas.manifest.urn;
-									}).catch( error => {
-										console.error(error);
-									});
+											return Utils.uploadIFCFileToForge(oAuth, files[f].split('.').slice(0, -1).join('.'), __dirname + '/models/ifc_modified' + '/' + files[f].split('.').slice(0, -1).join('.') + ".ifc");
+										})
+										.then( datas => {
+											urns[files[f].replace(".ifc", "")] = datas.manifest.urn;
+										}).catch( error => {
+											console.error(error);
+										});
 								}
+							}else if(ext == "rvt"){
+								if(files[f].charAt(0) != "."){
+								  	Utils.createForgeBucket(oAuth, files[f].split('.').slice(0, -1).join('.'))
+										.then( oAuth => {
 
-								count++;
-							  if(count == files.length){
+											return Utils.uploadRVTFileToForge(oAuth, files[f].split('.').slice(0, -1).join('.'), __dirname + '/models/ifc_modified' + '/' + files[f].split('.').slice(0, -1).join('.') + ".rvt");
+										})
+										.then( datas => {
+											urns[files[f].replace(".ifc", "")] = datas.manifest.urn;
+										}).catch( error => {
+											console.error(error);
+										});
+								}
+							}
+							count++;
+							if(count == files.length){
 							  	resolve();
-							  }
+							}
 						  }
 
 				});
@@ -162,7 +212,6 @@ function updateForge(){
 }
 
 function getSerializedModels(){
-
 	return new Promise((resolve, reject) => {
 
 		fs.readdir(__dirname + '/models/models_serialized', (err, files) => {
@@ -195,7 +244,6 @@ function getSerializedModels(){
 }
 
 function launchServer(){
-
 	const port = 3003;
 	const app = express();
 	app.use(cors());
@@ -266,7 +314,6 @@ function launchServer(){
 }
 
 function saveModel(name, json){
-	console.log(name);
 	// writeFile function with filename, content and callback function
 	fs.writeFile(__dirname + "/models/models_serialized/" + name + ".json", json, function (err) {
 	  if (err) throw err;

@@ -147,8 +147,9 @@ export default {
 				for(let t in tasks){
 					this.select(tasks[t].getObject4D(), true);
 				}
-
-				Memory.refresh();
+				if(!Memory.isTeamDisplayed()){
+					Memory.refresh();
+				}
 
 			}
 		},
@@ -162,8 +163,8 @@ export default {
 					const fObject = Memory.getForgeObject(dbId);
 					if(typeof fObject != "undefined"){
 						const object4D = fObject.getObject3D().getParent();
+						V_socketUtils.highlightTask(object4D.getTask(), !Memory.isSelected(fObject));
 						const objects3D = object4D.getObjects3D();
-
 						for(let obj in objects3D){
 							const fObjs = objects3D[obj].getForgeObjects();
 							for( let o in fObjs){
@@ -223,12 +224,13 @@ export default {
 		this.scene.init(this.oauth, this.urns, this.objs, ()=>{
 			console.log("init done");
 			this.createCustumMaterials();
-			this.allTransparent();
+			//this.allTransparent();
 			const tasks = V_taskTableUtils.getTokens();
 			for(let t in tasks){
 				this.select(tasks[t].getObject4D(), true);
 			}
 			this.scene.addListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, this.highlightTask);
+			this.scene.setLightPreset(7);
 			V_4DUtils.setForgeViewer(this);
 			V_timelineUtils.removeListener("time", this);
 			V_timelineUtils.addListener("time", this, this.watchTime);

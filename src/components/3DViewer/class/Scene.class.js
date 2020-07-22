@@ -41,14 +41,13 @@ class Scene{
 		    env: 'AutodeskProduction',
 		    api: 'derivativeV2',  // for models uploaded to EMEA change this option to 'derivativeV2_EU'
 		    accessToken : this.#initInfos.oauth.credentials.access_token,
-		    ambientShadows: false
 		};
 		const that = this;
 		Autodesk.Viewing.Initializer(options, () => {this._onInitialisationSuccess(that)});
 	}
 
 	_onInitialisationSuccess(that){
-		that.#id = 3;
+		//that.#id = 3;
 	    that.#viewer = new Autodesk.Viewing.Viewer3D(document.getElementById('forgeV'));
 	    Memory.setViewer(this.#viewer);
 
@@ -91,6 +90,10 @@ class Scene{
 
 	getViewer(){
 		return this.#viewer;
+	}
+
+	setLightPreset(index){
+		this.#viewer.setLightPreset(index);
 	}
 
 }

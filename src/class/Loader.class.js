@@ -183,26 +183,30 @@ class Loader{
 		return Loader.json_v0_4(JSON.stringify(json), ifc);
 	}
 	static json_v0_4(json, ifc){
+		let rvt = false;
 		//Errors
 		if(json == null){
 			throw 'JsonFile needed for import model';
 		}
 		if(ifc == null){
-			throw 'IfcFile needed for import model';
+			//throw 'IfcFile needed for import model';
+			rvt = true;
 		}
 
 		//Parse IFC file
 		let obj3Ds = {};
-		const IFClines = ifc.split('\n');
-		for(let l in IFClines){
-			const ifcDef = /(IFC[A-Z]*)\(([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*)/g;
-			const result = ifcDef.exec(IFClines[l]);
-			if(result != null && this.#ifcBuildingElements.includes(result[1])){
-				obj3Ds[result[9].replace(/['"]/gi, "")] = 
-					{
-						name : result[4].replace(/['"]/gi, ""),
-						id : result[9].replace(/['"]/gi, "")
-					}
+		if(!rvt){
+			const IFClines = ifc.split('\n');
+			for(let l in IFClines){
+				const ifcDef = /(IFC[A-Z]*)\(([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*)/g;
+				const result = ifcDef.exec(IFClines[l]);
+				if(result != null && this.#ifcBuildingElements.includes(result[1])){
+					obj3Ds[result[9].replace(/['"]/gi, "")] = 
+						{
+							name : result[4].replace(/['"]/gi, ""),
+							id : result[9].replace(/['"]/gi, "")
+						}
+				}
 			}
 		}
 

@@ -11,7 +11,7 @@ import btoa from 'btoa';
 class Utils{
 	
 	static forgeBucketName = 'veronikaa_4dlb';
-	static forgeFileName = 'veronikaa_4dlb.ifc';
+	static forgeFileName = 'veronikaa_4dlb';
 	static ids = {
 		"default" : 0
 	}
@@ -106,6 +106,8 @@ class Utils{
 		const objectsApi2 = new ForgeSDK.ObjectsApi();
 		let manifest = null;
 
+
+
 		await Utils.loadTextFile(url).then( file => {
 		  const objectsApi = new ForgeSDK.ObjectsApi();
 			return objectsApi.uploadObject(Utils.forgeBucketName + "-" + name, /*Utils.forgeFileName*/ name + ".ifc", file.length, file, {}, oAuth, oAuth.getCredentials())
@@ -139,6 +141,70 @@ class Utils{
 				}
 			).then( 
 				result => {
+					console.log(result.body.derivatives[0].name  + " : " + result.body.status);
+					manifest = result.body;
+				})
+			.catch(
+				error => console.log(error)
+			);
+		});
+
+		return {
+			"manifest" : manifest,
+			"oAuth" : oAuth
+		};
+	}
+
+	/**
+		uploadRVTFileToABucket
+		@param {oAuth2TwoLegged} oAuth
+		@param {string} url url of RVT file
+		@returns {Object} oAuth2TwoLegged + urn
+		@static
+	*/
+	static async uploadRVTFileToForge(oAuth, name, url){
+
+		const derivativesApi = new ForgeSDK.DerivativesApi();
+		const objectsApi2 = new ForgeSDK.ObjectsApi();
+		let manifest = null;
+
+
+		await Utils.loadTextFile(url).then( file => {
+		  const objectsApi = new ForgeSDK.ObjectsApi();
+		  console.log(Utils.forgeBucketName + "-" + name, /*Utils.forgeFileName*/ name + ".rvt", file.length);
+			return objectsApi.uploadObject(Utils.forgeBucketName + "-" + name, /*Utils.forgeFileName*/ name + ".rvt", file.length, file, {}, oAuth, oAuth.getCredentials())
+			.then(
+				response => {
+					const urn = this.getEncodedUrn(response.body.objectId).replace("urn:", "");
+					const job = {
+						input : 
+						{
+							urn : urn
+						}, 
+						output : 
+						{
+							formats : 
+							[
+								{
+									type: "svf",
+									views: ["3d"]
+								}
+							]
+						}
+					}
+
+					return derivativesApi.translate(job , {}, oAuth, oAuth.getCredentials());
+				}
+			).then( 
+				response => {
+
+					console.log("hey2", response.body.acceptedJobs.output.formats);
+					//console.log(response.body.status);
+					return derivativesApi.getManifest(response.body.urn, {}, oAuth, oAuth.getCredentials());
+				}
+			).then( 
+				result => {
+					console.log("hey3", result);
 					console.log(result.body.derivatives[0].name  + " : " + result.body.status);
 					manifest = result.body;
 				})

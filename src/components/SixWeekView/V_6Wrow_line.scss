@@ -1,11 +1,42 @@
+@use "assets/variables" as v;
+
 .teamLine{
+
+	display : flex;
+
 	.teamAbr{
-		font-family: Roboto Condensed;
-		font-style: italic;
-		font-weight: 300;
-		font-size: 15px;
-		line-height: 32px;
-		color : white;
-		padding-left : 7px;
+
+		width : 40px;
+		display : flex;
+		justify-content : center;
+		align-items : center;
+		height : 100%;
+		p{
+			font-family: Roboto Condensed;
+			font-style: italic;
+			font-weight: 300;
+			font-size: 15px;
+			color : white;
+		}
+	}
+
+	.teamDescription{
+
+		display: flex;
+		width : calc(100% - 80px);
+		height : 100%;
+		background-color : v.$white;
+		border-radius: 5px;
+
+		.teamIcon{
+			width : 10px;
+			height : 10px;
+
+			svg{
+				width : 100%;
+				height : 100%;
+			}
+		}
+
 	}
 }

@@ -5,6 +5,7 @@ class V_taskTableUtils{
 	//};
 	static tasks = [];
 	static taskObjects = [];
+	
 
 	static setAllTasks(tasks){
 		for(let t in tasks){

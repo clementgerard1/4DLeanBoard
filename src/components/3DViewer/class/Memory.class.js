@@ -33,6 +33,10 @@ class Memory{
 		forgeObject.setState(state);
 	}
 
+	static isTeamDisplayed(){
+		return this.#teamDisplay;
+	}
+
 	static setViewer(viewer){
 		this.#viewer = viewer;
 	}
@@ -59,6 +63,10 @@ class Memory{
 				this.#forgeObjects[f].isTeamDisplayed(bool);
 			}
 		}
+	}
+
+	static isSelected(forgeObject){
+		return typeof this.#selected[forgeObject.getId()] != "undefined";
 	}
 
 	static select(forgeObject, bool){
