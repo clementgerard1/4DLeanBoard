@@ -9,6 +9,8 @@ class Memory{
 	static #forgeObjects = {};
 	static #forgeObjectsNotLinked = {}
 	static #teamDisplay = false;
+	static #layerDisplay = false;
+	static #layerSelected = {};
 	static #teamSelected = {};
 
 	static addMaterial(material, init = false, name = this.#viewer.model.getFragmentList().materialmap[material.id]){
@@ -37,6 +39,10 @@ class Memory{
 		return this.#teamDisplay;
 	}
 
+	static isLayerDisplayed(){
+		return this.#layerDisplay;
+	}
+
 	static setViewer(viewer){
 		this.#viewer = viewer;
 	}
@@ -53,6 +59,26 @@ class Memory{
 		}
 		for(let f in this.#forgeObjects){
 			this.#forgeObjects[f].isTeamSelected(this.#teamSelected);
+		}
+	}
+
+	static setLayerSelected(layer, bool){
+		if(bool){
+			this.#layerSelected[layer] = true;
+		}else{
+			delete this.#layerSelected[layer];
+		}
+		for(let f in this.#forgeObjects){
+			this.#forgeObjects[f].isLayerSelected(this.#layerSelected);
+		}
+	}
+
+	static setLayerDisplayMode(bool){
+		if(this.#layerDisplay != bool){
+			this.#layerDisplay = bool;
+			for(let f in this.#forgeObjects){
+				this.#forgeObjects[f].isLayerDisplayed(bool);
+			}
 		}
 	}
 

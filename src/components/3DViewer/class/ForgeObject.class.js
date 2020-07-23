@@ -11,6 +11,8 @@ class ForgeObject{
 	#object3D;
 	#teamDisplayed;
 	#teamSelected;
+	#layerDisplayed;
+	#layerSelected;
 
 	constructor(id = Utils.getId("forgeObjects")){
 		this.#id = id;
@@ -22,6 +24,8 @@ class ForgeObject{
 		this.#object3D = null;
 		this.#teamDisplayed = false;
 		this.#teamSelected = true;
+		this.#layerDisplayed = false;
+		this.#layerSelected = true;
 	}
 
 	addProperty(property){
@@ -43,7 +47,6 @@ class ForgeObject{
 	}
 
 	isTeamSelected(teams){
-
 		if(typeof teams[this.#object3D.getParent().getTask().getTaskTeam().getId()] != "undefined"){
 			this.#teamSelected = true;
 		}else{
@@ -54,6 +57,20 @@ class ForgeObject{
 
 	isTeamDisplayed(bool){
 		this.#teamDisplayed = bool;
+		this.updateMaterial();
+	}
+
+	isLayerSelected(layers){
+		if(typeof layers[this.#properties["Layer"]] != "undefined"){
+			this.#layerSelected = true;
+		}else{
+			this.#layerSelected = false;
+		}
+		this.updateMaterial();
+	}
+
+	isLayerDisplayed(bool){
+		this.#layerDisplayed = bool;
 		this.updateMaterial();
 	}
 
@@ -83,6 +100,10 @@ class ForgeObject{
 				materialName = this.#object3D.getParent().getTask().getTaskTeam().getId() + "-team";
 			}else{	
 				materialName = this.#object3D.getParent().getTask().getTaskTeam().getId() + "-not-team";
+			}
+		}else if(this.#layerDisplayed) {
+			if(this.#layerSelected) {
+				console.log(this.#id);
 			}
 		}else{
 			if(this.#selected){

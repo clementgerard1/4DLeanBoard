@@ -212,10 +212,18 @@ export default {
 			Memory.setTeamDisplayMode(bool);
 			Memory.refresh();
 		},
+		setLayerDisplayed(layerName, bool){
+			Memory.setLayerSelected(layerName, bool);
+			Memory.refresh();
+		},
+
+		setLayerDisplayMode(bool){
+			Memory.setLayerDisplayMode(bool);
+			Memory.refresh();
+		},
 		setTime(time){
 			this.playerinit = time;
 		}
-
 	},
 	mounted : function(){
 
@@ -226,6 +234,8 @@ export default {
 		this.scene.init(this.oauth, this.urns, this.objs, ()=>{
 			console.log("init done");
 			this.createCustumMaterials();
+			this.setLayerDisplayed("Etage Rouge", true);
+			this.setLayerDisplayMode(true);
 			//this.allTransparent();
 			const tasks = V_taskTableUtils.getTokens();
 			for(let t in tasks){
