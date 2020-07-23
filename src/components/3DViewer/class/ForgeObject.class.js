@@ -71,6 +71,7 @@ class ForgeObject{
 
 	isLayerDisplayed(bool){
 		this.#layerDisplayed = bool;
+		//vv problème lors de cet appel
 		this.updateMaterial();
 	}
 

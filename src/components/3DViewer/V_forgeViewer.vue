@@ -234,8 +234,8 @@ export default {
 		this.scene.init(this.oauth, this.urns, this.objs, ()=>{
 			console.log("init done");
 			this.createCustumMaterials();
-			this.setLayerDisplayed("Etage Rouge", true);
 			this.setLayerDisplayMode(true);
+			this.setLayerDisplayed("Etage Rouge", true);
 			//this.allTransparent();
 			const tasks = V_taskTableUtils.getTokens();
 			for(let t in tasks){
