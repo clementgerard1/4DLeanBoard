@@ -7,6 +7,7 @@ class TaskTeam extends Team{
 	#workers;
 	#colorClass;
 	#abr;
+	#leader;
 
 	/**
  		@class TaskTeam
@@ -24,6 +25,7 @@ class TaskTeam extends Team{
 		this.#workers = null;
 		this.#colorClass = "defaultcolor";
 		this.#abr = abr.toUpperCase();
+		this.#leader = null;
 	}
 
 	/**
@@ -33,6 +35,29 @@ class TaskTeam extends Team{
 	addOperationUnit(operationUnit = new OperationUnit()){
 		this.#operationUnits[operationUnit.getId()] = operationUnit;
 	}
+
+	/**
+		Set the leader of the team
+		@param {String} name
+		@param {String} email
+		@param {String} phone
+	*/
+	setLeader(name, email, phone){
+		this.#leader = {
+			name : name,
+			email : email,
+			phone : phone
+		}
+	}
+
+	/* 
+		Get the leader of the team
+		@returns {Object}
+	*/
+	getLeader(){
+		return this.#leader;
+	}
+
 
 	/**
 		Remove a operationUnit

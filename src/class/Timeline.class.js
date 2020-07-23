@@ -122,6 +122,36 @@ class Timeline{
 		return teams;
 	}
 
+	getNbTaskDoneByTeamAndTime(team, time){
+		let done = 0;
+		let notDone = 0;
+		const tasks = this.#model.getTasks();
+		for(let t in tasks){
+			if(tasks[t].getTaskTeam().getId() == team.getId()){
+				if(this.getTime(tasks[t].getEndDate()) > time){
+					notDone++;
+				}else{
+					done++;
+				}
+			}
+		}
+		return done + "/" + (notDone + done);
+
+	}
+
+	getStartEndDateByTeam(team){
+		let start = null;
+		let end = null;
+		const tasks = this.#model.getTasks();
+		for(let t in tasks){
+			if(tasks[t].getTaskTeam().getId() == team.getId()){
+				if(start == null || tasks[t].getStartDate() < start) start = tasks[t].getStartDate();
+				if(end == null || tasks[t].getEndDate() > end) end = tasks[t].getEndDate();
+			}
+		}
+		return start.getDay() + "/" + start.getMonth() + "/" + start.getFullYear() + "-" + end.getDay() + "/" + end.getMonth() + "/" + end.getFullYear();
+	}
+
 	/**
 		Get Phases between two moments
 		@param {int} start

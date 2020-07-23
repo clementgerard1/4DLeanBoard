@@ -52,8 +52,8 @@ export default {
 				reflectivity: 0.0,
 				flatShading: true,
 				transparent: true,
-				opacity: 0.75,
-				color: scssVariables["currentWeek"],
+				opacity: 1,
+				color: '#FFFFFF',//scssVariables["currentWeek"],
 			});
 			Memory.addMaterial(currWeekMat, true, "currWeekMat");
 

@@ -14,11 +14,6 @@ export default {
 		'tasktablestart',
 		"tasksize"
 	],
-	data : function(){
-		return {
-			'c' : 0,
-		}
-	},
 	inject : [
 		'timeline',
 		'model',
@@ -36,17 +31,13 @@ export default {
 			V_socketUtils.setTime(this.tasktablestart + i);
 		},
 		handleDoublePan : function(event){
-			console.log(event);
-			if(event.pointers.length > 1){
-				this.c++;
-			}
+
 		}
 
 	},
 	template : `
 
 		<div v-doublePan="handleDoublePan" class="rowHeader" >
-			<p v-html="c"></p>
 			<date v-bind:style="{ height: tasksize  + 'px' }" class="rowHeaderItem" v-for="i in 6" :key="i" v-tap="()=>{selectWeek(i-1)}" v-bind:time="tasktablestart + (i-1)"></date>
 	 	</div>
 

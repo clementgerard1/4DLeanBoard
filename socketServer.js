@@ -12,6 +12,7 @@ const viewers = [];
 const players = [];
 const w6s = [];
 const filters = [];
+const teamOpen = {};
 
 const models = [];
 
@@ -34,11 +35,16 @@ io.on("connection", function(client){
             }*/
             const teams = model.getTaskTeams();
             const teamDisplayed = [];
+            const timeline = new Timeline(model);
             for(let t in teams){
                 teamDisplayed[teams[t].getId()] = true;
+                const nb = timeline.getMaxSimultaneousTasksByTaskTeamBetweenTwoDates(teams[t], 0, model.getDuration() - 1);
+                for(let n = 0 ; n < nb ; n++){
+                    teamOpen[teams[t].getId() + "-" + n] = false;
+                }
+
             }
 
-            const timeline = new Timeline(model);
             const selected = timeline.getTasksBetweenTwoDates(0 * 7, (0 * 7) + 6);
             let sel = [];
             for(let s in selected){
@@ -54,7 +60,8 @@ io.on("connection", function(client){
                 ifcmenu : [true, true, true, true],
                 playmenu : 4,
                 teamdisplay : 1,
-                teamDisplayed : teamDisplayed
+                teamDisplayed : teamDisplayed,
+                teamOpen : teamOpen,
             };
             client.emit("sendInit", models[modelName]);
         }).catch(error => console.error(error));
@@ -139,6 +146,12 @@ io.on("connection", function(client){
         //client.broadcast.emit("setTaskState", datas);
     })
 
+    client.on("setTeamOpening", (datas) => {
+        models[modelName].teamOpen[datas.teamId + "-" + datas.nth] = datas.value;
+        broadcast(client, modelName, "setTeamOpening", datas);
+        //client.broadcast.emit("setTaskState", datas);
+    })
+
     client.on("pressHighlightTask", (datas) => {
         if(datas.value && !models[modelName].pushed.includes(datas.taskId)){
             models[modelName].pushed.push(datas.taskId);
@@ -181,7 +194,6 @@ io.on("connection", function(client){
         //client.broadcast.emit("clearHighlighting", datas);
     })
     client.on("updateTeamDisplayed", (datas) => {
-        console.log(datas);
         if(datas.value && !models[modelName].teamDisplayed.includes(datas.team)){
             models[modelName].teamDisplayed[datas.team] = true;
         }else if(!datas.value){

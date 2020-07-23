@@ -41,6 +41,13 @@ class V_socketUtils{
 				V_taskTableUtils.updateStateDisplayById(this.initDatas.backgroundTasks[d], true);
 			}
 
+			//Team tab opening
+			for(let t in this.initDatas.teamOpen){
+				const teamId = t.split("-")[0];
+				const nth = t.split("-")[1];
+				V_taskTableUtils.setTeamById(teamId, nth, this.initDatas.teamOpen[t]);
+			}
+
 			//filter menu		
 			//IFC Menu
 			V_filterMenuUtils.setIfcMenuChange(this.initDatas.ifcmenu[0], this.initDatas.ifcmenu[1], this.initDatas.ifcmenu[2], this.initDatas.ifcmenu[3]);
@@ -55,6 +62,7 @@ class V_socketUtils{
 				V_filterMenuUtils.setTeamDisplayedById(d, this.initDatas.teamDisplayed[d]);
 				V_4DUtils.setTeamDisplayedById(d, this.initDatas.teamDisplayed[d]);
 			}
+
 		}
 	}
 
@@ -105,7 +113,7 @@ class V_socketUtils{
 
 		this.socket.on("updateTeamDisplayed", (datas) => {
 			V_4DUtils.setTeamDisplayedById(datas.team, datas.value);
-			V_filterMenuUtils.setTeamDisplayed(datas.team, datas.value);
+			V_filterMenuUtils.setTeamDisplayedById(datas.team, datas.value);
 		});
 
 		this.socket.on("updateDisplayMenu", (datas) => {
@@ -123,6 +131,9 @@ class V_socketUtils{
 		this.socket.on("updatePlanningMenu", (datas) => {
 			V_filterMenuUtils.setPlanningMenuChange(datas.choice);
 			V_playerUtils.displayMilestones(datas.choice > 1);
+		});
+		this.socket.on("setTeamOpening", (datas) => {
+			V_taskTableUtils.setTeamById(datas.teamId, datas.nth, datas.value);
 		});
 
 	}
@@ -272,6 +283,15 @@ class V_socketUtils{
 		V_taskTableUtils.updateStateDisplay(task, bool);
 		this.socket.emit("updateStateDisplay", { 
 			taskId : task.getId(),
+			value : bool
+		});
+	}
+
+	static setTeamOpening(team, nth, bool){
+		V_taskTableUtils.setTeam(team, nth, bool);
+		this.socket.emit("setTeamOpening", { 
+			teamId : team.getId(),
+			nth : nth,
 			value : bool
 		});
 	}

@@ -5,6 +5,7 @@ import V_taskTableBackground from "./V_taskTableBackground.vue";
 import V_taskTableFront from "./V_taskTableFront.vue";
 import TimelineUtils from "../Utils/V_timelineUtils.class.js";
 import V_socketUtils from "../Utils/V_socketUtils.class.js";
+import V_taskTableUtils from "../Utils/V_taskTableUtils.class.js";
 
 
 export default {
@@ -22,8 +23,14 @@ export default {
 		windowUpdate : function(event){
 			this.tasksize = (document.querySelector(".taskTableFrame").clientWidth - 80) / 6;
 		},
+		updateOpening : function(){
+			this.nbopened = V_taskTableUtils.getOpenedTeam(); 
+			this.nbclosed = V_taskTableUtils.getClosedTeam();
+		}
 	},
 	created : function(){
+		V_taskTableUtils.addFrame(this);
+		const taskTeams = this.model.getTaskTeams();
 		window.addEventListener("resize", this.windowUpdate);
 		TimelineUtils.addListener("time", this, this.updateTime);
 		V_socketUtils.addW6();
@@ -37,18 +44,22 @@ export default {
 			const lines = [];
 			const taskTeams = this.model.getTaskTeams();
 
+
 			for(let t in taskTeams){
 				lines[lines.length] = {
 					taskteam : taskTeams[t],
 					nb : this.timeline.getMaxSimultaneousTasksByTaskTeamBetweenTwoDates(taskTeams[t], 0, this.duration - 1)
+				}
+				for( let n = 0 ; n < lines[lines.length - 1].nb ; n++){
+					V_taskTableUtils.setTeam(taskTeams[t], n);
 				}
 			}
 			return {
 				tasktablestart : taskTableStart,
 				time : this.playerinit,
 				lines : lines,
-				nbopened : 0, //updated on row6w component
-				nbclosed : 0,	//updated on row6w component
+				nbopened : V_taskTableUtils.getOpenedTeam(), //updated on row6w component
+				nbclosed : V_taskTableUtils.getClosedTeam(),	//updated on row6w component
 				tasksize : 0,
 			};
 	},	

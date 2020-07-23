@@ -72,13 +72,19 @@ class Tool extends Autodesk.Viewing.ToolInterface {
  		if(event.type == "pinchmove" || event.type == "pinchstart" || event.type == "pinchend"){
 	    	const vec = this.viewer.navigation.getEyeToCenterOfBoundsVec(this.utilities.getBoundingBox());
 	    	const distance = vec.distanceTo(this.utilities.getBoundingBox().center());
-	    	const delta = 0;
+	    	let deltaa = 0;
+	    	console.log(event.distance);
 	    	if(this.previousPinchDistance != null){
-
+	    		deltaa = this.previousPinchDistance - event.distance;
 	    	}
-	    	console.log(distance);
+	    	if(event.type != "pinchend"){
+	    		this.previousPinchDistance = event.distance;
+	    	}else{
+	    		this.previousPinchDistance = null;
+	    	}
 	    	if((distance < this.maxZoom && deltaa > 0) || (distance > this.minZoom && deltaa < 0) ){
-	    		this.viewer.navigation.setPosition( new THREE.Vector3( -vec.x * (1 + ((deltaa / 3) / 20)), -vec.y * (1 + ((deltaa / 3) / 20)), -vec.z * (1 + ((deltaa / 3) / 20)) ) );
+
+	    		this.viewer.navigation.setPosition( new THREE.Vector3( -vec.x * (1 + (deltaa / 20)), -vec.y * (1 + (deltaa / 20)), -vec.z * (1 + (deltaa / 20)) ) );
 	    		this.viewer.navigation.updateCamera();
 	    		this.viewer.impl.invalidate(true);
 	    	}

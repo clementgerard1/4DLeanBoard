@@ -677,6 +677,15 @@ class Model{
 				operationUnitIds.push(operationUnits[o].getId());
 			}
 
+			let leaderName = null;
+			let leaderEmail = null;
+			let leaderPhone = null;
+			if(t.getLeader() != null){
+				leaderName = t.getLeader().name;
+				leaderEmail = t.getLeader().email;
+				leaderPhone = t.getLeader().phone;
+			}
+
 			const taskTeam = {
 				id : t.getId(),
 				name : t.getName(),
@@ -684,6 +693,9 @@ class Model{
 				workers : t.getWorkers(),
 				operationUnits : operationUnits,
 				color : t.getColorClass(),
+				leaderName : leaderName,
+				leaderEmail : leaderEmail,
+				leaderPhone : leaderPhone
 			}
 
 			jsonObj.taskTeams.push(taskTeam);
@@ -840,6 +852,9 @@ class Model{
 			taskTeam.setWorkers(infos.workers);
 			taskTeam.setColorClass(infos.color);
 			taskTeams[taskTeam.getId()] = taskTeam;
+			if(infos.leaderName != "null"){
+				taskTeam.setLeader(infos.leaderName, infos.leaderEmail, infos.leaderPhone);
+			}
 		}
 		for(let o in datas.operationUnits){
 			const infos = datas.operationUnits[o];

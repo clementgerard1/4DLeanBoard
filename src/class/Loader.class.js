@@ -227,6 +227,7 @@ class Loader{
 		//Teams
 		for(let i in infos.teams){
 			taskTeams[infos.teams[i].name] = new TaskTeam(infos.teams[i].name);
+			taskTeams[infos.teams[i].name].setLeader("Michel Dupond", "michel@dupond.com", "06 35 48 03 02");
 			taskTeams[infos.teams[i].name].setColorClass(infos.teams[i].color);
 		}
 
