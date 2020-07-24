@@ -331,6 +331,64 @@ export default {
 				<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
 				</filter>
 
+				<filter id="filter0_b_planBar" x="468" y="108" width="340" height="52" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+				<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+				<feGaussianBlur in="BackgroundImage" stdDeviation="5"/>
+				<feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur"/>
+				<feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur" result="shape"/>
+				</filter>
+				<filter id="filter1_b_planBar" x="-10" y="-10" width="1296" height="138" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+				<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+				<feGaussianBlur in="BackgroundImage" stdDeviation="5"/>
+				<feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur"/>
+				<feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur" result="shape"/>
+				</filter>
+				<filter id="filter2_d_planBar" x="449" y="40" width="40" height="40" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+				<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+				<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
+				<feOffset dx="2" dy="4"/>
+				<feGaussianBlur stdDeviation="2"/>
+				<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0"/>
+				<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+				<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+				</filter>
+				<filter id="filter3_d_planBar" x="622" y="40" width="40" height="40" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+				<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+				<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
+				<feOffset dx="2" dy="4"/>
+				<feGaussianBlur stdDeviation="2"/>
+				<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0"/>
+				<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+				<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+				</filter>
+				<filter id="filter4_d_planBar" x="795" y="40" width="40" height="40" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+				<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+				<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
+				<feOffset dx="2" dy="4"/>
+				<feGaussianBlur stdDeviation="2"/>
+				<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0"/>
+				<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+				<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+				</filter>
+				<filter id="filter5_d_planBar" x="968" y="40" width="40" height="40" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+				<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+				<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
+				<feOffset dx="2" dy="4"/>
+				<feGaussianBlur stdDeviation="2"/>
+				<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0"/>
+				<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+				<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+				</filter>
+				<filter id="filter6_d_planBar" x="276" y="40" width="40" height="40" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+				<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+				<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
+				<feOffset dx="2" dy="4"/>
+				<feGaussianBlur stdDeviation="2"/>
+				<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0"/>
+				<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+				<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+				</filter>
+
 			</defs>
 		</svg>
 

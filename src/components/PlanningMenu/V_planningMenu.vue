@@ -7,10 +7,25 @@ export default {
 	data : function(){
 		return {
 			planningBar : PlanningBar,
+			isOpen : false,
+		}
+	},
+	computed : {
+		top : function(){
+			if(!this.isOpen){
+				return "-112px";
+			}else{
+				return "0px";
+			}
+		}
+	},
+	methods: {
+		handleTap : function(){
+			this.isOpen = !this.isOpen;
 		}
 	},
 	template : `
-	<div class="planningMenu" v-html="planningBar">
+	<div v-tap="handleTap" v-bind:style="{top : top}" class="planningMenu" v-html="planningBar">
 		
 	</div>`,
 }
