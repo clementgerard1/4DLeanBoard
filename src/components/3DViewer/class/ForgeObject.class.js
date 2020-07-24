@@ -1,4 +1,5 @@
 import Utils from "../../../class/Utils.class.js";
+import Memory from "./Memory.class.js";
 
 class ForgeObject{
 
@@ -26,6 +27,11 @@ class ForgeObject{
 		this.#teamSelected = true;
 		this.#layerDisplayed = false;
 		this.#layerSelected = true;
+	}
+
+	setInvisible(bool){
+		const viewer = Memory.getViewer();
+		viewer.impl.visibilityManager.setNodeOff(this.#id, bool);
 	}
 
 	addProperty(property){
@@ -69,6 +75,13 @@ class ForgeObject{
 		this.updateMaterial();
 	}
 
+	setColor(bool, color){
+		const viewer = Memory.getViewer();
+		if(bool){
+			viewer.setThemingColor(this.#id, color);
+		}
+	}
+
 	isLayerDisplayed(bool){
 		this.#layerDisplayed = bool;
 		//vv problème lors de cet appel
@@ -77,6 +90,16 @@ class ForgeObject{
 
 	getId(){
 		return this.#id;
+	}
+
+	hide(bool){
+		console.log(this.#id);
+		const viewer = Memory.getViewer();
+		if(bool){
+			viewer.hide(this.#id, viewer.model);
+		}else{
+			viewer.show(this.#id);
+		}
 	}
 
 	isSelected(bool){
