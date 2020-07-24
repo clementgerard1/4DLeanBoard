@@ -1,0 +1,38 @@
+.phaseRow{
+
+	position :relative;
+	display: flex;
+	align-items : center;
+
+	.phaseItem{
+		position : relative;
+		display:inline-block;
+		padding : 5px;
+		margin : 2px 0px;
+		white-space: nowrap;
+		z-index:  1;
+		text-align : left;
+	}
+
+	.phaseItemNameLeft{
+		white-space: nowrap;
+		position : absolute;
+		display : inline-block;
+	}
+
+	.phaseItemNameRight{
+		margin-left : 10px;
+		white-space: nowrap;
+		position : relative;
+		display : inline-block;
+	}
+
+	.phaseItemFilled{
+		position : absolute;
+		top:0px;
+		margin : 2px 0px;
+		background-color : grey;
+		height : 34px;
+		z-index : -1;
+	}
+}

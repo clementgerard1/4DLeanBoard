@@ -6,6 +6,7 @@ import V_taskTableFront from "./V_taskTableFront.vue";
 import TimelineUtils from "../Utils/V_timelineUtils.class.js";
 import V_socketUtils from "../Utils/V_socketUtils.class.js";
 import V_taskTableUtils from "../Utils/V_taskTableUtils.class.js";
+import scssVariables from "./assets/_variables.scss";
 
 
 export default {
@@ -61,12 +62,26 @@ export default {
 				nbopened : V_taskTableUtils.getOpenedTeam(), //updated on row6w component
 				nbclosed : V_taskTableUtils.getClosedTeam(),	//updated on row6w component
 				tasksize : 0,
+				phasesDisplayed : true,
+				nbPhases : this.model.getPhases().length,
 			};
 	},	
 	provide: function(){
 		return {
 			'timeline' : this.timeline,
 			'model' : this.model,
+		}
+	},
+	computed : {
+		_duration : function(){
+			return this.duration;
+		},
+		newheight : function(){
+			if(this.phasesDisplayed){
+				return 'calc(100vh - ' + (parseInt(scssVariables["playerHeight"].replace("px", "")) / 2) + 'px - ' + ((this.nbPhases * 38)) + 'px ) !important';
+			}else{
+				return 'calc(100vh - ' + scssVariables["playerHeight"] + ') !important';
+			}
 		}
 	},
 	watch : {
@@ -81,7 +96,7 @@ export default {
 		'duration',
 	],
 	template : `
-		<div class="taskTableFrame">
+		<div class="taskTableFrame" v-bind:style="{ height : newheight}">
 
 			<div class="taskTableWrapper">
 
@@ -89,7 +104,7 @@ export default {
 				<tasktablebackground v-bind:tasksize="tasksize" v-bind:tasktablestart="tasktablestart" v-bind:time="time" v-bind:nbopened="nbopened" v-bind:nbclosed="nbclosed" id="taskTableBackground" v-bind:style="{paddingTop : tasksize + 'px', paddingBottom : tasksize + 'px' }"></tasktablebackground>
 
 				<!-- core -->
-				<row6wheader v-bind:tasksize="tasksize" v-bind:tasktablestart="tasktablestart" v-bind:time="time" ></row6wheader>
+				<row6wheader v-bind:duration="_duration" v-bind:tasksize="tasksize" v-bind:tasktablestart="tasktablestart" v-bind:time="time" ></row6wheader>
 				<template v-for="line in lines">
 					<row6w v-bind:tasksize="tasksize" v-bind:tasktablestart="tasktablestart" v-bind:time="time" v-for="i in line.nb" :key="line.taskteam.getId() + '-' + (tasktablestart + i)" v-bind:taskteam="line.taskteam" v-bind:nth="i-1"></row6w>
 				</template>

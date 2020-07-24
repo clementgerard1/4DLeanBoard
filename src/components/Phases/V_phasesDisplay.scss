@@ -1,0 +1,10 @@
+@use "../SixWeekView/assets/variables" as v;
+
+#phaseF{
+	position : relative;
+	pointer-events : none;
+	background-color:rgba(0,0,0,0);
+	padding-left : v.$playerDateWidth;
+	padding-right : v.$playerDateWidth;
+	width : 100%;
+}

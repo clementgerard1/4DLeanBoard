@@ -17,6 +17,7 @@ $white_transparent_reverse : linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 
 $greenishlight_transparent : rgba(151, 215, 199, 0.5);
 $black50 : rgba(0, 0, 0, 0.5);
 $redish : #FF8F80;
+$phaseGrey : #808080;
 
 
 // tests couleurs viewer
@@ -142,4 +143,5 @@ $currentWeek : $green;
 	currentWeek : $currentWeek;
 	playerHeight : $playerHeight;
 	filterPanelHeight : $filterPanelHeight;
+	phaseGrey : $phaseGrey;
 }

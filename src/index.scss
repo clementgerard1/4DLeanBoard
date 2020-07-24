@@ -28,34 +28,52 @@ body{
 		}
 
 		#forgeViewer{
-			height : calc(100vh - #{v.$playerHeight});
+			height : 100vh;
 			overflow: hidden;
 			position: relative;
 			background:none!important;
 		}
 
-		#mainPlayer{
-			height : v.$playerHeight;
-		}
-
 		box-sizing: border-box;
 
 	}
 
-	#taskTableFrame{
-		box-sizing: border-box;
-		*{
-			box-sizing: border-box;
-		}
+	#planningFrame{
+
 		float:right;
 	 	min-height: 0px;
+	 	position: relative;
 
 		border-left : 5px solid black;
 		width : 60%;
 		height : 100vh;
 		max-height: 100vh;
-	}
+		box-sizing: border-box;
 
+		background: v.$light;
+		*{
+			box-sizing: border-box;
+		}
+
+		#taskTableFrame{
+			height : calc(100vh - #{v.$playerHeight} - 100px);
+			overflow-x: hidden;
+		}
+
+		.phasesFrame{
+			z-index: 2;
+			border-top : 1px solid black;
+			height : calc(100px + #{v.$playerHeight});
+		}
+
+		#mainPlayer{
+			position : absolute;
+			height : v.$playerHeight;
+			bottom : 0px;
+			width : 100%;
+		}
+	}
+	
 	#modelSelect{
 		display:flex;
 		justify-content: center;
@@ -66,7 +84,7 @@ body{
 
 	#copyright{
 		position : absolute;
-		top : calc(100vh - #{v.$playerHeight + 15px});
+		bottom : 15px;
 		left : 5px;
 		font-size: 10px;
 	}
