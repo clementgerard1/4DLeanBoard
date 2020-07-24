@@ -15,6 +15,7 @@
 	width: 100%;
 
 	.backgroundcolumn{
+		pointer-events: all;
 		/*min-width : v.$taskSize - list.nth(v.$rowHeaderColumnMargin, 2) * 2;*/
 		background : v.$white_transparent_reverse;
 		margin-right : list.nth(v.$rowHeaderColumnMargin , 2);
