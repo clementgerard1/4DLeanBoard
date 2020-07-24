@@ -11,6 +11,7 @@ import V_taskTableFrame from "./components/SixWeekView/V_taskTableFrame.vue";
 import V_forgeViewer from "./components/3DViewer/V_forgeViewer.vue";
 import V_modelSelect from "./components/V_modelSelect.vue";
 import V_phasesDisplay from "./components/Phases/V_phasesDisplay.vue";
+import V_planningMenu from "./components/PlanningMenu/V_planningMenu.vue";
 import openSocket from "socket.io-client";
 import V_timelineUtils from "./components/Utils/V_timelineUtils.class.js";
 import V_taskTableUtils from "./components/Utils/V_taskTableUtils.class.js";
@@ -163,7 +164,8 @@ function init(){
 			player : V_player,
 			svgdefs : V_svgDefs,
 			modelselect : V_modelSelect,
-			phasesdisplay : V_phasesDisplay
+			phasesdisplay : V_phasesDisplay,
+			planningmenu : V_planningMenu,
 		},
 		data:{
 			playerinit : null,
@@ -265,6 +267,7 @@ function init(){
 	 				<p id="copyright">UMR 3495 MAP-CRAI © 2020</p>
 	 			</div>
 	 			<div v-if="forgeReady" id="planningFrame">
+	 				<planningmenu></planningmenu>
 	 				<tasktableframe v-if="modelSelected" id="taskTableFrame" v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit" v-bind:duration="duration"></tasktableframe>
 	 				<phasesdisplay  v-bind:model="model" v-bind:timeline="timeline" class="phasesFrame" ></phasesdisplay>
 	 				<player id="mainPlayer" v-bind:duration="duration" v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit"></player>

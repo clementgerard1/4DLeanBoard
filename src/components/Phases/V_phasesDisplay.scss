@@ -4,7 +4,20 @@
 	position : relative;
 	pointer-events : none;
 	background-color:rgba(0,0,0,0);
-	padding-left : v.$playerDateWidth;
+	padding-left : v.$playerDateWidth + 5px;
 	padding-right : v.$playerDateWidth;
 	width : 100%;
+
+	.playerLineWrapper{
+		position : relative;
+		width : calc(100% + 5px);
+		height : 0px;		
+		.playerLine{
+			z-index: 15;
+			border-right : 5px solid v.$greenbluish_light;
+			position : absolute;
+		}
+	}
+
+
 }

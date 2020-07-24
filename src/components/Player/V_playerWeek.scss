@@ -15,3 +15,13 @@
 .playerWeek.hightlighted{
 	background: v.$white_transparent_reverse;
 }
+
+.playerWeek.built{
+	background: v.$grey;
+}
+
+.playerWeek.toBuild{
+	box-sizing: border-box;
+	border: solid 1px v.$white;
+	margin:1px;
+}

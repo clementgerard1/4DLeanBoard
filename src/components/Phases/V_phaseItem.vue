@@ -14,14 +14,14 @@ export default {
 		'time'
 	],
 	computed : {
-		border : function(){
-			for(let t in this.phase.getTasks()){
-				return "solid 3px " + scssVariables["phaseGrey"]
-			}
-		},
 		left : function(){
 			if(this.model != null && this.timeline != null){
 				return ((this.timeline.getTime(this.phase.getStartDate()) / this.model.getDuration()) * 100) + "%";
+			}
+		},
+		lleft : function(){
+			if(this.model != null && this.timeline != null){
+				return "calc(" + this.left + " + " + this.pourcent + ")";
 			}
 		},
 		leftName : function(){
@@ -46,6 +46,13 @@ export default {
 			if((this.time * 7) > end) return (((end - start) / this.model.getDuration()) * 100) + "%";
 			return (Math.min( ((this.time * 7) - start) / this.model.getDuration(), 1) * 100) + "%";
 		}, 
+		antipourcent : function(){
+			const start = Math.ceil(this.timeline.getTime(this.phase.getStartDate()));
+			const end = Math.ceil(this.timeline.getTime(this.phase.getEndDate()));
+			if((this.time * 7) < start) return (((end - start) / this.model.getDuration()) * 100) + "%";
+			if((this.time * 7) > end) return "0%";
+			return (Math.min( (end - (this.time * 7)) / this.model.getDuration(), 1) * 100) + "%";
+		},
 		completion : function(){
 			const start = Math.ceil(this.timeline.getTime(this.phase.getStartDate()));
 			const end = Math.ceil(this.timeline.getTime(this.phase.getEndDate()));
@@ -62,15 +69,17 @@ export default {
 	<div class="phaseRow" v-bind:id="'phaseDisplay-' + phase.getId()" >
 		<!-- PhasesFrame -->
 		<template v-if="isRight">
-			<p class="phaseItem" v-bind:style="{ border : border, left : left, width : width}" v-html="completion"></p>
+			<p class="phaseItem" v-bind:style="{ left : left, width : width}" v-html="completion"></p>
 			<p class="phaseItemNameRight" v-bind:style="{ left : left}" v-html="phase.getName()"></p>
-			<div v-bind:style="{ left : left, width : pourcent}" class="phaseItemFilled"></div>
+			<div v-if="!(completion == '0%')" v-bind:style="{ left : left, width : pourcent}" class="phaseItemFilled"></div>
+			<div v-if="!(completion == '100%')" v-bind:style="{ left : lleft, width : antipourcent}" class="phaseItemNotFilled"></div>
 		</template>
 		<template v-else="isRight">
 
 			<p class="phaseItemNameLeft" v-bind:style="{ left : leftName}" v-html="phase.getName()"></p>
-			<p class="phaseItem" v-bind:style="{ border : border, left : left, width : width}" v-html="completion"></p>
-			<div v-bind:style="{ left : left, width : pourcent}" class="phaseItemFilled"></div>
+			<p class="phaseItem" v-bind:style="{ left : left, width : width}" v-html="completion"></p>
+			<div v-if="!(completion == '0%')" v-bind:style="{ left : left, width : pourcent}" class="phaseItemFilled"></div>
+			<div v-if="!(completion == '100%')" v-bind:style="{ left : lleft, width : antipourcent}" class="phaseItemNotFilled"></div>
 		</template>
 	</div>`,
 }

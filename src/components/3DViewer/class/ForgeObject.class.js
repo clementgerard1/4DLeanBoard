@@ -93,7 +93,6 @@ class ForgeObject{
 	}
 
 	hide(bool){
-		console.log(this.#id);
 		const viewer = Memory.getViewer();
 		if(bool){
 			viewer.hide(this.#id, viewer.model);

@@ -9,7 +9,7 @@
 			height : 6%;
 			width : calc(100% + 2px);
 			x : -1;
-			y : 57%;
+			y : 77%;
 			stroke: v.$blackish;
 			fill: "rgba(0,0,0,0)";
 			pointer-events: none;
@@ -18,7 +18,7 @@
 		.playerBackgroundFilled{
 			height : 6%;
 			x : -1;
-			y : 57%;
+			y : 77%;
 			stroke: v.$blackish;
 			fill: v.$blackish;
 			pointer-events: none;
@@ -26,7 +26,7 @@
 
 		.playerButton{
 			fill: v.$greenbluish_light;
-			cy : 57%;
+			cy : 77%;
 		}
 
 	}

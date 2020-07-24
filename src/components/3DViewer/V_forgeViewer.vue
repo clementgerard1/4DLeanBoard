@@ -253,7 +253,7 @@ export default {
 			this.setLayerDisplayed("Etage Rouge", true); */
 			//this.allTransparent();
 			//this.allInvisible(true);
-			this.allToRed(true);
+			//this.allToRed(true);
 			//this.hideAll(true);
 			const tasks = V_taskTableUtils.getTokens();
 			for(let t in tasks){

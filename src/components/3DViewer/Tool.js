@@ -73,7 +73,6 @@ class Tool extends Autodesk.Viewing.ToolInterface {
 	    	const vec = this.viewer.navigation.getEyeToCenterOfBoundsVec(this.utilities.getBoundingBox());
 	    	const distance = vec.distanceTo(this.utilities.getBoundingBox().center());
 	    	let deltaa = 0;
-	    	console.log(event.distance);
 	    	if(this.previousPinchDistance != null){
 	    		deltaa = this.previousPinchDistance - event.distance;
 	    	}

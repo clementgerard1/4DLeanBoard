@@ -15,10 +15,16 @@ export default {
 		},
 		highlighted: function(){
 			return Math.trunc(this.time / 6) == Math.trunc(this.innertime / 6);
+		},
+		built : function(){
+			return Math.trunc(this.time / 6) > Math.trunc(this.innertime / 6);
+		},
+		tobuild : function(){
+			return Math.trunc(this.time / 6) < Math.trunc(this.innertime / 6);
 		}
 	},
 	template : `
-	<div class="playerWeek" v-bind:class='{selected : selected, hightlighted : highlighted }'>
+	<div class="playerWeek" v-bind:class='{selected : selected, hightlighted : highlighted, built : built, toBuild : tobuild }'>
 		
 	</div>`,
 }

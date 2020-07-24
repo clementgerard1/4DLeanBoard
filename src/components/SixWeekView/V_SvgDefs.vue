@@ -141,7 +141,7 @@ export default {
 				<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
 				</filter>
 
-				<filter id="filter0_d_ms_player" x="0" y="-30" width="530" height="730" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+				<filter id="filter0_d_ms_player" x="-100" y="-30" width="530" height="730" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 				<feFlood flood-opacity="0" result="BackgroundImageFix"/>
 				<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
 				<feOffset dx="2" dy="4"/>
@@ -151,7 +151,7 @@ export default {
 				<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
 				</filter>
 
-				<filter id="filter0_d_playermilestonedone" x="0" y="-30" width="530" height="730" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+				<filter id="filter0_d_playermilestonedone" x="-100" y="-30" width="530" height="730" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 				<feFlood flood-opacity="0" result="BackgroundImageFix"/>
 				<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
 				<feOffset dx="2" dy="4"/>
