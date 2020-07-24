@@ -1,4 +1,5 @@
 import Utils from "../../../class/Utils.class.js";
+import { AuthClientThreeLegged } from "forge-apis";
 
 class Memory{
 
@@ -7,7 +8,7 @@ class Memory{
 	static #viewer = null;
 	static #selected = {};
 	static #forgeObjects = {};
-	static #forgeObjectsNotLinked = {}
+	static #forgeObjectsNotLinked = {};
 	static #teamDisplay = false;
 	static #layerDisplay = false;
 	static #layerSelected = {};
@@ -47,6 +48,10 @@ class Memory{
 		this.#viewer = viewer;
 	}
 
+	static getViewer(){
+		return this.#viewer;
+	}
+
 	static getMaterial(name){
 		return this.#materials[name];
 	}
@@ -81,6 +86,12 @@ class Memory{
 			}
 		}
 	}
+	
+	static hide(bool){
+		for(let f in this.#forgeObjects){
+			this.#forgeObjects[f].hide(bool);
+		}
+	}
 
 	static setTeamDisplayMode(bool){
 		if(this.#teamDisplay != bool){
@@ -88,6 +99,25 @@ class Memory{
 			for(let f in this.#forgeObjects){
 				this.#forgeObjects[f].isTeamDisplayed(bool);
 			}
+		}
+	}
+
+	static allToRed(bool){
+		const color = new THREE.Vector4(1,0,0,1);
+		const anomalies = new THREE.Vector4(0,0,1,1);
+		for(let f in this.#forgeObjects){
+			this.#forgeObjects[f].hide(bool);
+			this.#forgeObjects[f].setColor(bool, color);
+		}
+		for(let f in this.#forgeObjectsNotLinked){
+			this.#forgeObjectsNotLinked[f].hide(bool);
+			this.#forgeObjectsNotLinked[f].setColor(bool, anomalies);
+		}
+	}
+
+	static setAllInvisible(bool){
+		for(let f in this.#forgeObjectsNotLinked){
+			this.#forgeObjectsNotLinked[f].setInvisible(bool);
 		}
 	}
 
@@ -125,7 +155,5 @@ class Memory{
 	static refresh(){
 		this.#viewer.impl.invalidate(true);
 	}
-
-
 }
 export default Memory;
