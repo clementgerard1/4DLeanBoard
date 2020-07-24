@@ -29,7 +29,5 @@ class Document{
 	setAllMaterials(materialName){
 		this.#model.setAllMaterials(materialName);
 	}
-	
-
 }
 export default Document;

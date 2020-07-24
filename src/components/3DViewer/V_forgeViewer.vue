@@ -89,6 +89,21 @@ export default {
 			}
 		},
 
+		hideAll(bool){
+			Memory.hide(bool);
+			Memory.refresh()
+		},
+
+		allInvisible(bool){
+			Memory.setAllInvisible(bool);
+			Memory.refresh();
+		},
+
+		allToRed(bool){
+			Memory.allToRed(bool);
+			Memory.refresh();
+		},
+
 		allTransparent(){
 			this.scene.setAllMaterials("ignoredMaterial");
 		},
@@ -212,10 +227,18 @@ export default {
 			Memory.setTeamDisplayMode(bool);
 			Memory.refresh();
 		},
+		setLayerDisplayed(layerName, bool){
+			Memory.setLayerSelected(layerName, bool);
+			Memory.refresh();
+		},
+
+		setLayerDisplayMode(bool){
+			Memory.setLayerDisplayMode(bool);
+			Memory.refresh();
+		},
 		setTime(time){
 			this.playerinit = time;
 		}
-
 	},
 	mounted : function(){
 
@@ -226,7 +249,12 @@ export default {
 		this.scene.init(this.oauth, this.urns, this.objs, ()=>{
 			console.log("init done");
 			this.createCustumMaterials();
+			/* this.setLayerDisplayMode(true);
+			this.setLayerDisplayed("Etage Rouge", true); */
 			//this.allTransparent();
+			//this.allInvisible(true);
+			this.allToRed(true);
+			//this.hideAll(true);
 			const tasks = V_taskTableUtils.getTokens();
 			for(let t in tasks){
 				this.select(tasks[t].getObject4D(), true);

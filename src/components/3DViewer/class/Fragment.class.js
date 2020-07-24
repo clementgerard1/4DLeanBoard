@@ -23,6 +23,15 @@ class Fragment{
 		return this.#fragId;
 	}
 
+	hide(bool){
+		const viewer = Memory.getViewer();
+		if(bool){
+			viewer.hide(this.#fragId);
+		}else{
+			viewer.show(this.#fragId);
+		}
+	}
+
 	setMaterial(materialName){
 		let material = null;
 		if(materialName == "ignoredMaterial"){

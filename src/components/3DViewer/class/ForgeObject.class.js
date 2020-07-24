@@ -1,4 +1,5 @@
 import Utils from "../../../class/Utils.class.js";
+import Memory from "./Memory.class.js";
 
 class ForgeObject{
 
@@ -11,6 +12,8 @@ class ForgeObject{
 	#object3D;
 	#teamDisplayed;
 	#teamSelected;
+	#layerDisplayed;
+	#layerSelected;
 
 	constructor(id = Utils.getId("forgeObjects")){
 		this.#id = id;
@@ -22,6 +25,13 @@ class ForgeObject{
 		this.#object3D = null;
 		this.#teamDisplayed = false;
 		this.#teamSelected = true;
+		this.#layerDisplayed = false;
+		this.#layerSelected = true;
+	}
+
+	setInvisible(bool){
+		const viewer = Memory.getViewer();
+		viewer.impl.visibilityManager.setNodeOff(this.#id, bool);
 	}
 
 	addProperty(property){
@@ -43,7 +53,6 @@ class ForgeObject{
 	}
 
 	isTeamSelected(teams){
-
 		if(typeof teams[this.#object3D.getParent().getTask().getTaskTeam().getId()] != "undefined"){
 			this.#teamSelected = true;
 		}else{
@@ -57,8 +66,40 @@ class ForgeObject{
 		this.updateMaterial();
 	}
 
+	isLayerSelected(layers){
+		if(typeof layers[this.#properties["Layer"]] != "undefined"){
+			this.#layerSelected = true;
+		}else{
+			this.#layerSelected = false;
+		}
+		this.updateMaterial();
+	}
+
+	setColor(bool, color){
+		const viewer = Memory.getViewer();
+		if(bool){
+			viewer.setThemingColor(this.#id, color);
+		}
+	}
+
+	isLayerDisplayed(bool){
+		this.#layerDisplayed = bool;
+		//vv problème lors de cet appel
+		this.updateMaterial();
+	}
+
 	getId(){
 		return this.#id;
+	}
+
+	hide(bool){
+		console.log(this.#id);
+		const viewer = Memory.getViewer();
+		if(bool){
+			viewer.hide(this.#id, viewer.model);
+		}else{
+			viewer.show(this.#id);
+		}
 	}
 
 	isSelected(bool){
@@ -83,6 +124,10 @@ class ForgeObject{
 				materialName = this.#object3D.getParent().getTask().getTaskTeam().getId() + "-team";
 			}else{	
 				materialName = this.#object3D.getParent().getTask().getTaskTeam().getId() + "-not-team";
+			}
+		}else if(this.#layerDisplayed) {
+			if(this.#layerSelected) {
+				console.log(this.#id);
 			}
 		}else{
 			if(this.#selected){
