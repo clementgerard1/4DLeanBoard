@@ -116,19 +116,35 @@ class Model{
 						const tree = model.getInstanceTree();
 						tree.enumNodeFragments(dbObjects[d].dbId, (node)=>{
 			    			const material  = model.getFragmentList().getMaterial(node);
-			    			Memory.addMaterial(material);
+							Memory.addMaterial(material);
+							//console.log(material);
 			    			const ignoredMaterial = new THREE.MeshBasicMaterial({
 							    reflectivity: 0.0,
 							    flatShading: true,
-							    transparent: false,
+								transparent: true,
+								opacity: 0.5,
 							    color: "#FFFFFF",
 							});
+							const in6WeeksMaterial = new THREE.MeshBasicMaterial({
+							    reflectivity: 0.0,
+							    flatShading: true,
+								transparent: true,
+								opacity: 0.45,
+							    color: "#FFFFFF",
+							});
+
 							const darkness = 0.55;
 							ignoredMaterial.color = {
-						    	r: material.color.r * darkness, 
-			    				g: material.color.g * darkness, 
-			    				b: material.color.b * (darkness /*+ 0.1*/)
-						    }
+						    	r: material.color.r,/*  * darkness, */ 
+			    				g: material.color.g,/*  * darkness, */ 
+			    				b: material.color.b,/*  * (darkness + 0.1) */
+							}
+							in6WeeksMaterial.color = {
+						    	r: material.color.r, 
+			    				g: material.color.g,
+			    				b: material.color.b,
+							}
+							in6WeeksMaterial.reflectivity = 1;
 						 // 	material.map = null;
 						 // 	const ignoredMaterial = new THREE.MeshPhongMaterial({
 						 // 		color : new THREE.Color(material.color.r, material.color.g, material.color.b),
@@ -138,12 +154,14 @@ class Model{
 						 // 		shininess : 0
 						 // 	});
 						 	material.needsUpdate = true;
-						 	ignoredMaterial.needsUpdate = true;
+							ignoredMaterial.needsUpdate = true;
+							in6WeeksMaterial.needsUpdate = true;
 
-			    			const fragment = new Fragment(node, material, ignoredMaterial);
+			    			const fragment = new Fragment(node, material, ignoredMaterial, in6WeeksMaterial);
 							that.#dbObjects[dbObjects[d].dbId].addFragment(fragment);
 							fragment.setModel(model);
-			    			Memory.addMaterial(ignoredMaterial, true, "ignored-" + material.id);
+							Memory.addMaterial(ignoredMaterial, true, "ignored-" + material.id);
+							Memory.addMaterial(in6WeeksMaterial, true, "in6Weeks-" + material.id);
 			    		}, true);
 
 					}else{

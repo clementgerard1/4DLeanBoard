@@ -87,9 +87,9 @@ class Memory{
 		}
 	}
 	
-	static hide(bool){
-		for(let f in this.#forgeObjects){
-			this.#forgeObjects[f].hide(bool);
+	static setNotLinked(){
+		for(let f in this.#forgeObjectsNotLinked){
+			this.#forgeObjectsNotLinked[f].isLinked(false);
 		}
 	}
 
