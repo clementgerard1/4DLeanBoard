@@ -137,7 +137,7 @@ class ForgeObject{
 			}
 		}else if(this.#layerDisplayed) {
 			if(this.#layerSelected) {
-				console.log(this.#id);
+				//console.log(this.#id);
 			}
 		}else{
 			if(this.#selected){
