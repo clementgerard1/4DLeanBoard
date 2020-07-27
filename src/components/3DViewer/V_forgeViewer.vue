@@ -89,11 +89,6 @@ export default {
 			}
 		},
 
-		hideAll(bool){
-			Memory.hide(bool);
-			Memory.refresh()
-		},
-
 		allInvisible(bool){
 			Memory.setAllInvisible(bool);
 			Memory.refresh();
@@ -202,6 +197,11 @@ export default {
 			Memory.refresh();
 		},
 
+		setNotLinked() {
+			Memory.setNotLinked();
+			Memory.refresh();
+		},
+
 		select(object4D, bool){
 			const objs = object4D.getObjects3D();
 			for(let o in objs){
@@ -254,7 +254,7 @@ export default {
 			//this.allTransparent();
 			//this.allInvisible(true);
 			//this.allToRed(true);
-			//this.hideAll(true);
+			this.setNotLinked();
 			const tasks = V_taskTableUtils.getTokens();
 			for(let t in tasks){
 				this.select(tasks[t].getObject4D(), true);
@@ -263,6 +263,7 @@ export default {
 			this.scene.setLightPreset(7);
 
 			this.scene.setCube(true);
+			console.log(Memory.getViewer());
 
 			const tool = new Tool(this.scene.getViewer());
 			this.scene.getViewer().toolController.registerTool(tool);

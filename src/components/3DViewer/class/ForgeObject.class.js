@@ -46,6 +46,22 @@ class ForgeObject{
 		this.#model = model;
 	}
 
+	isLinked(bool) {
+		if(!bool) {
+			this.#state = "built";
+		}
+		this.updateMaterial();
+	}
+
+	hide(bool) {
+		const viewer = Memory.getViewer();
+		if(bool) {
+			viewer.hide(this.#id);
+		}else {
+			viewer.show(this.#id);
+		}
+	}
+
 	setAllMaterials(materialName){
 		for(let f in this.#fragments){
 			this.#fragments[f].setMaterial(materialName);
@@ -92,15 +108,6 @@ class ForgeObject{
 		return this.#id;
 	}
 
-	hide(bool){
-		const viewer = Memory.getViewer();
-		if(bool){
-			viewer.hide(this.#id, viewer.model);
-		}else{
-			viewer.show(this.#id);
-		}
-	}
-
 	isSelected(bool){
 		if(bool != this.#selected){
 			this.#selected = bool;
@@ -116,8 +123,12 @@ class ForgeObject{
 	}
 
 	updateMaterial(){
-
+		const viewer = Memory.getViewer();
 		let materialName = null;
+		if(!this.#selected) {
+			viewer.setThemingColor(this.#id, null);
+		}
+		this.hide(false);
 		if(this.#teamDisplayed){
 			if(this.#teamSelected){
 				materialName = this.#object3D.getParent().getTask().getTaskTeam().getId() + "-team";
@@ -130,15 +141,22 @@ class ForgeObject{
 			}
 		}else{
 			if(this.#selected){
-				materialName = "selectedMaterial";
+				materialName = "init";
+				viewer.setThemingColor(this.#id, new THREE.Vector4(77/255,170/255,49/255,0.3), viewer.model, true);
 			}else if(this.#state == "toBuild"){
-				materialName = "nextsWeeksMat";
+				//1
+				materialName = "ignoredMaterial";
+				//this.hide(true);
+				viewer.setThemingColor(this.#id, new THREE.Vector4(77/255,170/255,49/255,0.2), viewer.model, true);
+
+				//2
 			}else if(this.#state == "built"){
 				materialName = "init";
 			}else if(this.#state == "currentWeek"){
 				materialName = "currWeekMat";
 			}else if(this.#state == "builtOn6W"){
-				materialName = "sixWeeksMat";
+				materialName = "in6WeeksMaterial";
+				//viewer.setThemingColor(this.#id, new THREE.Vector4(1,1,1,0.75), viewer.model, true);
 			}
 		}
 
