@@ -176,7 +176,7 @@ function init(){
 						this.modelSelected = true;
 
 
-						this.urns = [datas.urn];
+						this.urns = datas.urns;
 						this.oauth = datas.oAuth;
 						this.forgeReady = true;
 

@@ -9,6 +9,7 @@ class Scene{
 	#initInfos;
 	#documents;
 	#viewCubeUiExt;
+	#temps;
 	/**
 		@class Scene
 		@classdesc Scene represents the forge viewer
@@ -27,15 +28,16 @@ class Scene{
 		}
 		this.#documents = [];
 		this.#viewCubeUiExt = null;
+		this.#temps = [];
 
 	}
 
-	init(oauth, urns, objs, callback){
+	init(oauth, urns, objs, callback, onSelect){
 		this.#initInfos = {
 			callback : callback,
 			oauth : oauth,
 			urns : urns,
-			objs : objs
+			objs : objs,
 		}
 
 		var options = {
@@ -74,7 +76,9 @@ class Scene{
 	}
 
 	_endOfInit(that){
-		
+		that.#temps.push(that.#temps.length);
+		if(that.#temps.length < that.#initInfos.urns.length) return;
+
 	    that.#viewer.setGroundShadow(false);
 	    that.#initInfos.callback();
 
@@ -88,6 +92,7 @@ class Scene{
 	}
 
 	addListener(event, callback){
+		console.log(this.#viewer);
 		this.#viewer.addEventListener(event, callback);
 	}
 

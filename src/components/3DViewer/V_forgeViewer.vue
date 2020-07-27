@@ -173,6 +173,10 @@ export default {
 
 		highlightTask() {
 			const selection = this.scene.getViewer().getSelection();
+
+			this.scene.getViewer().getSelection(function(selection){
+				console.log(selection);
+			});
 			if(selection.length != 0){
 				this.scene.getViewer().clearSelection();
 				for(let s in selection){
@@ -259,7 +263,7 @@ export default {
 			for(let t in tasks){
 				this.select(tasks[t].getObject4D(), true);
 			}
-			this.scene.addListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, this.highlightTask);
+			this.scene.addListener(Autodesk.Viewing.AGGREGATE_SELECTION_CHANGED_EVENT, this.highlightTask);
 			this.scene.setLightPreset(7);
 
 			this.scene.setCube(true);

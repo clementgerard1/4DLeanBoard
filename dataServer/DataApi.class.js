@@ -38,7 +38,7 @@ class DataApi{
 				model.deserialize(modelS.data.model);
 				return {
 					model : model,
-					urn : modelS.data.urn,
+					urns : modelS.data.urns,
 					oAuth : oauth,
 				};
 			});

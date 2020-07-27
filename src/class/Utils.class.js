@@ -106,14 +106,12 @@ class Utils{
 		const objectsApi2 = new ForgeSDK.ObjectsApi();
 		let manifest = null;
 
-
-
 		await Utils.loadTextFile(url).then( file => {
 		  const objectsApi = new ForgeSDK.ObjectsApi();
+
 			return objectsApi.uploadObject(Utils.forgeBucketName + "-" + name, /*Utils.forgeFileName*/ name + ".ifc", file.length, file, {}, oAuth, oAuth.getCredentials())
 			.then(
 				response => {
-
 					const urn = this.getEncodedUrn(response.body.objectId).replace("urn:", "");
 					const job = {
 						input : 
@@ -136,12 +134,13 @@ class Utils{
 				}
 			).then( 
 				response => {
-					//console.log(response.body.status);
 					return derivativesApi.getManifest(response.body.urn, {}, oAuth, oAuth.getCredentials());
 				}
 			).then( 
 				result => {
-					console.log(result.body.derivatives[0].name  + " : " + result.body.status);
+					if(result.body.derivatives.length > 0){
+						console.log(result.body.derivatives[0].name  + " : " + result.body.status);
+					}
 					manifest = result.body;
 				})
 			.catch(

@@ -28,19 +28,19 @@ class Tool extends Autodesk.Viewing.ToolInterface {
     }
  
     register() {
-        console.log('DrawTool registered.');
+        console.log('MouseTool registered.');
     }
  
     deregister() {
-        console.log('DrawTool unregistered.');
+        console.log('MouseTool unregistered.');
     }
  
     activate(name, viewer) {
-        console.log('DrawTool activated.');
+        console.log('MouseTool activated.');
     }
  
     deactivate(name) {
-        console.log('DrawTool deactivated.');
+        console.log('MouseTool deactivated.');
     }
  
     getPriority() {

@@ -63,6 +63,20 @@ class Loader{
 	}
 
 	/**
+		Load model from CSV
+		@param {string} CSVFile csv informations.
+		@param {Array} IFCFiles IFC file as string
+		@param {string} [delimiterColumn=,]
+		@param {string} [delimiterArray=;]
+		@param {string} [csvVersion=latest] Version of csv used.
+		@static
+	*/
+	static fromCSVandIFCS(CSVFile, IFCFiles, delimiterColumn = ";", delimiterArray = ",", csvVersion = this.#latestCSVVersion){
+
+		return eval("this.csv_v" + csvVersion.replace(".", "_")  + "(CSVFile, IFCFiles,`" + delimiterColumn + "`,`" + delimiterArray + "`)");
+	}
+
+	/**
 		Load model from JSON
 		@param {string} JSONFile json informations.
 		@param {string} [jsonVersion=latest] Version of json used.
@@ -83,7 +97,7 @@ class Loader{
 		return eval("this.json_v" + jsonVersion.replace(".", "_")  + "(json, ifc)");
 	}
 
-	static csv_v0_2(csv, ifc){
+	static csv_v0_2(csv, ifcs){
 
 		const json = {
 			name: null,
@@ -180,15 +194,15 @@ class Loader{
 			}
 		});
 
-		return Loader.json_v0_4(JSON.stringify(json), ifc);
+		return Loader.json_v0_4(JSON.stringify(json), ifcs);
 	}
-	static json_v0_4(json, ifc){
+	static json_v0_4(json, ifcs){
 		let rvt = false;
 		//Errors
 		if(json == null){
 			throw 'JsonFile needed for import model';
 		}
-		if(ifc == null){
+		if(ifcs == null){
 			//throw 'IfcFile needed for import model';
 			rvt = true;
 		}
@@ -196,16 +210,19 @@ class Loader{
 		//Parse IFC file
 		let obj3Ds = {};
 		if(!rvt){
-			const IFClines = ifc.split('\n');
-			for(let l in IFClines){
-				const ifcDef = /(IFC[A-Z]*)\(([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*)/g;
-				const result = ifcDef.exec(IFClines[l]);
-				if(result != null && this.#ifcBuildingElements.includes(result[1])){
-					obj3Ds[result[9].replace(/['"]/gi, "")] = 
-						{
-							name : result[4].replace(/['"]/gi, ""),
-							id : result[9].replace(/['"]/gi, "")
-						}
+			for(let f in ifcs){
+				const ifc = ifcs[f];
+				const IFClines = ifc.split('\n');
+				for(let l in IFClines){
+					const ifcDef = /(IFC[A-Z]*)\(([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*),([ \-'_:$#A-Z0-9a-z]*)/g;
+					const result = ifcDef.exec(IFClines[l]);
+					if(result != null && this.#ifcBuildingElements.includes(result[1])){
+						obj3Ds[result[9].replace(/['"]/gi, "")] = 
+							{
+								name : result[4].replace(/['"]/gi, ""),
+								id : result[9].replace(/['"]/gi, "")
+							}
+					}
 				}
 			}
 		}

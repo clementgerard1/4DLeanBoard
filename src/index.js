@@ -218,15 +218,14 @@ function init(){
 						V_timelineUtils.setTimeline(this.timeline);
 
 						const phase = this.timeline.getModel().getMilestones()[0].getPhases()[0];
-					  this.duration = this.model.getDuration();
+					  	this.duration = this.model.getDuration();
 
 
 						//Socket Server Connexion
 						const socket = openSocket("http://" + Config.socketServerIp + ":" + Config.socketServerPort + "?model=" + this.model.getName());
 						V_socketUtils.setSocket(socket);
 						this.modelSelected = true;
-
-						this.urns = [datas.urn];
+						this.urns = datas.urns;
 						this.oauth = datas.oAuth;
 						this.forgeReady = true;
 
