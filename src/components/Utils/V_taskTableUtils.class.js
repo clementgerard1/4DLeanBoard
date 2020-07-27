@@ -266,5 +266,11 @@ class V_taskTableUtils{
 		}
 	}
 
+	static setPlanningDisplay(milestone, phases, weeks, week){
+		for(let f in this.frames){
+			this.frames[f].setPlanningDisplay(milestone, phases, weeks, week);
+		}
+	}
+
 }
 export default V_taskTableUtils;

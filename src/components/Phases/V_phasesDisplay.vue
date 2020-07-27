@@ -1,6 +1,7 @@
 import "./V_phasesDisplay.scss";
 import V_phaseItem from "./V_phaseItem.vue";
 import V_timelineUtils from "../Utils/V_timelineUtils.class.js";
+import V_phasesUtils from "../Utils/V_phasesUtils.class.js";
 
 export default {
 	components : {
@@ -19,7 +20,7 @@ export default {
 	data : function(){
 		return {
 			time : null,
-			displayed : true,
+			isDisplayed : true,
 			playerWidth : "0%",
 		}
 	},
@@ -42,15 +43,19 @@ export default {
 			this.time = time;
 			this.playerWidth = (((this.time * 7) / this.model.getDuration()) * 100) + "%";
 		},
+		displayed : function(bool){
+			this.isDisplayed = bool;
+		}
 	},
 	created : function(){
 		V_timelineUtils.addListener("time", this, this.watchTime);
+		V_phasesUtils.addPhasePanel(this);
 	},
 	template : `
-	<div v-if="displayed" id="phaseF">
+	<div v-if="isDisplayed" id="phaseF">
 		<!-- PhasesFrame -->
 		<div class="playerLineWrapper">
-			<div class="playerLine" v-bind:style="{ width : playerWidth, height : ((phases.length - 1) * 38 - 10) + 'px'}"></div>
+			<div class="playerLine" v-bind:style="{ width : playerWidth, height : ((phases.length - 1) * 41 - 8) + 'px'}"></div>
 		</div>
 		<phaseitem v-for="p in phases" :key="p.getId()" v-bind:time="time" v-bind:model="_model" v-bind:timeline="_timeline" v-bind:phase="p"></phaseitem>
 	</div>`,

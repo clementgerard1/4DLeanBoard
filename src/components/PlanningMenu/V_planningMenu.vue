@@ -6,8 +6,11 @@ import PlanningBar from "./assets/PlanningBar.svg";
 export default {
 	data : function(){
 		return {
-			planningBar : PlanningBar,
 			isOpen : false,
+			milestoneDisplay : true,
+			phasesDisplay : true,
+			weeksDisplay : true,
+			weekDisplay : false,
 		}
 	},
 	computed : {
@@ -20,12 +23,23 @@ export default {
 		}
 	},
 	methods: {
-		handleTap : function(){
-			this.isOpen = !this.isOpen;
+		handleTap : function(event){
+			if(event.target.id == "openPlanningMenu" || event.target.id == "openPlanningMenuButton"){
+				this.isOpen = !this.isOpen;
+			}
+		},
+		handleMenuTap : function(id){
+			switch(id){
+				case 0 : this.milestoneDisplay = !this.milestoneDisplay; break;
+				case 1 : this.phasesDisplay = !this.phasesDisplay; this.weekDisplay = false; break;
+				case 2 : this.weeksDisplay = !this.weeksDisplay; this.weekDisplay = false; break;
+				case 3 : this.weekDisplay = !this.weekDisplay; this.weeksDisplay = false; this.phasesDisplay = false; break;
+			}
+			V_socketUtils.setPlanningDisplay(this.milestoneDisplay, this.phasesDisplay, this.weeksDisplay, this.weekDisplay);
 		}
 	},
 	template : `
-	<div v-tap="handleTap" v-bind:style="{top : top}" class="planningMenu" v-html="planningBar">
+	<div v-tap="handleTap" v-bind:style="{top : top}" class="planningMenu" > ` + PlanningBar + `
 		
 	</div>`,
 }

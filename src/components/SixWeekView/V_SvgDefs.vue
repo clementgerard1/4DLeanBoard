@@ -352,42 +352,35 @@ export default {
 				<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
 				<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
 				</filter>
-				<filter id="filter3_d_planBar" x="622" y="40" width="40" height="40" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+
+				<filter id="filter0_b_planBar" x="468" y="108" width="340" height="52" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 				<feFlood flood-opacity="0" result="BackgroundImageFix"/>
-				<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
-				<feOffset dx="2" dy="4"/>
-				<feGaussianBlur stdDeviation="2"/>
-				<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0"/>
-				<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
-				<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+				<feGaussianBlur in="BackgroundImage" stdDeviation="5"/>
+				<feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur"/>
+				<feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur" result="shape"/>
 				</filter>
-				<filter id="filter4_d_planBar" x="795" y="40" width="40" height="40" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+				<filter id="filter1_b_planBar" x="-10" y="-10" width="1296" height="138" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 				<feFlood flood-opacity="0" result="BackgroundImageFix"/>
-				<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
-				<feOffset dx="2" dy="4"/>
-				<feGaussianBlur stdDeviation="2"/>
-				<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0"/>
-				<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
-				<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+				<feGaussianBlur in="BackgroundImage" stdDeviation="5"/>
+				<feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur"/>
+				<feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur" result="shape"/>
 				</filter>
-				<filter id="filter5_d_planBar" x="968" y="40" width="40" height="40" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-				<feFlood flood-opacity="0" result="BackgroundImageFix"/>
-				<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
-				<feOffset dx="2" dy="4"/>
-				<feGaussianBlur stdDeviation="2"/>
-				<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0"/>
-				<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
-				<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
-				</filter>
-				<filter id="filter6_d_planBar" x="276" y="40" width="40" height="40" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-				<feFlood flood-opacity="0" result="BackgroundImageFix"/>
-				<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
-				<feOffset dx="2" dy="4"/>
-				<feGaussianBlur stdDeviation="2"/>
-				<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0"/>
-				<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
-				<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
-				</filter>
+				<pattern id="pattern0_planBar" patternContentUnits="objectBoundingBox" width="1" height="1">
+				<use xlink:href="#image0_planBar" transform="scale(0.0333333)"/>
+				</pattern>
+				<pattern id="pattern1_planBar" patternContentUnits="objectBoundingBox" width="1" height="1">
+				<use xlink:href="#image1_planBar" transform="scale(0.0333333)"/>
+				</pattern>
+				<pattern id="pattern2_planBar" patternContentUnits="objectBoundingBox" width="1" height="1">
+				<use xlink:href="#image2_planBar" transform="scale(0.0333333)"/>
+				</pattern>
+				<pattern id="pattern3_planBar" patternContentUnits="objectBoundingBox" width="1" height="1">
+				<use xlink:href="#image3_planBar" transform="scale(0.0333333)"/>
+				</pattern>
+				<image id="image0_planBar" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAABUElEQVRIie3VvytFYRzH8ZcfyeJH+bEyWAwyGCiKDTuT1WYwWsS/wOQPYLFKKRSLzSLJRl1KSpQSUpfhPqd76dxwnXMMfOpTT+f7fZ739/uc55yHv6aaH8w9wDxacInbRCr6gl4/+BCzaM0aHPk8a/AJ5mTY8TJ604bFgStSdYKFZAIeLzNOVX14UNzqRwykDe3AVQCuBL+GZx1pQRtwFEDbqFX4820qfk5NSUOrsREAp2guiTXiOMS2QkGJaTksfIOumHgnrkPOUlLQ6bDgM0YwhJ0wLtUgnkLuzE+ho3hBHmsKN1J0mvcwjH3soh9TIfclzK1I3bhT/jKI847iWbhHz3ehbTj7JjRyvmR8hvavQusUtq8SaJwPUP8ZtAqrCUIjr4e1y2oxBWjkhXLQCe/fT9LOYzIOfJEiNHIugv3afVyqcel2ncNYZt3869f1Buw28ByOuimtAAAAAElFTkSuQmCC"/>
+				<image id="image1_planBar" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAAAjUlEQVRIie2WSQ6AIBAEW+PnjM/Gl4j/wBPGsBiRaR0jlXDhQGWaYQEaf2MCsAJwwsMCGM/EliD1YzmKukDsLqRSw+7ryaIsr4mHzHy4BbVEW6g2aoO4O80T4hSUzvdV0de9U7FI/FLNVZ2S6qhTFMfPPMdFyamJul0gYuuqexbZP5Go4pnoEmnKxnfYADkVXJTgCWwSAAAAAElFTkSuQmCC"/>
+				<image id="image2_planBar" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAAAjElEQVRIie2WOw6AIBBEnx7LTy/x2MaLqOcQG02QQFQULNiXbDNsmGUoAAQhAT2wADpSzYByGc8RTY+aXMZmQwU0lubrD9JL1wS7XnjWPucqJoARGKz+EN17Yh8r7hif6ifyuGNz86tI7EH0G/3pHX+GGItxPsY10P5hnPR1+u0joCKbT0D3LhtBuMEGh0iZz80lV3QAAAAASUVORK5CYII="/>
+				<image id="image3_planBar" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAAAbklEQVRIie2VQQrAIAwEp6X//5Ttu+zJS1rRQJQWd8BbwhgSEhArkoAc/JKV7IOLKORJnh9yUe/X6Yx/9Bdgq4hbPbF53niORoKX7g/NmmqJJZZ4HNELpPsKRVX8tr8LQ3e1m/WG63Ni97AIYbkBDxItquXeH/4AAAAASUVORK5CYII="/>
 
 			</defs>
 		</svg>

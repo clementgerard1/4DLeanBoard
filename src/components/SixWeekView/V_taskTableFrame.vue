@@ -8,6 +8,7 @@ import V_socketUtils from "../Utils/V_socketUtils.class.js";
 import V_taskTableUtils from "../Utils/V_taskTableUtils.class.js";
 import scssVariables from "./assets/_variables.scss";
 
+import V_ganttDisplay from "./V_ganttDisplay.vue";
 
 export default {
 	components: {
@@ -15,6 +16,7 @@ export default {
 		tasktablefront : V_taskTableFront,
 		row6wheader : V_6Wrow_header,
 		row6w : V_6Wrow,
+		ganttdisplay : V_ganttDisplay,
 	},
 	methods : {
 		updateTime : function(time){
@@ -27,6 +29,11 @@ export default {
 		updateOpening : function(){
 			this.nbopened = V_taskTableUtils.getOpenedTeam(); 
 			this.nbclosed = V_taskTableUtils.getClosedTeam();
+		},
+		setPlanningDisplay : function(milestone, phases, weeks, week){
+			this.ganttBool = week;
+			this.weeksBool = weeks;
+			this.phasesDisplayed = phases;
 		}
 	},
 	created : function(){
@@ -64,6 +71,8 @@ export default {
 				tasksize : 0,
 				phasesDisplayed : true,
 				nbPhases : this.model.getPhases().length,
+				ganttBool : false,
+				weeksBool : false,
 			};
 	},	
 	provide: function(){
@@ -78,7 +87,7 @@ export default {
 		},
 		newheight : function(){
 			if(this.phasesDisplayed){
-				return 'calc(100vh - ' + (parseInt(scssVariables["playerHeight"].replace("px", "")) / 2) + 'px - ' + ((this.nbPhases * 38) + 7) + 'px ) !important';
+				return 'calc(100vh - ' + (parseInt(scssVariables["playerHeight"].replace("px", "")) / 2) + 'px - ' + ((this.nbPhases * 41) + 7) + 'px ) !important';
 			}else{
 				return 'calc(100vh - ' + scssVariables["playerHeight"] + ') !important';
 			}
@@ -101,16 +110,18 @@ export default {
 			<div class="taskTableWrapper">
 
 				<!-- background -->
-				<tasktablebackground v-bind:tasksize="tasksize" v-bind:tasktablestart="tasktablestart" v-bind:time="time" v-bind:nbopened="nbopened" v-bind:nbclosed="nbclosed" id="taskTableBackground" v-bind:style="{paddingTop : tasksize + 'px', paddingBottom : tasksize + 'px' }"></tasktablebackground>
+				<tasktablebackground v-if="weeksBool" v-bind:tasksize="tasksize" v-bind:tasktablestart="tasktablestart" v-bind:time="time" v-bind:nbopened="nbopened" v-bind:nbclosed="nbclosed" id="taskTableBackground" v-bind:style="{paddingTop : tasksize + 'px', paddingBottom : tasksize + 'px' }"></tasktablebackground>
 
 				<!-- core -->
-				<row6wheader v-bind:duration="_duration" v-bind:tasksize="tasksize" v-bind:tasktablestart="tasktablestart" v-bind:time="time" ></row6wheader>
-				<template v-for="line in lines">
+				<row6wheader v-if="weeksBool" v-bind:duration="_duration" v-bind:tasksize="tasksize" v-bind:tasktablestart="tasktablestart" v-bind:time="time" ></row6wheader>
+				<template v-if="weeksBool" v-for="line in lines">
 					<row6w v-bind:tasksize="tasksize" v-bind:tasktablestart="tasktablestart" v-bind:time="time" v-for="i in line.nb" :key="line.taskteam.getId() + '-' + (tasktablestart + i)" v-bind:taskteam="line.taskteam" v-bind:nth="i-1"></row6w>
 				</template>
 
 				<!-- front -->
-				<!--<tasktablefront v-bind:tasksize="tasksize" v-bind:tasktablestart="tasktablestart" v-bind:time="time" v-bind:nbopened="nbopened" v-bind:nbclosed="nbclosed" id="taskTableFront" v-bind:style="{paddingTop : tasksize + 'px', paddingBottom : tasksize + 'px' }"></tasktablefront>-->
+				<!--<tasktablefront v-if="weeksBool" v-bind:tasksize="tasksize" v-bind:tasktablestart="tasktablestart" v-bind:time="time" v-bind:nbopened="nbopened" v-bind:nbclosed="nbclosed" id="taskTableFront" v-bind:style="{paddingTop : tasksize + 'px', paddingBottom : tasksize + 'px' }"></tasktablefront>-->
+
+				<ganttdisplay v-if="ganttBool" ></ganttdisplay>
 			</div>
 	 	</div>
 	`,

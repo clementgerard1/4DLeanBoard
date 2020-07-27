@@ -3,6 +3,7 @@ import V_filterMenuUtils from "./V_filterMenuUtils.class.js";
 import V_playerUtils from "./V_playerUtils.class.js";
 import V_taskTableUtils from "./V_taskTableUtils.class.js";
 import V_timelineUtils from "./V_timelineUtils.class.js";
+import V_phasesUtils from "./V_phasesUtils.class.js";
 import DataApi from "../../../dataServer/DataApi.class.js";
 
 class V_socketUtils{
@@ -321,6 +322,13 @@ class V_socketUtils{
 		this.socket.emit("updateDisplayMenu", { 
 			choice : choice
 		});
+	}
+
+	/* ----------------------------- PLANNING MENU INTERACTION --------------------------- */
+	static setPlanningDisplay(milestone, phases, weeks, week){
+		V_taskTableUtils.setPlanningDisplay(milestone, phases, weeks, week);
+		V_playerUtils.displayMilestones(milestone);
+		V_phasesUtils.displayed(phases);
 	}
 
 }
