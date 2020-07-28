@@ -23,7 +23,7 @@ class Document{
 		const path = this.#doc.getViewablePath(this.#doc.getRoot().getDefaultGeometry());
 
 		this.#model.load(viewer, path, objs, callback);
-
+		
 	}
 
 	getModel(){

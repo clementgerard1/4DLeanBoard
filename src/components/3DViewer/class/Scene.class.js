@@ -45,7 +45,8 @@ class Scene{
 		    api: 'derivativeV2',  // for models uploaded to EMEA change this option to 'derivativeV2_EU'
 		    accessToken : this.#initInfos.oauth.credentials.access_token,
 		    groundReflection : true,
-		    edgeRendering : true
+			edgeRendering : true,
+			ambientShadows : true,
 		};
 		const that = this;
 		Autodesk.Viewing.Initializer(options, () => {this._onInitialisationSuccess(that)});
@@ -53,7 +54,7 @@ class Scene{
 
 	_onInitialisationSuccess(that){
 		//that.#id = 3;
-	    that.#viewer = new Autodesk.Viewing.Viewer3D(document.getElementById('forgeV'));
+	    that.#viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeV'));
 	    Memory.setViewer(this.#viewer);
 
 	    var startedCode = that.#viewer.start();
@@ -78,8 +79,16 @@ class Scene{
 	_endOfInit(that){
 		that.#temps.push(that.#temps.length);
 		if(that.#temps.length < that.#initInfos.urns.length) return;
-
-	    that.#viewer.setGroundShadow(false);
+		
+		that.#viewer.setGroundShadow(false);
+		that.#viewer.setEnvMapBackground(true);
+		that.#viewer.setDisplayEdges(true);
+		that.#viewer.setOrbitPastWorldPoles(false);
+		that.#viewer.setReverseZoomDirection(true);
+		that.#viewer.setEnvMapBackground(true);
+		that.#viewer.setFocalLength(19);
+		// to disable auto highlighting when mouse over an object
+		//that.#viewer.disableHighlight(true);
 	    that.#initInfos.callback();
 
 	}

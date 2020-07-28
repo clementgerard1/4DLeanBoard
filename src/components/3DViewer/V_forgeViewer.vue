@@ -11,6 +11,7 @@ import Scene from "./class/Scene.class.js";
 import Memory from "./class/Memory.class.js";
 
 import Tool from "./Tool.js";
+import Camera from "./class/Camera.class.js";
 
 import modelBar from "./assets/modelBar.svg";
 
@@ -90,11 +91,6 @@ export default {
 				Memory.addMaterial(teamNotMaterial , true, teams[t].getId() + "-not-team");
 				
 			}
-		},
-
-		hideAll(bool){
-			Memory.hide(bool);
-			Memory.refresh()
 		},
 
 		allInvisible(bool){
@@ -211,6 +207,11 @@ export default {
 			Memory.refresh();
 		},
 
+		setNotLinked() {
+			Memory.setNotLinked();
+			Memory.refresh();
+		},
+
 		select(object4D, bool){
 			const objs = object4D.getObjects3D();
 			for(let o in objs){
@@ -236,13 +237,13 @@ export default {
 			Memory.setTeamDisplayMode(bool);
 			Memory.refresh();
 		},
-		setLayerDisplayed(layerName, bool){
-			Memory.setLayerSelected(layerName, bool);
+		hideLayer(layerName, bool){
+			Memory.hideLayer(layerName, bool);
 			Memory.refresh();
 		},
 
-		setLayerDisplayMode(bool){
-			Memory.setLayerDisplayMode(bool);
+		setLayerHideMode(bool){
+			Memory.setLayerHideMode(bool);
 			Memory.refresh();
 		},
 		setTime(time){
@@ -257,6 +258,10 @@ export default {
 				model : this.modelShown[id].model,
 				shown : this.modelShown[id].model.isShown()
 			});
+		},
+		refreshCamera() {
+			Memory.setTarget();
+			Memory.refresh();
 		}
 	},
 	mounted : function(){
@@ -275,23 +280,31 @@ export default {
 					model : models[m]
 				}
 			}
-
+		
+			let camera = new Camera();
+			Memory.setCamera(camera);
 
 			this.createCustumMaterials();
-			/* this.setLayerDisplayMode(true);
-			this.setLayerDisplayed("Etage Rouge", true); */
+			this.hideLayer("Etage Rouge", true);
+			this.hideLayer("Etage Bleu", true);
+			this.setLayerHideMode(true);
 			//this.allTransparent();
 			//this.allInvisible(true);
 			//this.allToRed(true);
-			//this.hideAll(true);
+			this.setNotLinked();
 			const tasks = V_taskTableUtils.getTokens();
 			for(let t in tasks){
 				this.select(tasks[t].getObject4D(), true);
 			}
+
 			this.scene.addListener(Autodesk.Viewing.AGGREGATE_SELECTION_CHANGED_EVENT, this.highlightTask);
-			this.scene.setLightPreset(7);
+			this.scene.addListener(Autodesk.Viewing.CAMERA_CHANGED_EVENT, this.refreshCamera);
+			this.scene.setLightPreset(15);
 
 			this.scene.setCube(true);
+			/* Memory.getViewer().forEachExtension( (ext) => {
+				console.log(ext);
+			}); */
 
 			const tool = new Tool(this.scene.getViewer());
 			this.scene.getViewer().toolController.registerTool(tool);
