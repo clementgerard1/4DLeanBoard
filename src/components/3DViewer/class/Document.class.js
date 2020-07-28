@@ -26,6 +26,10 @@ class Document{
 
 	}
 
+	getModel(){
+		return this.#model;
+	}
+
 	setAllMaterials(materialName){
 		this.#model.setAllMaterials(materialName);
 	}

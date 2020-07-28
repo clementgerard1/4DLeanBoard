@@ -13,6 +13,8 @@ class Model{
 	#model;
 	#planningObjects;
 	#viewer;
+	#name;
+	#hide;
 
 
 	constructor(id = Utils.getId("forgeModel")){
@@ -23,6 +25,8 @@ class Model{
 		this.#model = null;
 		this.#planningObjects = null;
 		this.#viewer = null;
+		this.#name = null;
+		this.#hide = false;
 	}
 
 	load(viewer, path, objs, callback){
@@ -32,6 +36,10 @@ class Model{
 		this.callback = callback;
 		this.#viewer.addEventListener(Autodesk.Viewing.OBJECT_TREE_CREATED_EVENT, () => { this._onTreeLoaded(this, this.#id) });
 		viewer.loadModel(path, {}, (model)=> {this._onModelLoaded(model, that)});
+	}
+
+	getId(){
+		return this.#id;
 	}
 
 	setAllMaterials(materialName){
@@ -54,6 +62,10 @@ class Model{
 			}
 		}
 		return this.getIFCTag(dbObjects, parent);
+	}
+
+	isShown(){
+		return !this.#hide;
 	}
 
 	_allLoaded(that){
@@ -96,15 +108,22 @@ class Model{
 
 					//IFC Props
 					const tag = that.getIFCTag(dbObjects, d);
+					const nameDone = false;
 
 					that.#dbObjects[dbObjects[d].dbId] = new ForgeObject(dbObjects[d].dbId);
-
+					that.#dbObjects[dbObjects[d].dbId].setModel(that.#model);
+					console.log(dbObjects[d].dbId);
 					if(typeof ifcId2Obj3D[tag] != "undefined"){
 						that.#dbObjects[dbObjects[d].dbId].setObject3D(ifcId2Obj3D[tag]);
 						ifcId2Obj3D[tag].addForgeObject(that.#dbObjects[dbObjects[d].dbId]);
 						Memory.addForgeObject(that.#dbObjects[dbObjects[d].dbId], true);
-						that.#dbObjects[dbObjects[d].dbId].setModel(that.#model);
 						for(let p in dbObjects[d].properties){
+
+							if(!nameDone && dbObjects[d].properties[p].displayName == "Source File"){
+								const toSplit = dbObjects[d].properties[p].displayValue.split("_");
+								const namee = toSplit[toSplit.length - 1].replace(".ifc", "");
+								that.setName(namee.charAt(0).toUpperCase() + namee.slice(1));
+							}
 							const property = new IFCProperty(dbObjects[d].properties[p].displayName, dbObjects[d].properties[p]);
 							that.#dbObjects[dbObjects[d].dbId].addProperty(property);
 						}
@@ -163,6 +182,21 @@ class Model{
 		});
 	}
 
+	setName(name){
+		this.#name = name;
+	}
+
+	getName(){
+		return this.#name;
+	}
+
+	hide(bool){
+		this.#hide = bool;
+		for(let f in this.#dbObjects){
+			this.#dbObjects[f].hide(bool);
+		}
+	}
+
 	_onTreeLoaded(that, id){
 		if(!that.#treeLoaded && id == this.#id){
 			that.#treeLoaded = true;
@@ -179,6 +213,10 @@ class Model{
 		if(this.#treeLoaded && this.#modelLoaded){
 			this._allLoaded(this);
 		}
+	}
+
+	getModel(){
+		return this.#model;
 	}
 }
 export default Model;

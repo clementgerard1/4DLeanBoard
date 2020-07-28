@@ -11,18 +11,27 @@ export default {
 			phasesDisplay : true,
 			weeksDisplay : true,
 			weekDisplay : false,
+			topclose : "0vw",
 		}
 	},
 	computed : {
 		top : function(){
 			if(!this.isOpen){
-				return "-9.2vw";
+				
+				return this.topclose;
 			}else{
 				return "0px";
 			}
 		}
 	},
+	mounted : function(){
+		window.addEventListener('resize', this.onResize);
+		this.onResize();
+	},
 	methods: {
+		onResize : function(){
+			this.topclose = (-document.querySelector(".planningMenu").clientWidth * 0.092) + "px";
+		},
 		handleTap : function(event){
 			if(event.target.id == "openPlanningMenu" || event.target.id == "openPlanningMenuButton"){
 				this.isOpen = !this.isOpen;

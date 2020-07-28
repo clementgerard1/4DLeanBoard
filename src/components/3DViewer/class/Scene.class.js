@@ -120,5 +120,13 @@ class Scene{
 
 	}
 
+	getModels(){
+		const models = [];
+		for(let d in this.#documents){
+			models.push(this.#documents[d].getModel());
+		}
+		return models;
+	}
+
 }
 export default Scene;

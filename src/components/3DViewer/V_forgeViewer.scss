@@ -22,12 +22,75 @@
 		align-items: center;
 		justify-content : center;
 
-		div{
+		> div{
 			width : 100%;
-			margin : 10px;
+			padding : 10px;
 			display : flex;
 			justify-content: center;
 			align-items : center;
+			background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.2) 100%);
+
+			.modelName{
+				margin : 10px;
+				font-family: Oswald;
+				font-style: normal;
+				font-weight: 500;
+				font-size: 24px;
+				text-indent: 3px;
+				text-transform: capitalize;
+
+				display : flex;
+				align-items : center;
+
+				*{
+					display : inline-block;
+				}
+
+			}
+
+			.modelName.shown{
+
+				.fileButton{
+					background: #FFFFFF;
+					/* Blackish */
+
+					border: 2px solid #000000;
+					box-sizing: border-box;
+					/* Drop shadow */
+
+					height : 30px;
+					width : 30px;
+					border-radius: 15px;
+					box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.5);
+				}
+				p{
+					color : #000000;
+				}
+
+			}
+
+			.modelName.hide{
+
+				.fileButton{
+					/* Blackish */
+
+					border: 2px solid #000000;
+					box-sizing: border-box;
+					/* Drop shadow */
+
+					filter: drop-shadow(2px 4px 4px rgba(0, 0, 0, 0.5));
+
+					height : 30px;
+					width : 30px;
+					border-radius: 15px;
+
+				}
+				p{
+					color : #808080;
+				}
+
+			}
+
 		}
 
 		svg{

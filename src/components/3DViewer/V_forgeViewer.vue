@@ -22,6 +22,7 @@ export default {
 			time : null,
 			playerinit : null,
 			menuopen : false,
+			modelShown : []
 		}
 	},
 	props : [
@@ -249,6 +250,13 @@ export default {
 		},
 		handleMenuOpen(){
 			this.menuopen = !this.menuopen;
+		},
+		handleMenuChange(id){
+			this.modelShown[id].model.hide(this.modelShown[id].model.isShown());
+			this.$set(this.modelShown, id, {
+				model : this.modelShown[id].model,
+				shown : this.modelShown[id].model.isShown()
+			});
 		}
 	},
 	mounted : function(){
@@ -259,6 +267,16 @@ export default {
 		V_timelineUtils.addListener("time", this, this.setTime);
 		this.scene.init(this.oauth, this.urns, this.objs, ()=>{
 			console.log("init done");
+
+			const models = this.scene.getModels();
+			for(let m in models){
+				this.modelShown[models[m].getId()] = {
+					shown : models[m].isShown(),
+					model : models[m]
+				}
+			}
+
+
 			this.createCustumMaterials();
 			/* this.setLayerDisplayMode(true);
 			this.setLayerDisplayed("Etage Rouge", true); */
@@ -294,11 +312,15 @@ export default {
 			
 			<div class="openMenu" >
 				<div v-if="menuopen">
-					<p>MENU</p>
+					<div class="modelName" v-for="model in modelShown" v-tap="() => handleMenuChange(model.model.getId())" v-bind:class='[ model.shown ? "shown" : "hide"]'> 
+						<a class="fileButton"></a> 
+						<p v-html="model.model.getName()"></p>
+					</div>
 				</div>
 			`+ modelBar + `
 			</div>
 		</div>
+
 		<div id="forgeV"></div>
 	</div>`,
 }
