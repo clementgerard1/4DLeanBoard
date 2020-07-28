@@ -6,12 +6,13 @@ class Memory{
 	static #materials = [];
 	static #textures = [];
 	static #viewer = null;
+	static #camera = null;
 	static #selected = {};
 	static #forgeObjects = {};
 	static #forgeObjectsNotLinked = {};
 	static #teamDisplay = false;
 	static #layerDisplay = false;
-	static #layerSelected = {};
+	static #layerSelected = [];
 	static #teamSelected = {};
 
 	static addMaterial(material, init = false, name = this.#viewer.model.getFragmentList().materialmap[material.id]){
@@ -38,6 +39,14 @@ class Memory{
 
 	static isTeamDisplayed(){
 		return this.#teamDisplay;
+	}
+
+	static setCamera(cam) {
+		this.#camera = cam;
+	}
+
+	static setTarget() {
+		this.#camera.setTarget(this.#camera.getTarget());
 	}
 
 	static isLayerDisplayed(){
@@ -67,23 +76,29 @@ class Memory{
 		}
 	}
 
-	static setLayerSelected(layer, bool){
+	static hideLayer(layer, bool){
 		if(bool){
-			this.#layerSelected[layer] = true;
+			this.#layerSelected.push(layer);
 		}else{
-			delete this.#layerSelected[layer];
+			delete this.#layerSelected[this.#layerSelected.indexOf(layer)];
 		}
 		for(let f in this.#forgeObjects){
-			this.#forgeObjects[f].isLayerSelected(this.#layerSelected);
+			this.#forgeObjects[f].hideInLayer(this.#layerSelected);
 		}
+		/* for(let f in this.#forgeObjectsNotLinked) {
+			this.#forgeObjectsNotLinked[f].hideInLayer(this.#layerSelected);
+		} */
 	}
 
-	static setLayerDisplayMode(bool){
+	static setLayerHideMode(bool){
 		if(this.#layerDisplay != bool){
 			this.#layerDisplay = bool;
 			for(let f in this.#forgeObjects){
-				this.#forgeObjects[f].isLayerDisplayed(bool);
+				this.#forgeObjects[f].isLayerHided(bool);
 			}
+			/* for(let f in this.#forgeObjectsNotLinked) {
+				this.#forgeObjectsNotLinked[f].isLayerHided(bool);
+			} */
 		}
 	}
 	

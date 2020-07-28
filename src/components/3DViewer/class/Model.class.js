@@ -3,6 +3,7 @@ import ForgeObject from "./ForgeObject.class.js";
 import IFCProperty from "./IFCProperty.class.js";
 import Fragment from "./Fragment.class.js";
 import Memory from "./Memory.class.js";
+import Camera from "./Camera.class.js";
 
 class Model{
 
@@ -54,6 +55,8 @@ class Model{
 	_onModelLoaded(model, that, callback){
 
 		this.#model = model;
+		let camera = new Camera();
+		Memory.setCamera(camera);
 
     	function userFunction(pdb, tab) {
 
@@ -102,8 +105,11 @@ class Model{
 							ifcId2Obj3D[tag].addForgeObject(that.#dbObjects[dbObjects[d].dbId]);
 							Memory.addForgeObject(that.#dbObjects[dbObjects[d].dbId], true);
 							that.#dbObjects[dbObjects[d].dbId].setModel(that.#model);
+							console.log("----------------")
 							for(let p in dbObjects[d].properties){
-								const property = new IFCProperty(dbObjects[d].properties[p].displayName, dbObjects[d].properties[p]);
+								console.log(dbObjects[d].properties[p])
+								const property = new IFCProperty(dbObjects[d].properties[p].displayName, dbObjects[d].properties[p].displayValue);
+								console.log(property);
 								that.#dbObjects[dbObjects[d].dbId].addProperty(property);
 							}
 

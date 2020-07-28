@@ -81,6 +81,8 @@ class Scene{
 		that.#viewer.setDisplayEdges(true);
 		that.#viewer.setOrbitPastWorldPoles(false);
 		that.#viewer.setReverseZoomDirection(true);
+		that.#viewer.setEnvMapBackground(true);
+		that.#viewer.setFocalLength(19);
 		// to disable auto highlighting when mouse over an object
 		//that.#viewer.disableHighlight(true);
 	    that.#initInfos.callback();
