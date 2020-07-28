@@ -21,6 +21,7 @@ body{
 		max-width : 40%;
 		height : 100vh;
 		max-height: 100vh;
+		position : relative;
 
 		#filterPanel{
 			position: absolute;
@@ -35,6 +36,28 @@ body{
 		}
 
 		box-sizing: border-box;
+
+		#copyright{
+			z-index: 10;
+			
+			position : absolute;
+			top : 0px;
+			right : 0px;
+			display : flex;
+			align-items : center;
+
+			p{
+				display: inline-block;
+				font-size: 10px;
+				color: #808080;
+			}
+
+
+			#infoIcon{
+				display: inline-block;
+				width : 30px;
+			}
+		}
 
 	}
 
@@ -80,12 +103,29 @@ body{
 		width : 100vw;
 		height : 100vh;
 	}
-
-	#copyright{
+	
+	#infoFrame{
 		position : absolute;
-		bottom : 15px;
-		left : 5px;
-		font-size: 10px;
+		top : 0px;
+		left : 0px;
+		width : 100vw;
+		height : 100vh;
+		z-index : 200;
+		background-color:rgba(255,255,255,0.3);
+		display: flex;
+		justify-content : center;
+		align-items : center;
+
+		div{
+			width : 50vw;
+			height : 50vh;
+			background-color : white;
+			border : 1px solid black;
+			display : flex;
+			justify-content : center;
+			align-items : center;
+			font-size: 30px;
+		}
 	}
 
 }

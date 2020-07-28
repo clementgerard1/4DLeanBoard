@@ -7,6 +7,8 @@ import V_player from "./components/Player/V_player.vue";
 import V_svgDefs from "./components/SixWeekView/V_SvgDefs.vue";
 import V_taskTableFrame from "./components/SixWeekView/V_taskTableFrame.vue";
 import V_modelSelect from "./components/V_modelSelect.vue";
+import V_phasesDisplay from "./components/Phases/V_phasesDisplay.vue";
+import V_planningMenu from "./components/PlanningMenu/V_planningMenu.vue";
 import openSocket from "socket.io-client";
 import V_timelineUtils from "./components/Utils/V_timelineUtils.class.js";
 import V_taskTableUtils from "./components/Utils/V_taskTableUtils.class.js";
@@ -23,6 +25,7 @@ import Config from "../config.js";
 import "animate.css";
 import TouchGesturesUtils from "./components/Utils/V_touchGesturesUtils.class.js";
 import V_socketUtils from "./components/Utils/V_socketUtils.class.js";
+import infoIcon from "./components/assets/info.svg";
 
 window.addEventListener("load", function(){
 	init();
@@ -103,6 +106,56 @@ function init(){
 		}
 	});
 
+	Vue.directive("pan", {
+		bind: function(el, binding) 
+		{
+			if(el.getAttribute("hammerid") == null){
+				el.setAttribute("hammerid", Utils.getId("hammer"));
+			}
+			if (typeof binding.value === "function") {
+				let hammer = TouchGesturesUtils.getHammer(el);
+				if(hammer == null){
+					hammer = new Hammer(el);
+					TouchGesturesUtils.addHammer(el, hammer);
+				};
+
+				hammer.get('pan').set({threshold : 1});
+				hammer.on("panstart", binding.value);
+				hammer.on("panmove", binding.value);
+				hammer.on("panend", binding.value);
+				hammer.on("pandown", binding.value);
+				hammer.on("panup", binding.value);
+
+				TouchGesturesUtils.updateHammer(el);
+			}
+		}
+	});
+
+	Vue.directive("doublePan", {
+		bind: function(el, binding) 
+		{
+			if(el.getAttribute("hammerid") == null){
+				el.setAttribute("hammerid", Utils.getId("hammer"));
+			}
+			if (typeof binding.value === "function") {
+				let hammer = TouchGesturesUtils.getHammer(el);
+				if(hammer == null){
+					hammer = new Hammer(el);
+					TouchGesturesUtils.addHammer(el, hammer);
+				} 
+
+				const doublePan = new Hammer.Pan(
+					{event: 'doublepan', pointers : 2 }
+				);
+				doublePan.recognizeWith(hammer.recognizers)
+				hammer.add(doublePan);
+				hammer.on("doublepan", binding.value);
+
+				TouchGesturesUtils.updateHammer(el);
+			}
+		}
+	});
+
 	const app = new Vue({
 		el : '#content',
 		components : {
@@ -110,6 +163,9 @@ function init(){
 			svgdefs : V_svgDefs,
 			modelselect : V_modelSelect,
 			filterpanel : V_filterPanel,
+			phasesdisplay : V_phasesDisplay,
+			planningmenu : V_planningMenu,
+			player : V_player,
 		},
 		data:{
 			playerinit : null,
@@ -118,6 +174,8 @@ function init(){
 			duration : null,
 			modelSelected : false,
 			selectPanel : false,
+			infoicon : infoIcon,
+			infoDisplay : false,
  		},
  		methods:{
  			findGetParameter : function(parameterName) {
@@ -170,6 +228,12 @@ function init(){
  			},
  			handleTap : function(){
  				this.loadModel("test");
+ 			},
+ 			infoTap : function(){
+ 				this.infoDisplay = true;
+ 			},
+ 			handleHideMenu : function(){
+ 				this.infoDisplay = false;
  			}
  		},
  		created : function(){
@@ -194,13 +258,28 @@ function init(){
  		},
  		template : `
  		<div>
-	 		<div id="content" v-if="model != null">
+	 		<div id="content">
 	 			<modelselect id="modelSelect" v-if="selectPanel" v-on:setModel="setModel($event)">
 	 				<p v-tap="handleTap"> No selected </p>
 	 			</modelselect>
-	 			<filterpanel id="filterPanel" v-bind:model="model"></filterpanel>
-	 			<tasktableframe v-if="modelSelected" id="taskTableFrame" v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit" v-bind:duration="duration"></tasktableframe>
-	 			<p id="copyright">UMR 3495 MAP-CRAI © 2020</p>
+
+	 			<div id="infoFrame" v-if="infoDisplay" v-tap="handleHideMenu">
+	 				<div>
+	 					<p>Bientôt un tutoriel</p>
+	 				</div>
+	 			</div>
+
+	 			<div id="planningFrame"  v-if="model != null">
+	 				<planningmenu></planningmenu>
+	 				<tasktableframe v-if="modelSelected" id="taskTableFrame" v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit" v-bind:duration="duration"></tasktableframe>
+	 				<phasesdisplay  v-bind:model="model" v-bind:timeline="timeline" class="phasesFrame" ></phasesdisplay>
+	 				<player id="mainPlayer" v-bind:duration="duration" v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit"></player>
+	 			</div>
+	 			
+	 			<div id="copyright">
+	 				<p>UMR 3495 MAP-CRAI © 2020</p>
+	 				<a v-tap="infoTap" id="infoIcon" v-html="infoicon"></a>
+	 			</div>
 	 		</div>
 	 		<svgdefs style="width : 0px; height: 0px;"></svgdefs>
 	 	</div>

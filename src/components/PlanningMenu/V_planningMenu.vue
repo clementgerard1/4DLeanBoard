@@ -16,7 +16,7 @@ export default {
 	computed : {
 		top : function(){
 			if(!this.isOpen){
-				return "-112px";
+				return "-9.2vw";
 			}else{
 				return "0px";
 			}

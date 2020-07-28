@@ -12,6 +12,7 @@ import Memory from "./class/Memory.class.js";
 
 import Tool from "./Tool.js";
 
+import modelBar from "./assets/modelBar.svg";
 
 
 export default {
@@ -20,6 +21,7 @@ export default {
 			scene : null,
 			time : null,
 			playerinit : null,
+			menuopen : false,
 		}
 	},
 	props : [
@@ -172,11 +174,13 @@ export default {
 		},
 
 		highlightTask() {
-			const selection = this.scene.getViewer().getSelection();
-
-			this.scene.getViewer().getSelection(function(selection){
-				console.log(selection);
-			});
+			const select = this.scene.getViewer().getAggregateSelection();
+			const selection = [];
+			for(let s in select){
+				for(let ss in select[s].selection){
+					selection.push(select[s].selection[ss]);
+				}
+			}
 			if(selection.length != 0){
 				this.scene.getViewer().clearSelection();
 				for(let s in selection){
@@ -242,6 +246,9 @@ export default {
 		},
 		setTime(time){
 			this.playerinit = time;
+		},
+		handleMenuOpen(){
+			this.menuopen = !this.menuopen;
 		}
 	},
 	mounted : function(){
@@ -283,6 +290,15 @@ export default {
 	template : `
 	<div id="forgeViewer">
 		<!-- forgeViewer -->
+		<div id="modelMenu"> 
+			
+			<div class="openMenu" >
+				<div v-if="menuopen">
+					<p>MENU</p>
+				</div>
+			`+ modelBar + `
+			</div>
+		</div>
 		<div id="forgeV"></div>
 	</div>`,
 }

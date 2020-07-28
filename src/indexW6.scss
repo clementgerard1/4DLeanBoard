@@ -7,29 +7,46 @@ body{
 }
 
 #content{
-	height: 100vh;
-	max-height: 100vh;
-	width : 100vw;
-	max-width: 100vw;
+
 
 	*{
 		box-sizing: border-box;
 	}
 
-	#filterPanel{
-		position: absolute;
-		z-index:10;
-	}
+	#planningFrame{
 
-	#taskTableFrame{
+		float:right;
+	 	min-height: 0px;
+	 	position: relative;
+
+		border-left : 5px solid black;
+		height: 100vh;
+		max-height: 100vh;
+		width : 100vw;
+		max-width: 100vw;
 		box-sizing: border-box;
+
+		background: v.$light;
 		*{
 			box-sizing: border-box;
 		}
-	 	min-height: 0px;
-		width : 100%;
-		height : 100vh;
-		max-height: 100vh;
+
+		#taskTableFrame{
+			height : calc(100vh - #{v.$playerHeight} - 100px);
+			overflow-x: hidden;
+		}
+
+		.phasesFrame{
+			z-index: 2;
+			border-top : 1px solid black;
+		}
+
+		#mainPlayer{
+			position : absolute;
+			height : v.$playerHeight;
+			bottom : 0px;
+			width : 100%;
+		}
 	}
 
 	#modelSelect{
@@ -42,11 +59,47 @@ body{
 
 	#copyright{
 		position : absolute;
-		top : calc(100vh - 25px);
-		right : 5px;
-		font-size: 10px;
-		padding: 5px;
-		background-color: rgba(255,255,255,0.4);
+		top : 0px;
+		right : 15px;
+		display : flex;
+		align-items : center;
+		z-index:30;
+
+		p{
+			display: inline-block;
+			font-size: 10px;
+			color: #808080;
+		}
+
+
+		#infoIcon{
+			display: inline-block;
+			width : 30px;
+		}
+	}
+
+	#infoFrame{
+		position : absolute;
+		top : 0px;
+		left : 0px;
+		width : 100vw;
+		height : 100vh;
+		z-index : 200;
+		background-color:rgba(255,255,255,0.3);
+		display: flex;
+		justify-content : center;
+		align-items : center;
+
+		div{
+			width : 50vw;
+			height : 50vh;
+			background-color : white;
+			border : 1px solid black;
+			display : flex;
+			justify-content : center;
+			align-items : center;
+			font-size: 30px;
+		}
 	}
 
 }

@@ -382,6 +382,19 @@ export default {
 				<image id="image2_planBar" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAAAjElEQVRIie2WOw6AIBBEnx7LTy/x2MaLqOcQG02QQFQULNiXbDNsmGUoAAQhAT2wADpSzYByGc8RTY+aXMZmQwU0lubrD9JL1wS7XnjWPucqJoARGKz+EN17Yh8r7hif6ifyuGNz86tI7EH0G/3pHX+GGItxPsY10P5hnPR1+u0joCKbT0D3LhtBuMEGh0iZz80lV3QAAAAASUVORK5CYII="/>
 				<image id="image3_planBar" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAAAbklEQVRIie2VQQrAIAwEp6X//5Ttu+zJS1rRQJQWd8BbwhgSEhArkoAc/JKV7IOLKORJnh9yUe/X6Yx/9Bdgq4hbPbF53niORoKX7g/NmmqJJZZ4HNELpPsKRVX8tr8LQ3e1m/WG63Ni97AIYbkBDxItquXeH/4AAAAASUVORK5CYII="/>
 
+
+				<filter id="filter0_b_model3DMenu" x="-10" y="-10" width="340" height="52" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+				<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+				<feGaussianBlur in="BackgroundImage" stdDeviation="5"/>
+				<feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur"/>
+				<feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur" result="shape"/>
+				</filter>
+				
+				<linearGradient id="paint0_linear_model3DMenu" x1="160" y1="32" x2="160" y2="1.39876e-05" gradientUnits="userSpaceOnUse">
+				<stop stop-color="white"/>
+				<stop offset="1" stop-color="white" stop-opacity="0.2"/>
+				</linearGradient>
+
 			</defs>
 		</svg>
 

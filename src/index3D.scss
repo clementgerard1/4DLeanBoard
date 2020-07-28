@@ -15,6 +15,8 @@ body{
 	#viewerFrame{
 		position: relative;
 		display:inline-block;
+		background : v.$light;
+		box-sizing: border-box;
 
 		width : 100%;
 		max-width : 100vw;
@@ -27,13 +29,10 @@ body{
 		}
 
 		#forgeViewer{
-			height : calc(100vh - #{v.$playerHeight} - #{v.$filterPanelHeight});
+			height : 100vh;
 			overflow: hidden;
 			position: relative;
-		}
-
-		#mainPlayer{
-			height : v.$playerHeight;
+			background:none!important;
 		}
 
 	}
@@ -48,9 +47,47 @@ body{
 
 	#copyright{
 		position : absolute;
-		top : calc(100vh - #{v.$playerHeight + 15px});
-		left : 5px;
-		font-size: 10px;
+		top : 0px;
+		right : 0px;
+		display : flex;
+		align-items : center;
+
+		p{
+			display: inline-block;
+			font-size: 10px;
+			color: #808080;
+		}
+
+
+		#infoIcon{
+			display: inline-block;
+			width : 30px;
+		}
 	}
+	
+	#infoFrame{
+		position : absolute;
+		top : 0px;
+		left : 0px;
+		width : 100vw;
+		height : 100vh;
+		z-index : 200;
+		background-color:rgba(255,255,255,0.3);
+		display: flex;
+		justify-content : center;
+		align-items : center;
+
+		div{
+			width : 50vw;
+			height : 50vh;
+			background-color : white;
+			border : 1px solid black;
+			display : flex;
+			justify-content : center;
+			align-items : center;
+			font-size: 30px;
+		}
+	}
+
 
 }

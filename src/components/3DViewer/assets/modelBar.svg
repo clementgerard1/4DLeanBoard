@@ -1,0 +1,6 @@
+<svg width="320" height="32" viewBox="0 0 320 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g opacity="0.5" filter="url(#filter0_b_model3DMenu)">
+<path v-tap="handleMenuOpen" d="M320 2C320 18.5685 306.569 32 290 32L30 32C13.4315 32 -1.17422e-06 18.5686 -2.62268e-06 2.00003L-2.79753e-06 2.79753e-05L320 0L320 2Z" fill="url(#paint0_linear_model3DMenu)"/>
+</g>
+<path v-tap="handleMenuOpen" d="M175 16L160 16L145 16" stroke="#808080" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

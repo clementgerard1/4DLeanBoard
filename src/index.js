@@ -25,6 +25,7 @@ import Config from "../config.js";
 import "animate.css";
 import TouchGesturesUtils from "./components/Utils/V_touchGesturesUtils.class.js";
 import V_socketUtils from "./components/Utils/V_socketUtils.class.js";
+import infoIcon from "./components/assets/info.svg";
 
 window.addEventListener("load", function(){
 	init();
@@ -177,6 +178,8 @@ function init(){
 			modelSelected : false,
 			selectPanel : false,
 			forgeReady : false,
+			infoicon : infoIcon,
+			infoDisplay : false,
  		},
  		methods:{
  			findGetParameter : function(parameterName) {
@@ -231,6 +234,12 @@ function init(){
 
 				})
 				.catch( error => console.error(error));
+ 			},
+ 			infoTap : function(){
+ 				this.infoDisplay = true;
+ 			},
+ 			handleHideMenu : function(){
+ 				this.infoDisplay = false;
  			}
  		},
  		created : function(){
@@ -260,10 +269,19 @@ function init(){
 	 			<modelselect id="modelSelect" v-if="selectPanel" v-on:setModel="setModel($event)">
 	 			</modelselect>
 
+	 			<div id="infoFrame" v-if="infoDisplay" v-tap="handleHideMenu">
+	 				<div>
+	 					<p>Bientôt un tutoriel</p>
+	 				</div>
+	 			</div>
+
 	 			<div v-if="forgeReady" id="viewerFrame">
 	 				<filterpanel id="filterPanel" v-bind:model="model"></filterpanel>
 	 				<forgeviewer id="forgeViewer" v-bind:model="model" v-bind:timeline="timeline" v-bind:urns="urns" v-bind:oauth="oauth"></forgeviewer>
-	 				<p id="copyright">UMR 3495 MAP-CRAI © 2020</p>
+	 				<div id="copyright">
+		 				<p>UMR 3495 MAP-CRAI © 2020</p>
+		 				<a v-tap="infoTap" id="infoIcon" v-html="infoicon"></a>
+		 			</div>
 	 			</div>
 	 			<div v-if="forgeReady" id="planningFrame">
 	 				<planningmenu></planningmenu>

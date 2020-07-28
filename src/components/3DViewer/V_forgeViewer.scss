@@ -6,3 +6,37 @@
 	width : 100%;
 	height: 100%;
 }
+
+#modelMenu{
+	background-color : rgba(0,0,0,0);
+	position : absolute;
+	z-index: 0;
+	width : 100%;
+	display : flex;
+	justify-content : center;
+
+	.openMenu{
+		display : flex;
+		flex-direction : column;
+		width : 100%;
+		align-items: center;
+		justify-content : center;
+
+		div{
+			width : 100%;
+			margin : 10px;
+			display : flex;
+			justify-content: center;
+			align-items : center;
+		}
+
+		svg{
+
+			width : 25%;
+		}
+	}
+
+	.menuContent{
+
+	}
+}
