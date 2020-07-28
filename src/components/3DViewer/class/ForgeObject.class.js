@@ -12,8 +12,8 @@ class ForgeObject{
 	#object3D;
 	#teamDisplayed;
 	#teamSelected;
-	#layerDisplayed;
-	#layerSelected;
+	#layerHided;
+	#inLayerSelected;
 
 	constructor(id = Utils.getId("forgeObjects")){
 		this.#id = id;
@@ -25,8 +25,8 @@ class ForgeObject{
 		this.#object3D = null;
 		this.#teamDisplayed = false;
 		this.#teamSelected = true;
-		this.#layerDisplayed = false;
-		this.#layerSelected = true;
+		this.#layerHided = false;
+		this.#inLayerSelected = false;
 	}
 
 	setInvisible(bool){
@@ -35,7 +35,10 @@ class ForgeObject{
 	}
 
 	addProperty(property){
-		this.#properties[property.name] = property;
+		/* if(typeof this.#properties[property.getName()] != "undefined") {
+			console.log(property.getName(), 'double');
+		} */
+		this.#properties[property.getName()] = property;
 	}
 
 	addFragment(fragment){
@@ -82,13 +85,19 @@ class ForgeObject{
 		this.updateMaterial();
 	}
 
-	isLayerSelected(layers){
-		if(typeof layers[this.#properties["Layer"]] != "undefined"){
-			this.#layerSelected = true;
+	hideInLayer(layers){
+		/* Memory.getViewer().getProperties(this.#id, (prop) => {
+			console.log(prop);
+		}, (err) => {
+			console.log(err);
+		}); */
+		console.log(this.#properties);
+		if(layers.includes(this.#properties.layer)){
+			this.#inLayerSelected = true;
 		}else{
-			this.#layerSelected = false;
+			this.#inLayerSelected = false;
 		}
-		this.updateMaterial();
+		this.isLayerHided(this.#layerHided);
 	}
 
 	setColor(bool, color){
@@ -98,10 +107,20 @@ class ForgeObject{
 		}
 	}
 
-	isLayerDisplayed(bool){
-		this.#layerDisplayed = bool;
-		//vv problème lors de cet appel
-		this.updateMaterial();
+	isLayerHided(bool){
+		const viewer = Memory.getViewer();
+		
+		//console.log(this.#inLayerSelected);
+		if(bool) {
+			if(this.#inLayerSelected) {
+				console.log(this.#id);
+				viewer.hide(this.#id);
+				this.#layerHided = true;
+			}
+		}else {
+			viewer.show(this.#id);
+			this.#layerHided = false;
+		}
 	}
 
 	getId(){
@@ -134,10 +153,6 @@ class ForgeObject{
 				materialName = this.#object3D.getParent().getTask().getTaskTeam().getId() + "-team";
 			}else{	
 				materialName = this.#object3D.getParent().getTask().getTaskTeam().getId() + "-not-team";
-			}
-		}else if(this.#layerDisplayed) {
-			if(this.#layerSelected) {
-				//console.log(this.#id);
 			}
 		}else{
 			if(this.#selected){

@@ -11,6 +11,7 @@ import Scene from "./class/Scene.class.js";
 import Memory from "./class/Memory.class.js";
 
 import Tool from "./Tool.js";
+import Camera from "./class/Camera.class.js";
 
 
 
@@ -227,17 +228,21 @@ export default {
 			Memory.setTeamDisplayMode(bool);
 			Memory.refresh();
 		},
-		setLayerDisplayed(layerName, bool){
-			Memory.setLayerSelected(layerName, bool);
+		hideLayer(layerName, bool){
+			Memory.hideLayer(layerName, bool);
 			Memory.refresh();
 		},
 
-		setLayerDisplayMode(bool){
-			Memory.setLayerDisplayMode(bool);
+		setLayerHideMode(bool){
+			Memory.setLayerHideMode(bool);
 			Memory.refresh();
 		},
 		setTime(time){
 			this.playerinit = time;
+		},
+		refreshCamera() {
+			Memory.setTarget();
+			Memory.refresh();
 		}
 	},
 	mounted : function(){
@@ -249,8 +254,9 @@ export default {
 		this.scene.init(this.oauth, this.urns, this.objs, ()=>{
 			console.log("init done");
 			this.createCustumMaterials();
-			/* this.setLayerDisplayMode(true);
-			this.setLayerDisplayed("Etage Rouge", true); */
+			this.hideLayer("Etage Rouge", true);
+			this.hideLayer("Etage Bleu", true);
+			this.setLayerHideMode(true);
 			//this.allTransparent();
 			//this.allInvisible(true);
 			//this.allToRed(true);
@@ -260,10 +266,13 @@ export default {
 				this.select(tasks[t].getObject4D(), true);
 			}
 			this.scene.addListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, this.highlightTask);
-			this.scene.setLightPreset(7);
+			this.scene.addListener(Autodesk.Viewing.CAMERA_CHANGED_EVENT, this.refreshCamera);
+			this.scene.setLightPreset(15);
 
 			this.scene.setCube(true);
-			console.log(Memory.getViewer());
+			/* Memory.getViewer().forEachExtension( (ext) => {
+				console.log(ext);
+			}); */
 
 			const tool = new Tool(this.scene.getViewer());
 			this.scene.getViewer().toolController.registerTool(tool);

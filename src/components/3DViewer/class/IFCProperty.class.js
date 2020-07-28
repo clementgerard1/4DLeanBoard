@@ -16,5 +16,9 @@ class IFCProperty{
 		return this.#name;
 	}
 
+	getId(){
+		return this.#id;
+	}
+
 }
 export default IFCProperty;
