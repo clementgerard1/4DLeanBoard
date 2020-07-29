@@ -36,7 +36,6 @@ class Model{
 		this.callback = callback;
 		this.#viewer.addEventListener(Autodesk.Viewing.OBJECT_TREE_CREATED_EVENT, () => { this._onTreeLoaded(this, this.#id) });
 
-		if(this.#id > 4) return;
 		viewer.loadModel(path, {
             keepCurrentModels: true,
             globalOffset: {x:0,y:0,z:0}
@@ -123,7 +122,6 @@ class Model{
 						ifcId2Obj3D[tag].addForgeObject(that.#dbObjects[dbObjects[d].dbId]);
 						Memory.addForgeObject(that.#dbObjects[dbObjects[d].dbId], true);
 						for(let p in dbObjects[d].properties){
-
 							if(!nameDone && dbObjects[d].properties[p].displayName == "Source File"){
 								const toSplit = dbObjects[d].properties[p].displayValue.split("_");
 								const namee = toSplit[toSplit.length - 1].replace(".ifc", "");
@@ -134,6 +132,13 @@ class Model{
 						}
 
 					}else{
+						for(let p in dbObjects[d].properties){
+							if(!nameDone && dbObjects[d].properties[p].displayName == "Source File"){
+								const toSplit = dbObjects[d].properties[p].displayValue.split("_");
+								const namee = toSplit[toSplit.length - 1].replace(".ifc", "");
+								that.setName(namee.charAt(0).toUpperCase() + namee.slice(1));
+							}
+						}
 						that.#dbObjects[dbObjects[d].dbId].isLinked(false);
 						that.#viewer.lockSelection(dbObjects[d].dbId, true, that.#model)
 						Memory.addForgeObject(that.#dbObjects[dbObjects[d].dbId], false);

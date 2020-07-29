@@ -22,6 +22,7 @@ export default {
 			time : null,
 			isDisplayed : true,
 			playerWidth : "0%",
+			width2 : "10px",
 		}
 	},
 	computed : {
@@ -42,6 +43,7 @@ export default {
 		watchTime : function(time){
 			this.time = time;
 			this.playerWidth = (((this.time * 7) / this.model.getDuration()) * 100) + "%";
+			this.width2 = ((7 / this.model.getDuration()) * 100) + "%";
 		},
 		displayed : function(bool){
 			this.isDisplayed = bool;
@@ -55,7 +57,7 @@ export default {
 	<div v-if="isDisplayed" id="phaseF">
 		<!-- PhasesFrame -->
 		<div class="playerLineWrapper">
-			<div class="playerLine" v-bind:style="{ width : playerWidth, height : ((phases.length - 1) * 41 - 8) + 'px'}"></div>
+			<div class="playerLine" v-bind:style="{ left : playerWidth, width : width2, height : ((phases.length - 1) * 41 - 8) + 'px'}"></div>
 		</div>
 		<phaseitem v-for="p in phases" :key="p.getId()" v-bind:time="time" v-bind:model="_model" v-bind:timeline="_timeline" v-bind:phase="p"></phaseitem>
 	</div>`,

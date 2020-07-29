@@ -13,7 +13,7 @@
 	</g>
 	<g v-tap="()=>handleMenuTap(0)" v-else="milestoneDisplay">
 		<text fill='#808080' xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="24" font-weight="500" letter-spacing="0em"><tspan x="377" y="65.873">Jalon</tspan></text>
-		<rect opacity='#0.5' x="342" y="41" width="30" height="30" fill="url(#pattern0_planBar)"/>
+		<rect opacity='0.5' x="342" y="41" width="30" height="30" fill="url(#pattern0_planBar)"/>
 	</g>
 
 	<g  v-tap="()=>handleMenuTap(1)" v-if="phasesDisplay">

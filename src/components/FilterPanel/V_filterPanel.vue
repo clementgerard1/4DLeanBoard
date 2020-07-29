@@ -62,16 +62,7 @@ export default {
 	},
 	computed: {
 		offsetclass : function(){
-			if(this.menu3DOpen){
-				return "offset3D";
-			}
-			if(this.menuPlanningOpen){
-				return "offsetPlanning";
-			}
-			if(this.menuDisplayOpen){
-				return "offsetDisplay";
-			}
-			return "offset";
+			return "offset3D";
 		}
 	},
 	created: function(){
@@ -201,72 +192,10 @@ export default {
 	},*/
 	template : `
 	<div class="filterPanel">
-		<div class="mainMenu">
-			<div v-tap="handleMenuTap" class="filterMenu">
-				` + MenuStart +  `
-			</div>
-			<div class="itemContainer" v-if="menuOpen">
-				<div class="menuItem" v-tap="handle3DTap">
-					` + Menu3D +  `
-				</div>
-				<div class="menuItem" v-tap="handlePlanningTap">
-					` + MenuPlanning +  `
-				</div>
-				<div class="menuItem" v-tap="handleDisplayTap">
-					` + MenuDisplay +  `
-				</div>
-			</div>
-		</div>
 		<div class="subMenuContainer">
 			<div v-bind:class="offsetclass"></div>
 
-			<div key="menu3D" class="menu3D" v-if="menu3DOpen">
-				<div key="menu3DArchi" v-tap="handleArchiTap">
-					<standardbutton v-bind:condition="archicond"></standardbutton>
-					<p>Architecture</p>
-				</div>
-				<div key="menu3DStruct" v-tap="handleStructTap">
-					<standardbutton v-bind:condition="structcond"></standardbutton>
-					<p>Structure</p>
-				</div>
-				<div key="menu3DMEP" v-tap="handleMEPTap">
-					<standardbutton v-bind:condition="mepcond"></standardbutton>
-					<p>MEP</p>
-				</div>
-				<div key="menu3DConstruct" v-tap="handleConstructTap">
-					<standardbutton v-bind:condition="constructcond"></standardbutton>
-					<p>Construction</p>
-				</div>
-			</div>
-
-			<div key="menuPlanning" class="menuPlanning" v-if="menuPlanningOpen">
-				<div key="menuPlanningPlay" v-tap="handleSimplePlayTap">
-					<standardbutton v-bind:condition="simpleplaycond"></standardbutton>
-					<p>Simple Play</p>
-				</div>
-				<div key="menuPlanningMilestone" v-tap="handleMilestonesTap">
-					<standardbutton v-bind:condition="milestonescond"></standardbutton>
-					<p>Milestones</p>
-				</div>
-				<div key="menuPlanningPhase" v-tap="handlePhasesTap">
-					<standardbutton v-bind:condition="phasescond"></standardbutton>
-					<p>Phases</p>
-				</div>
-				<div key="menuPlanningWeeks" v-tap="handleWeeksTap">
-					<standardbutton v-bind:condition="weekscond"></standardbutton>
-					<p>6 weeks</p>
-				</div>
-			</div>
-
 			<div key="menuDisplay" class="menuDisplay" v-if="menuDisplayOpen">
-				<div key="menuDisplayBasic" v-tap="handleBasicDisplay">
-					<standardbutton v-bind:condition="basicdisplaycond"></standardbutton>
-					<p>Basic colors</p>
-				</div>
-				<div key="menuDisplayTeam" v-tap="handleTeamDisplay">
-					<standardbutton v-bind:condition="teamdisplaycond"></standardbutton>
-					<p>Firm colors</p>
-				</div>
 				<div v-if="teamdisplaycond">
 					<div class="offsetTeamDisplay"></div>
 					<div>
@@ -276,8 +205,26 @@ export default {
 						</div>
 					</div>
 				</div>
+				<div key="menuDisplayTeam" v-tap="handleTeamDisplay">
+					<standardbutton v-bind:condition="teamdisplaycond"></standardbutton>
+					<p>Firm colors</p>
+				</div>
+				<div key="menuDisplayBasic" v-tap="handleBasicDisplay">
+					<standardbutton v-bind:condition="basicdisplaycond"></standardbutton>
+					<p>Basic colors</p>
+				</div>
 			</div>
 
+		</div>
+		<div class="mainMenu">
+			<div v-tap="handleMenuTap" class="filterMenu">
+				` + MenuStart +  `
+			</div>
+			<div class="itemContainer" v-if="menuOpen">
+				<div class="menuItem" v-tap="handleDisplayTap">
+					` + MenuDisplay +  `
+				</div>
+			</div>
 		</div>
 	</div>`,
 }

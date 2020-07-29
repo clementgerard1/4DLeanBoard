@@ -114,7 +114,7 @@ export default {
 			<playermilestone v-if="displayM" v-bind:widthh="widthh" v-bind:time="time" v-for="m in milestones" :key="m.getId()" v-bind:milestone="m"></playermilestone>
 
 			<g filter="url(#filter0_d_playerButton)">
-				<circle class="playerButton" v-bind:cx="playerX" r="21" stroke-width="2" stroke="white" fill="#97D7C7"/>
+				<circle class="playerButton" v-bind:cx="playerX" r="21" stroke-width="2" stroke="black" fill="white"/>
 			</g>
 
 		</svg>

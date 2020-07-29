@@ -23,7 +23,7 @@ class Tool extends Autodesk.Viewing.ToolInterface {
         delete this.handleButtonDown;
         delete this.handleButtonUp;
         delete this.handleSingleClick;
-        //delete this.handleWheelInput;
+        delete this.handleWheelInput;
         delete this.handleGesture;
     }
  
@@ -68,6 +68,7 @@ class Tool extends Autodesk.Viewing.ToolInterface {
     };
  
  	handleGesture(event){
+        console.log(event);
  		//console.log(event.type);
  		if(event.type == "pinchmove" || event.type == "pinchstart" || event.type == "pinchend"){
 	    	const vec = this.viewer.navigation.getEyeToCenterOfBoundsVec(this.utilities.getBoundingBox());

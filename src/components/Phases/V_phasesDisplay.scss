@@ -4,7 +4,7 @@
 	position : relative;
 	pointer-events : none;
 	background-color:rgba(0,0,0,0);
-	padding-left : v.$playerDateWidth + 5px;
+	padding-left : v.$playerDateWidth;
 	padding-right : v.$playerDateWidth;
 	width : 100%;
 
@@ -14,7 +14,9 @@
 		height : 0px;		
 		.playerLine{
 			z-index: 15;
-			border-right : 5px solid v.$greenbluish_light;
+			/*border-right : 5px solid v.$greenbluish_light;*/
+			background-color : v.$greenbluish_light;
+			opacity : 0.6;
 			position : absolute;
 		}
 	}

@@ -257,6 +257,7 @@ export default {
 			this.menuopen = !this.menuopen;
 		},
 		handleMenuChange(id){
+
 			this.modelShown[id].model.hide(this.modelShown[id].model.isShown());
 			this.$set(this.modelShown, id, {
 				model : this.modelShown[id].model,
