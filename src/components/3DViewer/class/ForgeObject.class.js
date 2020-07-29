@@ -90,6 +90,8 @@ class ForgeObject{
 		}, (err) => {
 			console.log(err);
 		}); */
+
+		// layering ne marche pas pour le moment
 		if(layers.includes(this.#properties.layer)){
 			this.#inLayerSelected = true;
 		}else{

@@ -85,7 +85,6 @@ class Memory{
 			delete this.#layerSelected[this.#layerSelected.indexOf(layer)];
 		}
 		for(let f in this.#forgeObjects){
-			console.log(this.#forgeObjects[f]);
 			for(let ff in this.#forgeObjects[f]){
 				this.#forgeObjects[f][ff].hideInLayer(this.#layerSelected);
 			}
