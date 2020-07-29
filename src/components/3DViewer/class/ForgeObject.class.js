@@ -64,15 +64,6 @@ class ForgeObject{
 		this.updateMaterial();
 	}
 
-	hide(bool) {
-		const viewer = Memory.getViewer();
-		if(bool) {
-			viewer.hide(this.#id, this.#model);
-		}else {
-			viewer.show(this.#id, this.#model);
-		}
-	}
-
 	setAllMaterials(materialName){
 		for(let f in this.#fragments){
 			this.#fragments[f].setMaterial(materialName);
@@ -99,6 +90,8 @@ class ForgeObject{
 		}, (err) => {
 			console.log(err);
 		}); */
+
+		// layering ne marche pas pour le moment
 		if(layers.includes(this.#properties.layer)){
 			this.#inLayerSelected = true;
 		}else{
@@ -115,24 +108,26 @@ class ForgeObject{
 	}
 
 	isLayerHided(bool){
-		const viewer = Memory.getViewer();
+		//const viewer = Memory.getViewer();
 		
 		//console.log(this.#inLayerSelected);
 		if(bool) {
 			if(this.#inLayerSelected) {
-				viewer.hide(this.#id, this.#model);
+				//viewer.hide(this.#id, this.#model);
 				this.#layerHided = true;
 			}
 		}else {
-			viewer.show(this.#id, this.#model);
+			//viewer.show(this.#id, this.#model);
 			this.#layerHided = false;
 		}
+		this.updateMaterial();
 	}
 
 	getId(){
 		return this.#id;
 	}
 
+	//
 	hide(bool){
 		if(this.#model != null){
 			const viewer = Memory.getViewer();
@@ -143,6 +138,7 @@ class ForgeObject{
 			}
 		}
 	}
+	//
 
 	isSelected(bool){
 		if(bool != this.#selected){
@@ -164,11 +160,11 @@ class ForgeObject{
 		if(!this.#selected) {
 			viewer.setThemingColor(this.#id, null, this.#model);
 		}
-		this.hide(false);
+		viewer.show(this.#id, this.#model);
 		if(this.#teamDisplayed){
 			if(!this.#linked){
 				materialName = "init";
-				this.hide(true);
+				viewer.hide(this.#id, this.#model);
 			}else if(this.#teamSelected){
 				const color = this.#object3D.getParent().getTask().getTaskTeam().getColorClass();
 				const hexa = scssVariables[color.charAt(0).toLowerCase() + color.slice(1)];
@@ -180,8 +176,14 @@ class ForgeObject{
 				//materialName = this.#object3D.getParent().getTask().getTaskTeam().getId() + "-team";
 			}else{	
 				//materialName = this.#object3D.getParent().getTask().getTaskTeam().getId() + "-not-team";
-				this.hide(true);
+				viewer.hide(this.#id, this.#model);
 				materialName = "init";
+			}
+		}else if(this.#layerHided){
+			if(this.#inLayerSelected){
+				viewer.hide(this.#id, this.#model)
+			}else{
+				viewer.show(this.#id, this.#model);
 			}
 		}else{
 			if(this.#selected){
