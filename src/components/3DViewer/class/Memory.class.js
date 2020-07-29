@@ -85,6 +85,7 @@ class Memory{
 			delete this.#layerSelected[this.#layerSelected.indexOf(layer)];
 		}
 		for(let f in this.#forgeObjects){
+			console.log(this.#forgeObjects[f]);
 			for(let ff in this.#forgeObjects[f]){
 				this.#forgeObjects[f][ff].hideInLayer(this.#layerSelected);
 			}
@@ -132,6 +133,7 @@ class Memory{
 		}
 	}
 
+	//
 	static allToRed(bool){
 		const color = new THREE.Vector4(1,0,0,1);
 		const anomalies = new THREE.Vector4(0,0,1,1);
@@ -148,6 +150,7 @@ class Memory{
 			}
 		}
 	}
+	//
 
 	static setAllInvisible(bool){
 		for(let f in this.#forgeObjectsNotLinked){
