@@ -15,21 +15,24 @@ class Memory{
 	static #layerSelected = [];
 	static #teamSelected = {};
 
-	static addMaterial(material, init = false, name = this.#viewer.model.getFragmentList().materialmap[material.id]){
-		if(init){
-			//material.envMap = null;
-			//material.reflectivity = 0;
-			this.#viewer.impl.getMaterials().addMaterial(name, material, true);
-			//console.log(name);
-			//material.envMap = null;
-			//material.reflectivity = 0;
-			//material.needsUpdate = true;
-			//console.log(this.#viewer.impl.matman());
-		}
-		const id = this.#viewer.model.getFragmentList().materialmap[material.id];
-		if(typeof this.#materials[id] == "undefined") {
-			if(typeof name == "undefined") name = Utils.getGuid("materialName");
-			this.#materials[name] = material;
+	static addMaterial(material, init = false, name){
+		if(material != "undefined"){
+			if(name == "undefined") name = this.#viewer.model.getFragmentList().materialmap[material.id];
+			if(init){
+				//material.envMap = null;
+				//material.reflectivity = 0;
+				this.#viewer.impl.getMaterials().addMaterial(name, material, true);
+				//console.log(name);
+				//material.envMap = null;
+				//material.reflectivity = 0;
+				//material.needsUpdate = true;
+				//console.log(this.#viewer.impl.matman());
+			}
+			const id = this.#viewer.model.getFragmentList().materialmap[material.id];
+			if(typeof this.#materials[id] == "undefined") {
+				if(typeof name == "undefined") name = Utils.getGuid("materialName");
+				this.#materials[name] = material;
+			}
 		}
 	}
 

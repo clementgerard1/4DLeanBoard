@@ -2,10 +2,12 @@
 
 $light: linear-gradient(180deg, #D9D9D9 0%, #F7F7F7 100%);
 $dark: #495C79;
+$pinkish: #8B0699;
+$pinkish: #8B0699;
 $white: #FFFFFF;
 $blackish: #000000;
 $orange: #E98106;
-$greenbluish_light: #97D7C7;
+$greenbluish_light: #3EBD4B;
 $yellowish: #E7CB00;
 $blueish: #6C8CBF;
 $white_transparent: linear-gradient(180deg, #CBC8C8 0%, #FFFFFF 70.31%);
@@ -40,6 +42,10 @@ $ligth_grey: #aaaaaa;
 
 .BG_Blackish{
 	background : $blackish;
+}
+
+.BG_Pinkish{
+	background : $pinkish;
 }
 
 .BG_Orange{
@@ -145,4 +151,5 @@ $currentWeek : $green;
 	filterPanelHeight : $filterPanelHeight;
 	phaseGrey : $phaseGrey;
 	playerDateWidth : $playerDateWidth;
+	pinkish : $pinkish;
 }
