@@ -182,7 +182,7 @@ export default {
 				}
 			}
 			if(selection.length != 0){
-				this.scene.getViewer().clearSelection();
+				//this.scene.getViewer().clearSelection();
 				for(let s in selection){
 					const dbId = selection[s].selection;
 					const model = selection[s].model;
@@ -313,6 +313,8 @@ export default {
 			const tool = new Tool(this.scene.getViewer());
 			this.scene.getViewer().toolController.registerTool(tool);
 			this.scene.getViewer().toolController.activateTool('tool');
+			this.scene.getViewer().impl.selectionMaterialBase.opacity = 0;
+			this.scene.getViewer().impl.selectionMaterialTop.opacity = 0;
 
 			V_4DUtils.setForgeViewer(this);
 			V_timelineUtils.removeListener("time", this);
