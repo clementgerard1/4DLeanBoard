@@ -1,5 +1,6 @@
 import Utils from "../../../class/Utils.class.js";
 import Memory from "./Memory.class.js";
+import scssVariables from "../../SixWeekView/assets/_variables.scss";
 
 class ForgeObject{
 
@@ -14,6 +15,7 @@ class ForgeObject{
 	#teamSelected;
 	#layerHided;
 	#inLayerSelected;
+	#linked;
 
 	constructor(id = Utils.getId("forgeObjects")){
 		this.#id = id;
@@ -27,6 +29,7 @@ class ForgeObject{
 		this.#teamSelected = true;
 		this.#layerHided = false;
 		this.#inLayerSelected = false;
+		this.linked = false;
 	}
 
 	setInvisible(bool){
@@ -49,7 +52,12 @@ class ForgeObject{
 		this.#model = model;
 	}
 
+	getModel(){
+		return this.#model;
+	}
+
 	isLinked(bool) {
+		this.#linked = bool;
 		if(!bool) {
 			this.#state = "built";
 		}
@@ -59,9 +67,9 @@ class ForgeObject{
 	hide(bool) {
 		const viewer = Memory.getViewer();
 		if(bool) {
-			viewer.hide(this.#id);
+			viewer.hide(this.#id, this.#model);
 		}else {
-			viewer.show(this.#id);
+			viewer.show(this.#id, this.#model);
 		}
 	}
 
@@ -91,7 +99,6 @@ class ForgeObject{
 		}, (err) => {
 			console.log(err);
 		}); */
-		console.log(this.#properties);
 		if(layers.includes(this.#properties.layer)){
 			this.#inLayerSelected = true;
 		}else{
@@ -103,7 +110,7 @@ class ForgeObject{
 	setColor(bool, color){
 		const viewer = Memory.getViewer();
 		if(bool){
-			viewer.setThemingColor(this.#id, color);
+			viewer.setThemingColor(this.#id, color, this.#model);
 		}
 	}
 
@@ -113,12 +120,11 @@ class ForgeObject{
 		//console.log(this.#inLayerSelected);
 		if(bool) {
 			if(this.#inLayerSelected) {
-				console.log(this.#id);
-				viewer.hide(this.#id);
+				viewer.hide(this.#id, this.#model);
 				this.#layerHided = true;
 			}
 		}else {
-			viewer.show(this.#id);
+			viewer.show(this.#id, this.#model);
 			this.#layerHided = false;
 		}
 	}
@@ -156,24 +162,36 @@ class ForgeObject{
 		const viewer = Memory.getViewer();
 		let materialName = null;
 		if(!this.#selected) {
-			viewer.setThemingColor(this.#id, null);
+			viewer.setThemingColor(this.#id, null, this.#model);
 		}
 		this.hide(false);
 		if(this.#teamDisplayed){
-			if(this.#teamSelected){
-				materialName = this.#object3D.getParent().getTask().getTaskTeam().getId() + "-team";
+			if(!this.#linked){
+				materialName = "init";
+				this.hide(true);
+			}else if(this.#teamSelected){
+				const color = this.#object3D.getParent().getTask().getTaskTeam().getColorClass();
+				const hexa = scssVariables[color.charAt(0).toLowerCase() + color.slice(1)];
+				const r = parseInt(hexa.slice(1, 3), 16);
+				const g = parseInt(hexa.slice(3, 5), 16);
+				const b = parseInt(hexa.slice(5, 7), 16);
+				viewer.setThemingColor(this.#id, new THREE.Vector4(r / 255, g / 255, b / 255, 1), this.#model);
+				materialName = "init";
+				//materialName = this.#object3D.getParent().getTask().getTaskTeam().getId() + "-team";
 			}else{	
-				materialName = this.#object3D.getParent().getTask().getTaskTeam().getId() + "-not-team";
+				//materialName = this.#object3D.getParent().getTask().getTaskTeam().getId() + "-not-team";
+				this.hide(true);
+				materialName = "init";
 			}
 		}else{
 			if(this.#selected){
 				materialName = "init";
-				viewer.setThemingColor(this.#id, new THREE.Vector4(77/255,170/255,49/255,0.3), viewer.model, true);
+				viewer.setThemingColor(this.#id, new THREE.Vector4(77/255,170/255,49/255,1), this.#model);
 			}else if(this.#state == "toBuild"){
 				//1
 				materialName = "ignoredMaterial";
 				//this.hide(true);
-				viewer.setThemingColor(this.#id, new THREE.Vector4(77/255,170/255,49/255,0.2), viewer.model, true);
+				viewer.setThemingColor(this.#id, new THREE.Vector4(77/255,170/255,49/255,0.2), this.#model);
 
 				//2
 			}else if(this.#state == "built"){

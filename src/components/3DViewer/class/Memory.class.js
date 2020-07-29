@@ -72,7 +72,9 @@ class Memory{
 			delete this.#teamSelected[team.getId()];
 		}
 		for(let f in this.#forgeObjects){
-			this.#forgeObjects[f].isTeamSelected(this.#teamSelected);
+			for(let ff in this.#forgeObjects[f]){
+				this.#forgeObjects[f][ff].isTeamSelected(this.#teamSelected);
+			}
 		}
 	}
 
@@ -83,7 +85,9 @@ class Memory{
 			delete this.#layerSelected[this.#layerSelected.indexOf(layer)];
 		}
 		for(let f in this.#forgeObjects){
-			this.#forgeObjects[f].hideInLayer(this.#layerSelected);
+			for(let ff in this.#forgeObjects[f]){
+				this.#forgeObjects[f][ff].hideInLayer(this.#layerSelected);
+			}
 		}
 		/* for(let f in this.#forgeObjectsNotLinked) {
 			this.#forgeObjectsNotLinked[f].hideInLayer(this.#layerSelected);
@@ -94,7 +98,9 @@ class Memory{
 		if(this.#layerDisplay != bool){
 			this.#layerDisplay = bool;
 			for(let f in this.#forgeObjects){
-				this.#forgeObjects[f].isLayerHided(bool);
+				for(let ff in this.#forgeObjects[f]){
+					this.#forgeObjects[f][ff].isLayerHided(bool);
+				}
 			}
 			/* for(let f in this.#forgeObjectsNotLinked) {
 				this.#forgeObjectsNotLinked[f].isLayerHided(bool);
@@ -104,7 +110,9 @@ class Memory{
 	
 	static setNotLinked(){
 		for(let f in this.#forgeObjectsNotLinked){
-			this.#forgeObjectsNotLinked[f].isLinked(false);
+			for(let ff in this.#forgeObjectsNotLinked[f]){	
+				this.#forgeObjectsNotLinked[f][ff].isLinked(false);
+			}
 		}
 	}
 
@@ -112,7 +120,14 @@ class Memory{
 		if(this.#teamDisplay != bool){
 			this.#teamDisplay = bool;
 			for(let f in this.#forgeObjects){
-				this.#forgeObjects[f].isTeamDisplayed(bool);
+				for(let ff in this.#forgeObjects[f]){
+					this.#forgeObjects[f][ff].isTeamDisplayed(bool);
+				}
+			}
+			for(let f in this.#forgeObjectsNotLinked){
+				for(let ff in this.#forgeObjectsNotLinked[f]){
+					this.#forgeObjectsNotLinked[f][ff].isTeamDisplayed(bool);
+				}
 			}
 		}
 	}
@@ -121,18 +136,24 @@ class Memory{
 		const color = new THREE.Vector4(1,0,0,1);
 		const anomalies = new THREE.Vector4(0,0,1,1);
 		for(let f in this.#forgeObjects){
-			this.#forgeObjects[f].hide(bool);
-			this.#forgeObjects[f].setColor(bool, color);
+			for(let ff in this.#forgeObjects[f]){
+				this.#forgeObjects[f][ff].hide(bool);
+				this.#forgeObjects[f][ff].setColor(bool, color);
+			}
 		}
 		for(let f in this.#forgeObjectsNotLinked){
-			this.#forgeObjectsNotLinked[f].hide(bool);
-			this.#forgeObjectsNotLinked[f].setColor(bool, anomalies);
+			for(let ff in this.#forgeObjectsNotLinked[f]){	
+				this.#forgeObjectsNotLinked[f][ff].hide(bool);
+				this.#forgeObjectsNotLinked[f][ff].setColor(bool, anomalies);
+			}
 		}
 	}
 
 	static setAllInvisible(bool){
 		for(let f in this.#forgeObjectsNotLinked){
-			this.#forgeObjectsNotLinked[f].setInvisible(bool);
+			for(let ff in this.#forgeObjectsNotLinked[f]){	
+				this.#forgeObjectsNotLinked[f][ff].setInvisible(bool);
+			}
 		}
 	}
 
@@ -155,15 +176,18 @@ class Memory{
 		}
 	}
 
-	static getForgeObject(dbId){
-		return this.#forgeObjects[dbId];
+	static getForgeObject(dbId, model){
+		return this.#forgeObjects[model.id][dbId];
 	}
 
 	static addForgeObject(forgeObject, linked){
+		const modelId = forgeObject.getModel().id;
+		if(linked && typeof this.#forgeObjects[modelId] == "undefined") this.#forgeObjects[modelId] = {};
+		if(!linked && typeof this.#forgeObjectsNotLinked[modelId] == "undefined") this.#forgeObjectsNotLinked[modelId] = {};
 		if(linked){
-			this.#forgeObjects[forgeObject.getId()] = forgeObject;
+			this.#forgeObjects[modelId][forgeObject.getId()] = forgeObject;
 		}else{
-			this.#forgeObjectsNotLinked[forgeObject.getId()] = forgeObject;
+			this.#forgeObjectsNotLinked[modelId][forgeObject.getId()] = forgeObject;
 		}
 	}
 

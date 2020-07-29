@@ -101,7 +101,6 @@ class Scene{
 	}
 
 	addListener(event, callback){
-		console.log(this.#viewer);
 		this.#viewer.addEventListener(event, callback);
 	}
 

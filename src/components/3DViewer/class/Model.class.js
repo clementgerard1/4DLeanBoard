@@ -70,8 +70,6 @@ class Model{
 
 	_allLoaded(that){
 
-		this.#model = model;
-
 		function userFunction(pdb, tab) {
 
     		/*pdb.enumAttributes(function(i, attrDef, attrRaw){
@@ -114,9 +112,9 @@ class Model{
 
 					that.#dbObjects[dbObjects[d].dbId] = new ForgeObject(dbObjects[d].dbId);
 					that.#dbObjects[dbObjects[d].dbId].setModel(that.#model);
-					console.log(dbObjects[d].dbId);
 					if(typeof ifcId2Obj3D[tag] != "undefined"){
 						that.#dbObjects[dbObjects[d].dbId].setObject3D(ifcId2Obj3D[tag]);
+						that.#dbObjects[dbObjects[d].dbId].isLinked(true);
 						ifcId2Obj3D[tag].addForgeObject(that.#dbObjects[dbObjects[d].dbId]);
 						Memory.addForgeObject(that.#dbObjects[dbObjects[d].dbId], true);
 						for(let p in dbObjects[d].properties){
@@ -131,14 +129,15 @@ class Model{
 						}
 
 					}else{
+						that.#dbObjects[dbObjects[d].dbId].isLinked(false);
 						that.#viewer.lockSelection(dbObjects[d].dbId, true, that.#model)
 						Memory.addForgeObject(that.#dbObjects[dbObjects[d].dbId], false);
 					}
 
 					//Materials / Fragments
-					const tree = model.getInstanceTree();
+					const tree = that.#model.getInstanceTree();
 					tree.enumNodeFragments(dbObjects[d].dbId, (node)=>{
-		    			const material  = model.getFragmentList().getMaterial(node);
+		    			const material  = that.#model.getFragmentList().getMaterial(node);
 						Memory.addMaterial(material);
 						//console.log(material);
 		    			const ignoredMaterial = new THREE.MeshBasicMaterial({
@@ -182,7 +181,7 @@ class Model{
 
 		    			const fragment = new Fragment(node, material, ignoredMaterial, in6WeeksMaterial);
 						that.#dbObjects[dbObjects[d].dbId].addFragment(fragment);
-						fragment.setModel(model);
+						fragment.setModel(that.#model);
 						Memory.addMaterial(ignoredMaterial, true, "ignored-" + material.id);
 						Memory.addMaterial(in6WeeksMaterial, true, "in6Weeks-" + material.id);
 		    		}, true);

@@ -175,14 +175,18 @@ export default {
 			const selection = [];
 			for(let s in select){
 				for(let ss in select[s].selection){
-					selection.push(select[s].selection[ss]);
+					selection.push({
+						selection : select[s].selection[ss],
+						model : select[s].model
+					});
 				}
 			}
 			if(selection.length != 0){
 				this.scene.getViewer().clearSelection();
 				for(let s in selection){
-					const dbId = selection[s];
-					const fObject = Memory.getForgeObject(dbId);
+					const dbId = selection[s].selection;
+					const model = selection[s].model;
+					const fObject = Memory.getForgeObject(dbId, model);
 					if(typeof fObject != "undefined"){
 						const object4D = fObject.getObject3D().getParent();
 						V_socketUtils.highlightTask(object4D.getTask(), !Memory.isSelected(fObject));
