@@ -316,6 +316,8 @@ export default {
 			this.scene.getViewer().impl.selectionMaterialBase.opacity = 0;
 			this.scene.getViewer().impl.selectionMaterialTop.opacity = 0;
 
+			console.log(this.scene.getViewer());
+
 			V_4DUtils.setForgeViewer(this);
 			V_timelineUtils.removeListener("time", this);
 			V_timelineUtils.addListener("time", this, this.watchTime);

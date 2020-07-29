@@ -18,7 +18,6 @@ class Document{
 		const that = this;
 		//Plus tard les multiples viewables            
         //const t = this.documents[d].getRoot().findAllViewables();
-
 		this.#model = new Model();
 		const path = this.#doc.getViewablePath(this.#doc.getRoot().getDefaultGeometry());
 
