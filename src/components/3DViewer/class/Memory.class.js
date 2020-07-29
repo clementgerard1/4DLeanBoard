@@ -132,6 +132,7 @@ class Memory{
 		}
 	}
 
+	//
 	static allToRed(bool){
 		const color = new THREE.Vector4(1,0,0,1);
 		const anomalies = new THREE.Vector4(0,0,1,1);
@@ -148,6 +149,7 @@ class Memory{
 			}
 		}
 	}
+	//
 
 	static setAllInvisible(bool){
 		for(let f in this.#forgeObjectsNotLinked){
