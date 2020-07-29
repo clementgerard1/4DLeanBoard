@@ -16,7 +16,7 @@ class Memory{
 	static #teamSelected = {};
 
 	static addMaterial(material, init = false, name){
-		if(material != "undefined"){
+		if(typeof material != "undefined"){
 			if(name == "undefined") name = this.#viewer.model.getFragmentList().materialmap[material.id];
 			if(init){
 				//material.envMap = null;
