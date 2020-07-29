@@ -9,7 +9,8 @@ class Scene{
 	#initInfos;
 	#documents;
 	#viewCubeUiExt;
-	#temps;
+	#modelInitLoaded;
+	#modelInitLoaded2;
 	/**
 		@class Scene
 		@classdesc Scene represents the forge viewer
@@ -28,7 +29,8 @@ class Scene{
 		}
 		this.#documents = [];
 		this.#viewCubeUiExt = null;
-		this.#temps = [];
+		this.#modelInitLoaded = 0;
+		this.#modelInitLoaded2 = 0;
 
 	}
 
@@ -63,22 +65,38 @@ class Scene{
 	        return;
 	    }
 
-	    for(let u in that.#initInfos.urns){
-			Autodesk.Viewing.Document.load("urn:" + that.#initInfos.urns[u], (document) => {that._onDocumentLoaded(document, that)} , (event)=>{console.log(console.error('Failed fetching Forge manifest'))});
-		}
+	  //   for(let u in that.#initInfos.urns){
+	  //   	 console.log(u);
+			// setTimeout(()=>{
+		Autodesk.Viewing.Document.load("urn:" + that.#initInfos.urns[0], (document) => {that._onDocumentLoaded(document, that)} , (event)=>{console.log(console.error('Failed fetching Forge manifest'))});
+		// 	}, u * 4000);
+		// }
 	}
 
 	_onDocumentLoaded(doc, that){
-
+		that.#modelInitLoaded++;
 	    const docObj = new Document(doc);
 	    that.#documents.push(docObj);
-	    docObj.loadModels(that.#viewer, that.#initInfos.objs, ()=>{that._endOfInit(that)});
+
+		if(that.#modelInitLoaded < that.#initInfos.urns.length){
+			Autodesk.Viewing.Document.load("urn:" + that.#initInfos.urns[that.#modelInitLoaded], (document) => {that._onDocumentLoaded(document, that)} , (event)=>{console.log(console.error('Failed fetching Forge manifest'))});
+			return;
+		}
+
+	   	that.#documents[0].loadModels(that.#viewer, that.#initInfos.objs, ()=>{that._onModelLoaded(that)});
 
 	}
 
+	_onModelLoaded(that){
+		that.#modelInitLoaded2++;
+		if(that.#modelInitLoaded2 < that.#initInfos.urns.length){
+			that.#documents[that.#modelInitLoaded2].loadModels(that.#viewer, that.#initInfos.objs, ()=>{that._onModelLoaded(that)});
+			return;
+		}
+		that._endOfInit(that);
+	}
+
 	_endOfInit(that){
-		that.#temps.push(that.#temps.length);
-		if(that.#temps.length < that.#initInfos.urns.length) return;
 		
 		that.#viewer.setGroundShadow(false);
 		that.#viewer.setEnvMapBackground(true);

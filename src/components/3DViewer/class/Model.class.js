@@ -35,7 +35,12 @@ class Model{
 		this.#viewer = viewer;
 		this.callback = callback;
 		this.#viewer.addEventListener(Autodesk.Viewing.OBJECT_TREE_CREATED_EVENT, () => { this._onTreeLoaded(this, this.#id) });
-		viewer.loadModel(path, {}, (model)=> {this._onModelLoaded(model, that)});
+
+		if(this.#id > 4) return;
+		viewer.loadModel(path, {
+            keepCurrentModels: true,
+            globalOffset: {x:0,y:0,z:0}
+		}, (model)=> {this._onModelLoaded(model, that)});
 	}
 
 	getId(){
