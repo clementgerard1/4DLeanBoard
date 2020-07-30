@@ -1,5 +1,6 @@
 import "./V_planningMenu.scss";
 import V_socketUtils from "../Utils/V_socketUtils.class.js";
+import V_planningMenuUtils from "../Utils/V_planningMenuUtils.class.js";
 
 import PlanningBar from "./assets/PlanningBar.svg";
 
@@ -24,6 +25,9 @@ export default {
 			}
 		}
 	},
+	created : function(){
+		V_planningMenuUtils.addPlanningMenu(this);
+	},
 	mounted : function(){
 		window.addEventListener('resize', this.onResize);
 		this.onResize();
@@ -45,6 +49,12 @@ export default {
 				case 3 : this.weekDisplay = !this.weekDisplay; this.weeksDisplay = false; this.phasesDisplay = false; break;
 			}
 			V_socketUtils.setPlanningDisplay(this.milestoneDisplay, this.phasesDisplay, this.weeksDisplay, this.weekDisplay);
+		},
+		setPlanningMenuChange : function(milestone, phases, weeks, week){
+			this.milestoneDisplay = milestone;
+			this.phasesDisplay = phases;
+			this.weeksDisplay = weeks;
+			this.weekDisplay = week;
 		}
 	},
 	template : `

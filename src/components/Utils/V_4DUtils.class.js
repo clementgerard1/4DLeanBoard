@@ -120,5 +120,16 @@ class V_4DUtils{
 		}
 	}
 
+	/**
+		Change menu ifc choices
+		@param {bool} archi
+		@param {bool} struct
+		@param {bool} mep
+		@param {bool} construction
+	*/
+	static setIfcMenuChange(ifcs){
+		this.viewer.setIfcMenuChange(ifcs);
+	}
+
 }
 export default V_4DUtils;

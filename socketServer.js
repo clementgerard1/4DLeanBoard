@@ -22,9 +22,9 @@ io.on("connection", function(client){
     if(typeof models[modelName] == "undefined"){
 
         //Initialisation
-        DataApi.getModel(modelName).then((data)=>{
+        DataApi.getModel(modelName, true).then((data)=>{
             const model = new Model();
-            model.deserialize(data)
+            model.deserialize(data.model);
 
             //IFC Menu
             //Play menu
@@ -50,6 +50,12 @@ io.on("connection", function(client){
             for(let s in selected){
                 sel.push(selected[s].getId());
             }
+
+            const ifcmenu = [];
+            for(let i = 0 ; i < data.urns.length ; i++){
+                ifcmenu[i] = true;
+            }
+
             models[modelName] = {
                 model : model,
                 playerTime : 0,
@@ -57,8 +63,8 @@ io.on("connection", function(client){
                 pushed : [],
                 backgroundTasks : [],
                 timeline : timeline,
-                ifcmenu : [true, true, true, true],
-                playmenu : 4,
+                ifcmenu :  ifcmenu,
+                playmenu : [false, false, false, false],
                 teamdisplay : 1,
                 teamDisplayed : teamDisplayed,
                 teamOpen : teamOpen,
@@ -179,13 +185,14 @@ io.on("connection", function(client){
 
 
     client.on("updateIfcMenu", (datas) => {
-        models[modelName].ifcmenu = [datas.archi, datas.struct, datas.mep, datas.construction];
+        console.log(models);
+        models[modelName].ifcmenu = datas.ifcs;
         broadcast(client, modelName, "updateIfcMenu", datas);
         //client.broadcast.emit("clearHighlighting", datas);
     })
-    client.on("updatePlanningMenu", (datas) => {
-        models[modelName].playmenu = datas.choice;
-        broadcast(client, modelName, "updatePlanningMenu", datas);
+    client.on("setPlanningDisplay", (datas) => {
+        models[modelName].playmenu = datas.choices;
+        broadcast(client, modelName, "setPlanningDisplay", datas);
         //client.broadcast.emit("clearHighlighting", datas);
     })
     client.on("updateDisplayMenu", (datas) => {

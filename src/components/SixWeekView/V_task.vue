@@ -153,7 +153,6 @@ export default {
 	},
 	computed:{
 		notEmpty : function(){
-			if(typeof this.task != "undefined" && this.task != null && this.task.getId() == 6) console.log("hey");
 			return this.task != null;
 		},
 		tid : function(){

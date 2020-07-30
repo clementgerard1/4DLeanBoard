@@ -4,6 +4,7 @@ import V_playerUtils from "./V_playerUtils.class.js";
 import V_taskTableUtils from "./V_taskTableUtils.class.js";
 import V_timelineUtils from "./V_timelineUtils.class.js";
 import V_phasesUtils from "./V_phasesUtils.class.js";
+import V_planningMenuUtils from "./V_planningMenuUtils.class.js";
 import DataApi from "../../../dataServer/DataApi.class.js";
 
 class V_socketUtils{
@@ -51,10 +52,14 @@ class V_socketUtils{
 
 			//filter menu		
 			//IFC Menu
-			V_filterMenuUtils.setIfcMenuChange(this.initDatas.ifcmenu[0], this.initDatas.ifcmenu[1], this.initDatas.ifcmenu[2], this.initDatas.ifcmenu[3]);
+			V_4DUtils.setIfcMenuChange(this.initDatas.ifcmenu);
 			//Play menu
-			V_filterMenuUtils.setPlanningMenuChange(this.initDatas.playmenu);
-			V_playerUtils.displayMilestones(this.initDatas.playmenu > 1);
+			V_taskTableUtils.setPlanningDisplay(this.initDatas.playmenu[0], this.initDatas.playmenu[1], this.initDatas.playmenu[2], this.initDatas.playmenu[3]);
+			V_playerUtils.displayMilestones(this.initDatas.playmenu[0]);
+			V_phasesUtils.displayed(this.initDatas.playmenu[1]);
+			V_planningMenuUtils.setPlanningMenuChange(this.initDatas.playmenu[0], this.initDatas.playmenu[1], this.initDatas.playmenu[2], this.initDatas.playmenu[3]);
+			//V_filterMenuUtils.setPlanningMenuChange(this.initDatas.playmenu);
+			//V_playerUtils.displayMilestones(this.initDatas.playmenu > 1);
 			//Team Display
 			V_filterMenuUtils.setDisplayMenuChange(this.initDatas.teamdisplay);
 			V_4DUtils.setTeamDisplayMode(this.initDatas.teamdisplay == 2);
@@ -127,14 +132,21 @@ class V_socketUtils{
 			V_4DUtils.clearHighlighting();
 		});
 		this.socket.on("updateIfcMenu", (datas) => {
-			V_filterMenuUtils.setIfcMenuChange(datas.archi, datas.struct, datas.mep, datas.construction);
+			V_filterMenuUtils.V_4DUtils(datas.archi, datas.struct, datas.mep, datas.construction);
 		});
 		this.socket.on("updatePlanningMenu", (datas) => {
-			V_filterMenuUtils.setPlanningMenuChange(datas.choice);
-			V_playerUtils.displayMilestones(datas.choice > 1);
+			//V_filterMenuUtils.setPlanningMenuChange(datas.choices);
+			V_playerUtils.displayMilestones(datas.choices[0]);
 		});
 		this.socket.on("setTeamOpening", (datas) => {
 			V_taskTableUtils.setTeamById(datas.teamId, datas.nth, datas.value);
+		});
+
+		this.socket.on("setPlanningDisplay", (datas) => {
+			V_planningMenuUtils.setPlanningMenuChange(datas.choices[0], datas.choices[1], datas.choices[2], datas.choices[3]);
+			V_taskTableUtils.setPlanningDisplay(datas.choices[0], datas.choices[1], datas.choices[2], datas.choices[3]);
+			V_playerUtils.displayMilestones(datas.choices[0]);
+			V_phasesUtils.displayed(datas.choices[1]);
 		});
 
 	}
@@ -299,21 +311,17 @@ class V_socketUtils{
 
 	/* ---------------------------- FILTER MENU INTERACTIONS ---------------------------- */
 
-	static setIfcMenuChange(archi, struct, mep, construction){
-		V_filterMenuUtils.setIfcMenuChange(archi, struct, mep, construction);
+	static setIfcMenuChange(ifcs){
+		const toReturn = [];
+		for(let i in ifcs){
+			toReturn.push(//{
+					/*model : ifcs[i].model.getId(),
+					shown : */ifcs[i].shown
+				//}
+			);
+		}
 		this.socket.emit("updateIfcMenu", { 
-			archi : archi,
-			struct : struct,
-			mep : mep,
-			construction : construction,
-		});
-	}
-
-	static setPlanningMenuChange(choice){
-		V_filterMenuUtils.setPlanningMenuChange(choice);
-		V_playerUtils.displayMilestones(choice > 1);
-		this.socket.emit("updatePlanningMenu", { 
-			choice : choice
+			ifcs : toReturn
 		});
 	}
 
@@ -329,6 +337,9 @@ class V_socketUtils{
 		V_taskTableUtils.setPlanningDisplay(milestone, phases, weeks, week);
 		V_playerUtils.displayMilestones(milestone);
 		V_phasesUtils.displayed(phases);
+		this.socket.emit("setPlanningDisplay", { 
+			choices : [milestone, phases, weeks, week]
+		});
 	}
 
 }

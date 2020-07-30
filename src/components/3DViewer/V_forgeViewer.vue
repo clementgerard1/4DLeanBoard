@@ -263,10 +263,21 @@ export default {
 				model : this.modelShown[id].model,
 				shown : this.modelShown[id].model.isShown()
 			});
+			V_socketUtils.setIfcMenuChange(this.modelShown);
 		},
 		refreshCamera() {
 			Memory.setTarget();
 			Memory.refresh();
+		},
+
+		setIfcMenuChange(ifcs){
+			for(let i in ifcs){
+				this.modelShown[i].model.hide(ifcs[i]);
+				this.$set(this.modelShown, id, {
+					model : this.modelShown[id].model,
+					shown : this.modelShown[id].model.isShown()
+				});
+			}
 		}
 	},
 	mounted : function(){
