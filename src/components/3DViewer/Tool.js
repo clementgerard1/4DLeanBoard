@@ -72,7 +72,7 @@ class Tool extends Autodesk.Viewing.ToolInterface {
         }
         this.viewer.navigation.orientCameraUp();
         
-         if(event.type == "pinchmove" || event.type == "pinchstart" || event.type == "pinchend"){
+        /* if(event.type == "pinchmove" || event.type == "pinchstart" || event.type == "pinchend"){
             const vec = this.viewer.navigation.getEyeVector();
             console.log(vec);
             const distance = this.viewer.navigation.getEyeToCenterOfBoundsVec(this.utilities.getBoundingBox()).distanceTo(this.utilities.getBoundingBox().center());
