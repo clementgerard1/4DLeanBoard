@@ -12,7 +12,7 @@ export default {
 	],
 	computed: {
 		firstday : function(){
-			let date = new Date(this.timeline.getStartDate());
+			let date = new Date(this.timeline.getStartDate() - 1);
 			date.setDate(date.getDate() + (this.time * 7));
 			return date.getDate() + " " + Utils.getMonthString(date.getMonth() + 1);
 		},

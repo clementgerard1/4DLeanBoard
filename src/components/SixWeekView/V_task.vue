@@ -103,7 +103,9 @@ export default {
 			previouscolor : previousColor,
 			done : done,
 			paused : paused,
-			constraintTap : constraintTap
+			constraintTap : constraintTap,
+			isFirst : false,
+			index : null,
 		}
 	},
 	inject : [
@@ -117,7 +119,8 @@ export default {
 		"task",
 		"color",
 		"isOpen",
-		"maxheight"
+		"maxheight",
+		"isopen"
 	],
 	mounted: function(){
 		this.updateStateDiv();
@@ -173,6 +176,7 @@ export default {
 			const offset = (startTask.getTime() - startWeek.getTime())  / (1000 * 3600 * 24);
 
 			if(offset >= 0 && (offset + duration) <= 7){
+				this.index = 1;
 				return this.getTwoLineFormat(this.task.getName());
 			}else{
 				let nbWeeks = null;
@@ -185,8 +189,12 @@ export default {
 					index = Math.ceil(Math.abs(offset) / 7) + 1;
 					nbWeeks = Math.ceil((duration + initialOffset) / 7);
 				}
-
-				return this.getTwoLineFormat("(" + index +  "/" + nbWeeks + ")" + this.task.getName());
+				this.index = index;
+				if(index == 1 || ((this.time % 6) == 0)){
+					return this.getTwoLineFormat(/*"(" + index +  "/" + nbWeeks + ")" + */this.task.getName());
+				}else{
+					return "";
+				}
 
 			}
 		},
@@ -309,7 +317,6 @@ export default {
 			this.previousready = previousready;
 		},
 		hightlight: function(bool){
-			console.log(this);
 			this.highlighted = bool;
 		},
 		updateStateButtons: function(){
@@ -368,7 +375,9 @@ export default {
 			}
 		},
 		handleDoubleTap: function(event){
-			V_socketUtils.updateStateDisplay(this.task, !this.state);
+			if(this.isopen){
+				V_socketUtils.updateStateDisplay(this.task, !this.state);
+			}
 		},
 		handlePress : function(event){
 			const display = event.type == "press";
@@ -512,7 +521,7 @@ export default {
 	},
 	template : `
 	<div class="taskWrapper" v-bind:class='[highlighted ? "highlighted" : ""]'>
-		<div v-bind:style="{maxHeight : maxheight}" v-tap='handleTap' v-doubletap='handleDoubleTap' v-bind:class='[selected ? "selected" : "", "task"]'>
+		<div v-bind:style="{maxHeight : maxheight}" v-doubletap='handleTap' v-tap='handleDoubleTap' class="task">
 			<div v-if="notEmpty" class='taskclass animate__animated animate__flipInY'>` + taskSVG + `</div>
 			<div v-if="notEmpty" v-show="state" v-bind:id="taskId + '-' + time" class="taskstate animate__animated animate__faster">` + taskStatusSVG + `</div>
 		</div>

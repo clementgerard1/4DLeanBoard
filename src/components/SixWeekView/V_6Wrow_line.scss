@@ -1,0 +1,81 @@
+@use "assets/variables" as v;
+
+.teamLine{
+
+	display : flex;
+	pointer-events: all !important;
+
+	.teamAbr{
+
+		width : 40px;
+		display : flex;
+		justify-content : center;
+		align-items : center;
+		height : 100%;
+		p{
+			font-family: Roboto Condensed;
+			font-style: italic;
+			font-weight: 300;
+			font-size: 15px;
+			color : white;
+		}
+	}
+
+	.teamDescription{
+
+		display: flex;
+		width : calc(100% - 80px);
+		height : 100%;
+		background-color : v.$white;
+		/*border-radius: 5px;*/
+		align-items : center;
+		background : v.$light;
+
+		font-family : Oswald;
+
+		.teamName{
+			margin-left : 10px;
+			margin-right : 20px;
+		}
+
+		.doneStatus{
+			margin-left : 7px;
+			margin-right : 20px;
+		}
+
+		.teamDates{
+			margin-left : 7px;
+			margin-right : 20px;
+		}
+
+		.leaderName{
+			margin-left : 7px;
+			margin-right : 20px;
+		}
+
+		.leaderEmail{
+			margin-right : 20px;
+		}
+
+		.teamIcon{
+			width : 20px;
+			height : 20px;
+
+			svg{
+				width : 100%;
+				height : 100%;
+			}
+		}
+
+		.manIcon{
+			width : 20px;
+			height : 20px;
+
+			svg{
+				width : 100%;
+				height : 100%;
+			}
+		}
+
+	}
+}

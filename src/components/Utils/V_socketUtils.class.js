@@ -3,6 +3,7 @@ import V_filterMenuUtils from "./V_filterMenuUtils.class.js";
 import V_playerUtils from "./V_playerUtils.class.js";
 import V_taskTableUtils from "./V_taskTableUtils.class.js";
 import V_timelineUtils from "./V_timelineUtils.class.js";
+import V_phasesUtils from "./V_phasesUtils.class.js";
 import DataApi from "../../../dataServer/DataApi.class.js";
 
 class V_socketUtils{
@@ -41,6 +42,13 @@ class V_socketUtils{
 				V_taskTableUtils.updateStateDisplayById(this.initDatas.backgroundTasks[d], true);
 			}
 
+			//Team tab opening
+			for(let t in this.initDatas.teamOpen){
+				const teamId = t.split("-")[0];
+				const nth = t.split("-")[1];
+				V_taskTableUtils.setTeamById(teamId, nth, this.initDatas.teamOpen[t]);
+			}
+
 			//filter menu		
 			//IFC Menu
 			V_filterMenuUtils.setIfcMenuChange(this.initDatas.ifcmenu[0], this.initDatas.ifcmenu[1], this.initDatas.ifcmenu[2], this.initDatas.ifcmenu[3]);
@@ -52,9 +60,10 @@ class V_socketUtils{
 			V_4DUtils.setTeamDisplayMode(this.initDatas.teamdisplay == 2);
 			//Teams	
 			for(let d in this.initDatas.teamDisplayed){
-				V_filterMenuUtils.setTeamDisplayedById(this.initDatas.teamDisplayed[d], true);
-				V_4DUtils.setTeamDisplayedById(this.initDatas.teamDisplayed[d], true);
+				V_filterMenuUtils.setTeamDisplayedById(d, this.initDatas.teamDisplayed[d]);
+				V_4DUtils.setTeamDisplayedById(d, this.initDatas.teamDisplayed[d]);
 			}
+
 		}
 	}
 
@@ -105,7 +114,7 @@ class V_socketUtils{
 
 		this.socket.on("updateTeamDisplayed", (datas) => {
 			V_4DUtils.setTeamDisplayedById(datas.team, datas.value);
-			V_filterMenuUtils.setTeamDisplayed(datas.team, datas.value);
+			V_filterMenuUtils.setTeamDisplayedById(datas.team, datas.value);
 		});
 
 		this.socket.on("updateDisplayMenu", (datas) => {
@@ -123,6 +132,9 @@ class V_socketUtils{
 		this.socket.on("updatePlanningMenu", (datas) => {
 			V_filterMenuUtils.setPlanningMenuChange(datas.choice);
 			V_playerUtils.displayMilestones(datas.choice > 1);
+		});
+		this.socket.on("setTeamOpening", (datas) => {
+			V_taskTableUtils.setTeamById(datas.teamId, datas.nth, datas.value);
 		});
 
 	}
@@ -180,7 +192,7 @@ class V_socketUtils{
 	*/		
 	static highlightTask(task, bool){
 		V_taskTableUtils.highlightTaskById(task.getId(), bool);
-  	this.socket.emit("highlightTask", { id : task.getId(), value : bool});
+   		this.socket.emit("highlightTask", { id : task.getId(), value : bool});
 	}
 
 
@@ -276,6 +288,15 @@ class V_socketUtils{
 		});
 	}
 
+	static setTeamOpening(team, nth, bool){
+		V_taskTableUtils.setTeam(team, nth, bool);
+		this.socket.emit("setTeamOpening", { 
+			teamId : team.getId(),
+			nth : nth,
+			value : bool
+		});
+	}
+
 	/* ---------------------------- FILTER MENU INTERACTIONS ---------------------------- */
 
 	static setIfcMenuChange(archi, struct, mep, construction){
@@ -301,6 +322,13 @@ class V_socketUtils{
 		this.socket.emit("updateDisplayMenu", { 
 			choice : choice
 		});
+	}
+
+	/* ----------------------------- PLANNING MENU INTERACTION --------------------------- */
+	static setPlanningDisplay(milestone, phases, weeks, week){
+		V_taskTableUtils.setPlanningDisplay(milestone, phases, weeks, week);
+		V_playerUtils.displayMilestones(milestone);
+		V_phasesUtils.displayed(phases);
 	}
 
 }

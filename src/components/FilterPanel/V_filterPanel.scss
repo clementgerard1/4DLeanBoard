@@ -47,6 +47,7 @@
 
 	.subMenuContainer{
 		display:flex;
+		padding-top: 10px;
 
 		.offset3D{
 			width : 60px;
@@ -87,6 +88,6 @@
 	}
 
 	background-color: rgba(217, 217, 217,0.8);
-	border-radius: 0px 0px 5px 0px;
+	border-radius: 0px 5px 0px 0px;
 
 }

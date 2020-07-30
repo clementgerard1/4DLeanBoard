@@ -1,4 +1,4 @@
-<svg width="204" height="204" viewBox="10 6 184 186" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg v-bind:class='[selected ? "selected" : ""]' width="204" height="204" viewBox="10 6 184 186" fill="none" xmlns="http://www.w3.org/2000/svg">
 
 
 <g v-show="isOpen" filter="url(#filter0_d_task)">
@@ -6,12 +6,12 @@
 </g>
 <text v-show="isOpen" fill="black" xml:space="preserve" style="white-space: pre" font-family="Roboto Condensed" font-size="24" font-style="italic" font-weight="300" letter-spacing="0em"><tspan x="15" y="77.3047">{{taskname.l1}}</tspan><tspan x="15" y="109.305">{{taskname.l2}}</tspan></text>
 
-<rect v-if="ready" x="14.5" y="6.5" width="175" height="27" v-bind:fill="svgcolor" v-bind:stroke="svgcolor" stroke-width="5"/>
+<rect v-if="ready" x="14.5" y="6.5" width="175" height="27" v-bind:fill="svgcolor" stroke="white" stroke-width="5"/>
 <rect v-else="ready" x="14.5" y="6.5" width="175" height="27" fill="white" v-bind:stroke="svgcolor" stroke-width="5"/>
 
-<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="24" font-weight="500" letter-spacing="0em"><tspan x="19" y="30.848">{{tid}}</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="14" font-weight="500" letter-spacing="0em"><tspan x="19" y="25.848">{{tid}}</tspan></text>
 
-<g v-show="isOpen" v-html="readytaskface"></g>
+<!--<g v-show="isOpen" v-html="readytaskface"></g>-->
 
 
 <path v-show="isOpen" v-if="done" d="M163 164.718L169.857 173C169.982 167.855 175.31 157.601 178 156" stroke="white" stroke-width="5" stroke-linejoin="round"/>
@@ -24,41 +24,48 @@
 <text v-show="isOpen" v-else-if="ready" fill="white" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="14" font-weight="500" letter-spacing="0em"><tspan x="162.435" y="170.328">7/7</tspan></text>
 
 <g v-show="isOpen">
-	<rect v-if="space" x="145" y="167" width="10" height="10" rx="5"  fill="black"/>
-	<rect v-else="space" x="145.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
+	<rect v-if="space" x="175" y="167" width="10" height="10" rx="5"  fill="black"/>
+	<rect v-else="space" x="175.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
 
-	<rect v-if="safety" x="135" y="167" width="10" height="10" rx="5" fill="black"/>
-	<rect v-else="safety" x="135.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
+	<rect v-if="safety" x="165" y="167" width="10" height="10" rx="5" fill="black"/>
+	<rect v-else="safety" x="165.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
 
-	<rect v-if="equipement" x="125" y="167" width="10" height="10" rx="5" fill="black"/>
-	<rect v-else="equipement" x="125.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
+	<rect v-if="equipement" x="155" y="167" width="10" height="10" rx="5" fill="black"/>
+	<rect v-else="equipement" x="155.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
 
-	<rect v-if="manpower" x="115" y="167" width="10" height="10" rx="5" fill="black"/>
-	<rect v-else="manpower" x="115.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
+	<rect v-if="manpower" x="145" y="167" width="10" height="10" rx="5" fill="black"/>
+	<rect v-else="manpower" x="145.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
 
-	<rect v-if="materials" x="105" y="167" width="10" height="10" rx="5" fill="black"/>
-	<rect v-else="materials" x="105.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
+	<rect v-if="materials" x="135" y="167" width="10" height="10" rx="5" fill="black"/>
+	<rect v-else="materials" x="135.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
 
-	<rect v-if="constraint" x="85" y="167" width="10" height="10" rx="5" fill="black"/>
-	<rect v-else="constraint" x="85.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
+	<rect v-if="constraint" x="115" y="167" width="10" height="10" rx="5" fill="black"/>
+	<rect v-else="constraint" x="115.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
 
-	<rect v-if="information" x="95" y="167" width="10" height="10" rx="5" fill="black"/>
-	<rect v-else="information" x="95.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
+	<rect v-if="information" x="125" y="167" width="10" height="10" rx="5" fill="black"/>
+	<rect v-else="information" x="125.5" y="167.5" width="9" height="9" rx="4.5" stroke="black" stroke-opacity="0.5"/>
 </g>
 
 <g v-show="isOpen">
-	<path v-show="isOpen && (previousTask != null)" d="M18 149H48V177C48 178.105 47.1046 179 46 179H20C18.8954 179 18 178.105 18 177V149Z" stroke="url(#paint0_linear)" stroke-width="2"/>
+
+	<rect v-show="isOpen && (previousTask != null)" v-if="previousready" x="18" y="163.062" width="30" height="16" rx="1" v-bind:fill="previouscolor" stroke="white" stroke-width="2"/>
+	<rect v-show="isOpen && (previousTask != null)" v-else="previousready" x="18" y="163.062" width="30" height="16" rx="1" fill="white" v-bind:stroke="previouscolor" stroke-width="2"/>
+
+	<path v-show="isOpen && (previousTask != null)" d="M32 164.75L26 170.75L32 176.75" stroke="#808080" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+	<path v-show="isOpen && (previousTask != null)" d="M40 164.75L34 170.75L40 176.75" stroke="#808080" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+	<!--<path v-show="isOpen && (previousTask != null)" d="M18 149H48V177C48 178.105 47.1046 179 46 179H20C18.8954 179 18 178.105 18 177V149Z" stroke="url(#paint0_linear)" stroke-width="2"/>
 	<rect v-if="previousready" x="18" y="149" width="30" height="4" v-bind:fill="previouscolor" v-bind:stroke="previouscolor" stroke-width="2"/>
-	<rect v-else="previousready" x="18" y="149" width="30" height="4" fill="white" v-bind:stroke="previouscolor" stroke-width="2"/>
+	<rect v-else="previousready" x="18" y="149" width="30" height="4" fill="white" v-bind:stroke="previouscolor" stroke-width="2"/>-->
 
 	<!-- press handler -->
-	<rect v-press="handlePress" x="18" y="149" width="30" height="27" fill="white" stroke-width="0" opacity="0"/>
+	<rect v-show="isOpen && (previousTask != null)" v-press="handlePress" x="18" y="149" width="30" height="27" fill="white" stroke-width="0" opacity="0"/>
 
 </g>
 
-<g v-show="isOpen && (previousTask != null)" filter="url(#filter2_d_task)">
+<!--<g v-show="isOpen && (previousTask != null)" filter="url(#filter2_d_task)">
 	<path style="pointer-events:none" d="M35 159L28 166L35 173" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-</g>
+</g>-->
 
 <g>
 	<rect x="71" y="13" width="5" height="4" fill="#808080"/>
@@ -68,8 +75,8 @@
 	<rect x="77" y="13" width="5" height="4" fill="#808080"/>
 	<path fill-rule="evenodd" clip-rule="evenodd" d="M81 26C83.2091 26 85 24.2091 85 22C85 19.7909 83.2091 18 81 18C78.7909 18 77 19.7909 77 22C77 24.2091 78.7909 26 81 26ZM80.5 18.6667V21.7929L78.6464 23.6464L79.3536 24.3536L81.3536 22.3536L81.5 22.2071V22V18.6667H80.5Z" fill="#808080"/>
 </g>
-<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="14" font-weight="500" letter-spacing="0em"><tspan x="90.6797" y="26.328">{{dr}}</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="24" font-weight="500" letter-spacing="0em"><tspan x="90.6797" y="29.928">{{dr}}</tspan></text>
 <path d="M148 21C145.239 21 143 23.2386 143 26L153 26C153 23.2386 150.761 21 148 21Z" fill="#808080"/>
 <ellipse cx="148" cy="16.5" rx="3" ry="3.5" fill="#808080"/>
-<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="14" font-weight="500" letter-spacing="0em"><tspan x="162.814" y="26.328">{{mn}}</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="24" font-weight="500" letter-spacing="0em"><tspan x="162.814" y="29.928">{{mn}}</tspan></text>
 </svg>

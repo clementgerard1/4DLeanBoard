@@ -4,6 +4,7 @@
 .phaserow{
 	margin-top : 17px;
 	position:relative;
+	pointer-events: none;
 
 	.phaseLine{
 		overflow: hidden;
@@ -19,6 +20,7 @@
 		align-items: center;
 		justify-content : center;
 		position:absolute;
+		z-index:10;
 
 		svg{
 			width : 100%;
@@ -42,6 +44,8 @@
 	}
 
 	.tasksWrapper {
+
+		pointer-events : none;
 		/*height: v.$taskSize;*/
 		padding: 0px 25px;
 		position: relative;		
@@ -49,8 +53,10 @@
 		margin-bottom : - (v.$phaseHeight);
 
 		display : flex;
+		overflow : hidden;
 
 		.taskWrapper{
+			pointer-events : auto;
 			flex: 1;
 		}
 

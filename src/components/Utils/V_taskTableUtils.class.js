@@ -3,13 +3,65 @@ class V_taskTableUtils{
 	static tokens = {};//{
 	//	taskId : null
 	//};
+	static rows = [];
 	static tasks = [];
 	static taskObjects = [];
+	static teams = [];
+	static frames = [];
+	
 
 	static setAllTasks(tasks){
 		for(let t in tasks){
 			this.taskObjects[tasks[t].getId()] = tasks[t];
 		}
+	}
+
+	static setTeam(team, nth, init = false){
+		if(typeof this.teams[team.getId() + "-" + nth] != "undefined"){
+			this.teams[team.getId() + "-" + nth].display = init;
+		}else{
+			this.teams[team.getId() + "-" + nth] = {
+				team : team,
+				display : init
+			}
+		}
+		for(let r in this.rows){
+			if(this.rows[r].taskteam.getId() == team.getId() && this.rows[r].nth == nth){
+				if(this.rows[r].isOpen != init) this.rows[r].updateOpening();
+			}
+		}
+
+		for(let f in this.frames){
+			this.frames[f].updateOpening();
+		}
+
+	}
+
+	static setTeamById(teamId, nth, value = false){
+		for( let t in this.teams){
+			if(this.teams[t] != null && this.teams[t].team.getId() == teamId) V_taskTableUtils.setTeam(this.teams[t].team, nth, value);
+		}
+	}
+
+	static isOpen(team, nth){
+		if(typeof this.teams[team.getId() + "-" + nth] != "undefined") return this.teams[team.getId() + "-" + nth].display
+		return null;
+	}
+
+	static getOpenedTeam(){
+		let count = 0;
+		for(let t in this.teams){
+			if(this.teams[t].display) count++;
+		}
+		return count;
+	}
+
+	static getClosedTeam(){
+		let count = 0;
+		for(let t in this.teams){
+			if(!this.teams[t].display) count++;
+		}
+		return count;
 	}
 
 	/**
@@ -25,6 +77,19 @@ class V_taskTableUtils{
 			}
 		}
 	}	
+
+	/**
+		Add V_6Wrow as listener of TaskTable Changement
+		@param {V_6Wrow} V_task which become reactive
+		@static
+	*/
+	static addRow(vRow){
+		this.rows[vRow._uid] = vRow
+	}	
+
+	static addFrame(vFrame){
+		this.frames[vFrame._uid] = vFrame;
+	}
 
 	/**
 		Update V_Task listener
@@ -142,7 +207,7 @@ class V_taskTableUtils{
 	static highlightTaskById(taskId, bool){
 		let test = true;
 		let i = 0;
-		while(test){
+		while(test && i < this.tasks.length){
 			if(typeof this.tasks[i] != "undefined"){
 				test = false;
 			}
@@ -198,6 +263,12 @@ class V_taskTableUtils{
 					if(previous[p] == task) this.tasks[t].vTask.updatePrevious();
 				}
 			}
+		}
+	}
+
+	static setPlanningDisplay(milestone, phases, weeks, week){
+		for(let f in this.frames){
+			this.frames[f].setPlanningDisplay(milestone, phases, weeks, week);
 		}
 	}
 

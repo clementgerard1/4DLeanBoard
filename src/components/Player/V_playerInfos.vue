@@ -61,9 +61,9 @@ export default {
 			const x = event.srcEvent.clientX - this.svg.getBoundingClientRect().x;
 			const weekWidth = (this.svg.clientWidth) / this.nbweek;
 
-			if(event.target.classList.contains("playerButton") || event.type == "panstart" && (x > (this.time * weekWidth) && (x < ((this.time + 1) * weekWidth)))) this.playerflag = true;
+			//if(event.target.classList.contains("playerButton") || event.type == "panstart" && (x > (this.time * weekWidth) && (x < ((this.time + 1) * weekWidth)))) this.playerflag = true;
 
-			if(this.playerflag){
+			//if(this.playerflag){
 				if(event.type == "panmove" || event.type == "panstart"){
 					if( x > (weekWidth / 2) && x < ((this.nbweek-1) * weekWidth + (weekWidth / 2)) ){
 						this.playerX = x;
@@ -78,6 +78,15 @@ export default {
 					this.playerX = this.time * weekWidth + (weekWidth / 2);
 					this.playerflag = false;
 				}
+			//}
+		},
+		handleTap : function(event){
+			const x = event.srcEvent.clientX - this.svg.getBoundingClientRect().x;
+			const weekWidth = (this.svg.clientWidth) / this.nbweek;
+			this.playerX = x;
+			const time = Math.trunc(x / weekWidth);
+			if(time != this.time){
+				V_socketUtils.setTime(time);
 			}
 		}
 	},
@@ -96,7 +105,7 @@ export default {
 		}
 	},
 	template : `
-	<div v-pan="handlePan" class="svgPlayer" v-bind:class="svgClass">
+	<div v-tap="handleTap" v-pan="handlePan" class="svgPlayer" v-bind:class="svgClass">
 		<svg height="` + scssVariables.playerHeight.replace("px", "") + `" fill="none" xmlns="http://www.w3.org/2000/svg">
 			
 			<rect class="playerBackground" stroke-width="2"/>
@@ -105,7 +114,7 @@ export default {
 			<playermilestone v-if="displayM" v-bind:widthh="widthh" v-bind:time="time" v-for="m in milestones" :key="m.getId()" v-bind:milestone="m"></playermilestone>
 
 			<g filter="url(#filter0_d_playerButton)">
-				<circle class="playerButton" v-bind:cx="playerX" r="21" stroke-width="2" stroke="white" fill="#97D7C7"/>
+				<circle class="playerButton" v-bind:cx="playerX" r="21" stroke-width="2" stroke="black" fill="white"/>
 			</g>
 
 		</svg>

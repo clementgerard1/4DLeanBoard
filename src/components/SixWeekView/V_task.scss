@@ -24,11 +24,11 @@
 				height:100%
 			}
 
-		}
-		
-		.task.selected{
-			border: v.$greenbluish_light 5px solid;
-			border-radius : 0px 0px 10px 10px;
+			.selected{
+				border: v.$greenbluish_light 5px solid;
+				border-radius : 0px 0px 10px 10px;
+			}
+
 		}
 		
 		svg{

@@ -52,8 +52,6 @@ class Timeline{
 			}
 		}
 
-		//console.log(this.#steps);
-
 	}
 
 	#fillTimeline(object){
@@ -122,6 +120,36 @@ class Timeline{
 			}
 		}
 		return teams;
+	}
+
+	getNbTaskDoneByTeamAndTime(team, time){
+		let done = 0;
+		let notDone = 0;
+		const tasks = this.#model.getTasks();
+		for(let t in tasks){
+			if(tasks[t].getTaskTeam().getId() == team.getId()){
+				if(this.getTime(tasks[t].getEndDate()) > time){
+					notDone++;
+				}else{
+					done++;
+				}
+			}
+		}
+		return done + "/" + (notDone + done);
+
+	}
+
+	getStartEndDateByTeam(team){
+		let start = null;
+		let end = null;
+		const tasks = this.#model.getTasks();
+		for(let t in tasks){
+			if(tasks[t].getTaskTeam().getId() == team.getId()){
+				if(start == null || tasks[t].getStartDate() < start) start = tasks[t].getStartDate();
+				if(end == null || tasks[t].getEndDate() > end) end = tasks[t].getEndDate();
+			}
+		}
+		return start.getDay() + "/" + start.getMonth() + "/" + start.getFullYear() + "-" + end.getDay() + "/" + end.getMonth() + "/" + end.getFullYear();
 	}
 
 	/**
@@ -408,7 +436,7 @@ class Timeline{
 
 		for(let i = 1 ; i <= 6 ; i++){
 
-			const tasks = this.getTasksByTeamBetweenTwoDates(taskTeam, start+ (((end - start + 1) / 6) * (i - 1)), start + (((end - start + 1) / 6) * i) - 1);		
+			const tasks = this.getTasksByTeamBetweenTwoDates(taskTeam, start+ (((end - start + 1) / 6) * (i - 1)), start + (((end - start + 1) / 6) * i) - 1);	
 			for(let t in tasks){
 				const originNth = this.getOriginNth(taskTeam, tasks[t]);
 				if(originNth == nth){
@@ -454,14 +482,22 @@ class Timeline{
 	getOriginNth(taskTeam, task){
 		const time = this.getTime(task.getStartDate());
 		const startWeekTime = Math.trunc(time / 7) * 7;
-		const tasks = this.getTasksByTeamBetweenTwoDates(taskTeam, startWeekTime, startWeekTime + 7);
-		return tasks.indexOf(task);
+		const tasks = this.getTasksByTeamBetweenTwoDates(taskTeam, startWeekTime, startWeekTime + 6);
+		let offset = 0;
+		for(let t in tasks){
+			if(tasks[t] == task){
+				return (offset + parseInt(t)) % tasks.length
+			}else{
+				offset += this.getOriginNth(taskTeam, tasks[t]);
+			}
+		}
+		return null;
 	}
 
 	getOriginNthByPhase(phase, taskTeam, task){
 		const time = this.getTime(task.getStartDate());
 		const startWeekTime = Math.trunc(time / 7) * 7;
-		const tasks = this.getTasksByTeamAndPhaseBetweenTwoDates(phase, taskTeam, startWeekTime, startWeekTime + 7);
+		const tasks = this.getTasksByTeamAndPhaseBetweenTwoDates(phase, taskTeam, startWeekTime, startWeekTime + 6);
 		return tasks.indexOf(task);
 	}
 

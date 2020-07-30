@@ -2,7 +2,129 @@
 	position:initial;
 }
 
+#toolbar-settingsTool, #toolbar-fullscreenTool, #navTools, #toolbar-measurementSubmenuTool, #toolbar-explodeTool{
+	display : none !important;
+}
+
+#modelTools{
+	margin-right : 0px;
+	border-radius: 5px 0px 0px 5px;
+}
+
+#settingsTools{
+	margin-left : 0px;
+	border-radius: 0px 5px 5px 0px;
+}
+
+#toolbar-sectionTool{
+	display : block !important;
+}
+
+#guiviewer3d-toolbar{
+	width : fit-content;
+	right : 0px;
+	position : absolute;
+	left : initial;
+}
+
 #forgeV{
 	width : 100%;
 	height: 100%;
+}
+
+#modelMenu{
+	background-color : rgba(0,0,0,0);
+	position : absolute;
+	z-index: 0;
+	width : 100%;
+	display : flex;
+	justify-content : center;
+
+	.openMenu{
+		display : flex;
+		flex-direction : column;
+		width : 100%;
+		align-items: center;
+		justify-content : center;
+
+		> div{
+			width : 100%;
+			padding : 10px;
+			display : flex;
+			justify-content: center;
+			align-items : center;
+			background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.2) 100%);
+
+			.modelName{
+				margin : 10px;
+				font-family: Oswald;
+				font-style: normal;
+				font-weight: 500;
+				font-size: 24px;
+				text-indent: 3px;
+				text-transform: capitalize;
+
+				display : flex;
+				align-items : center;
+
+				*{
+					display : inline-block;
+				}
+
+			}
+
+			.modelName.shown{
+
+				.fileButton{
+					background: #FFFFFF;
+					/* Blackish */
+
+					border: 2px solid #000000;
+					box-sizing: border-box;
+					/* Drop shadow */
+
+					height : 30px;
+					width : 30px;
+					border-radius: 15px;
+					box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.5);
+				}
+				p{
+					color : #000000;
+				}
+
+			}
+
+			.modelName.hide{
+
+				.fileButton{
+					/* Blackish */
+
+					border: 2px solid #000000;
+					box-sizing: border-box;
+					/* Drop shadow */
+
+					filter: drop-shadow(2px 4px 4px rgba(0, 0, 0, 0.5));
+
+					height : 30px;
+					width : 30px;
+					border-radius: 15px;
+
+				}
+				p{
+					color : #808080;
+				}
+
+			}
+
+		}
+
+		svg{
+
+			width : 25%;
+		}
+	}
+
+	.menuContent{
+
+	}
 }

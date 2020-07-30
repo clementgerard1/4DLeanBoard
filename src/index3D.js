@@ -16,6 +16,7 @@ import V_filterMenuUtils from "./components/Utils/V_filterMenuUtils.class.js";
 //import Hammer from "hammerjs";
 
 import "./index3D.scss";
+import infoIcon from "./components/assets/info.svg";
 import Config from "../config.js";
 import "animate.css";
 import TouchGesturesUtils from "./components/Utils/V_touchGesturesUtils.class.js";
@@ -117,11 +118,13 @@ function init(){
 			timeline : null,
 			model : null,
 			duration : null,
-			urn : null,
+			urns : null,
 			oauth : null,
 			modelSelected : false,
 			selectPanel : false,
 			forgeReady : false,
+			infoicon : infoIcon,
+			infoDisplay : false,
  		},
 		methods: {
 			findGetParameter : function(parameterName) {
@@ -176,7 +179,7 @@ function init(){
 						this.modelSelected = true;
 
 
-						this.urn = datas.urn;
+						this.urns = datas.urns;
 						this.oauth = datas.oAuth;
 						this.forgeReady = true;
 
@@ -185,6 +188,12 @@ function init(){
  			},
  			handleTap : function(){
  				this.loadModel("test");
+ 			},
+ 			infoTap : function(){
+ 				this.infoDisplay = true;
+ 			},
+ 			handleHideMenu : function(){
+ 				this.infoDisplay = false;
  			}
 		},
  		created : function(){
@@ -215,10 +224,19 @@ function init(){
 	 				<p v-tap="handleTap"> No selected </p>
 	 			</modelselect>
 
+	 			<div id="infoFrame" v-if="infoDisplay" v-tap="handleHideMenu">
+	 				<div>
+	 					<p>Bientôt un tutoriel</p>
+	 				</div>
+	 			</div>
+
 	 			<div v-if="forgeReady" id="viewerFrame">
 	 				<filterpanel id="filterPanel" v-bind:model="model"></filterpanel>
-	 				<forgeviewer id="forgeViewer" v-bind:model="model" v-bind:timeline="timeline" v-bind:urn="urn" v-bind:oauth="oauth"></forgeviewer>
-	 				<player id="mainPlayer" v-bind:duration="duration" v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit"></player>
+	 				<forgeviewer id="forgeViewer" v-bind:model="model" v-bind:timeline="timeline" v-bind:urns="urns" v-bind:oauth="oauth"></forgeviewer>
+		 			<div id="copyright">
+		 				<p>UMR 3495 MAP-CRAI © 2020</p>
+		 				<a v-tap="infoTap" id="infoIcon" v-html="infoicon"></a>
+		 			</div>
 	 			</div>
 	 		</div>
 	 		<svgdefs style="width : 0px; height: 0px;"></svgdefs>

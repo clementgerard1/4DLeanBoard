@@ -1,0 +1,64 @@
+@use "../SixWeekView/assets/variables" as v;
+
+.phaseRow{
+
+	position :relative;
+	display: flex;
+	align-items : center;
+	border-bottom : 1px solid rgba(0,0,0,0.1);
+	height: 37px;
+
+	.phaseItem{
+		position : relative;
+		display:inline-block;
+		padding : 0px 5px;
+		margin : 2px 0px;
+		white-space: nowrap;
+		z-index:  1;
+		text-align : left;
+
+		font-family : Oswald;
+		font-size : 18px;
+	}
+
+	.phaseItemNameLeft{
+		white-space: nowrap;
+		position : absolute;
+		display : inline-block;
+		font-family : Oswald;
+		font-size : 24px;
+	}
+
+	.phaseItemNameRight{
+		margin-left : 10px;
+		white-space: nowrap;
+		position : relative;
+		display : inline-block;
+		font-family : Oswald;
+		font-size : 24px;
+	}
+
+	.phaseItemFilled{
+		position : absolute;
+		top:0px;
+		margin : 2px 0px;
+		background-color : v.$phaseGrey;
+		border : v.$phaseGrey 3px solid;
+		height : 32px;
+		z-index : -1;
+	}
+
+	.phaseItemNotFilled{
+		position : absolute;
+		top:0px;
+		margin : 2px 0px;
+		z-index: 10;
+		border : v.$white 3px solid;
+		background-color : rgba(0,0,0,0);
+		height : 32px;
+	}
+}
+
+.phaseRow:nth-child(12), .phaseRow:nth-child(13){
+	border-bottom : 0px solid rgba(0,0,0,0.2);
+}

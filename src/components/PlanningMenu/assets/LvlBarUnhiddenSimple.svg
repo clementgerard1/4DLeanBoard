@@ -1,0 +1,47 @@
+<svg width="1276" height="150" viewBox="0 0 1276 150" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g filter="url(#filter0_b)">
+<path d="M798 120C798 136.569 784.569 150 768 150L508 150C491.431 150 478 136.569 478 120L478 118L798 118L798 120Z" fill="black" fill-opacity="0.26"/>
+</g>
+<path d="M623 134H638H653" stroke="#808080" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<g filter="url(#filter1_b)">
+<path d="M1276 88C1276 104.569 1262.57 118 1246 118L30 118C13.4315 118 -1.17422e-06 104.569 -2.62268e-06 88.0001L-1.03159e-05 0.000111551L1276 0L1276 88Z" fill="black" fill-opacity="0.26"/>
+</g>
+<text fill="#808080" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="24" font-weight="500" letter-spacing="0em"><tspan x="377" y="65.873">Milestones</tspan></text>
+<rect opacity="0.5" x="342" y="41" width="30" height="30" fill="url(#pattern0)"/>
+<text fill="#808080" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="24" font-weight="500" letter-spacing="0em"><tspan x="550" y="65.873">Phases</tspan></text>
+<rect opacity="0.5" x="515" y="41" width="30" height="30" fill="url(#pattern1)"/>
+<text fill="#808080" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="24" font-weight="500" letter-spacing="0em"><tspan x="723" y="65.873">6 Weeks</tspan></text>
+<rect opacity="0.5" x="688" y="41" width="30" height="30" fill="url(#pattern2)"/>
+<text fill="#808080" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="24" font-weight="500" letter-spacing="0em"><tspan x="896" y="65.873">Week</tspan></text>
+<rect opacity="0.5" x="861" y="41" width="30" height="30" fill="url(#pattern3)"/>
+<defs>
+<filter id="filter0_b" x="468" y="108" width="340" height="52" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feGaussianBlur in="BackgroundImage" stdDeviation="5"/>
+<feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur" result="shape"/>
+</filter>
+<filter id="filter1_b" x="-10" y="-10" width="1296" height="138" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feGaussianBlur in="BackgroundImage" stdDeviation="5"/>
+<feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur" result="shape"/>
+</filter>
+<pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image0" transform="scale(0.0333333)"/>
+</pattern>
+<pattern id="pattern1" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image1" transform="scale(0.0333333)"/>
+</pattern>
+<pattern id="pattern2" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image2" transform="scale(0.0333333)"/>
+</pattern>
+<pattern id="pattern3" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image3" transform="scale(0.0333333)"/>
+</pattern>
+<image id="image0" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAABUElEQVRIie3VvytFYRzH8ZcfyeJH+bEyWAwyGCiKDTuT1WYwWsS/wOQPYLFKKRSLzSLJRl1KSpQSUpfhPqd76dxwnXMMfOpTT+f7fZ739/uc55yHv6aaH8w9wDxacInbRCr6gl4/+BCzaM0aHPk8a/AJ5mTY8TJ604bFgStSdYKFZAIeLzNOVX14UNzqRwykDe3AVQCuBL+GZx1pQRtwFEDbqFX4820qfk5NSUOrsREAp2guiTXiOMS2QkGJaTksfIOumHgnrkPOUlLQ6bDgM0YwhJ0wLtUgnkLuzE+ho3hBHmsKN1J0mvcwjH3soh9TIfclzK1I3bhT/jKI847iWbhHz3ehbTj7JjRyvmR8hvavQusUtq8SaJwPUP8ZtAqrCUIjr4e1y2oxBWjkhXLQCe/fT9LOYzIOfJEiNHIugv3afVyqcel2ncNYZt3869f1Buw28ByOuimtAAAAAElFTkSuQmCC"/>
+<image id="image1" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAAAjUlEQVRIie2WSQ6AIBAEW+PnjM/Gl4j/wBPGsBiRaR0jlXDhQGWaYQEaf2MCsAJwwsMCGM/EliD1YzmKukDsLqRSw+7ryaIsr4mHzHy4BbVEW6g2aoO4O80T4hSUzvdV0de9U7FI/FLNVZ2S6qhTFMfPPMdFyamJul0gYuuqexbZP5Go4pnoEmnKxnfYADkVXJTgCWwSAAAAAElFTkSuQmCC"/>
+<image id="image2" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAAAjElEQVRIie2WOw6AIBBEnx7LTy/x2MaLqOcQG02QQFQULNiXbDNsmGUoAAQhAT2wADpSzYByGc8RTY+aXMZmQwU0lubrD9JL1wS7XnjWPucqJoARGKz+EN17Yh8r7hif6ifyuGNz86tI7EH0G/3pHX+GGItxPsY10P5hnPR1+u0joCKbT0D3LhtBuMEGh0iZz80lV3QAAAAASUVORK5CYII="/>
+<image id="image3" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAAAbklEQVRIie2VQQrAIAwEp6X//5Ttu+zJS1rRQJQWd8BbwhgSEhArkoAc/JKV7IOLKORJnh9yUe/X6Yx/9Bdgq4hbPbF53niORoKX7g/NmmqJJZZ4HNELpPsKRVX8tr8LQ3e1m/WG63Ni97AIYbkBDxItquXeH/4AAAAASUVORK5CYII="/>
+</defs>
+</svg>
