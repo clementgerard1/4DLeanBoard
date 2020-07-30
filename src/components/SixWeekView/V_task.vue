@@ -375,8 +375,13 @@ export default {
 			}
 		},
 		handleDoubleTap: function(event){
-			if(this.isopen){
-				V_socketUtils.updateStateDisplay(this.task, !this.state);
+
+			if(!this.constraintTap){
+				if(this.isopen){
+					V_socketUtils.updateStateDisplay(this.task, !this.state);
+				}
+			}else{
+				this.constraintTap = false;
 			}
 		},
 		handlePress : function(event){
