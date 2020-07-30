@@ -22,7 +22,7 @@ class Tool extends Autodesk.Viewing.ToolInterface {
         delete this.handleButtonDown;
         delete this.handleButtonUp;
         delete this.handleSingleClick;
-        //delete this.handleWheelInput;
+        delete this.handleWheelInput;
         delete this.handleGesture;
     }
  
