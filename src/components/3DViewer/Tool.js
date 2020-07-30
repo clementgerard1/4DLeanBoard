@@ -54,7 +54,7 @@ class Tool extends Autodesk.Viewing.ToolInterface {
         return false;
     }
 
-    handleWheelInput(delta) {
+   /* handleWheelInput(delta) {
         const deltaa = -Math.min(delta, 9);
         const vec = this.viewer.navigation.getEyeToCenterOfBoundsVec(this.utilities.getBoundingBox());
         const distance = vec.distanceTo(new THREE.Vector3( 0, 0, 0 ));
@@ -64,13 +64,13 @@ class Tool extends Autodesk.Viewing.ToolInterface {
             this.viewer.impl.invalidate(true);
         }
         return true;
-    };
+    };*/
  
      handleGesture(event){
         if(event.type == "rotate" || event.type == "rotatestart" || event.type == "rotatemove" || event.type == "rotateend" || event.type == "rotatecancel"){
             return true;
         }
-        this.viewer.navigation.orientCameraUp();
+        //this.viewer.navigation.orientCameraUp();
         
         /* if(event.type == "pinchmove" || event.type == "pinchstart" || event.type == "pinchend"){
             const vec = this.viewer.navigation.getEyeVector();
