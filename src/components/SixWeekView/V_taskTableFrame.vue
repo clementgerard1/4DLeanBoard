@@ -54,6 +54,7 @@ export default {
 
 
 			for(let t in taskTeams){
+				console.log(taskTeams[t].getName(), 0, this.duration, this.timeline.getMaxSimultaneousTasksByTaskTeamBetweenTwoDates(taskTeams[t], 0, this.duration - 1))
 				lines[lines.length] = {
 					taskteam : taskTeams[t],
 					nb : this.timeline.getMaxSimultaneousTasksByTaskTeamBetweenTwoDates(taskTeams[t], 0, this.duration - 1)

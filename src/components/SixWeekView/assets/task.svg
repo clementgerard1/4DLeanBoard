@@ -6,8 +6,9 @@
 </g>
 <text v-show="isOpen" fill="black" xml:space="preserve" style="white-space: pre" font-family="Roboto Condensed" font-size="24" font-style="italic" font-weight="300" letter-spacing="0em"><tspan x="15" y="77.3047">{{taskname.l1}}</tspan><tspan x="15" y="109.305">{{taskname.l2}}</tspan></text>
 
-<rect v-if="ready" x="14.5" y="6.5" width="175" height="27" v-bind:fill="svgcolor" stroke="white" stroke-width="5"/>
-<rect v-else="ready" x="14.5" y="6.5" width="175" height="27" fill="white" v-bind:stroke="svgcolor" stroke-width="5"/>
+<rect v-if="ready && !done" x="14.5" y="6.5" width="175" height="27" v-bind:fill="svgcolor" stroke="white" stroke-width="5"/>
+<rect v-if="ready && done" x="7.5" y="6.5" width="186" height="27" v-bind:fill="svgcolor" stroke="svgcolor" stroke-width="5"/>
+<rect v-if="!ready" x="14.5" y="6.5" width="175" height="27" fill="white" v-bind:stroke="svgcolor" stroke-width="5"/>
 
 <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="14" font-weight="500" letter-spacing="0em"><tspan x="19" y="25.848">{{tid}}</tspan></text>
 

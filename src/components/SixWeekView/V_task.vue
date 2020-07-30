@@ -526,7 +526,7 @@ export default {
 	},
 	template : `
 	<div class="taskWrapper" v-bind:class='[highlighted ? "highlighted" : ""]'>
-		<div v-bind:style="{maxHeight : maxheight}" v-doubletap='handleTap' v-tap='handleDoubleTap' class="task">
+		<div v-bind:style="{maxHeight : maxheight}"` /*+ `v-doubletap='handleTap'`*/ + ` v-tap='handleDoubleTap' class="task">
 			<div v-if="notEmpty" class='taskclass animate__animated animate__flipInY'>` + taskSVG + `</div>
 			<div v-if="notEmpty" v-show="state" v-bind:id="taskId + '-' + time" class="taskstate animate__animated animate__faster">` + taskStatusSVG + `</div>
 		</div>

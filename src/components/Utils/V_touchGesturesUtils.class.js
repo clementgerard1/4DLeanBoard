@@ -41,10 +41,10 @@ class V_TouchGesturesUtils{
 				if(k == "tap1"){//SingleTap
 
 					const single = hammer.get("tap1");
-					const double = hammer.get("tap2");
-					if(double != null){
-						single.requireFailure(double);
-					}
+					// const double = hammer.get("tap2");
+					// if(double != null){
+					// 	single.requireFailure(double);
+					// }
 
 				}else if(k == "tap2"){//DoubleTap	
 				

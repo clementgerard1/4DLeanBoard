@@ -486,7 +486,8 @@ class Timeline{
 		let offset = 0;
 		for(let t in tasks){
 			if(tasks[t] == task){
-				return (offset + parseInt(t)) % tasks.length
+				console.log("hoy", tasks[t].getId(), (offset + parseInt(t)));
+				return (offset + 1) % tasks.length
 			}else{
 				offset += this.getOriginNth(taskTeam, tasks[t]);
 			}
