@@ -272,10 +272,10 @@ export default {
 
 		setIfcMenuChange(ifcs){
 			for(let i in ifcs){
-				this.modelShown[i].model.hide(ifcs[i]);
-				this.$set(this.modelShown, id, {
-					model : this.modelShown[id].model,
-					shown : this.modelShown[id].model.isShown()
+				this.modelShown[i].model.hide(!ifcs[i]);
+				this.$set(this.modelShown, i, {
+					model : this.modelShown[i].model,
+					shown : this.modelShown[i].model.isShown()
 				});
 			}
 		}

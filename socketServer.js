@@ -23,8 +23,7 @@ io.on("connection", function(client){
 
         //Initialisation
         DataApi.getModel(modelName, true).then((data)=>{
-            const model = new Model();
-            model.deserialize(data.model);
+            const model = data.model;
 
             //IFC Menu
             //Play menu
@@ -55,7 +54,6 @@ io.on("connection", function(client){
             for(let i = 0 ; i < data.urns.length ; i++){
                 ifcmenu[i] = true;
             }
-
             models[modelName] = {
                 model : model,
                 playerTime : 0,
@@ -69,6 +67,8 @@ io.on("connection", function(client){
                 teamDisplayed : teamDisplayed,
                 teamOpen : teamOpen,
             };
+
+            console.log(modelName, models[modelName]);
             client.emit("sendInit", models[modelName]);
         }).catch(error => console.error(error));
 
@@ -185,7 +185,6 @@ io.on("connection", function(client){
 
 
     client.on("updateIfcMenu", (datas) => {
-        console.log(models);
         models[modelName].ifcmenu = datas.ifcs;
         broadcast(client, modelName, "updateIfcMenu", datas);
         //client.broadcast.emit("clearHighlighting", datas);

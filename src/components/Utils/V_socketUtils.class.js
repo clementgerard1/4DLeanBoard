@@ -5,6 +5,7 @@ import V_taskTableUtils from "./V_taskTableUtils.class.js";
 import V_timelineUtils from "./V_timelineUtils.class.js";
 import V_phasesUtils from "./V_phasesUtils.class.js";
 import V_planningMenuUtils from "./V_planningMenuUtils.class.js";
+import V_blockUtils from "./V_blockUtils.class.js";
 import DataApi from "../../../dataServer/DataApi.class.js";
 
 class V_socketUtils{
@@ -97,7 +98,20 @@ class V_socketUtils{
 			this.initApp();
 		});
 
+		let timeBlockBool = false;
+		let timeBlockTimeout = null;
+		const timeBlock = 10000;
 		this.socket.on("setTime", (datas) => {
+
+			V_blockUtils.setDisplay(true);
+			if(timeBlockBool){
+				clearTimeout(timeBlockTimeout);
+				timeBlockBool = true;
+			}
+			timeBlockTimeout = setTimeout(function(){ 
+				V_blockUtils.setDisplay(false);
+			}, timeBlock);
+
 			V_timelineUtils.setTime(datas.time);
 		});
 
@@ -132,7 +146,7 @@ class V_socketUtils{
 			V_4DUtils.clearHighlighting();
 		});
 		this.socket.on("updateIfcMenu", (datas) => {
-			V_filterMenuUtils.V_4DUtils(datas.archi, datas.struct, datas.mep, datas.construction);
+			V_4DUtils.setIfcMenuChange(datas.ifcs);
 		});
 		this.socket.on("updatePlanningMenu", (datas) => {
 			//V_filterMenuUtils.setPlanningMenuChange(datas.choices);

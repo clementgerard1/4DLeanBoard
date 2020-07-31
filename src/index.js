@@ -16,6 +16,7 @@ import openSocket from "socket.io-client";
 import V_timelineUtils from "./components/Utils/V_timelineUtils.class.js";
 import V_taskTableUtils from "./components/Utils/V_taskTableUtils.class.js";
 import V_filterMenuUtils from "./components/Utils/V_filterMenuUtils.class.js";
+import V_blockPage from "./components/BlockPage/V_blockPage.vue";
 
 //Hammer si already on viewer3D.min.js loaded on index.html
 //import Hammer from "hammerjs";
@@ -142,6 +143,7 @@ function init(){
 			modelselect : V_modelSelect,
 			phasesdisplay : V_phasesDisplay,
 			planningmenu : V_planningMenu,
+			blockpage : V_blockPage,
 		},
 		data:{
 			playerinit : null,
@@ -240,6 +242,8 @@ function init(){
  		template : `
  		<div>
 	 		<div id="content">
+
+	 			<blockpage></blockpage>
 
 	 			<modelselect id="modelSelect" v-if="selectPanel" v-on:setModel="setModel($event)">
 	 			</modelselect>

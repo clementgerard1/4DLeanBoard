@@ -8,6 +8,7 @@ class V_4DUtils{
 		teamDisplayMode : null,
 		teamsDisplayed : [],
 		teamsDisplayedId : [],
+		ifcs : null,
 	};
 	static needInit = false;
 
@@ -20,13 +21,14 @@ class V_4DUtils{
 		//this.viewers.push(viewer);
 		this.viewer = viewer;
 		if(this.needInit){
-			this.setTeamDisplayMode(this.waitViewer.teamDisplayMode);
+			if(this.waitViewer.teamDisplayMode != null) this.setTeamDisplayMode(this.waitViewer.teamDisplayMode);
 			for(let t in this.waitViewer.teamsDisplayed){
 				this.setTeamDisplayed(this.waitViewer.teamsDisplayed[t].taskTeam, this.waitViewer.teamsDisplayed[t].bool);
 			}
 			for(let t in this.waitViewer.teamsDisplayedId){
 				this.setTeamDisplayedById(this.waitViewer.teamsDisplayedId[t].taskTeamId, this.waitViewer.teamsDisplayedId[t].bool);
 			}
+			if(this.waitViewer.ifcs != null) this.viewer.setIfcMenuChange(this.waitViewer.ifcs);
 		}
 		this.needInit = false;
 	}	
@@ -128,7 +130,12 @@ class V_4DUtils{
 		@param {bool} construction
 	*/
 	static setIfcMenuChange(ifcs){
-		this.viewer.setIfcMenuChange(ifcs);
+		if(this.viewer != null){
+			this.viewer.setIfcMenuChange(ifcs);
+		}else{
+			this.waitViewer.ifcs = ifcs;
+			this.needInit = true;
+		}
 	}
 
 }

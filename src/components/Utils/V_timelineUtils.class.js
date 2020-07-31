@@ -3,9 +3,11 @@ import V_taskTableUtils from "./V_taskTableUtils.class.js";
 class V_timelineUtils{
 
 	static time = null;
+	static offset = 0;
 	static timeline = null;
 	static listeners = {
 		"time" : {},
+		"offset" : {}
 	};
 
 	static setTimeline(timeline){
@@ -58,6 +60,13 @@ class V_timelineUtils{
 		}
 	}
 
+	static setOffset(offset){
+		this.offset = offset;
+		for(let l in this.listeners["offset"]){
+			this.listeners["offset"][l](this.offset);
+		}
+	}
+
 	/**
 		Get actual time
 		@returns {uint}
@@ -65,6 +74,10 @@ class V_timelineUtils{
 	*/
 	static getTime(){
 		return this.time;
+	}
+
+	static getOffset(){
+		return this.offset;
 	}
 
 }
