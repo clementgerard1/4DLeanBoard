@@ -1,8 +1,10 @@
 @use "assets/variables" as v;
+@use "sass:list";
+
 
 .rowHeader{
 	display : flex;
-	padding : 0px 25px;
+	padding : 0px 40px;
 	width: 100%;
 	position : relative;
 
@@ -25,14 +27,14 @@
 	.Larrow{
 		width : 20px;
 		position : absolute;
-		left : 0px;
+		left : 5px;
 		bottom : 0px;
 	}
 
 	.Rarrow{
 		width : 20px;
 		position : absolute;
-		right : 0px;
+		right : 5px;
 		bottom : 0px;
 	}
 

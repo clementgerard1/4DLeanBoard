@@ -1,10 +1,10 @@
 <svg width="1276" height="150" viewBox="0 0 1276 150" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 	<g filter="url(#filter0_b_planBar)">
-		<path id="openPlanningMenu"  d="M798 120C798 136.569 784.569 150 768 150L508 150C491.431 150 478 136.569 478 120L478 118L798 118L798 120Z" fill="black" fill-opacity="0.26"/>
+		<path id="openPlanningMenu"  d="M798 120C798 136.569 784.569 150 768 150L508 150C491.431 150 478 136.569 478 120L478 118L798 118L798 120Z" fill="#CCCCCC" fill-opacity="1"/>
 	</g>
 	<path id="openPlanningMenuButton" d="M623 134H638H653" stroke="#808080" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
 	<g filter="url(#filter1_b_planBar)">
-	<path d="M1276 88C1276 104.569 1262.57 118 1246 118L30 118C13.4315 118 -1.17422e-06 104.569 -2.62268e-06 88.0001L-1.03159e-05 0.000111551L1276 0L1276 88Z" fill="black" fill-opacity="0.26"/>
+	<path d="M1276 88C1276 104.569 1262.57 118 1246 118L30 118C13.4315 118 -1.17422e-06 104.569 -2.62268e-06 88.0001L-1.03159e-05 0.000111551L1276 0L1276 88Z" fill="#CCCCCC" fill-opacity="1"/>
 	</g>
 
 	<g v-tap="()=>handleMenuTap(0)" v-if="milestoneDisplay">

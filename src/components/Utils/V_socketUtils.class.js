@@ -51,6 +51,13 @@ class V_socketUtils{
 				V_taskTableUtils.setTeamById(teamId, nth, this.initDatas.teamOpen[t]);
 			}
 
+			//Team info tab opening
+			for(let t in this.initDatas.teamInfosDisplayed){
+				const teamId = t.split("-")[0];
+				const nth = t.split("-")[1];
+				V_taskTableUtils.setTeamDisplay(teamId, nth, this.initDatas.teamInfosDisplayed[t]);
+			}
+
 			//filter menu		
 			//IFC Menu
 			V_4DUtils.setIfcMenuChange(this.initDatas.ifcmenu);
@@ -113,6 +120,10 @@ class V_socketUtils{
 			}, timeBlock);
 
 			V_timelineUtils.setTime(datas.time);
+		});
+
+		this.socket.on("setTeamDisplay" , (datas) => {
+			V_taskTableUtils.setTeamDisplay(datas.teamId, datas.nth, datas.value);
 		});
 
 		this.socket.on("setRequirement", (datas) => {
@@ -318,6 +329,15 @@ class V_socketUtils{
 		V_taskTableUtils.setTeam(team, nth, bool);
 		this.socket.emit("setTeamOpening", { 
 			teamId : team.getId(),
+			nth : nth,
+			value : bool
+		});
+	}
+
+	static setTeamDisplay(teamId, nth, bool){
+		V_taskTableUtils.setTeamDisplay(teamId, nth, bool);
+		this.socket.emit("setTeamDisplay", { 
+			teamId : teamId,
 			nth : nth,
 			value : bool
 		});

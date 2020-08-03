@@ -107,13 +107,14 @@ export default {
 	template : `
 		<div class="taskTableFrame" v-bind:style="{ height : newheight}">
 
+			<!-- core -->
+			<row6wheader v-if="weeksBool" v-bind:duration="_duration" v-bind:tasksize="tasksize" v-bind:tasktablestart="tasktablestart" v-bind:time="time" ></row6wheader>
+
 			<div class="taskTableWrapper">
 
 				<!-- background -->
-				<tasktablebackground v-if="weeksBool" v-bind:tasksize="tasksize" v-bind:tasktablestart="tasktablestart" v-bind:time="time" v-bind:nbopened="nbopened" v-bind:nbclosed="nbclosed" id="taskTableBackground" v-bind:style="{paddingTop : tasksize + 'px', paddingBottom : tasksize + 'px' }"></tasktablebackground>
+				<tasktablebackground v-if="weeksBool" v-bind:tasksize="tasksize" v-bind:tasktablestart="tasktablestart" v-bind:time="time" v-bind:nbopened="nbopened" v-bind:nbclosed="nbclosed" id="taskTableBackground" v-bind:style="{paddingTop : '0px', paddingBottom : tasksize + 'px' }"></tasktablebackground>
 
-				<!-- core -->
-				<row6wheader v-if="weeksBool" v-bind:duration="_duration" v-bind:tasksize="tasksize" v-bind:tasktablestart="tasktablestart" v-bind:time="time" ></row6wheader>
 				<template v-if="weeksBool" v-for="line in lines">
 					<row6w v-bind:tasksize="tasksize" v-bind:tasktablestart="tasktablestart" v-bind:time="time" v-for="i in line.nb" :key="line.taskteam.getId() + '-' + (tasktablestart + i)" v-bind:taskteam="line.taskteam" v-bind:nth="i-1"></row6w>
 				</template>

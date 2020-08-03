@@ -64,6 +64,9 @@ export default {
 		_team : function(){
 			return this.taskteam;
 		},
+		_nth : function(){
+			return this.nth;
+		},
 		zIndex : function(){
 			if(this.teamDescription){
 				return {
@@ -109,7 +112,7 @@ export default {
 	<div class="phaserow">
 
 		<!-- line -->
-		<taskline v-if="isVisible" class="phaseLine" v-tap="handleOpenPhase" v-bind:time="_time" v-bind:team="_team" v-bind:class="color" v-bind:teamdescription="teamDescription" v-bind:style='zIndex'></taskline>
+		<taskline v-if="isVisible" class="phaseLine" v-tap="handleOpenPhase" v-bind:time="_time" v-bind:nth="_nth" v-bind:team="_team" v-bind:class="color" v-bind:teamdescription="teamDescription" v-bind:style='zIndex'></taskline>
 
 		<!-- tasks -->
 		<div v-if="isVisible" v-bind:style="{maxHeight : maxheight, height : (tasksize - 30) + 'px'}" class="tasksWrapper">

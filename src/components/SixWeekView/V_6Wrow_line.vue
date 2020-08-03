@@ -1,4 +1,6 @@
 import TimelineUtils from "../Utils/V_timelineUtils.class.js";
+import V_socketUtils from "../Utils/V_socketUtils.class.js";
+import V_taskTableUtils from "../Utils/V_taskTableUtils.class.js";
 import Utils from "../../class/Utils.class.js";
 import CheckList from "./assets/CheckList.svg";
 import Schedule from "./assets/Schedule.svg";
@@ -20,17 +22,28 @@ export default {
 	props: [
 		"team",
 		"teamdescription",
-		"time"
+		"time",
+		"nth"
 	],
 	methods: {
 		handleTap : function(){
-			this.$parent.teamDescription = !this.$parent.teamDescription;
+			//this.setTeamDisplay(this.team.getId(), this.nth, !this.$parent.teamDescription);
+			V_socketUtils.setTeamDisplay(this.team.getId(), this.nth, !this.$parent.teamDescription);
+		},
+		setTeamDisplay : function(teamId, nth, bool){
+			if(this.team.getId() == teamId && this.nth == nth){
+				this.$parent.teamDescription = bool;
+			}
 		}
 	},
 	inject : [
 		'timeline',
 		'model',
 	],
+	created : function(){
+		V_taskTableUtils.addLine(this);
+		this.setTeamDisplay(this.team.getId(), this.nth, V_taskTableUtils.getInfosLine(this.team.getId(), this.nth));
+	},
 	computed : {
 		doneStatus : function(){
 			return this.timeline.getNbTaskDoneByTeamAndTime(this.team, this.time * 7);

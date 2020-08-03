@@ -5,16 +5,17 @@
 
 .taskTableFrame{
 
-	padding : v.$taskFramePadding;
 	z-index:-2;
-	overflow: scroll;
 	height: 100%;
+	overflow: hidden;
 
 
 	.taskTableWrapper{
+		overflow: scroll;
+		box-sizing: content-box;
 		height: 100%;
 		position: relative;
-		width: 100%;/*fit-content;*/
+		width: calc(100% + 17px);/*fit-content;*/
 		min-width: 100%;
 	}
 

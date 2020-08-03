@@ -8,6 +8,8 @@ class V_taskTableUtils{
 	static taskObjects = [];
 	static teams = [];
 	static frames = [];
+	static lines = [];
+	static infosLines = [];
 	
 
 	static setAllTasks(tasks){
@@ -77,6 +79,10 @@ class V_taskTableUtils{
 			}
 		}
 	}	
+
+	static addLine(vLine){
+		this.lines[vLine._uid] = vLine;
+	}
 
 	/**
 		Add V_6Wrow as listener of TaskTable Changement
@@ -270,6 +276,17 @@ class V_taskTableUtils{
 		for(let f in this.frames){
 			this.frames[f].setPlanningDisplay(milestone, phases, weeks, week);
 		}
+	}
+
+	static setTeamDisplay(teamId, nth, bool){
+		this.infosLines[teamId + "-" + nth] = bool;
+		for(let l in this.lines){
+			this.lines[l].setTeamDisplay(teamId, nth, bool);
+		}
+	}
+
+	static getInfosLine(teamId, nth){
+		return this.infosLines[teamId + "-" + nth];
 	}
 
 }

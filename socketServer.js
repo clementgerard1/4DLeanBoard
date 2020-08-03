@@ -13,6 +13,7 @@ const players = [];
 const w6s = [];
 const filters = [];
 const teamOpen = {};
+const teamInfosDisplayed = {};
 
 const models = [];
 
@@ -40,6 +41,7 @@ io.on("connection", function(client){
                 const nb = timeline.getMaxSimultaneousTasksByTaskTeamBetweenTwoDates(teams[t], 0, model.getDuration() - 1);
                 for(let n = 0 ; n < nb ; n++){
                     teamOpen[teams[t].getId() + "-" + n] = false;
+                    teamInfosDisplayed[teams[t].getId() + "-" + n] = false;
                 }
 
             }
@@ -65,6 +67,7 @@ io.on("connection", function(client){
                 playmenu : [false, false, false, false],
                 teamdisplay : 1,
                 teamDisplayed : teamDisplayed,
+                teamInfosDisplayed : teamInfosDisplayed,
                 teamOpen : teamOpen,
             };
 
@@ -206,6 +209,16 @@ io.on("connection", function(client){
             models[modelName].teamDisplayed[datas.team] = false;
         }
         broadcast(client, modelName, "updateTeamDisplayed", datas);
+        //client.broadcast.emit("clearHighlighting", datas);
+    })
+
+    client.on("setTeamDisplay", (datas) => {
+        if(datas.value){
+            models[modelName].teamInfosDisplayed[datas.teamId + "-" + datas.nth] = true;
+        }else if(!datas.value){
+            models[modelName].teamInfosDisplayed[datas.teamId + "-" + datas.nth] = false;
+        }
+        broadcast(client, modelName, "setTeamDisplay", datas);
         //client.broadcast.emit("clearHighlighting", datas);
     })
 

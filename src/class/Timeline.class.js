@@ -8,6 +8,7 @@ class Timeline{
 	#model;
 	#steps;
 	#startDate;
+	#startWeekDate;
 
 	/**
  		@class Timeline
@@ -21,6 +22,7 @@ class Timeline{
 		this.#model = model;
 		this.#steps = [];
 		this.#startDate = null;
+		this.#startWeekDate = null;
 		this.#constructTimeline();
 	}
 
@@ -34,6 +36,10 @@ class Timeline{
 			const d = milestones[m].getStartDate();
 			if(this.#startDate == null || d < this.#startDate) this.#startDate = d;
 		}
+
+
+		this.#startWeekDate = new Date(this.#startDate.getDate() - this.#startDate.getDay() + 1);
+
 
 		//Fill timeline
 		for(let m in milestones){
@@ -319,7 +325,7 @@ class Timeline{
 		@returns {Date}
 	*/
 	getDateObject(time){
-		return new Date(this.#startDate.getTime() + ( time * 1000 * 3600 * 24));
+		return new Date(this.#startWeekDate.getTime() + ( time * 1000 * 3600 * 24));
 	}
 
 	/*

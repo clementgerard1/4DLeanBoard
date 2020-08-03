@@ -60,7 +60,7 @@ export default {
 
 		<div v-doublePan="handleDoublePan" class="rowHeader" >
 			<div v-if="tasktablestart != 0" v-tap="handlePreviousWeek" :key="'previous'" class="Larrow" v-html="Larrow"></div>
-			<date v-bind:style="{ height: tasksize  + 'px' }" class="rowHeaderItem" v-for="i in 6" :key="i" v-tap="()=>{selectWeek(i-1)}" v-bind:time="tasktablestart + (i-1)"></date>
+			<date v-bind:style="{ height: (tasksize / 2)  + 'px' }" class="rowHeaderItem" v-for="i in 6" :key="i" v-tap="()=>{selectWeek(i-1)}" v-bind:time="tasktablestart + (i-1)"></date>
 			<div v-if="(tasktablestart + 7) < _duration" v-tap="handleNextWeek" :key="'next'" class="Rarrow" v-html="Rarrow"></div>
 	 	</div>
 
