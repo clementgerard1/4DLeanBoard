@@ -6,6 +6,7 @@ export default {
 		return {
 				time : this.playerinit,
 				startPan : null,
+				offset : 0
 		}
 	},
 	props:[
@@ -13,7 +14,7 @@ export default {
 		"timeline",
 		"model",
 		"playerinit",
-		"offsettime"
+		"offsettime",
 	],
 	inject:[
 		"timeline",
@@ -35,9 +36,18 @@ export default {
 				this.startOffset = V_timelineUtils.getOffset();
 			}
 			//console.log(this.startOffset + (week - this.startPan));
-			console.log(Math.trunc(this.time / 6) + V_timelineUtils.getOffset());
-			V_timelineUtils.setOffset(this.startOffset + (week - this.startPan));
-			console.log(V_timelineUtils.getOffset());
+			const newOffset = this.startOffset + (week - this.startPan);
+			//if(newOffset - (this.time % 6) <= 0 && (newOffset - (this.time % 6)) >= -5){
+
+			//Orignal time dans le offset 
+			const nthOffset = (this.time - this.startOffset) % 6;
+			const distance = newOffset - this.startOffset;
+			console.log(nthOffset, distance);
+			const calc = nthOffset - distance;
+			if(calc >= 0 && calc <= 5){	
+				V_timelineUtils.setOffset(newOffset);
+				this.offset = this.startOffset + (week - this.startPan);	
+			}
 			if(event.type == "panend"){
 				this.startPan = null;
 			}
@@ -47,8 +57,9 @@ export default {
 		nbWeeks : function(){
 			return Math.trunc(this.model.getDuration() / 7);
 		},
-		offset : function(){
-			return Math.trunc(this.time / 6);
+		startWeekTime : function(){
+			console.log(this.time, this.offset);
+			return Math.trunc((this.time - this.offset) / 6) * 6 + this.offset;
 		}
 	},
 	created : function(){
@@ -56,7 +67,7 @@ export default {
 	},
 	template : `
 	<div id="timelineOffset" class="timelineOffset">
-		<div v-pan="handleOffsetChange" id="sixWeekSelected" v-bind:style="{left : (offset * ((100 / nbWeeks) * 6)) + '%', width : ((100 / nbWeeks) * 6) + '%'}">
+		<div v-pan="handleOffsetChange" id="sixWeekSelected" v-bind:style="{left : (startWeekTime * (100 / nbWeeks)) + '%', width : ((100 / nbWeeks) * 6) + '%'}">
 
 		</div>
 	</div>`,

@@ -61,6 +61,7 @@ class V_timelineUtils{
 	}
 
 	static setOffset(offset){
+		// if(offset < -5 || offset > 5) !
 		this.offset = offset;
 		for(let l in this.listeners["offset"]){
 			this.listeners["offset"][l](this.offset);

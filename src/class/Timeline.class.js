@@ -36,9 +36,8 @@ class Timeline{
 			const d = milestones[m].getStartDate();
 			if(this.#startDate == null || d < this.#startDate) this.#startDate = d;
 		}
-
-
-		this.#startWeekDate = new Date(this.#startDate.getDate() - this.#startDate.getDay() + 1);
+		this.#startWeekDate = new Date(this.#startDate);
+		this.#startWeekDate.setDate(this.#startWeekDate.getDate() - (this.#startDate.getDay() - 1));
 
 
 		//Fill timeline

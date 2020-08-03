@@ -12,6 +12,7 @@
 
 	.taskTableWrapper{
 		overflow: scroll;
+		overflow-x : hidden;
 		box-sizing: content-box;
 		height: 100%;
 		position: relative;

@@ -21,7 +21,11 @@ export default {
 	methods : {
 		updateTime : function(time){
 			this.time = time;
-			this.tasktablestart = Math.trunc(this.time / 6) * 6;
+			this.tasktablestart = Math.trunc((this.time - this.offset) / 6) * 6 + this.offset;
+		},
+		updateOffset : function(offset){
+			this.offset = offset;
+			this.tasktablestart = Math.trunc((this.time - this.offset) / 6) * 6 + this.offset;
 		},
 		windowUpdate : function(event){
 			this.tasksize = (document.querySelector(".taskTableFrame").clientWidth - 80) / 6;
@@ -40,6 +44,7 @@ export default {
 		V_taskTableUtils.addFrame(this);
 		const taskTeams = this.model.getTaskTeams();
 		window.addEventListener("resize", this.windowUpdate);
+		TimelineUtils.addListener("offset", this, this.updateOffset);
 		TimelineUtils.addListener("time", this, this.updateTime);
 		V_socketUtils.addW6();
 	},
@@ -73,6 +78,7 @@ export default {
 				nbPhases : this.model.getPhases().length,
 				ganttBool : false,
 				weeksBool : false,
+				offset : 0,
 			};
 	},	
 	provide: function(){

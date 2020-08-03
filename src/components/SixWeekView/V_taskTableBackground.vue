@@ -1,5 +1,6 @@
 import "./V_taskTableBackground.scss";
 import V_socketUtils from "../Utils/V_socketUtils.class.js";
+import V_timelineUtils from "../Utils/V_timelineUtils.class.js";
 import scssVariables from "./assets/_variables.scss";
 
 export default {

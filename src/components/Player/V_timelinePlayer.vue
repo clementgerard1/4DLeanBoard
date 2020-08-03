@@ -9,6 +9,7 @@ export default {
 	data : function(){
 		return {
 				time : this.playerinit,
+				offset : 0,
 		}
 	},
 	props:[
@@ -28,13 +29,17 @@ export default {
 	methods: {
 		watchTime : function(time){
 			this.time = time;
+		},
+		watchOffset : function(offset){
+			this.offset = offset;
 		}
 	},
 	created : function(){
 		V_timelineUtils.addListener("time", this, this.watchTime);
+		V_timelineUtils.addListener("offset", this, this.watchOffset);
 	},
 	template : `
 	<div class="timelinePlayer">
-		<playerweek class="week" v-bind:time="time" v-for="i in nbweek" :key="i" v-bind:innertime="i-1" v-bind:id="i-1"></playerweek>
+		<playerweek class="week" v-bind:offset="offset" v-bind:time="time" v-for="i in nbweek" :key="i" v-bind:innertime="i-1" v-bind:id="i-1"></playerweek>
 	</div>`,
 }

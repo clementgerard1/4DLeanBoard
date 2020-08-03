@@ -9,6 +9,7 @@ export default {
 	props:[
 		'innertime',
 		'time',
+		'offset'
 	],	
 	inject:[
 		"timeline",
@@ -19,13 +20,20 @@ export default {
 			return this.innertime == this.time;
 		},
 		highlighted: function(){
-			return Math.trunc(this.time / 6) == Math.trunc(this.innertime / 6);
+			const firstTimeWeek = (this.time - ((this.time - this.offset)  % 6));
+			const calc = this.innertime - firstTimeWeek;
+			//console.log(Math.trunc((this.time - (this.offset % 6)) / 6), Math.trunc(this.innertime / 6));
+			return calc >= 0 && calc <= 5;
 		},
 		built : function(){
-			return Math.trunc(this.time / 6) > Math.trunc(this.innertime / 6);
+			const firstTimeWeek = (this.time - ((this.time - this.offset)  % 6));
+			const calc = this.innertime - firstTimeWeek;
+			return calc < 0;
 		},
 		tobuild : function(){
-			return Math.trunc(this.time / 6) < Math.trunc(this.innertime / 6);
+			const firstTimeWeek = (this.time - ((this.time - this.offset)  % 6));
+			const calc = this.innertime - firstTimeWeek;
+			return calc > 5;
 		},
 		opacityweek : function(){
 			if(this.selected){
