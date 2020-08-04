@@ -6,14 +6,16 @@
 
 	#timelineOffset{
 
-		height : 10%;
+		height : 100%;
+		position : absolute;
 		width : calc(100% - #{ 2 * v.$playerDateWidth});
 		margin-left : v.$playerDateWidth;
 	}
 
 	.backgroundPlayer{
+		padding-top : 30px;
 		display: flex;
-		height: 90%;
+		height: 100%;
 
 		#timelinePlayer{
 			height : 100%;
@@ -48,8 +50,8 @@
 
 	.svgPlayer{
 		position : absolute;
-		top : 10%;
-		height:90%;
+		top : 30px;
+		height: calc(100% - 30px);
 		width : calc(100% - #{2 * v.$playerDateWidth});
 		margin : 0px v.$playerDateWidth;
 	}

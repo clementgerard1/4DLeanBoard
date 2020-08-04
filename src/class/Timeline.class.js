@@ -324,7 +324,7 @@ class Timeline{
 		@returns {Date}
 	*/
 	getDateObject(time){
-		return new Date(this.#startWeekDate.getTime() + ( time * 1000 * 3600 * 24));
+		return new Date(this.#startWeekDate.getTime() + ( time * 1000 * 3600 * 24) + (3 * 3600 * 1000)); // Add 3 hours for summer hour
 	}
 
 	/*

@@ -50,7 +50,9 @@ export default {
 			}
 		},
 		tasks : function(){
+			console.log(this.tasktablestart);
 			const tasks = this.timeline.getTasksByTaskTeamAndNthBetweenTwoDates(this.taskteam, this.nth, this.tasktablestart * 7, (this.tasktablestart + 6) * 7 - 1);
+			console.log(this.taskteam.getName(), this.nth, this.tasktablestart * 7, (this.tasktablestart + 6) * 7 - 1, tasks.count);
 			//this.isOpen = (tasks.count != 0);
 			this.isVisible = !(tasks.count == 0  && this.nth != 0);
 			return tasks.array;

@@ -21,11 +21,11 @@ export default {
 	methods : {
 		updateTime : function(time){
 			this.time = time;
-			this.tasktablestart = Math.trunc((this.time - this.offset) / 6) * 6 + this.offset;
+			this.tasktablestart = Math.floor((this.time - this.offset) / 6) * 6 + this.offset;
 		},
 		updateOffset : function(offset){
 			this.offset = offset;
-			this.tasktablestart = Math.trunc((this.time - this.offset) / 6) * 6 + this.offset;
+			this.tasktablestart = Math.floor((this.time - this.offset) / 6) * 6 + this.offset;
 		},
 		windowUpdate : function(event){
 			this.tasksize = (document.querySelector(".taskTableFrame").clientWidth - 80) / 6;
@@ -52,7 +52,7 @@ export default {
 		this.windowUpdate();
 	},
 	data: function(){
-			let taskTableStart = Math.trunc(this.playerinit / 6) * 6;
+			let taskTableStart = Math.floor(this.playerinit / 6) * 6;
 			const phases = this.timeline.getPhasesBetweenTwoDates(0, this.duration - 1);
 			const lines = [];
 			const taskTeams = this.model.getTaskTeams();

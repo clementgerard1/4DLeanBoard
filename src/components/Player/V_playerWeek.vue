@@ -20,18 +20,18 @@ export default {
 			return this.innertime == this.time;
 		},
 		highlighted: function(){
-			const firstTimeWeek = (this.time - ((this.time - this.offset)  % 6));
+			const firstTimeWeek = Math.floor((this.time - this.offset) / 6) * 6 + this.offset;
 			const calc = this.innertime - firstTimeWeek;
 			//console.log(Math.trunc((this.time - (this.offset % 6)) / 6), Math.trunc(this.innertime / 6));
 			return calc >= 0 && calc <= 5;
 		},
 		built : function(){
-			const firstTimeWeek = (this.time - ((this.time - this.offset)  % 6));
+			const firstTimeWeek = Math.floor((this.time - this.offset) / 6) * 6 + this.offset;
 			const calc = this.innertime - firstTimeWeek;
 			return calc < 0;
 		},
 		tobuild : function(){
-			const firstTimeWeek = (this.time - ((this.time - this.offset)  % 6));
+			const firstTimeWeek = Math.floor((this.time - this.offset) / 6) * 6 + this.offset;
 			const calc = this.innertime - firstTimeWeek;
 			return calc > 5;
 		},
@@ -44,6 +44,9 @@ export default {
 		}
 	},
 	data : function(){
+
+		let date = new Date(this.timeline.getStartDate());
+		date.setDate(date.getDate() + (this.time * 7));
 		const weekNumber = Utils.getWeekNumber(this.timeline.getDateObject(this.innertime * 7));
 		return {
 			weeknumber : weekNumber,
