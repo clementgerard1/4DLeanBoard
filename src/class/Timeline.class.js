@@ -9,6 +9,7 @@ class Timeline{
 	#steps;
 	#startDate;
 	#startWeekDate;
+	#tasksNth;
 
 	/**
  		@class Timeline
@@ -21,6 +22,7 @@ class Timeline{
 	constructor(model){
 		this.#model = model;
 		this.#steps = [];
+		this.#tasksNth = {};
 		this.#startDate = null;
 		this.#startWeekDate = null;
 		this.#constructTimeline();
@@ -57,6 +59,10 @@ class Timeline{
 			}
 		}
 
+		this.#determineNths();
+
+		// console.log(this.#steps);
+
 	}
 
 	#fillTimeline(object){
@@ -75,6 +81,43 @@ class Timeline{
 			}else if(object instanceof Operation){
 				this.#steps[i]["operations"].push(object);
 			}
+		}
+	}
+
+	#determineNths(){
+		//Per week
+		for(let i = 0 ; i < this.#steps.length / 7 ; i++){
+
+			//tasks on a week
+			const taskTeams = this.getTaskTeamsBetweenTwoDates(i*7, (i * 7) + 6);
+			for(let team in taskTeams){
+				const tasks = this.getTasksByTeamBetweenTwoDates(taskTeams[team], i*7, (i * 7) + 6);
+				for(let t in tasks){
+					if(typeof this.#tasksNth[tasks[t].getId()] == "undefined"){
+						const temp = [];
+						for(let tt in tasks){
+							if((tasks[tt] != tasks[t]) && (typeof this.#tasksNth[tasks[tt].getId()] != "undefined")){
+								temp[this.#tasksNth[tasks[tt].getId()]] = true;
+							}
+						}
+						let i = 0;
+						let result = null;
+						while(i < temp.length && (result == null)){
+							if(typeof temp[i] == "undefined"){
+								result = i;
+							}
+							i++;
+						}
+
+						if(result == null){
+							result = temp.length;
+						}
+
+						this.#tasksNth[tasks[t].getId()] = result;
+					}
+				}
+			}
+
 		}
 	}
 
@@ -116,12 +159,12 @@ class Timeline{
 		for(let i = start; i <= end ; i++){
 			const tasks = this.#steps[i].tasks;
 			for(let t in tasks){
-				const tTeams = tasks[t].getTaskTeams();
-				for(let team in tTeams){
-					if(!teams.includes(tTeams[team])){
-						teams.push(tTeams[team]);
+				//const tTeams = tasks[t].getTaskTeam();
+				//for(let team in tTeams){
+					if(!teams.includes(tasks[t].getTaskTeam())){
+						teams.push(tasks[t].getTaskTeam());
 					}
-				}
+				//}
 			}
 		}
 		return teams;
@@ -362,15 +405,20 @@ class Timeline{
 	getMaxSimultaneousTasksByTaskTeamBetweenTwoDates(taskTeam, start, end){
 		const phases = this.#model.getTasks();
 		let max = 0;
-		for(let i = start; i <= end ; i++){
-			const tasks = this.#steps[i].tasks;
+		for(let i = start; i <= (end / 7) ; i++){
 
 			let count = 0;
-			for(let t in tasks){
-				if(tasks[t].getTaskTeam() == taskTeam){
-					count++
-				}
+			const temp = [];
+			for(let j = (i * 7) ; j < ((i+1) * 7) ; j++){
+					const tasks = this.#steps[j].tasks;
+					for(let t in tasks){
+						if(!temp.includes(tasks[t].getId()) && tasks[t].getTaskTeam() == taskTeam){
+							temp.push(tasks[t].getId());
+							count++
+						}
+					}
 			}
+
 			if(max < count) max = count;
 		}
 		return max;
@@ -444,6 +492,7 @@ class Timeline{
 			const tasks = this.getTasksByTeamBetweenTwoDates(taskTeam, start+ (((end - start + 1) / 6) * (i - 1)), start + (((end - start + 1) / 6) * i) - 1);	
 			for(let t in tasks){
 				const originNth = this.getOriginNth(taskTeam, tasks[t]);
+				// if(taskTeam.getName() == "Team C") console.log(taskTeam.getName(), tasks[t].getId(), originNth);
 				if(originNth == nth){
 					arrayReturn[i-1] = tasks[t];
 					count++;
@@ -485,10 +534,12 @@ class Timeline{
 	}
 
 	getOriginNth(taskTeam, task){
+		return this.#tasksNth[task.getId()];
 		const time = this.getTime(task.getStartDate());
 		const startWeekTime = Math.trunc(time / 7) * 7;
 		const tasks = this.getTasksByTeamBetweenTwoDates(taskTeam, startWeekTime, startWeekTime + 6);
-		let offset = 0;
+		let offset = 1;
+		// console.log(task.getId(), tasks.length);
 		for(let t in tasks){
 			if(tasks[t] == task){
 				return (offset + 1) % tasks.length

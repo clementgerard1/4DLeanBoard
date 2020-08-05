@@ -20,8 +20,16 @@ test('TaskTeam constructor(name)', () =>{
 	expect(taskTeam.getName()).toBe("hello");
 });
 
-test('TaskTeam constructor(id, name)', () =>{
-	const taskTeam = new TaskTeam("hello", 15);
+test('TaskTeam constructor(name, abr)', () =>{
+	const taskTeam = new TaskTeam("hello", "abr");
+	expect(taskTeam.getId()).toBe(0);
+	expect(taskTeam.getAbr()).toBe("ABR");
+	expect(taskTeam.getName()).toBe("hello");
+});
+
+test('TaskTeam constructor(name, abr, id)', () =>{
+	const taskTeam = new TaskTeam("hello", "abr", 15);
+	expect(taskTeam.getAbr()).toBe("ABR");
 	expect(taskTeam.getId()).toBe(15);
 	expect(taskTeam.getName()).toBe("hello");
 });
