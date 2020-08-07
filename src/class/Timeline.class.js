@@ -444,6 +444,9 @@ class Timeline{
 			const tasks = this.getTasksByTeamBetweenTwoDates(taskTeam, start+ (((end - start + 1) / 6) * (i - 1)), start + (((end - start + 1) / 6) * i) - 1);	
 			for(let t in tasks){
 				const originNth = this.getOriginNth(taskTeam, tasks[t]);
+
+				//console.log(tasks[t].getId(), originNth);
+				
 				if(originNth == nth){
 					arrayReturn[i-1] = tasks[t];
 					count++;
@@ -489,6 +492,12 @@ class Timeline{
 		const startWeekTime = Math.trunc(time / 7) * 7;
 		const tasks = this.getTasksByTeamBetweenTwoDates(taskTeam, startWeekTime, startWeekTime + 6);
 		let offset = 0;
+		if(task.getId() == 112) console.log(time, startWeekTime, tasks);
+		if(task.getId() == 112) {
+			for(let t in tasks){
+				console.log(tasks[t].getId());
+			}
+		}
 		for(let t in tasks){
 			if(tasks[t] == task){
 				return (offset + 1) % tasks.length
