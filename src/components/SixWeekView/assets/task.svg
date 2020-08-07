@@ -49,8 +49,8 @@
 
 <g v-show="isOpen">
 
-	<rect v-show="isOpen && (previousTask != null)" v-if="previousready" x="18" y="163.062" width="30" height="16" rx="1" v-bind:fill="previouscolor" stroke="white" stroke-width="2"/>
-	<rect v-show="isOpen && (previousTask != null)" v-else="previousready" x="18" y="163.062" width="30" height="16" rx="1" fill="white" v-bind:stroke="previouscolor" stroke-width="2"/>
+	<rect v-show="isOpen && (previousTask != null)" v-if="previousready" x="18" y="163.062" width="30" height="16" rx="1" v-bind:fill="previouscolor" stroke="white" stroke-width="4"/>
+	<rect v-show="isOpen && (previousTask != null)" v-else="previousready" x="18" y="163.062" width="30" height="16" rx="1" fill="white" v-bind:stroke="previouscolor" stroke-width="4"/>
 
 	<path v-show="isOpen && (previousTask != null)" d="M32 164.75L26 170.75L32 176.75" stroke="#808080" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
 	<path v-show="isOpen && (previousTask != null)" d="M40 164.75L34 170.75L40 176.75" stroke="#808080" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>

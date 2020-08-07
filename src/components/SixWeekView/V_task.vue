@@ -172,8 +172,9 @@ export default {
 			const endWeek = this.timeline.getDateObject(this.time * 7 + 6);
 			const duration = this.task.getDuration();
 			const startTask = this.task.getStartDate();
-			const offset = (startTask.getTime() - startWeek.getTime())  / (1000 * 3600 * 24);
-
+			const offset = Math.round((startTask.getTime() - startWeek.getTime())  / (1000 * 3600 * 24));
+			if(this.task.getId() == 139 || this.task.getId() == 140){
+			}
 			if(offset >= 0 && (offset + duration) <= 7){
 				this.index = 1;
 				return this.getTwoLineFormat(this.task.getName());

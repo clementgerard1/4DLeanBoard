@@ -50,9 +50,9 @@ export default {
 			}
 		},
 		tasks : function(){
-			console.log(this.tasktablestart);
+			console.log(this.tasktablestart, this.nth);
 			const tasks = this.timeline.getTasksByTaskTeamAndNthBetweenTwoDates(this.taskteam, this.nth, this.tasktablestart * 7, (this.tasktablestart + 6) * 7 - 1);
-			console.log(this.taskteam.getName(), this.nth, this.tasktablestart * 7, (this.tasktablestart + 6) * 7 - 1, tasks.count);
+			//console.log(tasks.count, this.nth);
 			//this.isOpen = (tasks.count != 0);
 			this.isVisible = !(tasks.count == 0  && this.nth != 0);
 			return tasks.array;
@@ -88,11 +88,6 @@ export default {
 			}else{
 				this.maxheight = "30px";
 			}
-		},
-		tasktablestart: function(){
-			const tasks = this.timeline.getTasksByTaskTeamAndNthBetweenTwoDates(this.taskteam, this.nth, this.tasktablestart * 7, (this.tasktablestart + 6) * 7 - 1);
-			//this.isOpen = (tasks.count != 0);
-			this.isVisible = (tasks.count != 0  && this.nth != 0);
 		}
 	},
 	created: function(){
@@ -114,15 +109,15 @@ export default {
 	<div class="phaserow">
 
 		<!-- line -->
-		<taskline v-if="isVisible" class="phaseLine" v-tap="handleOpenPhase" v-bind:time="_time" v-bind:nth="_nth" v-bind:team="_team" v-bind:class="color" v-bind:teamdescription="teamDescription" v-bind:style='zIndex'></taskline>
+		<taskline v-show="isVisible" class="phaseLine" v-tap="handleOpenPhase" v-bind:time="_time" v-bind:nth="_nth" v-bind:team="_team" v-bind:class="color" v-bind:teamdescription="teamDescription" v-bind:style='zIndex'></taskline>
 
 		<!-- tasks -->
-		<div v-if="isVisible" v-bind:style="{maxHeight : maxheight, height : (tasksize - 30) + 'px'}" class="tasksWrapper">
+		<div v-show="isVisible" v-bind:style="{maxHeight : maxheight, height : (tasksize - 30) + 'px'}" class="tasksWrapper">
 			<task v-bind:style="{maxHeight : maxheight}" v-bind:maxheight="maxheight" v-bind:color="color" v-bind:team="_team" nth=0 v-for="(task, i) in tasks" :key="i" v-bind:isopen="isOpen" v-bind:task="task" v-bind:isOpen="isOpen" v-bind:time="_tasktablestart + i"  ></task>
 		</div>
 
 		<!-- button -->
-		<div v-if="isVisible" v-bind:class='[isOpen ? "open" : "close"]' v-tap="handleOpenPhase" v-html="icon" class="phaseButton"></div>
+		<div v-show="isVisible" v-bind:class='[isOpen ? "open" : "close"]' v-tap="handleOpenPhase" v-html="icon" class="phaseButton"></div>
 
 
 
