@@ -103,6 +103,7 @@ class ForgeObject{
 	setColor(bool, color){
 		const viewer = Memory.getViewer();
 		if(bool){
+			//console.log(viewer);
 			viewer.setThemingColor(this.#id, color, this.#model);
 		}
 	}

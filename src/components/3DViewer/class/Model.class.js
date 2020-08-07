@@ -38,7 +38,8 @@ class Model{
 
 		viewer.loadModel(path, {
             keepCurrentModels: true,
-            globalOffset: {x:0,y:0,z:0}
+            globalOffset: {x:0,y:0,z:0},
+            isAEC:true
 		}, (model)=> {this._onModelLoaded(model, that)});
 	}
 
@@ -140,6 +141,7 @@ class Model{
 							}
 						}
 						that.#dbObjects[dbObjects[d].dbId].isLinked(false);
+						that.#dbObjects[dbObjects[d].dbId].setColor(true, new THREE.Vector4(1, 1, 1, 1));
 						that.#viewer.lockSelection(dbObjects[d].dbId, true, that.#model)
 						Memory.addForgeObject(that.#dbObjects[dbObjects[d].dbId], false);
 					}

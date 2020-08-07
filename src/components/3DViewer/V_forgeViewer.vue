@@ -182,7 +182,7 @@ export default {
 				}
 			}
 			if(selection.length != 0){
-				//this.scene.getViewer().clearSelection();
+				this.scene.getViewer().clearSelection();
 				for(let s in selection){
 					const dbId = selection[s].selection;
 					const model = selection[s].model;
@@ -211,10 +211,10 @@ export default {
 			Memory.refresh();
 		},
 
-		setNotLinked() {
-			Memory.setNotLinked();
-			Memory.refresh();
-		},
+		// setNotLinked() {
+		// 	Memory.setNotLinked();
+		// 	Memory.refresh();
+		// },
 
 		select(object4D, bool){
 			const objs = object4D.getObjects3D();
@@ -307,7 +307,7 @@ export default {
 			//this.allTransparent();
 			//this.allInvisible(true);
 			//this.allToRed(true);
-			this.setNotLinked();
+			//this.setNotLinked();
 			const tasks = V_taskTableUtils.getTokens();
 			for(let t in tasks){
 				this.select(tasks[t].getObject4D(), true);
@@ -327,6 +327,8 @@ export default {
 			this.scene.getViewer().toolController.activateTool('tool');
 			this.scene.getViewer().impl.selectionMaterialBase.opacity = 0;
 			this.scene.getViewer().impl.selectionMaterialTop.opacity = 0;
+
+			this.scene.getViewer().setDisplayEdges(true);
 
 			//console.log(this.scene.getViewer());
 

@@ -111,13 +111,13 @@ class Memory{
 		}
 	}
 	
-	static setNotLinked(){
-		for(let f in this.#forgeObjectsNotLinked){
-			for(let ff in this.#forgeObjectsNotLinked[f]){	
-				this.#forgeObjectsNotLinked[f][ff].isLinked(false);
-			}
-		}
-	}
+	// static setNotLinked(){
+	// 	for(let f in this.#forgeObjectsNotLinked){
+	// 		for(let ff in this.#forgeObjectsNotLinked[f]){	
+	// 			this.#forgeObjectsNotLinked[f][ff].isLinked(false);
+	// 		}
+	// 	}
+	// }
 
 	static setTeamDisplayMode(bool){
 		if(this.#teamDisplay != bool){
@@ -127,11 +127,11 @@ class Memory{
 					this.#forgeObjects[f][ff].isTeamDisplayed(bool);
 				}
 			}
-			for(let f in this.#forgeObjectsNotLinked){
-				for(let ff in this.#forgeObjectsNotLinked[f]){
-					this.#forgeObjectsNotLinked[f][ff].isTeamDisplayed(bool);
-				}
-			}
+			// for(let f in this.#forgeObjectsNotLinked){
+			// 	for(let ff in this.#forgeObjectsNotLinked[f]){
+			// 		this.#forgeObjectsNotLinked[f][ff].isTeamDisplayed(bool);
+			// 	}
+			// }
 		}
 	}
 
@@ -145,21 +145,21 @@ class Memory{
 				this.#forgeObjects[f][ff].setColor(bool, color);
 			}
 		}
-		for(let f in this.#forgeObjectsNotLinked){
-			for(let ff in this.#forgeObjectsNotLinked[f]){	
-				this.#forgeObjectsNotLinked[f][ff].hide(bool);
-				this.#forgeObjectsNotLinked[f][ff].setColor(bool, anomalies);
-			}
-		}
+		// for(let f in this.#forgeObjectsNotLinked){
+		// 	for(let ff in this.#forgeObjectsNotLinked[f]){	
+		// 		this.#forgeObjectsNotLinked[f][ff].hide(bool);
+		// 		this.#forgeObjectsNotLinked[f][ff].setColor(bool, anomalies);
+		// 	}
+		// }
 	}
 	//
 
 	static setAllInvisible(bool){
-		for(let f in this.#forgeObjectsNotLinked){
-			for(let ff in this.#forgeObjectsNotLinked[f]){	
-				this.#forgeObjectsNotLinked[f][ff].setInvisible(bool);
-			}
-		}
+		// for(let f in this.#forgeObjectsNotLinked){
+		// 	for(let ff in this.#forgeObjectsNotLinked[f]){	
+		// 		this.#forgeObjectsNotLinked[f][ff].setInvisible(bool);
+		// 	}
+		// }
 	}
 
 	static isSelected(forgeObject){

@@ -490,7 +490,6 @@ class Timeline{
 
 		for(let i = 1 ; i <= 6 ; i++){
 
-			console.log(taskTeam.getName(), start+ (((end - start + 1) / 6) * (i - 1)), start + (((end - start + 1) / 6) * i) - 1);
 			const tasks = this.getTasksByTeamBetweenTwoDates(taskTeam, start+ (((end - start + 1) / 6) * (i - 1)), start + (((end - start + 1) / 6) * i) - 1);	
 			for(let t in tasks){
 				const originNth = this.getOriginNth(taskTeam, tasks[t]);
