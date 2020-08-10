@@ -2,6 +2,8 @@ import Utils from "../../../class/Utils.class.js";
 import Document from "./Document.class.js";
 import Memory from "./Memory.class.js";
 
+import styles3D from "../assets/styles3D.csv";
+
 class Scene{
 
 	#id;
@@ -11,6 +13,8 @@ class Scene{
 	#viewCubeUiExt;
 	#modelInitLoaded;
 	#modelInitLoaded2;
+
+	#styles;
 	/**
 		@class Scene
 		@classdesc Scene represents the forge viewer
@@ -31,6 +35,11 @@ class Scene{
 		this.#viewCubeUiExt = null;
 		this.#modelInitLoaded = 0;
 		this.#modelInitLoaded2 = 0;
+
+
+		this.#styles = [];
+		this.parseStyles(styles3D);
+
 
 	}
 
@@ -75,7 +84,7 @@ class Scene{
 
 	_onDocumentLoaded(doc, that){
 		that.#modelInitLoaded++;
-	    const docObj = new Document(doc);
+	    const docObj = new Document(doc, that.#styles);
 	    that.#documents.push(docObj);
 
 		if(that.#modelInitLoaded < that.#initInfos.urns.length){
@@ -149,9 +158,219 @@ class Scene{
 	getModels(){
 		const models = [];
 		for(let d in this.#documents){
-			models.push(this.#documents[d].getModel());
+			const modelss = this.#documents[d].getModels();
+			for(let m in modelss){
+				models.push(modelss[m]);
+			}
 		}
 		return models;
+	}
+
+	parseStyles(csv){
+
+		const defaultStyles = {
+			"basicMaterial" : {
+				"selected" : {
+					"visible" : {
+						"material" : null,
+						"edge" : null,
+						"MAV" : false,
+						"EAV" : false,
+					},
+					"hidden" : {
+						"material" : null,
+						"edge" : null,
+						"MAV" : false,
+						"EAV" : false,
+					}
+				},
+				"notSelected" : {
+					"visible" : {
+						"material" : null,
+						"edge" : null,
+						"MAV" : false,
+						"EAV" : false,
+					},
+					"hidden" : {
+						"material" : null,
+						"edge" : null,
+						"MAV" : false,
+						"EAV" : false,
+					}
+				}
+			},
+			"teamMaterial" : {
+				"selected" : {
+					"visible" : {
+						"material" : null,
+						"edge" : null,
+						"MAV" : false,
+						"EAV" : false,
+					},
+					"hidden" : {
+						"material" : null,
+						"edge" : null,
+						"MAV" : false,
+						"EAV" : false,
+					}
+				},
+				"notSelected" : {
+					"visible" : {
+						"material" : null,
+						"edge" : null,
+						"MAV" : false,
+						"EAV" : false,
+					},
+					"hidden" : {
+						"material" : null,
+						"edge" : null,
+						"MAV" : false,
+						"EAV" : false,
+					}
+				}
+			}
+		}
+
+		const lines = csv.split("\n");
+		let currentStyle = null;
+		let currentSelectMode = null;
+		let currentVisibleMode = null;
+		let currentTypeMode = null;
+
+
+		for(let l in lines){
+			const line = lines[l];
+			if(l == 0) continue;
+			const cols = line.split(",");
+			for(let c in cols){
+				const col = cols[c];
+				
+
+				//Init 3D style
+				if(c == 0 && col != ""){
+
+					let constraint = null;
+					if(cols[1] != ""){
+						constraint = cols[1];
+					};
+					console.log(constraint);
+					currentStyle = {
+						timeState : parseInt(col),
+						constructionState : constraint,
+						styles : {
+
+						}
+						/* model for each style */
+						// selected : {
+
+						// 		visible : {
+
+						// 				material : {
+
+						// 				},
+						// 				edge : {
+
+						// 				},
+						// 				MAV : false,
+						// 				EAV : false
+
+						// 		},
+						// 		hidden : {
+
+						// 				material : {
+
+						// 				},
+						// 				edge : {
+
+						// 				},
+						// 				MAV : false,
+						// 				EAV : false
+
+						// 		}
+						// },
+
+						// notSelected : {
+
+						// 		visible : {
+
+						// 			material : {
+
+						// 			},
+						// 			edge : {
+
+						// 			},
+						// 			MAV : false,
+						// 			EAV : false
+
+						// 		},
+						// 		hidden : {
+
+						// 			material : {
+
+						// 			},
+						// 			edge : {
+
+						// 			},
+						// 			MAV : false,
+						// 			EAV : false
+
+						// 		}
+						// }
+					};	
+					this.#styles[this.#styles.length] = currentStyle;
+				} 
+
+				//Update select mode
+				if(c == 2 && cols[c] == "Selected"){
+					currentSelectMode = "selected";
+				}else if(c == 2 && cols[c] == "Not Selected"){
+					currentSelectMode = "notSelected";
+				}
+
+				//Update visible mode
+				if(c == 3 && cols[c] == "Visible"){
+					currentVisibleMode = "visible";
+				}else if(c == 3 && cols[c] == "Hidden"){
+					currentVisibleMode = "hidden";
+				}
+
+				//Update type mode
+				if(c == 4 && cols[c] == "Material"){
+					currentTypeMode = "material";
+				}else if(c == 4 && cols[c] == "Edge"){
+					currentTypeMode = "edge";
+				}else if(c == 4 && cols[c] == "MAV"){
+					currentTypeMode = "MAV";
+				}else if(c == 4 && cols[c] == "EAV"){
+					currentTypeMode = "EAV";
+				}
+
+				//Basic material mode 
+				if(typeof currentStyle.styles["basicMaterial"] == "undefined") currentStyle.styles["basicMaterial"] = {};
+				if(typeof currentStyle.styles["basicMaterial"][currentSelectMode] == "undefined") currentStyle.styles["basicMaterial"][currentSelectMode] = {};
+				if(typeof currentStyle.styles["basicMaterial"][currentSelectMode][currentVisibleMode] == "undefined") currentStyle.styles["basicMaterial"][currentSelectMode][currentVisibleMode] = {};
+				if(c == 5){
+					if(cols[c] != ""){
+					currentStyle.styles["basicMaterial"][currentSelectMode][currentVisibleMode][currentTypeMode] = cols[c];
+					}else{
+						currentStyle.styles["basicMaterial"][currentSelectMode][currentVisibleMode][currentTypeMode] = defaultStyles["basicMaterial"][currentSelectMode][currentVisibleMode][currentTypeMode];
+					}
+				}
+
+				if(typeof currentStyle.styles["teamMaterial"] == "undefined") currentStyle.styles["teamMaterial"] = {};
+				if(typeof currentStyle.styles["teamMaterial"][currentSelectMode] == "undefined") currentStyle.styles["teamMaterial"][currentSelectMode] = {};
+				if(typeof currentStyle.styles["teamMaterial"][currentSelectMode][currentVisibleMode] == "undefined") currentStyle.styles["teamMaterial"][currentSelectMode][currentVisibleMode] = {};
+				if(c == 6){
+					if(cols[c] != ""){
+						currentStyle.styles["teamMaterial"][currentSelectMode][currentVisibleMode][currentTypeMode] = cols[c];
+					}else{
+						currentStyle.styles["teamMaterial"][currentSelectMode][currentVisibleMode][currentTypeMode] = defaultStyles["basicMaterial"][currentSelectMode][currentVisibleMode][currentTypeMode];
+					}
+				}
+
+			}
+		}
+
 	}
 
 }

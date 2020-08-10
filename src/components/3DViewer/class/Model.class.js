@@ -15,6 +15,7 @@ class Model{
 	#viewer;
 	#name;
 	#hide;
+	#style;
 
 
 	constructor(id = Utils.getId("forgeModel")){
@@ -27,10 +28,13 @@ class Model{
 		this.#viewer = null;
 		this.#name = null;
 		this.#hide = false;
+		this.#style = null;
 	}
 
-	load(viewer, path, objs, callback){
+	load(viewer, style, path, objs, callback){
+
 		const that = this;
+		this.#style = style;
 		this.#planningObjects = objs;
 		this.#viewer = viewer;
 		this.callback = callback;
@@ -74,6 +78,8 @@ class Model{
 	}
 
 	_allLoaded(that){
+
+		console.log(that.#model.id);
 
 		function userFunction(pdb, tab) {
 

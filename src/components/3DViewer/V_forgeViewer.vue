@@ -250,12 +250,16 @@ export default {
 			Memory.setLayerHideMode(bool);
 			Memory.refresh();
 		},
+
 		setTime(time){
 			this.playerinit = time;
 		},
+
 		handleMenuOpen(){
 			this.menuopen = !this.menuopen;
 		},
+
+
 		handleMenuChange(id){
 
 			this.modelShown[id].model.hide(this.modelShown[id].model.isShown());
@@ -279,6 +283,8 @@ export default {
 				});
 			}
 		}
+
+
 	},
 	mounted : function(){
 
@@ -286,6 +292,7 @@ export default {
 		this.objs = this.model.getObjects3D();
 
 		V_timelineUtils.addListener("time", this, this.setTime);
+
 		this.scene.init(this.oauth, this.urns, this.objs, ()=>{
 			console.log("init done");
 
@@ -296,9 +303,6 @@ export default {
 					model : models[m]
 				}
 			}
-		
-			let camera = new Camera();
-			Memory.setCamera(camera);
 
 			this.createCustumMaterials();
 			this.hideLayer("Etage Rouge", true);
