@@ -6,15 +6,16 @@ class Document{
 	#id;
 	#doc;
 	#models;
-	#styles;
+	#modelsNeeded;
 	#modelLoaded;
 
-	constructor(doc, styles, id = Utils.getId("forgeDocument")){
+	constructor(doc, modelsNeeded, id = Utils.getId("forgeDocument")){
 		this.#id = id;
 		this.#doc = doc;
 		this.#models = [];
-		this.#styles = styles;
+		this.#modelsNeeded = modelsNeeded;
 		this.#modelLoaded = 0;
+
 	}
 
 	loadModels(viewer, objs, callback){
@@ -22,16 +23,16 @@ class Document{
 		const that = this;
 		this.#models[this.#models.length] = new Model();
 		const path = this.#doc.getViewablePath(this.#doc.getRoot().getDefaultGeometry());
-		this.#models[this.#models.length - 1].load(viewer, this.#styles[0], path, objs, () => that._onModelLoaded(that, viewer, objs, path, callback));
+		this.#models[this.#models.length - 1].load(viewer, this.#modelsNeeded[0].style, path, objs, () => that._onModelLoaded(that, viewer, objs, path, callback));
 		
 	}
 
 	_onModelLoaded(that, viewer, objs, path, callback){
 
 		that.#modelLoaded++;
-		if(that.#modelLoaded < that.#styles.length){
+		if(that.#modelLoaded < that.#modelsNeeded.length){
 			that.#models[that.#models.length] = new Model();
-			that.#models[that.#models.length - 1].load(viewer, that.#styles[that.#modelLoaded], path, objs, () => that._onModelLoaded(that, viewer, objs, path, callback));
+			that.#models[that.#models.length - 1].load(viewer, that.#modelsNeeded[that.#modelLoaded].style, path, objs, () => that._onModelLoaded(that, viewer, objs, path, callback));
 			return;
 		}
 

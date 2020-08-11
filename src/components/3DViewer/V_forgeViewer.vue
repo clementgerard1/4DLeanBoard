@@ -93,35 +93,36 @@ export default {
 			}
 		},
 
-		allInvisible(bool){
-			Memory.setAllInvisible(bool);
-			Memory.refresh();
-		},
-
-		allToRed(bool){
-			Memory.allToRed(bool);
-			Memory.refresh();
-		},
-
-		allTransparent(){
-			this.scene.setAllMaterials("ignoredMaterial");
+		getScene : function(){
+			return this.scene;
 		},
 
 		watchTime : function(time){
 			if(this.time != time){
 
 				this.time = time;
-
 				//State
 				const startActualWeek = this.time * 7;
 
 				const start6Weeks = Math.trunc(this.time / 6) * 42;
-				const previousTasks = this.timeline.getTasksBetweenTwoDates(0, start6Weeks);
+				const previousTasks = this.timeline.getTasksBetweenTwoDates(0, start6Weeks - 1);
+				const thisWeek = this.timeline.getTasksBetweenTwoDates(start6Weeks, start6Weeks + 6);
 				const weeksTasks = this.timeline.getTasksBetweenTwoDates(start6Weeks, start6Weeks + 41);
-				const nextTasks = this.timeline.getTasksBetweenTwoDates(start6Weeks, this.model.getDuration() * 7);
+				const nextWeeksTasks = this.timeline.getTasksBetweenTwoDates(start6Weeks + 42, start6Weeks + 83);
+				const nextTasks = this.timeline.getTasksBetweenTwoDates(start6Weeks + 84, this.model.getDuration() * 7);
 
 				for(let t in previousTasks){
 					const objs = previousTasks[t].getObject4D().getObjects3D()
+					for(let o in objs){
+						const forges = objs[o].getForgeObjects();
+						for(let f in forges){
+							Memory.setState(forges[f], 0);
+						}
+					}
+				}
+
+				for(let t in thisWeek){
+					const objs = thisWeek[t].getObject4D().getObjects3D()
 					for(let o in objs){
 						const forges = objs[o].getForgeObjects();
 						for(let f in forges){
@@ -163,9 +164,8 @@ export default {
 				for(let t in tasks){
 					this.select(tasks[t].getObject4D(), true);
 				}
-				if(!Memory.isTeamDisplayed()){
-					Memory.refresh();
-				}
+
+				Memory.refresh();
 
 			}
 		},
@@ -203,18 +203,13 @@ export default {
 					}
 
 
-					//const task = fObjs[o].getObject3D().getParent().getTask();
-					//V_socketUtils.highlightTask(task, !b);
+					const task = fObjs[o].getObject3D().getParent().getTask();
+					V_socketUtils.highlightTask(task, !b);
 
 				}
 			}
 			Memory.refresh();
 		},
-
-		// setNotLinked() {
-		// 	Memory.setNotLinked();
-		// 	Memory.refresh();
-		// },
 
 		select(object4D, bool){
 			const objs = object4D.getObjects3D();
@@ -241,15 +236,6 @@ export default {
 			Memory.setTeamDisplayMode(bool);
 			Memory.refresh();
 		},
-		hideLayer(layerName, bool){
-			Memory.hideLayer(layerName, bool);
-			Memory.refresh();
-		},
-
-		setLayerHideMode(bool){
-			Memory.setLayerHideMode(bool);
-			Memory.refresh();
-		},
 
 		setTime(time){
 			this.playerinit = time;
@@ -257,11 +243,12 @@ export default {
 
 		handleMenuOpen(){
 			this.menuopen = !this.menuopen;
+			const s = this.scene.getStyle(0, null, true, true, "basicMaterial");
+			const id = Memory.getModelByEdgeStyle(1, s.edge);
 		},
 
 
 		handleMenuChange(id){
-
 			this.modelShown[id].model.hide(this.modelShown[id].model.isShown());
 			this.$set(this.modelShown, id, {
 				model : this.modelShown[id].model,
@@ -270,8 +257,8 @@ export default {
 			V_socketUtils.setIfcMenuChange(this.modelShown);
 		},
 		refreshCamera() {
-			Memory.setTarget();
-			Memory.refresh();
+			// Memory.setTarget();
+			// Memory.refresh();
 		},
 
 		setIfcMenuChange(ifcs){
@@ -282,19 +269,86 @@ export default {
 					shown : this.modelShown[i].model.isShown()
 				});
 			}
+		},
+
+		hackEdges(){
+
+			this.scene.getViewer().setDisplayEdges(true);
+
+      const renderer = this.scene.getViewer().impl.renderer();
+      const viewer = this.scene.getViewer();
+      const _edgeMaterial = renderer.getEdgeMaterial();
+      Memory.addMaterialInformations(viewer.impl.getMaterials()._materials);
+
+      const l = this.urns.length;
+			_edgeMaterial.getCustomOverrideMaterial = function(shapeMaterial) {
+					console.log(shapeMaterial.lol, shapeMaterial.edgeCustumColor);
+					//console.log(shapeMaterial.id, shapeMaterial.lol);
+
+					//console.log(shapeMaterial.id);
+            // If the original material applies the instance transform, depthMaterial must do this as well.
+            var instanced   = shapeMaterial.useInstancing;
+
+            var mat = _edgeMaterial;
+
+            //Unlike depth test settings, we need to change uniforms on the material variant
+            //for them to take effect
+            const _isRenderingOverlays = true;
+            const _isRenderingHidden = false;
+            
+            var _edgeColor = null;
+				    var _edgeColorHighlight = null;
+				    var _edgeColorHighlightUnder = null;
+
+				    if(shapeMaterial.edgeCustumColor){
+            	_edgeColor = shapeMaterial.edgeCustumColor;
+					    _edgeColorHighlight = shapeMaterial.edgeCustumColor;
+					    _edgeColorHighlightUnder = shapeMaterial.edgeCustumColor;
+            }else{
+            	_edgeColor = new THREE.Vector4(1,1,1,0);
+					    _edgeColorHighlight = new THREE.Vector4(1,1,0, 0);
+					    _edgeColorHighlightUnder = new THREE.Vector4(1,1,0, 0);
+            }
+				    
+            if (_isRenderingOverlays) {
+                if (_isRenderingHidden) {
+                    mat.uniforms.color.value.copy(_edgeColorHighlightUnder);
+                } else {
+                    mat.uniforms.color.value.copy(_edgeColorHighlight);
+                }
+            } else {
+                mat.uniforms.color.value.copy(_edgeColor);
+            }
+
+            // Standard model materials usually use the default edge opacity.
+            // But we allow custom shapes to override it.
+            if (shapeMaterial.edgeOpacity !== undefined) {
+                mat.uniforms.color.value.w = shapeMaterial.edgeOpacity;
+            }
+
+            mat.uniforms.color.needsUpdate = true;
+            return mat;
+        };
+
+			//console.log(this.scene.getViewer());
 		}
 
 
 	},
 	mounted : function(){
-
-		this.scene = new Scene();
+		this.scene = new Scene(this.model);
+		Memory.setSceneObject(this.scene);
 		this.objs = this.model.getObjects3D();
 
 		V_timelineUtils.addListener("time", this, this.setTime);
 
+		Memory.setNb3DModels(this.urns.length);
+		Memory.setNbStyles(this.scene.getEdgeStyles().length);
+
 		this.scene.init(this.oauth, this.urns, this.objs, ()=>{
 			console.log("init done");
+
+			//Start rendering
 
 			const models = this.scene.getModels();
 			for(let m in models){
@@ -304,10 +358,10 @@ export default {
 				}
 			}
 
-			this.createCustumMaterials();
-			this.hideLayer("Etage Rouge", true);
-			this.hideLayer("Etage Bleu", true);
-			this.setLayerHideMode(true);
+			//this.createCustumMaterials();
+			//this.hideLayer("Etage Rouge", true);
+			//this.hideLayer("Etage Bleu", true);
+			//this.setLayerHideMode(true);
 			//this.allTransparent();
 			//this.allInvisible(true);
 			//this.allToRed(true);
@@ -322,25 +376,27 @@ export default {
 			this.scene.setLightPreset(15);
 
 			this.scene.setCube(true);
-			/* Memory.getViewer().forEachExtension( (ext) => {
-				console.log(ext);
-			}); */
+
+			this.scene.getViewer().impl.selectionMaterialBase.opacity = 0;
+			this.scene.getViewer().impl.selectionMaterialTop.opacity = 0;
+
+			this.hackEdges();
 
 			const tool = new Tool(this.scene.getViewer());
 			this.scene.getViewer().toolController.registerTool(tool);
 			this.scene.getViewer().toolController.activateTool('tool');
-			this.scene.getViewer().impl.selectionMaterialBase.opacity = 0;
-			this.scene.getViewer().impl.selectionMaterialTop.opacity = 0;
-
-			this.scene.getViewer().setDisplayEdges(true);
-
-			//console.log(this.scene.getViewer());
 
 			V_4DUtils.setForgeViewer(this);
 			V_timelineUtils.removeListener("time", this);
 			V_timelineUtils.addListener("time", this, this.watchTime);
-			this.watchTime(this.playerinit);
 			V_socketUtils.addViewer();
+
+			//All informations are loaded / All objects are invisible on their models
+			console.log("LOADED");
+			Memory.setUnlinkedStyle();
+			this.watchTime(this.playerinit);
+
+
 		})
 
 	},

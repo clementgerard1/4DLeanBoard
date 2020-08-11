@@ -8,7 +8,7 @@ class ForgeObject{
 	#properties;
 	#fragments;
 	#model;
-	#selected;
+	#originalModelId;
 	#state;
 	#object3D;
 	#teamDisplayed;
@@ -17,24 +17,51 @@ class ForgeObject{
 	#inLayerSelected;
 	#linked;
 
-	constructor(id = Utils.getId("forgeObjects")){
+	#timeState;
+	#selected;
+	#visible;
+	#started;
+
+	constructor(id = Utils.getId("forgeObjects"), model){
 		this.#id = id;
 		this.#properties = {};
 		this.#fragments = {};
-		this.#model = null;
-		this.#selected = false;
+		this.#model = model;
+		this.#originalModelId = (Math.trunc((model.id-1) / Memory.getNbStyles())) + 1;
 		this.#state = "toBuild";
 		this.#object3D = null;
 		this.#teamDisplayed = false;
 		this.#teamSelected = true;
 		this.#layerHided = false;
 		this.#inLayerSelected = false;
-		this.linked = false;
+		this.#linked = false;
+
+		this.#timeState = -1;
+		this.#selected = false;
+		this.#visible = true;
+
+		this.#started = false;
 	}
 
-	setInvisible(bool){
+	setTimeState(i){
 		const viewer = Memory.getViewer();
-		viewer.impl.visibilityManager.setNodeOff(this.#id, bool);
+		this.#timeState = i;
+		let newModel = null;
+		switch(this.#timeState){
+			case 0 : 	const styles = Memory.getSceneObject().getStyle(0, null, this.#selected, this.#visible, "basicMaterial");
+								newModel = Memory.getModelByEdgeStyle(this.#originalModelId, styles.edge);
+								break;
+		}
+		if((newModel != null && newModel.id != this.#model.id) || !this.#started){
+			viewer.impl.visibilityManager.setNodeOff(this.#id, true, this.#model);
+			viewer.impl.visibilityManager.setNodeOff(this.#id, false, newModel);
+			this.#model = newModel;
+			this.#started = true;
+		}
+
+		
+
+
 	}
 
 	addProperty(property){
@@ -61,7 +88,7 @@ class ForgeObject{
 		if(!bool) {
 			this.#state = "built";
 		}
-		this.updateMaterial();
+		//this.updateMaterial();
 	}
 
 	setAllMaterials(materialName){

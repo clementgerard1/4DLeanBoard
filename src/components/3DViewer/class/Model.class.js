@@ -31,6 +31,10 @@ class Model{
 		this.#style = null;
 	}
 
+	setEdgeStyle(stg){
+
+	}
+
 	load(viewer, style, path, objs, callback){
 
 		const that = this;
@@ -43,7 +47,7 @@ class Model{
 		viewer.loadModel(path, {
             keepCurrentModels: true,
             globalOffset: {x:0,y:0,z:0},
-            isAEC:true
+            isAEC:true,
 		}, (model)=> {this._onModelLoaded(model, that)});
 	}
 
@@ -79,7 +83,7 @@ class Model{
 
 	_allLoaded(that){
 
-		console.log(that.#model.id);
+		Memory.addEdgeStyle(that.#style, that.#model);
 
 		function userFunction(pdb, tab) {
 
@@ -109,108 +113,126 @@ class Model{
 		that.#model.getPropertyDb().executeUserFunction(userFunction, [])
 		.then(function(dbObjects){
 
-			for(let d in dbObjects){
+				for(let d in dbObjects){
+					//Disable on start
+					Memory.getViewer().impl.visibilityManager.setNodeOff(dbObjects[d].dbId, true, that.#model);
 
-				let isVisible = false;
-				for(let p in dbObjects[d].properties){
-					if(dbObjects[d].properties[p].displayName == "Icon" && dbObjects[d].properties[p].displayValue == "Geometry") isVisible = true;
-				}
-				if(isVisible){
+					//if(that.#style == null){
 
-					//IFC Props
-					const tag = that.getIFCTag(dbObjects, d);
-					const nameDone = false;
-
-					that.#dbObjects[dbObjects[d].dbId] = new ForgeObject(dbObjects[d].dbId);
-					that.#dbObjects[dbObjects[d].dbId].setModel(that.#model);
-					if(typeof ifcId2Obj3D[tag] != "undefined"){
-						that.#dbObjects[dbObjects[d].dbId].setObject3D(ifcId2Obj3D[tag]);
-						that.#dbObjects[dbObjects[d].dbId].isLinked(true);
-						ifcId2Obj3D[tag].addForgeObject(that.#dbObjects[dbObjects[d].dbId]);
-						Memory.addForgeObject(that.#dbObjects[dbObjects[d].dbId], true);
+						let isVisible = false;
 						for(let p in dbObjects[d].properties){
-							if(!nameDone && dbObjects[d].properties[p].displayName == "Source File"){
-								const toSplit = dbObjects[d].properties[p].displayValue.split("_");
-								const namee = toSplit[toSplit.length - 1].replace(".ifc", "");
-								that.setName(namee.charAt(0).toUpperCase() + namee.slice(1));
-							}
-							const property = new IFCProperty(dbObjects[d].properties[p].displayName, dbObjects[d].properties[p]);
-							that.#dbObjects[dbObjects[d].dbId].addProperty(property);
+							if(dbObjects[d].properties[p].displayName == "Icon" && dbObjects[d].properties[p].displayValue == "Geometry") isVisible = true;
 						}
+						if(isVisible){
 
-					}else{
-						for(let p in dbObjects[d].properties){
-							if(!nameDone && dbObjects[d].properties[p].displayName == "Source File"){
-								const toSplit = dbObjects[d].properties[p].displayValue.split("_");
-								const namee = toSplit[toSplit.length - 1].replace(".ifc", "");
-								that.setName(namee.charAt(0).toUpperCase() + namee.slice(1));
+							// if(Math.random() > 0.01){
+							// 	that.#viewer.impl.visibilityManager.setNodeOff(dbObjects[d].dbId, true, that.#model);
+							// }
+							//IFC Props
+							const tag = that.getIFCTag(dbObjects, d);
+							const nameDone = false;
+
+							that.#dbObjects[dbObjects[d].dbId] = new ForgeObject(dbObjects[d].dbId, that.#model);
+							//that.#viewer.impl.highlightObjectNode(that.#model, dbObjects[d].dbId, true, false);
+							
+							//that.#dbObjects[dbObjects[d].dbId].setModel(that.#model);
+							if(typeof ifcId2Obj3D[tag] != "undefined"){
+								that.#dbObjects[dbObjects[d].dbId].setObject3D(ifcId2Obj3D[tag]);
+								that.#dbObjects[dbObjects[d].dbId].isLinked(true);
+								ifcId2Obj3D[tag].addForgeObject(that.#dbObjects[dbObjects[d].dbId]);
+								Memory.addForgeObject(that.#dbObjects[dbObjects[d].dbId], true);
+								for(let p in dbObjects[d].properties){
+									if(!nameDone && dbObjects[d].properties[p].displayName == "Source File"){
+										const toSplit = dbObjects[d].properties[p].displayValue.split("_");
+										const namee = toSplit[toSplit.length - 1].replace(".ifc", "");
+										that.setName(namee.charAt(0).toUpperCase() + namee.slice(1));
+									}
+									const property = new IFCProperty(dbObjects[d].properties[p].displayName, dbObjects[d].properties[p]);
+									that.#dbObjects[dbObjects[d].dbId].addProperty(property);
+								}
+
+							}else{
+								for(let p in dbObjects[d].properties){
+									if(!nameDone && dbObjects[d].properties[p].displayName == "Source File"){
+										const toSplit = dbObjects[d].properties[p].displayValue.split("_");
+										const namee = toSplit[toSplit.length - 1].replace(".ifc", "");
+										that.setName(namee.charAt(0).toUpperCase() + namee.slice(1));
+									}
+								}
+								that.#dbObjects[dbObjects[d].dbId].isLinked(false);
+								//that.#dbObjects[dbObjects[d].dbId].setColor(true, new THREE.Vector4(1, 1, 1, 1));
+								that.#viewer.lockSelection(dbObjects[d].dbId, true, that.#model)
+								Memory.addForgeObject(that.#dbObjects[dbObjects[d].dbId], false);
 							}
-						}
-						that.#dbObjects[dbObjects[d].dbId].isLinked(false);
-						that.#dbObjects[dbObjects[d].dbId].setColor(true, new THREE.Vector4(1, 1, 1, 1));
-						that.#viewer.lockSelection(dbObjects[d].dbId, true, that.#model)
-						Memory.addForgeObject(that.#dbObjects[dbObjects[d].dbId], false);
-					}
 
-					//Materials / Fragments
-					const tree = that.#model.getInstanceTree();
-					tree.enumNodeFragments(dbObjects[d].dbId, (node)=>{
-		    			const material  = that.#model.getFragmentList().getMaterial(node);
-						Memory.addMaterial(material);
-						//console.log(material);
-						if(typeof material != "undefined"){
-			    			const ignoredMaterial = new THREE.MeshBasicMaterial({
-							    reflectivity: 0.0,
-							    flatShading: true,
-								transparent: true,
-								opacity: 0.5,
-							    color: "#FFFFFF",
-							});
-							const in6WeeksMaterial = new THREE.MeshBasicMaterial({
-							    reflectivity: 0.0,
-							    flatShading: true,
-								transparent: true,
-								opacity: 0.45,
-							    color: "#FFFFFF",
-							});
+							//Materials / Fragments
+							const tree = that.#model.getInstanceTree();
+							tree.enumNodeFragments(dbObjects[d].dbId, (node)=>{
+				    		const material  = that.#model.getFragmentList().getMaterial(node);
 
-							const darkness = 0.55;
-							ignoredMaterial.color = {
-						    	r: material.color.r,/*  * darkness, */ 
-			    				g: material.color.g,/*  * darkness, */ 
-			    				b: material.color.b,/*  * (darkness + 0.1) */
-							}
-							in6WeeksMaterial.color = {
-						    	r: material.color.r, 
-			    				g: material.color.g,
-			    				b: material.color.b,
-							}
-							in6WeeksMaterial.reflectivity = 1;
-						 // 	material.map = null;
-						 // 	const ignoredMaterial = new THREE.MeshPhongMaterial({
-						 // 		color : new THREE.Color(material.color.r, material.color.g, material.color.b),
-						 // 		emissive : new THREE.Color(material.color.r, material.color.g, material.color.b),
-						 // 		specular : new THREE.Color(material.color.r, material.color.g, material.color.b),
-						 // 		side : THREE.DoubleSide,
-						 // 		shininess : 0
-						 // 	});
-						 	material.needsUpdate = true;
-							ignoredMaterial.needsUpdate = true;
-							in6WeeksMaterial.needsUpdate = true;
+								Memory.addMaterial(material);
 
-			    			const fragment = new Fragment(node, material, ignoredMaterial, in6WeeksMaterial);
-							that.#dbObjects[dbObjects[d].dbId].addFragment(fragment);
-							fragment.setModel(that.#model);
-							Memory.addMaterial(ignoredMaterial, true, "ignored-" + material.id);
-							Memory.addMaterial(in6WeeksMaterial, true, "in6Weeks-" + material.id);
-						}
+								if(typeof material != "undefined"){
+					    			const ignoredMaterial = new THREE.MeshBasicMaterial({
+									    reflectivity: 0.0,
+									    flatShading: true,
+										transparent: true,
+										opacity: 0.5,
+									    color: "#FFFFFF",
+									});
+									const in6WeeksMaterial = new THREE.MeshBasicMaterial({
+									    reflectivity: 0.0,
+									    flatShading: true,
+										transparent: true,
+										opacity: 0.45,
+									    color: "#FFFFFF",
+									});
+
+									const darkness = 0.55;
+									ignoredMaterial.color = {
+								    	r: material.color.r,/*  * darkness, */ 
+					    				g: material.color.g,/*  * darkness, */ 
+					    				b: material.color.b,/*  * (darkness + 0.1) */
+									}
+									in6WeeksMaterial.color = {
+								    	r: material.color.r, 
+					    				g: material.color.g,
+					    				b: material.color.b,
+									}
+									in6WeeksMaterial.reflectivity = 1;
+								 // 	material.map = null;
+								 // 	const ignoredMaterial = new THREE.MeshPhongMaterial({
+								 // 		color : new THREE.Color(material.color.r, material.color.g, material.color.b),
+								 // 		emissive : new THREE.Color(material.color.r, material.color.g, material.color.b),
+								 // 		specular : new THREE.Color(material.color.r, material.color.g, material.color.b),
+								 // 		side : THREE.DoubleSide,
+								 // 		shininess : 0
+								 // 	});
+								 	material.needsUpdate = true;
+									ignoredMaterial.needsUpdate = true;
+									in6WeeksMaterial.needsUpdate = true;
+
+					    			const fragment = new Fragment(node, material, ignoredMaterial, in6WeeksMaterial);
+									that.#dbObjects[dbObjects[d].dbId].addFragment(fragment);
+									fragment.setModel(that.#model);
+									Memory.addMaterial(ignoredMaterial, true, "ignored-" + material.id);
+									Memory.addMaterial(in6WeeksMaterial, true, "in6Weeks-" + material.id);
+
+
+									//const clone = that.cloneOriginalMaterial(material);
+									//console.log("1",clone.id);
+									//Memory.addMaterial(clone, true, material.id + "-cloned");
+									//that.#model.getFragmentList().setMaterial(node, clone);
+									//console.log("2",that.#model.getFragmentList().getMaterialId(node));
+								}
 		    		}, true);
 
-				}else{
+					}else{
 
-					//console.log(dbObjects[d].dbId, dbObjects[d].properties);
+						//console.log(dbObjects[d].dbId, dbObjects[d].properties);
+					}
 				}
-			}
+			//}
 
 		}).then(function(){
 			that.callback();
@@ -252,6 +274,26 @@ class Model{
 		if(this.#treeLoaded && this.#modelLoaded){
 			this._allLoaded(this);
 		}
+	}
+
+	cloneOriginalMaterial(material){
+		const mat = material.clone();
+		mat.bloublou = "BROU";
+		mat.cutplanes = material.cutplanes;
+		mat.envMapExposure = material.envMapExposure;
+		mat.envRotationCos = material.envRotationCos;
+		mat.envRotationSin = material.envRotationSin;
+		mat.exposureBias = material.exposureBias;
+		mat.irradianceMap = material.irradianceMap;
+		mat.lol = material.lol;
+		mat.mrtIdBuffer = material.mrtIdBuffer;
+		mat.mrtNormals = material.mrtNormals;
+		mat.packedNormals = material.packedNormals;
+		mat.textureMaps = material.textureMaps;
+		mat.texturesLoaded = material.texturesLoaded;
+		mat.tonemapOutput = material.tonemapOutput;
+		mat.vertexIds = material.vertexIds;
+		return mat;
 	}
 
 	getModel(){

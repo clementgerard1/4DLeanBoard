@@ -14,6 +14,11 @@ class Memory{
 	static #layerDisplay = false;
 	static #layerSelected = [];
 	static #teamSelected = {};
+	static nbModels = 0;
+	static nbStyles = 1;
+	static sceneObj = null;
+
+	static style2Model = {};
 
 	static addMaterial(material, init = false, name){
 		if(typeof material != "undefined"){
@@ -32,6 +37,93 @@ class Memory{
 			if(typeof this.#materials[id] == "undefined") {
 				if(typeof name == "undefined") name = Utils.getGuid("materialName");
 				this.#materials[name] = material;
+			}
+		}
+	}
+
+	static setNb3DModels(nb){
+		this.nbModels = nb;
+		for(let i = 0 ; i < nb ; i++){
+			this.style2Model[i] = {};
+		}
+	}
+
+	static setNbStyles(nb){
+		this.nbStyles = nb;
+	}
+
+	static getNbStyles(nb){
+		return this.nbStyles;
+	}
+
+	static setSceneObject(sceneObj){
+		this.sceneObj = sceneObj;
+	}
+
+	static getSceneObject(){
+		return this.sceneObj;
+	}
+
+	static addEdgeStyle(style, model){
+		if(typeof this.style2Model[Math.trunc((model.id - 1) / this.nbStyles)][style] == "undefined"){
+			this.style2Model[Math.trunc((model.id - 1) / this.nbStyles)][style] = {
+				model : model,
+				nb : model.id % this.nbStyles
+			}
+		}
+	}
+
+	static getModelByEdgeStyle(startModelId, style){
+		if(typeof this.style2Model[startModelId - 1] != "undefined"){
+			return this.style2Model[startModelId - 1][style].model;
+		}
+	}
+
+	static getEdgeStyleByModelId(modelId){
+		for(let s in this.style2Model[Math.trunc((modelId - 1) / this.nbStyles)]){
+			if(this.style2Model[Math.trunc((modelId - 1) / this.nbStyles)][s].nb == modelId % this.nbStyles){
+				return s;
+			}
+		}
+		// if(typeof this.style2Model[startModelId - 1] != "undefined"){
+		// 	return this.style2Model[startModelId - 1][style];
+		// }
+	}
+
+	static addMaterialInformations(materials){
+		for(let m in materials){
+			const temp = m.split("|");
+			if(temp.length > 1){
+				const temp2 = temp[0].split(":");
+				if(temp2.length > 1){
+					materials[m].lol = parseInt(temp2[1]);
+					const style = this.getEdgeStyleByModelId(parseInt(temp2[1]));
+
+					//SLICE BUGGER
+					if(style != null){
+						materials[m].edgeCustumColor = new THREE.Vector4(parseInt(style.slice(1, 3), 16) / 255, parseInt(style.slice(3, 5), 16) / 255, parseInt(style.slice(5, 7), 16) / 255, 1);
+					}
+					
+					console.log(style, materials[m].edgeCustumColor);
+				}else{
+					materials[m].lol = "LOL";
+				}
+				//console.log(temp[1]);
+			}else{
+				materials[m].lol = "LOL";
+			}
+		}
+	}
+
+	//
+	static updateOpacityModel(materials){
+
+	}
+
+	static setUnlinkedStyle(){
+		for(let f in this.#forgeObjectsNotLinked){
+			for(let ff in this.#forgeObjectsNotLinked[f]){
+				this.#forgeObjectsNotLinked[f][ff].setTimeState(0);
 			}
 		}
 	}
@@ -111,13 +203,6 @@ class Memory{
 		}
 	}
 	
-	// static setNotLinked(){
-	// 	for(let f in this.#forgeObjectsNotLinked){
-	// 		for(let ff in this.#forgeObjectsNotLinked[f]){	
-	// 			this.#forgeObjectsNotLinked[f][ff].isLinked(false);
-	// 		}
-	// 	}
-	// }
 
 	static setTeamDisplayMode(bool){
 		if(this.#teamDisplay != bool){

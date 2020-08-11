@@ -13,6 +13,8 @@ class Scene{
 	#viewCubeUiExt;
 	#modelInitLoaded;
 	#modelInitLoaded2;
+	#modelsNeeded;
+	#planningModel;
 
 	#styles;
 	/**
@@ -23,7 +25,8 @@ class Scene{
 
 		@param {int} [id=automaticaly generated] id of the scene.
 	*/
-	constructor(id = Utils.getId("scene")){
+	constructor(planningModel, id = Utils.getId("scene")){
+		this.#planningModel = planningModel;
 		this.#id = id;
 		this.#viewer = null;
 		this.#initInfos = {
@@ -39,7 +42,7 @@ class Scene{
 
 		this.#styles = [];
 		this.parseStyles(styles3D);
-
+		this.#modelsNeeded = this.determineModels();
 
 	}
 
@@ -56,15 +59,15 @@ class Scene{
 		    api: 'derivativeV2',  // for models uploaded to EMEA change this option to 'derivativeV2_EU'
 		    accessToken : this.#initInfos.oauth.credentials.access_token,
 		    groundReflection : true,
-			edgeRendering : true,
-			ambientShadows : true,
+				edgeRendering : true,
+				ambientShadows : true,
 		};
 		const that = this;
 		Autodesk.Viewing.Initializer(options, () => {this._onInitialisationSuccess(that)});
 	}
 
 	_onInitialisationSuccess(that){
-		//that.#id = 3;
+
 	    that.#viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeV'));
 	    Memory.setViewer(this.#viewer);
 
@@ -74,17 +77,28 @@ class Scene{
 	        return;
 	    }
 
-	  //   for(let u in that.#initInfos.urns){
-	  //   	 console.log(u);
-			// setTimeout(()=>{
-		Autodesk.Viewing.Document.load("urn:" + that.#initInfos.urns[0], (document) => {that._onDocumentLoaded(document, that)} , (event)=>{console.log(console.error('Failed fetching Forge manifest'))});
-		// 	}, u * 4000);
-		// }
+			Autodesk.Viewing.Document.load("urn:" + that.#initInfos.urns[0], (document) => {that._onDocumentLoaded(document, that)} , (event)=>{console.log(console.error('Failed fetching Forge manifest'))});
+
+	}
+
+	getStyle(timeMode, constraint, selected, shown, filterMode){
+
+		let select = "selected";
+		if(!selected) select = "notSelected";
+		let visible = "visible";
+		if(!shown) visible = "hidden";
+
+		let style = null;
+		for(let s in this.#styles){
+			if(this.#styles[s].timeState == timeMode && this.#styles[s].constructionState == constraint && typeof this.#styles[s].styles[filterMode] != "undefined" && typeof this.#styles[s].styles[filterMode][select] != "undefined" && typeof this.#styles[s].styles[filterMode][select][visible] != "undefined"){
+				return this.#styles[s].styles[filterMode][select][visible];
+			}
+		}
 	}
 
 	_onDocumentLoaded(doc, that){
 		that.#modelInitLoaded++;
-	    const docObj = new Document(doc, that.#styles);
+	    const docObj = new Document(doc, that.#modelsNeeded);
 	    that.#documents.push(docObj);
 
 		if(that.#modelInitLoaded < that.#initInfos.urns.length){
@@ -109,7 +123,7 @@ class Scene{
 		
 		that.#viewer.setGroundShadow(false);
 		that.#viewer.setEnvMapBackground(true);
-		that.#viewer.setDisplayEdges(true);
+		//that.#viewer.setDisplayEdges(true);
 		that.#viewer.setOrbitPastWorldPoles(false);
 		that.#viewer.setReverseZoomDirection(true);
 		that.#viewer.setEnvMapBackground(true);
@@ -164,6 +178,55 @@ class Scene{
 			}
 		}
 		return models;
+	}
+
+	determineModels(){
+		const models = [];
+
+		//no Edge 
+		models[models.length] = {
+			style : null,
+		}
+
+		for(let s in this.#styles){
+			for(let ss in this.#styles[s].styles){
+				for(let sss in this.#styles[s].styles[ss]){
+					for(let ssss in this.#styles[s].styles[ss][sss]){
+						if(this.#styles[s].styles[ss][sss][ssss].edge != null){
+							let v = true;
+							for(let m in models){
+								if(models[m].style == this.#styles[s].styles[ss][sss][ssss].edge){
+									v = false;
+									break;
+								}
+							}
+							if(v){
+								const regex = RegExp('team');
+								if(regex.test(this.#styles[s].styles[ss][sss][ssss].edge)){
+									const teams = this.#planningModel.getTaskTeams();
+									for(let t in teams){
+										models[models.length] = {
+											style : this.#styles[s].styles[ss][sss][ssss].edge,
+										}
+									}
+								}else{
+
+									models[models.length] = {
+										style : this.#styles[s].styles[ss][sss][ssss].edge,
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return models;
+
+	}
+
+	getEdgeStyles(){
+		return this.#modelsNeeded;
 	}
 
 	parseStyles(csv){
@@ -253,7 +316,6 @@ class Scene{
 					if(cols[1] != ""){
 						constraint = cols[1];
 					};
-					console.log(constraint);
 					currentStyle = {
 						timeState : parseInt(col),
 						constructionState : constraint,
@@ -346,10 +408,10 @@ class Scene{
 				}
 
 				//Basic material mode 
-				if(typeof currentStyle.styles["basicMaterial"] == "undefined") currentStyle.styles["basicMaterial"] = {};
-				if(typeof currentStyle.styles["basicMaterial"][currentSelectMode] == "undefined") currentStyle.styles["basicMaterial"][currentSelectMode] = {};
-				if(typeof currentStyle.styles["basicMaterial"][currentSelectMode][currentVisibleMode] == "undefined") currentStyle.styles["basicMaterial"][currentSelectMode][currentVisibleMode] = {};
 				if(c == 5){
+					if(typeof currentStyle.styles["basicMaterial"] == "undefined") currentStyle.styles["basicMaterial"] = {};
+					if(typeof currentStyle.styles["basicMaterial"][currentSelectMode] == "undefined") currentStyle.styles["basicMaterial"][currentSelectMode] = {};
+					if(typeof currentStyle.styles["basicMaterial"][currentSelectMode][currentVisibleMode] == "undefined") currentStyle.styles["basicMaterial"][currentSelectMode][currentVisibleMode] = {};
 					if(cols[c] != ""){
 					currentStyle.styles["basicMaterial"][currentSelectMode][currentVisibleMode][currentTypeMode] = cols[c];
 					}else{
@@ -357,17 +419,30 @@ class Scene{
 					}
 				}
 
-				if(typeof currentStyle.styles["teamMaterial"] == "undefined") currentStyle.styles["teamMaterial"] = {};
-				if(typeof currentStyle.styles["teamMaterial"][currentSelectMode] == "undefined") currentStyle.styles["teamMaterial"][currentSelectMode] = {};
-				if(typeof currentStyle.styles["teamMaterial"][currentSelectMode][currentVisibleMode] == "undefined") currentStyle.styles["teamMaterial"][currentSelectMode][currentVisibleMode] = {};
+				//Team material mode / Displayed
 				if(c == 6){
+					if(typeof currentStyle.styles["teamMaterialDisplayed"] == "undefined") currentStyle.styles["teamMaterialDisplayed"] = {};
+					if(typeof currentStyle.styles["teamMaterialDisplayed"][currentSelectMode] == "undefined") currentStyle.styles["teamMaterialDisplayed"][currentSelectMode] = {};
+					if(typeof currentStyle.styles["teamMaterialDisplayed"][currentSelectMode][currentVisibleMode] == "undefined") currentStyle.styles["teamMaterialDisplayed"][currentSelectMode][currentVisibleMode] = {};
 					if(cols[c] != ""){
-						currentStyle.styles["teamMaterial"][currentSelectMode][currentVisibleMode][currentTypeMode] = cols[c];
+						currentStyle.styles["teamMaterialDisplayed"][currentSelectMode][currentVisibleMode][currentTypeMode] = cols[c];
 					}else{
-						currentStyle.styles["teamMaterial"][currentSelectMode][currentVisibleMode][currentTypeMode] = defaultStyles["basicMaterial"][currentSelectMode][currentVisibleMode][currentTypeMode];
+						currentStyle.styles["teamMaterialDisplayed"][currentSelectMode][currentVisibleMode][currentTypeMode] = defaultStyles["basicMaterial"][currentSelectMode][currentVisibleMode][currentTypeMode];
 					}
 				}
 
+				//Team material mode / Not displayed
+				if(c == 7){
+					if(typeof currentStyle.styles["teamMaterialNotDislayed"] == "undefined") currentStyle.styles["teamMaterialNotDislayed"] = {};
+					if(typeof currentStyle.styles["teamMaterialNotDislayed"][currentSelectMode] == "undefined") currentStyle.styles["teamMaterialNotDislayed"][currentSelectMode] = {};
+					if(typeof currentStyle.styles["teamMaterialNotDislayed"][currentSelectMode][currentVisibleMode] == "undefined") currentStyle.styles["teamMaterialNotDislayed"][currentSelectMode][currentVisibleMode] = {};
+					if(cols[c] != ""){
+						currentStyle.styles["teamMaterialNotDislayed"][currentSelectMode][currentVisibleMode][currentTypeMode] = cols[c];
+					}else{
+						currentStyle.styles["teamMaterialNotDislayed"][currentSelectMode][currentVisibleMode][currentTypeMode] = defaultStyles["basicMaterial"][currentSelectMode][currentVisibleMode][currentTypeMode];
+					}
+				}
+			
 			}
 		}
 
