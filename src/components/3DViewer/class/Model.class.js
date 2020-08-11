@@ -117,7 +117,7 @@ class Model{
 					//Disable on start
 					Memory.getViewer().impl.visibilityManager.setNodeOff(dbObjects[d].dbId, true, that.#model);
 
-					//if(that.#style == null){
+					if(that.#style == null){
 
 						let isVisible = false;
 						for(let p in dbObjects[d].properties){
@@ -232,7 +232,7 @@ class Model{
 						//console.log(dbObjects[d].dbId, dbObjects[d].properties);
 					}
 				}
-			//}
+			}
 
 		}).then(function(){
 			that.callback();

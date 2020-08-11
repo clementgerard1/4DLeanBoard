@@ -34,65 +34,6 @@ export default {
 	],
 	methods : {
 
-		createCustumMaterials(){
-			const selectedMaterial = new THREE.MeshBasicMaterial({
-			    color: scssVariables["select3DColor"],
-			    emissive : scssVariables["select3DColor"],
-			    specular : scssVariables["select3DColor"],
-			    shininess : 0,
-			});
-			Memory.addMaterial(selectedMaterial, true, "selectedMaterial");
-
-			const nextsWeeksMat = new THREE.MeshBasicMaterial({
-				reflectivity: 0.0,
-				flatShading: true,
-				transparent: true,
-				opacity: 0.5,
-				color: scssVariables["nextSixWeeks"],
-			});
-			Memory.addMaterial(nextsWeeksMat, true, "nextsWeeksMat");
-
-			const currWeekMat = new THREE.MeshBasicMaterial({
-				reflectivity: 0.0,
-				flatShading: true,
-				transparent: true,
-				opacity: 1,
-				color: '#FFFFFF',//scssVariables["currentWeek"],
-			});
-			Memory.addMaterial(currWeekMat, true, "currWeekMat");
-
-			const sixWeeksMat = new THREE.MeshBasicMaterial({
-				reflectivity: 0.0,
-				flatShading: true,
-				transparent: true,
-				opacity: 0.75,
-				color: scssVariables["currentSixWeeks"],
-			});
-			Memory.addMaterial(sixWeeksMat, true, "sixWeeksMat");
-
-			const teams = this.model.getTaskTeams();
-			for(let t in teams){
-
-				const teamMaterial = new THREE.MeshBasicMaterial({
-					reflectivity: 0.0,
-					flatShading: true,
-					transparent: true,
-					opacity: 0.75,
-					color: scssVariables[teams[t].getColorClass().replace("BG_", "").toLowerCase()],
-				});
-				Memory.addMaterial(teamMaterial , true, teams[t].getId() + "-team");
-				const teamNotMaterial = new THREE.MeshBasicMaterial({
-					reflectivity: 0.0,
-					flatShading: true,
-					transparent: true,
-					opacity: 0.35,
-					color: scssVariables[teams[t].getColorClass().replace("BG_", "").toLowerCase()],
-				});
-				Memory.addMaterial(teamNotMaterial , true, teams[t].getId() + "-not-team");
-				
-			}
-		},
-
 		getScene : function(){
 			return this.scene;
 		},
@@ -108,62 +49,54 @@ export default {
 				const previousTasks = this.timeline.getTasksBetweenTwoDates(0, start6Weeks - 1);
 				const thisWeek = this.timeline.getTasksBetweenTwoDates(start6Weeks, start6Weeks + 6);
 				const weeksTasks = this.timeline.getTasksBetweenTwoDates(start6Weeks, start6Weeks + 41);
-				const nextWeeksTasks = this.timeline.getTasksBetweenTwoDates(start6Weeks + 42, start6Weeks + 83);
 				const nextTasks = this.timeline.getTasksBetweenTwoDates(start6Weeks + 84, this.model.getDuration() * 7);
-
-				for(let t in previousTasks){
-					const objs = previousTasks[t].getObject4D().getObjects3D()
-					for(let o in objs){
-						const forges = objs[o].getForgeObjects();
-						for(let f in forges){
-							Memory.setState(forges[f], 0);
-						}
-					}
-				}
-
-				for(let t in thisWeek){
-					const objs = thisWeek[t].getObject4D().getObjects3D()
-					for(let o in objs){
-						const forges = objs[o].getForgeObjects();
-						for(let f in forges){
-							Memory.setState(forges[f], "built");
-						}
-					}
-				}
 
 				for(let n in nextTasks){
 					const objs = nextTasks[n].getObject4D().getObjects3D()
 					for(let o in objs){
 						const forges = objs[o].getForgeObjects();
 						for(let f in forges){
-							Memory.setState(forges[f], "toBuild");
+							Memory.setState(forges[f], 1);
 						}
 					}
 				}
 
-				for(let w in weeksTasks){
-					let state = null;
-					if(this.timeline.isActiveBetweenTwoDate(weeksTasks[w], startActualWeek, startActualWeek + 6)){
-						state = "currentWeek";
-					}else{
-						state = "builtOn6W";
-					}
-
-					const objs = weeksTasks[w].getObject4D().getObjects3D()
+				for(let n in weeksTasks){
+					const objs = weeksTasks[n].getObject4D().getObjects3D()
 					for(let o in objs){
 						const forges = objs[o].getForgeObjects();
 						for(let f in forges){
-							Memory.setState(forges[f], state);
+							Memory.setState(forges[f], 2);
 						}
 					}
-				}		
+				}
+
+				for(let n in thisWeek){
+					const objs = thisWeek[n].getObject4D().getObjects3D()
+					for(let o in objs){
+						const forges = objs[o].getForgeObjects();
+						for(let f in forges){
+							Memory.setState(forges[f], 3);
+						}
+					}
+				}
+
+				for(let n in previousTasks){
+					const objs = previousTasks[n].getObject4D().getObjects3D()
+					for(let o in objs){
+						const forges = objs[o].getForgeObjects();
+						for(let f in forges){
+							Memory.setState(forges[f], 4);
+						}
+					}
+				}
 
 				//Selection
-				this.clearSelection();
-				const tasks = V_taskTableUtils.getTokens();
-				for(let t in tasks){
-					this.select(tasks[t].getObject4D(), true);
-				}
+				// this.clearSelection();
+				// const tasks = V_taskTableUtils.getTokens();
+				// for(let t in tasks){
+				// 	this.select(tasks[t].getObject4D(), true);
+				// }
 
 				Memory.refresh();
 
@@ -249,11 +182,12 @@ export default {
 
 
 		handleMenuChange(id){
-			this.modelShown[id].model.hide(this.modelShown[id].model.isShown());
 			this.$set(this.modelShown, id, {
-				model : this.modelShown[id].model,
-				shown : this.modelShown[id].model.isShown()
+				shown : !this.modelShown[id].shown,
+				name : this.modelShown[id].name,
+				id : id,
 			});
+			Memory.setTransparent(id, this.modelShown[id].shown);
 			V_socketUtils.setIfcMenuChange(this.modelShown);
 		},
 		refreshCamera() {
@@ -263,11 +197,12 @@ export default {
 
 		setIfcMenuChange(ifcs){
 			for(let i in ifcs){
-				this.modelShown[i].model.hide(!ifcs[i]);
 				this.$set(this.modelShown, i, {
-					model : this.modelShown[i].model,
-					shown : this.modelShown[i].model.isShown()
+					shown : ifcs[i],
+					name : this.modelShown[i].name,
+					id : i,
 				});
+				Memory.setTransparent(i, this.modelShown[i].shown);
 			}
 		},
 
@@ -282,7 +217,6 @@ export default {
 
       const l = this.urns.length;
 			_edgeMaterial.getCustomOverrideMaterial = function(shapeMaterial) {
-					console.log(shapeMaterial.lol, shapeMaterial.edgeCustumColor);
 					//console.log(shapeMaterial.id, shapeMaterial.lol);
 
 					//console.log(shapeMaterial.id);
@@ -348,15 +282,16 @@ export default {
 		this.scene.init(this.oauth, this.urns, this.objs, ()=>{
 			console.log("init done");
 
-			//Start rendering
-
 			const models = this.scene.getModels();
 			for(let m in models){
-				this.modelShown[models[m].getId()] = {
+				this.modelShown[Math.trunc(models[m].getId() / Memory.getNbStyles())] = {
 					shown : models[m].isShown(),
-					model : models[m]
+					id : Math.trunc(models[m].getId() / Memory.getNbStyles()),
+					name : models[m].getName()
 				}
 			}
+
+			//Start rendering
 
 			//this.createCustumMaterials();
 			//this.hideLayer("Etage Rouge", true);
@@ -393,9 +328,12 @@ export default {
 
 			//All informations are loaded / All objects are invisible on their models
 			console.log("LOADED");
+			
 			Memory.setUnlinkedStyle();
 			this.watchTime(this.playerinit);
-
+			for(let m in models){
+				Memory.setTransparent(this.modelShown[Math.trunc(models[m].getId() / Memory.getNbStyles())], this.modelShown[Math.trunc(models[m].getId() / Memory.getNbStyles())].shown);
+			}
 
 		})
 
@@ -407,9 +345,9 @@ export default {
 			
 			<div class="openMenu" >
 				<div v-if="menuopen">
-					<div class="modelName" v-for="model in modelShown" v-tap="() => handleMenuChange(model.model.getId())" v-bind:class='[ model.shown ? "shown" : "hide"]'> 
+					<div class="modelName" v-for="model in modelShown" v-tap="() => handleMenuChange(model.id)" v-bind:class='[ model.shown ? "shown" : "hide"]'> 
 						<a class="fileButton"></a> 
-						<p v-html="model.model.getName()"></p>
+						<p v-html="model.name"></p>
 					</div>
 				</div>
 			`+ modelBar + `

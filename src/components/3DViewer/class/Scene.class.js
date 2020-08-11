@@ -172,10 +172,8 @@ class Scene{
 	getModels(){
 		const models = [];
 		for(let d in this.#documents){
-			const modelss = this.#documents[d].getModels();
-			for(let m in modelss){
-				models.push(modelss[m]);
-			}
+			const modelss = this.#documents[d].getModel(0);
+			models.push(modelss);
 		}
 		return models;
 	}
@@ -401,11 +399,11 @@ class Scene{
 					currentTypeMode = "material";
 				}else if(c == 4 && cols[c] == "Edge"){
 					currentTypeMode = "edge";
-				}else if(c == 4 && cols[c] == "MAV"){
-					currentTypeMode = "MAV";
-				}else if(c == 4 && cols[c] == "EAV"){
-					currentTypeMode = "EAV";
-				}
+				}else if(c == 4 && cols[c] == "Material Transparent"){
+					currentTypeMode = "transparent";
+				}// }else if(c == 4 && cols[c] == "EAV"){
+				// 	currentTypeMode = "EAV";
+				// }
 
 				//Basic material mode 
 				if(c == 5){

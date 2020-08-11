@@ -44,30 +44,21 @@ class ForgeObject{
 	}
 
 	setTimeState(i){
-		const viewer = Memory.getViewer();
-		this.#timeState = i;
-		let newModel = null;
-		switch(this.#timeState){
-			case 0 : 	const styles = Memory.getSceneObject().getStyle(0, null, this.#selected, this.#visible, "basicMaterial");
-								newModel = Memory.getModelByEdgeStyle(this.#originalModelId, styles.edge);
-								break;
+		if(this.#timeState != i){
+			const viewer = Memory.getViewer();
+			this.#timeState = i;
+			this.updateMaterial();
 		}
-		if((newModel != null && newModel.id != this.#model.id) || !this.#started){
-			viewer.impl.visibilityManager.setNodeOff(this.#id, true, this.#model);
-			viewer.impl.visibilityManager.setNodeOff(this.#id, false, newModel);
-			this.#model = newModel;
-			this.#started = true;
+	}
+
+	setTransparent(bool){
+		if(this.#visible != !bool){
+			this.#visible = !bool;
+			this.updateMaterial();
 		}
-
-		
-
-
 	}
 
 	addProperty(property){
-		/* if(typeof this.#properties[property.getName()] != "undefined") {
-			console.log(property.getName(), 'double');
-		} */
 		this.#properties[property.getName()] = property;
 	}
 
@@ -85,16 +76,6 @@ class ForgeObject{
 
 	isLinked(bool) {
 		this.#linked = bool;
-		if(!bool) {
-			this.#state = "built";
-		}
-		//this.updateMaterial();
-	}
-
-	setAllMaterials(materialName){
-		for(let f in this.#fragments){
-			this.#fragments[f].setMaterial(materialName);
-		}
 	}
 
 	isTeamSelected(teams){
@@ -103,12 +84,12 @@ class ForgeObject{
 		}else{
 			this.#teamSelected = false;
 		}
-		this.updateMaterial();
+		//this.updateMaterial();
 	}
 
 	isTeamDisplayed(bool){
 		this.#teamDisplayed = bool;
-		this.updateMaterial();
+		//this.updateMaterial();
 	}
 
 	hideInLayer(layers){
@@ -148,7 +129,7 @@ class ForgeObject{
 			//viewer.show(this.#id, this.#model);
 			this.#layerHided = false;
 		}
-		this.updateMaterial();
+		//this.updateMaterial();
 	}
 
 	getId(){
@@ -171,20 +152,45 @@ class ForgeObject{
 	isSelected(bool){
 		if(bool != this.#selected){
 			this.#selected = bool;
-			this.updateMaterial();
+			//this.updateMaterial();
 		}
 	}
 
 	setState(state){
 		if(this.#state != state){
 			this.#state = state;
-			this.updateMaterial();
+			//this.updateMaterial();
 		}
-	}
+	};
 
 	updateMaterial(){
+
 		const viewer = Memory.getViewer();
-		let materialName = null;
+		const styles = Memory.getSceneObject().getStyle(this.#timeState, null, this.#selected, this.#visible, "basicMaterial");
+		
+		if(typeof styles != "undefined"){
+			const newModel = Memory.getModelByEdgeStyle(this.#originalModelId, styles.edge);
+			const color = new THREE.Vector4(parseInt(styles.material.slice(1, 3), 16) / 255, parseInt(styles.material.slice(3, 5), 16) / 255, parseInt(styles.material.slice(5, 7), 16) / 255, parseInt(styles.material.slice(8, 11)) / 100);
+			if((newModel != null && newModel.id != this.#model.id) || !this.#started){
+				viewer.impl.visibilityManager.setNodeOff(this.#id, true, this.#model);
+				viewer.impl.visibilityManager.setNodeOff(this.#id, false, newModel);
+				this.#model = newModel;
+
+				this.#started = true;
+			}
+
+
+			viewer.setThemingColor(this.#id, color, this.#model);
+			if(styles.transparent == "TRUE"){
+				viewer.hide(this.#id, this.#model);
+			}else{
+				viewer.show(this.#id, this.#model);
+			}
+		}
+
+		
+
+		/*let materialName = null;
 		if(!this.#selected) {
 			viewer.setThemingColor(this.#id, null, this.#model);
 		}
@@ -236,7 +242,7 @@ class ForgeObject{
 
 		for(let f in this.#fragments){
 			this.#fragments[f].setMaterial(materialName);
-		}
+		}*/
 	}
 
 	getSelected(){
