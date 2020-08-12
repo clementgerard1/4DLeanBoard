@@ -225,7 +225,6 @@ class Scene{
 				}
 			}
 		}
-		console.log(models);
 		return models;
 
 	}

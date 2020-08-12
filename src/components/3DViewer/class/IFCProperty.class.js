@@ -20,5 +20,9 @@ class IFCProperty{
 		return this.#id;
 	}
 
+	getInfo(){
+		return this.#propertyInfos;
+	}
+
 }
 export default IFCProperty;

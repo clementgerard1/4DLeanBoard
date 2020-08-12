@@ -118,6 +118,7 @@ class V_taskTableUtils{
 		@static
 	*/
 	static setToken(task, bool){
+		this.tokens = {};
 		if(bool){
 			this.tokens[task.getId()] = {
 				task : task,

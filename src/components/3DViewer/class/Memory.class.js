@@ -230,7 +230,7 @@ class Memory{
 
 	static select(forgeObject, bool){
 		if(bool){
-			if(typeof this.#selected[forgeObject.getId()]) this.#selected[forgeObject.getId()] = forgeObject;
+			if(typeof this.#selected[forgeObject.getId()] == "undefined") this.#selected[forgeObject.getId()] = forgeObject;
 		}else{
 			delete this.#selected[forgeObject.getId()];
 		}
@@ -244,7 +244,9 @@ class Memory{
 	}
 
 	static getForgeObject(dbId, model){
-		return this.#forgeObjects[model.id][dbId];
+		const newModelId = Math.trunc((model.id - 1) / this.nbStyles);
+		if(typeof  this.#forgeObjects[newModelId] == "undefined" || typeof this.#forgeObjects[newModelId][dbId] == "undefined") return null;
+		return this.#forgeObjects[newModelId][dbId];
 	}
 
 	static addForgeObject(forgeObject, linked){

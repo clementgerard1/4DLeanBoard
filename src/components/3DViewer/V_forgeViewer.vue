@@ -116,11 +116,12 @@ export default {
 			}
 			if(selection.length != 0){
 				this.scene.getViewer().clearSelection();
+				this.clearSelection();
 				for(let s in selection){
 					const dbId = selection[s].selection;
 					const model = selection[s].model;
 					const fObject = Memory.getForgeObject(dbId, model);
-					if(typeof fObject != "undefined"){
+					if(typeof fObject != "undefined" && fObject != null){
 						const object4D = fObject.getObject3D().getParent();
 						V_socketUtils.highlightTask(object4D.getTask(), !Memory.isSelected(fObject));
 						const objects3D = object4D.getObjects3D();
@@ -134,14 +135,9 @@ export default {
 							}
 						}
 					}
-
-
-					const task = fObjs[o].getObject3D().getParent().getTask();
-					V_socketUtils.highlightTask(task, !b);
-
 				}
+				Memory.refresh();
 			}
-			Memory.refresh();
 		},
 
 		select(object4D, bool){
@@ -301,10 +297,10 @@ export default {
 			//this.allInvisible(true);
 			//this.allToRed(true);
 			//this.setNotLinked();
-			const tasks = V_taskTableUtils.getTokens();
-			for(let t in tasks){
-				this.select(tasks[t].getObject4D(), true);
-			}
+			// const tasks = V_taskTableUtils.getTokens();
+			// for(let t in tasks){
+			// 	this.select(tasks[t].getObject4D(), true);
+			// }
 
 			this.scene.addListener(Autodesk.Viewing.AGGREGATE_SELECTION_CHANGED_EVENT, this.highlightTask);
 			this.scene.addListener(Autodesk.Viewing.CAMERA_CHANGED_EVENT, this.refreshCamera);

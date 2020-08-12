@@ -92,6 +92,8 @@ class ForgeObject{
 
 		if(bool){
 			this.#filterMode = "teamMaterial";
+		}else{
+			this.#filterMode = "basicMaterial";
 		}
 
 		this.updateMaterial();
@@ -155,9 +157,15 @@ class ForgeObject{
 	//
 
 	isSelected(bool){
+		//console.log(this.#properties);
+		for(let p in this.#properties){
+			console.log(p, this.#properties[p].getName(), this.#properties[p].getInfo());
+		}
+
+
 		if(bool != this.#selected){
 			this.#selected = bool;
-			//this.updateMaterial();
+			this.updateMaterial();
 		}
 	}
 
@@ -168,6 +176,7 @@ class ForgeObject{
 		if(visible && this.#teamDisplayed && !this.#teamSelected){
 			visible = false;
 		}
+
 		const styles = Memory.getSceneObject().getStyle(this.#timeState, null, this.#selected, visible, this.#filterMode);
 
 		if(typeof styles != "undefined"){
@@ -188,7 +197,6 @@ class ForgeObject{
 			}
 
 			const color = new THREE.Vector4(parseInt(materialStyle.slice(1, 3), 16) / 255, parseInt(materialStyle.slice(3, 5), 16) / 255, parseInt(materialStyle.slice(5, 7), 16) / 255, intensity / 100);
-			console.log(color);
 			if((newModel != null && newModel.id != this.#model.id) || !this.#started){
 				viewer.impl.visibilityManager.setNodeOff(this.#id, true, this.#model);
 				viewer.impl.visibilityManager.setNodeOff(this.#id, false, newModel);

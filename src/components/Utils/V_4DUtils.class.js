@@ -47,6 +47,7 @@ class V_4DUtils{
 			//const objects3D = object4D.getObjects3D();
 			//for(let o in objects3D){
 			//this.viewers[v].highlight(object4D);
+			this.viewer.clearSelection();
 			this.viewer.select(object4D, bool);
 			//}
 		//}
