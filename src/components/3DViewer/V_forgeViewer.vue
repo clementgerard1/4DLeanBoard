@@ -187,7 +187,7 @@ export default {
 				name : this.modelShown[id].name,
 				id : id,
 			});
-			Memory.setTransparent(id, this.modelShown[id].shown);
+			Memory.setIfcTransparent(id, this.modelShown[id].shown);
 			V_socketUtils.setIfcMenuChange(this.modelShown);
 		},
 		refreshCamera() {
@@ -202,7 +202,7 @@ export default {
 					name : this.modelShown[i].name,
 					id : i,
 				});
-				Memory.setTransparent(i, this.modelShown[i].shown);
+				Memory.setIfcTransparent(i, this.modelShown[i].shown);
 			}
 		},
 
@@ -332,7 +332,7 @@ export default {
 			Memory.setUnlinkedStyle();
 			this.watchTime(this.playerinit);
 			for(let m in models){
-				Memory.setTransparent(this.modelShown[Math.trunc(models[m].getId() / Memory.getNbStyles())], this.modelShown[Math.trunc(models[m].getId() / Memory.getNbStyles())].shown);
+				Memory.setIfcTransparent(this.modelShown[Math.trunc(models[m].getId() / Memory.getNbStyles())], this.modelShown[Math.trunc(models[m].getId() / Memory.getNbStyles())].shown);
 			}
 
 		})

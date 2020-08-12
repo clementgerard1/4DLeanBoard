@@ -2,6 +2,8 @@ import Utils from "../../../class/Utils.class.js";
 import Document from "./Document.class.js";
 import Memory from "./Memory.class.js";
 
+import scssVariables from "../../SixWeekView/assets/_variables.scss";
+
 import styles3D from "../assets/styles3D.csv";
 
 class Scene{
@@ -180,6 +182,7 @@ class Scene{
 
 	determineModels(){
 		const models = [];
+		let edgeTeam = false;
 
 		//no Edge 
 		models[models.length] = {
@@ -202,10 +205,13 @@ class Scene{
 								const regex = RegExp('team');
 								if(regex.test(this.#styles[s].styles[ss][sss][ssss].edge)){
 									const teams = this.#planningModel.getTaskTeams();
-									for(let t in teams){
-										models[models.length] = {
-											style : this.#styles[s].styles[ss][sss][ssss].edge,
+									if(!edgeTeam){
+										for(let t in teams){	
+											models[models.length] = {
+												style : scssVariables[teams[t].getColorClass().replace("BG_", "").toLowerCase()],
+											}
 										}
+										edgeTeam = true;
 									}
 								}else{
 
@@ -219,6 +225,7 @@ class Scene{
 				}
 			}
 		}
+		console.log(models);
 		return models;
 
 	}
@@ -419,25 +426,13 @@ class Scene{
 
 				//Team material mode / Displayed
 				if(c == 6){
-					if(typeof currentStyle.styles["teamMaterialDisplayed"] == "undefined") currentStyle.styles["teamMaterialDisplayed"] = {};
-					if(typeof currentStyle.styles["teamMaterialDisplayed"][currentSelectMode] == "undefined") currentStyle.styles["teamMaterialDisplayed"][currentSelectMode] = {};
-					if(typeof currentStyle.styles["teamMaterialDisplayed"][currentSelectMode][currentVisibleMode] == "undefined") currentStyle.styles["teamMaterialDisplayed"][currentSelectMode][currentVisibleMode] = {};
+					if(typeof currentStyle.styles["teamMaterial"] == "undefined") currentStyle.styles["teamMaterial"] = {};
+					if(typeof currentStyle.styles["teamMaterial"][currentSelectMode] == "undefined") currentStyle.styles["teamMaterial"][currentSelectMode] = {};
+					if(typeof currentStyle.styles["teamMaterial"][currentSelectMode][currentVisibleMode] == "undefined") currentStyle.styles["teamMaterial"][currentSelectMode][currentVisibleMode] = {};
 					if(cols[c] != ""){
-						currentStyle.styles["teamMaterialDisplayed"][currentSelectMode][currentVisibleMode][currentTypeMode] = cols[c];
+						currentStyle.styles["teamMaterial"][currentSelectMode][currentVisibleMode][currentTypeMode] = cols[c];
 					}else{
-						currentStyle.styles["teamMaterialDisplayed"][currentSelectMode][currentVisibleMode][currentTypeMode] = defaultStyles["basicMaterial"][currentSelectMode][currentVisibleMode][currentTypeMode];
-					}
-				}
-
-				//Team material mode / Not displayed
-				if(c == 7){
-					if(typeof currentStyle.styles["teamMaterialNotDislayed"] == "undefined") currentStyle.styles["teamMaterialNotDislayed"] = {};
-					if(typeof currentStyle.styles["teamMaterialNotDislayed"][currentSelectMode] == "undefined") currentStyle.styles["teamMaterialNotDislayed"][currentSelectMode] = {};
-					if(typeof currentStyle.styles["teamMaterialNotDislayed"][currentSelectMode][currentVisibleMode] == "undefined") currentStyle.styles["teamMaterialNotDislayed"][currentSelectMode][currentVisibleMode] = {};
-					if(cols[c] != ""){
-						currentStyle.styles["teamMaterialNotDislayed"][currentSelectMode][currentVisibleMode][currentTypeMode] = cols[c];
-					}else{
-						currentStyle.styles["teamMaterialNotDislayed"][currentSelectMode][currentVisibleMode][currentTypeMode] = defaultStyles["basicMaterial"][currentSelectMode][currentVisibleMode][currentTypeMode];
+						currentStyle.styles["teamMaterial"][currentSelectMode][currentVisibleMode][currentTypeMode] = defaultStyles["basicMaterial"][currentSelectMode][currentVisibleMode][currentTypeMode];
 					}
 				}
 			

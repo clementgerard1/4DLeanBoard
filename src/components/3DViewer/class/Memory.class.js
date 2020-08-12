@@ -74,6 +74,7 @@ class Memory{
 	}
 
 	static getModelByEdgeStyle(startModelId, style){
+
 		if(style == null) style = "null";
 		if(typeof this.style2Model[startModelId - 1] != "undefined"){
 			return this.style2Model[startModelId - 1][style].model;
@@ -99,7 +100,6 @@ class Memory{
 				if(temp2.length > 1){
 					materials[m].lol = parseInt(temp2[1]);
 					const style = this.getEdgeStyleByModelId(parseInt(temp2[1]));
-					console.log(style);
 					//SLICE BUGGER
 					if(style != "null"){
 						materials[m].edgeCustumColor = new THREE.Vector4(parseInt(style.slice(1, 3), 16) / 255, parseInt(style.slice(3, 5), 16) / 255, parseInt(style.slice(5, 7), 16) / 255, 1);
@@ -115,12 +115,12 @@ class Memory{
 		}
 	}
 
-	static setTransparent(id, bool){
+	static setIfcTransparent(id, bool){
 		for(let f in this.#forgeObjects[id]){
-			this.#forgeObjects[id][f].setTransparent(!bool);
+			this.#forgeObjects[id][f].setIfcTransparent(!bool);
 		}
 		for(let f in this.#forgeObjectsNotLinked[id]){
-			this.#forgeObjectsNotLinked[id][f].setTransparent(!bool);
+			this.#forgeObjectsNotLinked[id][f].setIfcTransparent(!bool);
 		}
 	}
 

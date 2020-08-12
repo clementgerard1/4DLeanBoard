@@ -9,17 +9,17 @@ class ForgeObject{
 	#fragments;
 	#model;
 	#originalModelId;
-	#state;
 	#object3D;
 	#teamDisplayed;
 	#teamSelected;
 	#layerHided;
 	#inLayerSelected;
 	#linked;
+	#filterMode
 
 	#timeState;
 	#selected;
-	#visible;
+	#ifcVisible;
 	#started;
 
 	constructor(id = Utils.getId("forgeObjects"), model){
@@ -28,17 +28,17 @@ class ForgeObject{
 		this.#fragments = {};
 		this.#model = model;
 		this.#originalModelId = (Math.trunc((model.id-1) / Memory.getNbStyles())) + 1;
-		this.#state = "toBuild";
 		this.#object3D = null;
 		this.#teamDisplayed = false;
 		this.#teamSelected = true;
 		this.#layerHided = false;
 		this.#inLayerSelected = false;
 		this.#linked = false;
+		this.#filterMode = "basicMaterial";
 
 		this.#timeState = -1;
 		this.#selected = false;
-		this.#visible = true;
+		this.#ifcVisible = true;
 
 		this.#started = false;
 	}
@@ -51,9 +51,9 @@ class ForgeObject{
 		}
 	}
 
-	setTransparent(bool){
-		if(this.#visible != !bool){
-			this.#visible = !bool;
+	setIfcTransparent(bool){
+		if(this.#ifcVisible != !bool){
+			this.#ifcVisible = !bool;
 			this.updateMaterial();
 		}
 	}
@@ -84,12 +84,17 @@ class ForgeObject{
 		}else{
 			this.#teamSelected = false;
 		}
-		//this.updateMaterial();
+		this.updateMaterial();
 	}
 
 	isTeamDisplayed(bool){
 		this.#teamDisplayed = bool;
-		//this.updateMaterial();
+
+		if(bool){
+			this.#filterMode = "teamMaterial";
+		}
+
+		this.updateMaterial();
 	}
 
 	hideInLayer(layers){
@@ -156,21 +161,34 @@ class ForgeObject{
 		}
 	}
 
-	setState(state){
-		if(this.#state != state){
-			this.#state = state;
-			//this.updateMaterial();
-		}
-	};
-
 	updateMaterial(){
 
 		const viewer = Memory.getViewer();
-		const styles = Memory.getSceneObject().getStyle(this.#timeState, null, this.#selected, this.#visible, "basicMaterial");
-		
+		let visible = this.#ifcVisible;
+		if(visible && this.#teamDisplayed && !this.#teamSelected){
+			visible = false;
+		}
+		const styles = Memory.getSceneObject().getStyle(this.#timeState, null, this.#selected, visible, this.#filterMode);
+
 		if(typeof styles != "undefined"){
-			const newModel = Memory.getModelByEdgeStyle(this.#originalModelId, styles.edge);
-			const color = new THREE.Vector4(parseInt(styles.material.slice(1, 3), 16) / 255, parseInt(styles.material.slice(3, 5), 16) / 255, parseInt(styles.material.slice(5, 7), 16) / 255, parseInt(styles.material.slice(8, 11)) / 100);
+			let edgeStyle = styles.edge;
+			if(styles.edge == "team"){
+				edgeStyle = scssVariables[this.#object3D.getParent().getTask().getTaskTeam().getColorClass().replace("BG_", "").toLowerCase()];
+			}
+			const newModel = Memory.getModelByEdgeStyle(this.#originalModelId, edgeStyle);
+			let materialStyle = styles.material;
+			let intensity = "100%";
+
+			const regex = RegExp('team');
+			if(regex.test(styles.material)){
+				materialStyle = scssVariables[this.#object3D.getParent().getTask().getTaskTeam().getColorClass().replace("BG_", "").toLowerCase()];
+				intensity = parseInt(styles.material.slice(5, 8));
+			}else{
+				intensity = parseInt(materialStyle.slice(8, 11));
+			}
+
+			const color = new THREE.Vector4(parseInt(materialStyle.slice(1, 3), 16) / 255, parseInt(materialStyle.slice(3, 5), 16) / 255, parseInt(materialStyle.slice(5, 7), 16) / 255, intensity / 100);
+			console.log(color);
 			if((newModel != null && newModel.id != this.#model.id) || !this.#started){
 				viewer.impl.visibilityManager.setNodeOff(this.#id, true, this.#model);
 				viewer.impl.visibilityManager.setNodeOff(this.#id, false, newModel);
