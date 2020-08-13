@@ -48,8 +48,55 @@ class Scene{
 
 	}
 
-	init(oauth, urns, objs, callback, onSelect){
+	init(oauth, urns, objs, ifcProperties, callback){
+
+		//for(let o in objs){
+			//const tag = objs[o].getIFCId();
+			for(let i in ifcProperties){
+				const infos = JSON.parse(ifcProperties[i]);
+
+					//console.log(infos);
+					for(let ii in infos){
+						for(let o in infos[ii].objs3D){
+							//console.log(infos[ii].objs3D[o].tag);
+						}
+					}
+			}
+			//console.log(tag);
+		//}
+
+		//Properties
+		const properties = {};
+		for(let p in ifcProperties){
+			const infos = JSON.parse(ifcProperties[p]);
+			for(let i in infos){
+				for(let o in infos[i].objs3D){
+					if(typeof properties[infos[i].objs3D[o].tag] == "undefined") properties[infos[i].objs3D[o].tag] = {
+						name3D : infos[i].objs3D[o].name,
+						props : []
+					};
+					properties[infos[i].objs3D[o].tag].props[properties[infos[i].objs3D[o].tag].props.length] = {
+						desc : infos[i].desc,
+						props : []
+					}
+
+					for(let t in infos[i]){
+						if(t != "desc" && t != "objs3D"){
+							properties[infos[i].objs3D[o].tag].props[properties[infos[i].objs3D[o].tag].props.length - 1] = {
+								0 : infos[i][t][0],
+								1 : infos[i][t][1],
+								2 : infos[i][t][2],
+							}
+						}
+					}
+				}
+			}
+		}
+
+		console.log(properties);
+
 		this.#initInfos = {
+			properties : properties,
 			callback : callback,
 			oauth : oauth,
 			urns : urns,
@@ -108,14 +155,14 @@ class Scene{
 			return;
 		}
 
-	   	that.#documents[0].loadModels(that.#viewer, that.#initInfos.objs, ()=>{that._onModelLoaded(that)});
+	   	that.#documents[0].loadModels(that.#viewer, that.#initInfos.objs, that.#initInfos.properties, ()=>{that._onModelLoaded(that)});
 
 	}
 
 	_onModelLoaded(that){
 		that.#modelInitLoaded2++;
 		if(that.#modelInitLoaded2 < that.#initInfos.urns.length){
-			that.#documents[that.#modelInitLoaded2].loadModels(that.#viewer, that.#initInfos.objs, ()=>{that._onModelLoaded(that)});
+			that.#documents[that.#modelInitLoaded2].loadModels(that.#viewer, that.#initInfos.objs, that.#initInfos.properties, ()=>{that._onModelLoaded(that)});
 			return;
 		}
 		that._endOfInit(that);

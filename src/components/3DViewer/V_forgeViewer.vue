@@ -31,6 +31,7 @@ export default {
 		"oauth",
 		"timeline",
 		"model",
+		"ifcProperties"
 	],
 	methods : {
 
@@ -275,7 +276,7 @@ export default {
 		Memory.setNb3DModels(this.urns.length);
 		Memory.setNbStyles(this.scene.getEdgeStyles().length);
 
-		this.scene.init(this.oauth, this.urns, this.objs, ()=>{
+		this.scene.init(this.oauth, this.urns, this.objs, this.ifcProperties, ()=>{
 			console.log("init done");
 
 			const models = this.scene.getModels();

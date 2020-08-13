@@ -182,6 +182,7 @@ function init(){
 
 
 						this.urns = datas.urns;
+						this.ifcProperties = datas.ifcProperties;
 						this.oauth = datas.oAuth;
 						this.forgeReady = true;
 
@@ -236,7 +237,7 @@ function init(){
 
 	 			<div v-if="forgeReady" id="viewerFrame">
 	 				<filterpanel id="filterPanel" v-bind:model="model"></filterpanel>
-	 				<forgeviewer id="forgeViewer" v-bind:model="model" v-bind:timeline="timeline" v-bind:urns="urns" v-bind:oauth="oauth"></forgeviewer>
+	 				<forgeviewer id="forgeViewer" v-bind:model="model" v-bind:timeline="timeline" v-bind:urns="urns" v-bind:ifcProperties="ifcProperties" v-bind:oauth="oauth"></forgeviewer>
 		 			<div id="copyright">
 		 				<p>UMR 3495 MAP-CRAI © 2020</p>
 		 				<a v-tap="infoTap" id="infoIcon" v-html="infoicon"></a>

@@ -14,6 +14,7 @@ import bodyParser from 'body-parser';
 
 const models = [];
 const urns = [];
+const ifcProperties = [];
 init();
 
 function init(){
@@ -136,11 +137,10 @@ function getNewIfcFiles(fragToIds){
 			  				if(files[f].split('.').slice(0, -1).join('.') != ""){
 						  		fs.readFile(__dirname + '/models/ifc' + '/' + files[f], 'utf8', (err, data)=>{
 
-
 						  			fs.writeFile(__dirname + "/models/ifc_modified/" + files[f].split('.').slice(0, -1).join('.') + ".ifc", Loader.createIFCFileWithId(data, fragToIds[files[f].split('.').slice(0, -1).join('.')]), function (err) {
 									  	if (err) throw err;
 									  	console.log('Modified IFC created.');
-									});
+										});
 
 								});
 						  	}
@@ -169,10 +169,21 @@ function getNewIfcFiles(fragToIds){
 					  					fs.writeFile(__dirname + "/models/ifc_modified/" + files[f].toLowerCase() + "_" + files2[ff].toLowerCase().split('.').slice(0, -1).join('.') + ".ifc", Loader.createIFCFileWithId(data, fragToIds[files2[ff].split('.').slice(0, -1).join('.')]), function (err) {
 										  	if (err) throw err;
 										  	console.log('Modified IFC created.');
-										});
+
+
+											});
+
+											//Get properties
+											const props = Loader.createJSONfromIFC(data);
+											if(typeof ifcProperties[files[f].toLowerCase()] == "undefined") ifcProperties[files[f].toLowerCase()] = [];
+											ifcProperties[files[f].toLowerCase()][ifcProperties[files[f].toLowerCase()].length] = props;
+											fs.writeFile(__dirname + "/models/ifc_properties/" + files[f].toLowerCase() + "_" + files2[ff].toLowerCase().split('.').slice(0, -1).join('.') + ".json", props, function (err) {
+										  	if (err) throw err;
+										  	console.log('Modified IFC properties created.');
+											});
 
 									});
-							  	}
+							  }
 
 							}
 
@@ -322,6 +333,7 @@ function launchServer(){
 		//res.sendFile(__dirname + "/models/models_serialized/" + req.query.name + ".json");
 		const toReturn = {
 			model : models[req.query.name].serialize(),
+			ifcProperties : ifcProperties[req.query.name],
 			urns : urnSended,
 		}
 		res.json(toReturn);

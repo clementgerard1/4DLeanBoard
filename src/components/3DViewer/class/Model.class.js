@@ -16,6 +16,8 @@ class Model{
 	#name;
 	#hide;
 	#style;
+	#properties;
+	#callback;
 
 
 	constructor(id = Utils.getId("forgeModel")){
@@ -29,19 +31,21 @@ class Model{
 		this.#name = null;
 		this.#hide = false;
 		this.#style = null;
+		this.#properties = null;
 	}
 
 	setEdgeStyle(stg){
 
 	}
 
-	load(viewer, style, path, objs, callback){
+	load(viewer, style, path, objs, properties, callback){
 
 		const that = this;
 		this.#style = style;
 		this.#planningObjects = objs;
 		this.#viewer = viewer;
-		this.callback = callback;
+		this.#callback = callback;
+		this.#properties = properties;
 		this.#viewer.addEventListener(Autodesk.Viewing.OBJECT_TREE_CREATED_EVENT, () => { this._onTreeLoaded(this, this.#id) });
 
 		viewer.loadModel(path, {
@@ -82,6 +86,7 @@ class Model{
 	}
 
 	_allLoaded(that){
+
 
 		Memory.addEdgeStyle(that.#style, that.#model);
 
@@ -141,6 +146,7 @@ class Model{
 							// }
 							//IFC Props
 							const tag = that.getIFCTag(dbObjects, d);
+
 							const nameDone = false;
 
 							that.#dbObjects[dbObjects[d].dbId] = new ForgeObject(dbObjects[d].dbId, that.#model);
@@ -168,6 +174,18 @@ class Model{
 										const property = new IFCProperty(dbObjects[d].properties[p].displayName, dbObjects[d].properties[p]);
 										that.#dbObjects[dbObjects[d].dbId].addProperty(property);
 									}
+
+									//ExtractProperties
+									if(typeof that.#properties[tag] != "undefined"){
+										const props = that.#properties[tag].props;
+										for(let pr in props){
+											 const property = new IFCProperty("ext-" + props[pr][1], props[pr][2]);
+											 that.#dbObjects[dbObjects[d].dbId].addProperty(property);
+										}
+									}else{
+										console.log(tag);
+									}
+									//console.log(prop);
 
 								}else{
 									for(let p in dbObjects[d].properties){
@@ -255,7 +273,7 @@ class Model{
 			}
 
 		}).then(function(){
-			that.callback();
+			that.#callback();
 		})
 		.catch(function(err){
 		  console.log("Something didn't go right...")

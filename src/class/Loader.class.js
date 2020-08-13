@@ -851,6 +851,106 @@ class Loader{
 
 	}
 
+	static createJSONfromIFC(ifcSource){
+		const IFClines = ifcSource.split('\n');
+		let newFile = "";
+		let count = 0;
+		const tab = {};
+		//Build ifc tab with index
+		for(let l in IFClines){
+			const regex = /#([0-9]*)=/;
+			const result = regex.exec(IFClines[l]);
+			if(result != null){
+				tab[result[1]] = IFClines[l];
+			}
+		}
+
+		const infos= {};
+
+		for(let t in tab){
+			const relDef = /(IFCRELDEFINESBYPROPERTIES)\(([\(\) \-'_:$#A-Z0-9a-z]*),([\(\) \-'_:$#A-Z0-9a-z]*),([\(\) \-'_:$#A-Z0-9a-z]*),([\(\) \-'_:$#A-Z0-9a-z]*),([\(\) \-'_:$#A-Z0-9a-z]*),([\(\) \-'_:$#A-Z0-9a-z]*)\)/g;
+			const res1 = relDef.exec(tab[t]);
+			if(res1 != null){
+
+				//Propertiess
+				infos[t] = {};
+				const n = tab[res1[7].replace("#", "")];
+				const relDef2 = /(IFCPROPERTYSET)\(([\\\(\) \-'_:$#A-Z0-9a-z]*),([\\\(\) \-'_:$#A-Z0-9a-z]*),([\\\(\) \-'_:$#A-Z0-9a-z]*),([\\\(\) \-'_:$#A-Z0-9a-z]*),([,\\\(\) \-'_:$#A-Z0-9a-z]*)\)/g;
+				const res2 = relDef2.exec(n);
+				if(res2 != null){
+					infos[t]["desc"] = res2[4];
+					//info1 = res2[4];
+					const n2s = res2[6].replace("(", "").replace(")", "").split(",");
+					for(let s in n2s){
+						const n2 = tab[n2s[s].replace("#", "")];
+						const relDef4 = /(IFCPROPERTYSINGLEVALUE)\(([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*)\)/g;
+						const res3 = relDef4.exec(n2);
+						infos[t][s] = {};
+						infos[t][s][0] = 'IFCPROPERTYSINGLEVALUE';
+						infos[t][s][1] = res3[2];
+						infos[t][s][2] = res3[4].replace("IFCLABEL(", "").replace(")", "");
+					}
+				}else{
+					 const relDef3 = /(IFCELEMENTQUANTITY)\(([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([,/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*)\)/g;
+					 const res3 = relDef3.exec(n);
+						infos[t]["desc"] = res3[4];
+						const n2s = res3[7].replace("(", "").replace(")", "").split(",");
+						for(let s in n2s){
+							const n2 = tab[n2s[s].replace("#", "")];
+							const relDef4 = /(IFC[A-Z]*)\(([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*)\)/g;
+							const res4 = relDef4.exec(n2);
+							infos[t][s] = [];
+							infos[t][s][0] = res4[1];
+							infos[t][s][1] = res4[2];
+							infos[t][s][2] = res4[5];
+						}
+				}
+
+				//Objects 3D
+				const n2ss = res1[6].replace("(", "").replace(")", "").split(",");
+				for(let s in n2ss){
+					const n2 = tab[n2ss[s].replace("#", "")];
+					const relDef5 = /(IFC[A-Z]*)\(([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\ \-'_:$#A-Z0-9a-z]*)/g;
+					const res5 = relDef5.exec(n2);
+					infos[t].objs3D = [];
+					infos[t].objs3D[infos[t].objs3D.length] = {};
+					//console.log(res5);
+					// switch(res5[1]){
+						// case 'IFCWALLSTANDARDCASE' : 
+						// 	infos[t].objs3D[infos[t].objs3D.length - 1].name = res5[4].slice(1, -1);
+						// 	infos[t].objs3D[infos[t].objs3D.length - 1].tag = res5[9].slice(1, -1);
+						// 	break;
+						// case 'IFCDOOR' : 
+						// 	console.log(res5, res5[9]);
+						// 	infos[t].objs3D[infos[t].objs3D.length - 1].name = res5[4].slice(1, -1);
+						// 	infos[t].objs3D[infos[t].objs3D.length - 1].tag = res5[9].slice(1, -1);
+						// 	break;
+						// case 'IFCCOLUMN' : 
+						// 	infos[t].objs3D[infos[t].objs3D.length - 1].name = res5[4].slice(1, -1);
+						// 	infos[t].objs3D[infos[t].objs3D.length - 1].tag = res5[9].slice(1, -1);
+						// 	break;
+						// case 'IFCPLATE' : 
+						// 	infos[t].objs3D[infos[t].objs3D.length - 1].name = res5[4].slice(1, -1);
+						// 	infos[t].objs3D[infos[t].objs3D.length - 1].tag = res5[9].slice(1, -1);
+						// 	break;
+						// case 'IFCWINDOW' : 
+						// 	infos[t].objs3D[infos[t].objs3D.length - 1].name = res5[4].slice(1, -1);
+						// 	infos[t].objs3D[infos[t].objs3D.length - 1].tag = res5[9].slice(1, -1);
+						// 	break;
+						// default : 
+							infos[t].objs3D[infos[t].objs3D.length - 1].name = res5[4].slice(1, -1);
+							infos[t].objs3D[infos[t].objs3D.length - 1].tag = res5[9].slice(1, -1);
+					// }
+
+					//console.log(res5[1], infos[t].objs3D[infos[t].objs3D.length - 1].tag);
+				}
+
+			}
+		}
+
+		return JSON.stringify(infos);
+	}
+
 	//createIFCFileWithId
 	static createIFCFileWithId(ifcSource, fragToIdArray){
 		const IFClines = ifcSource.split('\n');

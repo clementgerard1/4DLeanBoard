@@ -40,6 +40,7 @@ class DataApi{
 					model : model,
 					urns : modelS.data.urns,
 					oAuth : oauth,
+					ifcProperties : modelS.data.ifcProperties,
 				};
 			});
 		}else{

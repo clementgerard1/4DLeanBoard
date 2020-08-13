@@ -22,6 +22,8 @@ class ForgeObject{
 	#ifcVisible;
 	#started;
 
+	#constructionState;
+
 	constructor(id = Utils.getId("forgeObjects"), model){
 		this.#id = id;
 		this.#properties = {};
@@ -35,6 +37,7 @@ class ForgeObject{
 		this.#inLayerSelected = false;
 		this.#linked = false;
 		this.#filterMode = "basicMaterial";
+		this.#constructionState = null;
 
 		this.#timeState = -1;
 		this.#selected = false;
@@ -60,6 +63,23 @@ class ForgeObject{
 
 	addProperty(property){
 		this.#properties[property.getName()] = property;
+		if(property.getName() == "ext-'Renovation Status'"){
+			const info = property.getInfo();
+			switch (info){
+				case 'New' : 
+					if(this.#constructionState == null) this.#constructionState = 1;
+					break;
+				case 'To Be Demolished' : 
+					this.#constructionState = 2;
+					break;
+				case 'Existing' :
+					this.#constructionState = 0;
+					break;
+
+			}
+		}else if(property.getName() == "ext-'ConstructionType'" && property.getInfo() == "'Temporary'"){
+			this.#constructionState = 3;
+		}
 	}
 
 	addFragment(fragment){
@@ -157,11 +177,6 @@ class ForgeObject{
 	//
 
 	isSelected(bool){
-		//console.log(this.#properties);
-		for(let p in this.#properties){
-			console.log(p, this.#properties[p].getName(), this.#properties[p].getInfo());
-		}
-
 
 		if(bool != this.#selected){
 			this.#selected = bool;
@@ -170,6 +185,8 @@ class ForgeObject{
 	}
 
 	updateMaterial(){
+
+		console.log(this.#constructionState);
 
 		const viewer = Memory.getViewer();
 		let visible = this.#ifcVisible;

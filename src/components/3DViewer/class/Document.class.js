@@ -18,21 +18,21 @@ class Document{
 
 	}
 
-	loadModels(viewer, objs, callback){
+	loadModels(viewer, objs, properties, callback){
 
 		const that = this;
 		this.#models[this.#models.length] = new Model();
 		const path = this.#doc.getViewablePath(this.#doc.getRoot().getDefaultGeometry());
-		this.#models[this.#models.length - 1].load(viewer, this.#modelsNeeded[0].style, path, objs, () => that._onModelLoaded(that, viewer, objs, path, callback));
+		this.#models[this.#models.length - 1].load(viewer, this.#modelsNeeded[0].style, path, objs, properties, () => that._onModelLoaded(that, viewer, objs, properties, path, callback));
 		
 	}
 
-	_onModelLoaded(that, viewer, objs, path, callback){
+	_onModelLoaded(that, viewer, objs, properties,  path, callback){
 
 		that.#modelLoaded++;
 		if(that.#modelLoaded < that.#modelsNeeded.length){
 			that.#models[that.#models.length] = new Model();
-			that.#models[that.#models.length - 1].load(viewer, that.#modelsNeeded[that.#modelLoaded].style, path, objs, () => that._onModelLoaded(that, viewer, objs, path, callback));
+			that.#models[that.#models.length - 1].load(viewer, that.#modelsNeeded[that.#modelLoaded].style, path, objs, properties, () => that._onModelLoaded(that, viewer, objs, properties, path, callback));
 			return;
 		}
 
