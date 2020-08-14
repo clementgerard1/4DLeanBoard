@@ -186,15 +186,13 @@ class ForgeObject{
 
 	updateMaterial(){
 
-		console.log(this.#constructionState);
-
 		const viewer = Memory.getViewer();
 		let visible = this.#ifcVisible;
 		if(visible && this.#teamDisplayed && !this.#teamSelected){
 			visible = false;
 		}
 
-		const styles = Memory.getSceneObject().getStyle(this.#timeState, null, this.#selected, visible, this.#filterMode);
+		const styles = Memory.getSceneObject().getStyle(this.#timeState, this.#constructionState, this.#selected, visible, this.#filterMode);
 
 		if(typeof styles != "undefined"){
 			let edgeStyle = styles.edge;

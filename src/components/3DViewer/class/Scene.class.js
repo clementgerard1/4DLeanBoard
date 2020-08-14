@@ -139,7 +139,7 @@ class Scene{
 
 		let style = null;
 		for(let s in this.#styles){
-			if(this.#styles[s].timeState == timeMode && this.#styles[s].constructionState == constraint && typeof this.#styles[s].styles[filterMode] != "undefined" && typeof this.#styles[s].styles[filterMode][select] != "undefined" && typeof this.#styles[s].styles[filterMode][select][visible] != "undefined"){
+			if(this.#styles[s].timeState == timeMode && (this.#styles[s].constructionState == constraint || this.#styles[s].constructionState == null) && typeof this.#styles[s].styles[filterMode] != "undefined" && typeof this.#styles[s].styles[filterMode][select] != "undefined" && typeof this.#styles[s].styles[filterMode][select][visible] != "undefined"){
 				return this.#styles[s].styles[filterMode][select][visible];
 			}
 		}
