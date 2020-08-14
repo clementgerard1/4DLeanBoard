@@ -62,6 +62,8 @@ class ForgeObject{
 	}
 
 	addProperty(property){
+		if(property.getName() == "Material") console.log(property.getInfo());
+ 
 		this.#properties[property.getName()] = property;
 		if(property.getName() == "ext-'Renovation Status'"){
 			const info = property.getInfo();
@@ -80,6 +82,10 @@ class ForgeObject{
 		}else if(property.getName() == "ext-'ConstructionType'" && property.getInfo() == "'Temporary'"){
 			this.#constructionState = 3;
 		}
+	}
+
+	getProperties(){
+		return this.#properties;
 	}
 
 	addFragment(fragment){
@@ -185,8 +191,6 @@ class ForgeObject{
 	}
 
 	updateMaterial(){
-
-		if(this.#id == 203) console.log("update");
 
 		const viewer = Memory.getViewer();
 		let visible = this.#ifcVisible;
