@@ -93,8 +93,6 @@ class Scene{
 			}
 		}
 
-		console.log(properties);
-
 		this.#initInfos = {
 			properties : properties,
 			callback : callback,

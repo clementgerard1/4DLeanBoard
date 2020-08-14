@@ -48,9 +48,9 @@ export default {
 
 				const start6Weeks = Math.trunc(this.time / 6) * 42;
 				const previousTasks = this.timeline.getTasksBetweenTwoDates(0, start6Weeks - 1);
-				const thisWeek = this.timeline.getTasksBetweenTwoDates(start6Weeks, start6Weeks + 6);
+				const thisWeek = this.timeline.getTasksBetweenTwoDates(startActualWeek, startActualWeek + 6);
 				const weeksTasks = this.timeline.getTasksBetweenTwoDates(start6Weeks, start6Weeks + 41);
-				const nextTasks = this.timeline.getTasksBetweenTwoDates(start6Weeks + 84, this.model.getDuration() * 7);
+				const nextTasks = this.timeline.getTasksBetweenTwoDates(start6Weeks + 42, this.model.getDuration() * 7);
 
 				for(let n in nextTasks){
 					const objs = nextTasks[n].getObject4D().getObjects3D()
@@ -138,6 +138,9 @@ export default {
 					}
 				}
 				Memory.refresh();
+
+				Memory.getSelected();
+
 			}
 		},
 

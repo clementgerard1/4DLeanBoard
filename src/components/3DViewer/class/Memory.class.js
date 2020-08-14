@@ -237,6 +237,10 @@ class Memory{
 		forgeObject.isSelected(bool);
 	}
 
+	static getSelected(){
+		return this.#selected;
+	}
+
 	static clearSelection(){
 		for(let s in this.#selected){
 			this.select(this.#selected[s], false);
