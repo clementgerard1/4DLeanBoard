@@ -167,7 +167,48 @@ class Scene{
 	}
 
 	_endOfInit(that){
-		
+
+		let section = null;
+		console.log(that.#viewer);
+	  const toolbar = that.#viewer.getToolbar();
+	  const controls = []
+	  for(let i = 0 ; i < toolbar.getNumberOfControls() ; i++){
+	  	const id = toolbar.getControlId(i);
+	  	const control = toolbar.getControl(id);
+	  	const contain = toolbar.getControl(id).getNumberOfControls();
+	  	if(contain > 0){
+	  		for(let j = 0 ; j < contain ; j++){
+	  			if(control.getControlId(j) == "toolbar-sectionTool"){
+	  				section = control.getControl(control.getControlId(j));
+	  			}
+	  		}
+	  	}
+	  	controls.push(control);
+		}
+		for(let c in controls){
+			toolbar.removeControl(controls[c]);
+		}
+		const container = new Autodesk.Viewing.UI.ControlGroup("main");
+		toolbar.addControl(container);
+
+		container.addControl(section);
+		const button = new Autodesk.Viewing.UI.Button("ifcHierarchie");
+		button.setIcon("adsk-icon-structure");
+		container.addControl(button);
+		const button2 = new Autodesk.Viewing.UI.Button("ifcProperties");
+		button2.setIcon("adsk-icon-properties");
+		container.addControl(button2);
+
+		button.onClick = function(event){
+
+		}
+
+		const panel = new Autodesk.Viewing.UI.DockingPanel(document.getElementById("ifcStructures"), "ifcStructPanel", "IFC Structure");
+		that.#viewer.addPanel(panel);
+		panel.setVisible(true);
+		panel.createTitleBar("BONJOUR");
+
+
 		that.#viewer.setGroundShadow(false);
 		that.#viewer.setEnvMapBackground(true);
 		//that.#viewer.setDisplayEdges(true);

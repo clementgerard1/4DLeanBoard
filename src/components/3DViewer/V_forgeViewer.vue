@@ -187,8 +187,6 @@ export default {
 
 		handleMenuOpen(){
 			this.menuopen = !this.menuopen;
-			const s = this.scene.getStyle(0, null, true, true, "basicMaterial");
-			const id = Memory.getModelByEdgeStyle(1, s.edge);
 		},
 
 
@@ -365,6 +363,8 @@ export default {
 			</div>
 		</div>
 
-		<div id="forgeV"></div>
+		<div id="forgeV">
+			<div id="ifcStructures"></div>
+		</div>
 	</div>`,
 }

@@ -2,7 +2,6 @@ import "./V_taskTableFrame.scss";
 import V_6Wrow from "./V_6Wrow.vue";
 import V_6Wrow_header from "./V_6Wrow_header.vue";
 import V_taskTableBackground from "./V_taskTableBackground.vue";
-import V_taskTableFront from "./V_taskTableFront.vue";
 import TimelineUtils from "../Utils/V_timelineUtils.class.js";
 import V_socketUtils from "../Utils/V_socketUtils.class.js";
 import V_taskTableUtils from "../Utils/V_taskTableUtils.class.js";
@@ -13,7 +12,6 @@ import V_ganttDisplay from "./V_ganttDisplay.vue";
 export default {
 	components: {
 		tasktablebackground : V_taskTableBackground,
-		tasktablefront : V_taskTableFront,
 		row6wheader : V_6Wrow_header,
 		row6w : V_6Wrow,
 		ganttdisplay : V_ganttDisplay,
@@ -124,9 +122,6 @@ export default {
 				<template v-if="weeksBool" v-for="line in lines">
 					<row6w v-bind:tasksize="tasksize" v-bind:tasktablestart="tasktablestart" v-bind:time="time" v-for="i in line.nb" :key="line.taskteam.getId() + '-' + (tasktablestart + i)" v-bind:taskteam="line.taskteam" v-bind:nth="i-1"></row6w>
 				</template>
-
-				<!-- front -->
-				<!--<tasktablefront v-if="weeksBool" v-bind:tasksize="tasksize" v-bind:tasktablestart="tasktablestart" v-bind:time="time" v-bind:nbopened="nbopened" v-bind:nbclosed="nbclosed" id="taskTableFront" v-bind:style="{paddingTop : tasksize + 'px', paddingBottom : tasksize + 'px' }"></tasktablefront>-->
 
 				<ganttdisplay v-if="ganttBool" ></ganttdisplay>
 			</div>
