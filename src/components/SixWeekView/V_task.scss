@@ -3,6 +3,8 @@
 
 .tasksWrapper{
 
+	overflow:visible;
+
 	.highlighted{
 		border: 2px solid red;
     border-radius: 10px;
@@ -10,16 +12,105 @@
 
 	.taskWrapper{
 		margin-right : list.nth(v.$rowHeaderColumnMargin , 2);
-		padding-right : list.nth(v.$rowHeaderColumnMargin , 2);
-		padding-left: list.nth(v.$rowHeaderColumnMargin , 2);
-		box-sizing: content-box !important;
-		/*min-width : 188px;*/
-		height: fit-content;
+		min-height : 30px;
 
 		.task{
-			position : relative;
-			height: fit-content;
 
+			/* White */
+			background: #FFFFFF;
+			/* Drop Black 50 8 4 */
+			box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.5);
+			border-radius: 0px 0px 10px 10px;
+			overflow: visible;
+
+			.taskContent{
+
+				.main{
+					overflow: hidden;
+					position : relative;
+
+					.taskDescription{
+						overflow: hidden;
+	   			  text-overflow: ellipsis;
+	   			  overflow-wrap: anywhere;
+					}
+
+				}
+
+				.footer{
+
+					display : flex;
+					p{
+						display: inline-block;
+
+					}
+
+					p:nth-child(1){
+						display : flex;
+						flex : 1;
+						text-align : left;
+
+						svg{
+							width : 100%;
+							display : block;
+						}
+
+					}
+
+					p:nth-child(2){
+
+						flex : 5;
+						text-align : center;
+					}
+
+					p:nth-child(3){
+
+						flex : 1;
+						text-align : right;
+					}
+				}
+
+			}
+
+			.taskHeader{
+				width : 100%;
+				height : 30px;
+
+				div {
+
+					height : 100%;
+
+					div{
+						height : 100%;
+						display : flex;
+						justify-content : center;
+						align-items : center;
+						border : 5px solid white;
+
+						p{
+							flex : 1;
+							display: inline-block;
+
+						}
+
+						p:nth-child(1){
+							text-align : left;
+						}
+
+						p:nth-child(2){
+							text-align : center;
+						}
+
+						p:nth-child(3){
+							text-align : right;
+						}
+
+					}
+
+				}
+			}
+
+			position : relative;
 			.taskclass{
 				height:100%
 			}

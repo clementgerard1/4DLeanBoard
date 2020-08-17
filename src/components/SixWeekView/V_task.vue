@@ -1,5 +1,5 @@
-import taskSVG from "./assets/task.svg";
 import taskStatusSVG from "./assets/taskStatus.svg";
+import previousTask from "./assets/previousTask.svg";
 import V_taskTableUtils from "../Utils/V_taskTableUtils.class.js";
 import V_4DUtils from "../Utils/V_4DUtils.class.js";
 import V_socketUtils from "../Utils/V_socketUtils.class.js";
@@ -106,6 +106,7 @@ export default {
 			constraintTap : constraintTap,
 			isFirst : false,
 			index : null,
+			taskHeight : "0px",
 		}
 	},
 	inject : [
@@ -119,12 +120,12 @@ export default {
 		"task",
 		"color",
 		"isOpen",
-		"maxheight",
 		"isopen"
 	],
 	mounted: function(){
 		this.updateStateDiv();
 		this.updateStateButtons();
+		this.watchResize();
 	},
 	created: function(){
 		V_taskTableUtils.addTask(this);
@@ -191,7 +192,8 @@ export default {
 				}
 				this.index = index;
 				if(index == 1 || ((this.time % 6) == 0)){
-					return this.getTwoLineFormat(/*"(" + index +  "/" + nbWeeks + ")" + */this.task.getName());
+					return this.task.getName();
+					//return this.getTwoLineFormat(/*"(" + index +  "/" + nbWeeks + ")" + */this.task.getName());
 				}else{
 					return "";
 				}
@@ -200,14 +202,7 @@ export default {
 		},
 		taskteam : function(){
 			return this.task.getTaskTeam().getName();
-		},
-		taskId: function(){
-			if(this.task != null){
-				return this.task.getId();
-			}else{
-				return "noTask";
-			}
-		},
+		}
 
 	},
 	watch:{
@@ -522,14 +517,56 @@ export default {
 		},
 		setSelectedValue(bool){
 			this.selected = bool;
+		},
+
+		watchResize(){
+			const elem = document.getElementById(this._uid + "-" + "task");
+			if(elem != null){
+				this.taskHeight = ((elem.clientWidth) - 30);
+			}
 		}
 	},
+
 	template : `
 	<div class="taskWrapper" v-bind:class='[highlighted ? "highlighted" : ""]'>
-		<div v-bind:style="{maxHeight : maxheight}"` /*+ `v-doubletap='handleTap'`*/ + ` v-tap='handleDoubleTap' class="task">
-			<div v-if="false && notEmpty" class='taskclass animate__animated animate__flipInY'>` + taskSVG + `</div>
-			<div v-if="false && notEmpty" v-show="state" v-bind:id="taskId + '-' + time" class="taskstate animate__animated animate__faster">` + taskStatusSVG + `</div>
-			<div v-if="notEmpty">HEY</div>
+		<div v-tap='handleDoubleTap' class="task">
+			
+			<div v-if="notEmpty" v-bind:id="_uid + '-task'" >
+
+				<div class="taskHeader">
+					<div >
+						<!-- home face -->
+						<div v-bind:style="{borderColor : 'red'}" >
+							<p v-html="'#' + task.getId()"></p>
+							<p><img src="/img/w6/durationIcon.svg"/><span v-html="dr"></span></p>
+							<p><img src="/img/w6/manIcon.svg" /><span v-html="mn"></span></p>
+						</div>
+
+						<!-- description face -->
+
+
+					</div>
+				</div>
+
+				<div v-if="isOpen" class="taskContent" v-bind:style="{ height : taskHeight  + 'px'}">
+					
+					<!-- home face -->
+					<div v-if="taskname != ''">
+						<div class="main" v-bind:style="{ height : (taskHeight * 0.7)  + 'px'}">
+							<p class="taskDescription" v-html="taskname"></p>
+						</div>
+						<div class="footer" v-bind:style="{ height : (taskHeight * 0.3)  + 'px'}">
+							<p>` + previousTask + `</p>
+							<p></p>
+							<p></p>
+						</div>
+					</div>
+
+
+				</div>
+
+
+			</div>
 		</div>
 	</div>`,
 }

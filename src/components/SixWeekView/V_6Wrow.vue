@@ -54,7 +54,7 @@ export default {
 			//console.log(tasks.count, this.nth);
 			//this.isOpen = (tasks.count != 0);
 			this.isVisible = !(tasks.count == 0  && this.nth != 0);
-			return tasks.array;
+			return tasks;
 		},
 		_time : function(){
 			return this.time;
@@ -80,15 +80,6 @@ export default {
 			}
 		}
 	},
-	watch: {
-		isOpen: function(){
-			if(this.isOpen){
-				this.maxheight = "initial";
-			}else{
-				this.maxheight = "30px";
-			}
-		}
-	},
 	created: function(){
 		V_taskTableUtils.addRow(this);
 	},
@@ -111,12 +102,12 @@ export default {
 		<taskline v-show="isVisible" class="phaseLine" v-tap="handleOpenPhase" v-bind:time="_time" v-bind:nth="_nth" v-bind:team="_team" v-bind:class="color" v-bind:teamdescription="teamDescription" v-bind:style='zIndex'></taskline>
 
 		<!-- tasks -->
-		<div v-show="isVisible" v-bind:style="{maxHeight : maxheight, height : (tasksize - 30) + 'px'}" class="tasksWrapper">
-			<task v-bind:style="{maxHeight : maxheight}" v-bind:maxheight="maxheight" v-bind:color="color" v-bind:team="_team" nth=0 v-for="(task, i) in tasks" :key="i" v-bind:isopen="isOpen" v-bind:task="task" v-bind:isOpen="isOpen" v-bind:time="_tasktablestart + i"  ></task>
+		<div v-show="isVisible" class="tasksWrapper">
+			<task v-bind:color="color" v-bind:team="_team" nth=0 v-for="(task, i) in tasks.array" :key="i" v-bind:isopen="isOpen" v-bind:task="task" v-bind:isOpen="isOpen" v-bind:time="_tasktablestart + i"  ></task>
 		</div>
 
 		<!-- button -->
-		<div v-show="isVisible" v-bind:class='[isOpen ? "open" : "close"]' v-tap="handleOpenPhase" v-html="icon" class="phaseButton"></div>
+		<div v-show="isVisible && tasks.count > 0" v-bind:class='[isOpen ? "open" : "close"]' v-tap="handleOpenPhase" v-html="icon" class="phaseButton"></div>
 
 
 

@@ -56,10 +56,12 @@
 		margin-bottom : - (v.$phaseHeight);
 
 		display : flex;
-		overflow : hidden;
+		flex-shrink : 1;
+		/*overflow : hidden;*/
 
 		.taskWrapper{
 			pointer-events : auto;
+			flex-shrink: 1;
 			flex: 1;
 		}
 
