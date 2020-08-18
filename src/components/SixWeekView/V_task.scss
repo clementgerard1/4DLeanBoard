@@ -30,9 +30,20 @@
 					position : relative;
 
 					.taskDescription{
+						margin-left : 10px;
+						margin-top : 10px;
 						overflow: hidden;
 	   			  text-overflow: ellipsis;
 	   			  overflow-wrap: anywhere;
+	   			  font-family: Roboto Condensed;
+						font-style: italic;
+						font-weight: normal;
+						font-size: 1.5em;
+						/* or 86% */
+
+						text-transform: capitalize;
+						font-feature-settings: 'liga' off;
+
 					}
 
 				}
@@ -49,6 +60,7 @@
 						display : flex;
 						flex : 1;
 						text-align : left;
+						max-width : 30%;
 
 						svg{
 							width : 100%;
@@ -60,7 +72,15 @@
 					p:nth-child(2){
 
 						flex : 5;
-						text-align : center;
+						display : flex;
+						justify-content : center;
+						align-items : center;
+						max-width : 50%;
+						margin-left : 10px;
+						svg{
+							flex : 1;
+							width : 100%;
+						}
 					}
 
 					p:nth-child(3){
@@ -95,14 +115,44 @@
 
 						p:nth-child(1){
 							text-align : left;
+							font-family: Oswald;
+							font-style: normal;
+							font-weight: 500;
+							font-size: 0.8em;
+							margin-left : 5%;
 						}
 
 						p:nth-child(2){
+
+							*{
+								max-width : 48%;
+							}
 							text-align : center;
+							font-family: Oswald;
+							font-style: normal;
+							font-weight: 500;
+							font-size: 1.2em;
+							span{
+								display : inline-block;
+								margin-left : 3%;
+							}
 						}
 
 						p:nth-child(3){
+							*{
+								max-width : 48%;
+							}
 							text-align : right;
+							font-family: Oswald;
+							font-style: normal;
+							font-weight: 500;
+							font-size: 1.2em;
+							margin-right : 5%;
+							
+							span{
+								display : inline-block;
+								margin-left : 3%;
+							}
 						}
 
 					}

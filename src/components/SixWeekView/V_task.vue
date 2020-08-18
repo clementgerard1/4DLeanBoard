@@ -6,6 +6,9 @@ import V_socketUtils from "../Utils/V_socketUtils.class.js";
 import "./V_task.scss";
 import scssVariables from "./assets/_variables.scss";
 
+import lpsEmpty from "./assets/lpsEmpty.svg";
+import lpsDone from "./assets/lpsDone.svg";
+
 export default {
 	data : function(){
 
@@ -126,6 +129,7 @@ export default {
 		this.updateStateDiv();
 		this.updateStateButtons();
 		this.watchResize();
+		window.addEventListener('resize', this.watchResize);
 	},
 	created: function(){
 		V_taskTableUtils.addTask(this);
@@ -165,6 +169,29 @@ export default {
 		svgcolor : function(){
 			return scssVariables[this.color.replace("BG_", "").toLowerCase()];
 		},
+		headercolors : function(){
+			if(this.done){
+				return {
+					body : this.svgcolor,
+					border : this.svgcolor
+				};
+			}else if(this.paused){
+				return {
+					body : this.svgcolor,
+					border : "red"
+				};
+			}else if(this.ready){
+				return {
+					body : this.svgcolor,
+					border : "white"
+				};
+			}else{
+				return {
+					body : "white",
+					border : this.svgcolor
+				};
+			}
+		},
 		mn : function(){
 			return this.task.getTaskTeam().getWorkers();
 		},
@@ -202,6 +229,45 @@ export default {
 		},
 		taskteam : function(){
 			return this.task.getTaskTeam().getName();
+		},
+		tasksSVG : function(){
+			let result = "";
+			if(this.constraint){
+				result += lpsDone;
+			}else{
+				result += lpsEmpty;
+			}
+			if(this.information){
+				result += lpsDone;
+			}else{
+				result += lpsEmpty;
+			}
+			if(this.materials){
+				result += lpsDone;
+			}else{
+				result += lpsEmpty;
+			}
+			if(this.manpower){
+				result += lpsDone;
+			}else{
+				result += lpsEmpty;
+			}
+			if(this.equipement){
+				result += lpsDone;
+			}else{
+				result += lpsEmpty;
+			}
+			if(this.safety){
+				result += lpsDone;
+			}else{
+				result += lpsEmpty;
+			}
+			if(this.space){
+				result += lpsDone;
+			}else{
+				result += lpsEmpty;
+			}
+			return result;
 		}
 
 	},
@@ -536,7 +602,7 @@ export default {
 				<div class="taskHeader">
 					<div >
 						<!-- home face -->
-						<div v-bind:style="{borderColor : 'red'}" >
+						<div v-bind:style="{backgroundColor : headercolors.body, borderColor : headercolors.border}" >
 							<p v-html="'#' + task.getId()"></p>
 							<p><img src="/img/w6/durationIcon.svg"/><span v-html="dr"></span></p>
 							<p><img src="/img/w6/manIcon.svg" /><span v-html="mn"></span></p>
@@ -557,7 +623,7 @@ export default {
 						</div>
 						<div class="footer" v-bind:style="{ height : (taskHeight * 0.3)  + 'px'}">
 							<p>` + previousTask + `</p>
-							<p></p>
+							<p v-html="tasksSVG"></p>
 							<p></p>
 						</div>
 					</div>
