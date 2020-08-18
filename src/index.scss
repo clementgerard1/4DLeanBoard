@@ -90,10 +90,7 @@ body{
 		}
 
 		#mainPlayer{
-			position : absolute;
-			height : v.$playerHeight - 20px;
-			margin-bottom : 20px;
-			bottom : 0px;
+			height : v.$playerHeight;
 			width : 100%;
 		}
 	}

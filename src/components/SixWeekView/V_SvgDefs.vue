@@ -395,6 +395,21 @@ export default {
 				<stop offset="1" stop-color="white" stop-opacity="0.2"/>
 				</linearGradient>
 
+				<linearGradient id="paint0_linear_playerRect" x1="615" y1="0" x2="615" y2="10" gradientUnits="userSpaceOnUse">
+				<stop stop-color="#D9D9D9"/>
+				<stop offset="1" stop-color="#F7F7F7"/>
+				</linearGradient>
+
+				<linearGradient id="paint0_linear_milestone" x1="17.9099" y1="22.5" x2="17.9099" y2="54.3198" gradientUnits="userSpaceOnUse">
+				<stop stop-color="#D9D9D9"/>
+				<stop offset="1" stop-color="#F7F7F7"/>
+				</linearGradient>
+
+				<linearGradient id="paint0_linear_milestone2" x1="31.9099" y1="39.5" x2="31.9099" y2="71.3198" gradientUnits="userSpaceOnUse">
+				<stop stop-color="#D9D9D9"/>
+				<stop offset="1" stop-color="#F7F7F7"/>
+				</linearGradient>
+
 			</defs>
 		</svg>
 

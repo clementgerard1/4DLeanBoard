@@ -35,13 +35,13 @@ export default {
 			const calc = this.innertime - firstTimeWeek;
 			return calc > 5;
 		},
-		opacityweek : function(){
-			if(this.selected){
-				return 1;
-			}else{
-				return 0.5;
-			}
-		}
+		// opacityweek : function(){
+		// 	if(this.selected){
+		// 		return 1;
+		// 	}else{
+		// 		return 0.5;
+		// 	}
+		// }
 	},
 	data : function(){
 
@@ -54,7 +54,7 @@ export default {
 	},
 	template : `
 	<div class="playerWeek" v-bind:class='{selected : selected, hightlighted : highlighted, built : built, toBuild : tobuild }'>
-		<p v-if="highlighted" v-html="weeknumber" v-bind:style="{opacity : opacityweek}">
+		<p v-if="highlighted" v-html="weeknumber">
 
 		</p>
 	</div>`,

@@ -2,11 +2,11 @@
 
 .timelinePlayer{
 	display : flex;
-	background: v.$light;
+	background: rgba(0,0,0,0); /*v.$light;*/
 
 	.week{
 		flex : 1;
-		background: v.$white_transparent;
+		background: rgba(0,0,0,0);/*v.$white_transparent;*/
 		mix-blend-mode: normal;
 		border-radius: 2px;
 		margin: 2px;
