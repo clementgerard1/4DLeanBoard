@@ -5,11 +5,11 @@ Timeline status,Constraints,,,,Basic Materials ,Teams ,<--- Filtres,
 ,,,Hidden,Material,,,,
 ,,,,Material Transparent,,,,team = teamColor 
 ,,,,Edge,,,,
-,,Not Selected,Visible,Material,#FFFFFF 100%,#FFFFFF 100%,Timeline status :,0 : Existent - not part of the project
+,,Not Selected,Visible,Material,#FFFFFF 100%,#FF0000 100%,Timeline status :,0 : Existent - not part of the project
 ,,,,Material Transparent,FALSE,FALSE,,1 : Upcoming part of the project
 ,,,,Edge,#000000,#FF0000,,2 : Upcoming in 6weeks
-,,,Hidden,Material,#FFFFFF 100%,#FFFFFF 100%,,3 : Ongoing
-,,,,Material Transparent,TRUE,FALSE,,4 : Done
+,,,Hidden,Material,#FFFFFF 100%,#FF0000 100%,,3 : Ongoing
+,,,,Material Transparent,TRUE,TRUE,,4 : Done
 ,,,,Edge,,,,
 ,,,,,,,,
 1,3,Selected,Visible,Material,#FF00FF 100%,#FF00FF 100%,Constraints :,0 : Existing

@@ -216,11 +216,11 @@ class Memory{
 					this.#forgeObjects[f][ff].isTeamDisplayed(bool);
 				}
 			}
-			// for(let f in this.#forgeObjectsNotLinked){
-			// 	for(let ff in this.#forgeObjectsNotLinked[f]){
-			// 		this.#forgeObjectsNotLinked[f][ff].isTeamDisplayed(bool);
-			// 	}
-			// }
+			for(let f in this.#forgeObjectsNotLinked){
+				for(let ff in this.#forgeObjectsNotLinked[f]){
+					this.#forgeObjectsNotLinked[f][ff].isTeamDisplayed(bool);
+				}
+			}
 		}
 	}
 
