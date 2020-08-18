@@ -22,6 +22,7 @@ export default {
 			scene : null,
 			time : null,
 			playerinit : null,
+			offset : null,
 			menuopen : false,
 			modelShown : []
 		}
@@ -39,14 +40,14 @@ export default {
 			return this.scene;
 		},
 
-		watchTime : function(time){
-			if(this.time != time){
+		watchTime : function(time, forced = false){
+			if(this.time != time || forced){
 
 				this.time = time;
 				//State
 				const startActualWeek = this.time * 7;
-
-				const start6Weeks = Math.trunc(this.time / 6) * 42;
+				const start6Weeks = (Math.floor((this.time - this.offset) / 6) * 6 + this.offset) * 7;
+				//const start6Weeks = Math.trunc(this.time / 6) * 42;
 				const previousTasks = this.timeline.getTasksBetweenTwoDates(0, startActualWeek - 1);
 				const thisWeek = this.timeline.getTasksBetweenTwoDates(startActualWeek, startActualWeek + 6);
 				const weeksTasks = this.timeline.getTasksBetweenTwoDates(startActualWeek, start6Weeks + 41);
@@ -185,6 +186,11 @@ export default {
 			this.playerinit = time;
 		},
 
+		setOffset(offset){
+			this.offset = offset;
+			this.watchTime(this.time, true);
+		},
+
 		handleMenuOpen(){
 			this.menuopen = !this.menuopen;
 			const s = this.scene.getStyle(0, null, true, true, "basicMaterial");
@@ -286,6 +292,7 @@ export default {
 		this.objs = this.model.getObjects3D();
 
 		V_timelineUtils.addListener("time", this, this.setTime);
+		V_timelineUtils.addListener("offset", this, this.setOffset);
 
 		Memory.setNb3DModels(this.urns.length);
 		Memory.setNbStyles(this.scene.getEdgeStyles().length);
