@@ -62,7 +62,6 @@ class ForgeObject{
 	}
 
 	addProperty(property){
-		if(property.getName() == "Material") console.log(property.getInfo());
  
 		this.#properties[property.getName()] = property;
 		if(property.getName() == "ext-'Renovation Status'"){

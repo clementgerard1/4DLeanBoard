@@ -47,9 +47,9 @@ export default {
 				const startActualWeek = this.time * 7;
 
 				const start6Weeks = Math.trunc(this.time / 6) * 42;
-				const previousTasks = this.timeline.getTasksBetweenTwoDates(0, start6Weeks - 1);
+				const previousTasks = this.timeline.getTasksBetweenTwoDates(0, startActualWeek - 1);
 				const thisWeek = this.timeline.getTasksBetweenTwoDates(startActualWeek, startActualWeek + 6);
-				const weeksTasks = this.timeline.getTasksBetweenTwoDates(start6Weeks, start6Weeks + 41);
+				const weeksTasks = this.timeline.getTasksBetweenTwoDates(startActualWeek, start6Weeks + 41);
 				const nextTasks = this.timeline.getTasksBetweenTwoDates(start6Weeks + 42, this.model.getDuration() * 7);
 
 				for(let n in nextTasks){
