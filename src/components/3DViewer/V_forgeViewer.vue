@@ -139,10 +139,8 @@ export default {
 					}
 				}
 				Memory.refresh();
-
 				const objsSelected = Memory.getSelected();
 				for(let o in objsSelected){
-					console.log(objsSelected);
 					const properties = objsSelected[o].getProperties();
 					for(let p in properties){
 						if(typeof properties[p].getInfo().displayValue == "undefined"){

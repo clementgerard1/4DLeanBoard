@@ -67,13 +67,13 @@ class ForgeObject{
 		if(property.getName() == "ext-'Renovation Status'"){
 			const info = property.getInfo();
 			switch (info){
-				case 'New' : 
+				case "'New'" : 
 					if(this.#constructionState == null) this.#constructionState = 1;
 					break;
-				case 'To Be Demolished' : 
+				case "'To Be Demolished'" : 
 					this.#constructionState = 2;
 					break;
-				case 'Existing' :
+				case "'Existing'" :
 					this.#constructionState = 0;
 					break;
 

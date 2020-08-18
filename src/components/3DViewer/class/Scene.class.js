@@ -130,6 +130,8 @@ class Scene{
 
 	getStyle(timeMode, constraint, selected, shown, filterMode){
 
+		if(constraint == 2) console.log(timeMode, constraint, selected, shown, filterMode);
+
 		let select = "selected";
 		if(!selected) select = "notSelected";
 		let visible = "visible";
@@ -137,7 +139,12 @@ class Scene{
 
 		let style = null;
 		for(let s in this.#styles){
+			console.log(this.#styles[s].timeState, this.#styles[s]);
 			if(this.#styles[s].timeState == timeMode && (this.#styles[s].constructionState == constraint || this.#styles[s].constructionState == null) && typeof this.#styles[s].styles[filterMode] != "undefined" && typeof this.#styles[s].styles[filterMode][select] != "undefined" && typeof this.#styles[s].styles[filterMode][select][visible] != "undefined"){
+				if(constraint == 2){
+					console.log(s, filterMode, select, visible,this.#styles[s]);
+					console.log(this.#styles[s].styles[filterMode][select][visible]);
+				}
 				return this.#styles[s].styles[filterMode][select][visible];
 			}
 		}
