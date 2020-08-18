@@ -1,92 +1,91 @@
-Timeline status;Constraints;;;;Basic Materials ;Teams ;<--- Filtres;
-0;;Selected;Visible;Material;;;;
-;;;;Material Transparent;;;;
-;;;;Edge;;;;
-;;;Hidden;Material;;;;
-;;;;Material Transparent;;;;team = teamColor 
-;;;;Edge;;;;
-;;Not Selected;Visible;Material;#000000 010%;#000000 010%;Timeline status :;0 : Existent - not part of the project
-;;;;Material Transparent;FALSE;FALSE;;1 : Upcoming part of the project
-;;;;Edge;;;;2 : Upcoming in 6weeks
-;;;Hidden;Material;#000000 010%;#000000 010%;;3 : Ongoing
-;;;;Material Transparent;TRUE;TRUE;;4 : Done
-;;;;Edge;;;;
-;;;;;;;;
-1;;Selected;Visible;Material;#97D7C7 090%;team 100%;Constraints :; 
-;;;;Material Transparent;TRUE;FALSE;;1 : New
-;;;;Edge;#97D7C7;#97D7C7;;2 : To be demolished
-;;;Hidden;Material;#97D7C7 050%;team 050%;;3 : Temporary
-;;;;Material Transparent;TRUE;TRUE;;
-;;;;Edge;#97D7C7;#97D7C7;;
-;;Not Selected;Visible;Material;#FFFFFF 080%;team 100%;;
-;;;;Material Transparent;TRUE;TRUE;;
-;;;;Edge;#FFFFFF;team;;
-;;;Hidden;Material;#FFFFFF 100%;team 050%;;
-;;;;Material Transparent;TRUE;TRUE;;
-;;;;Edge;;;;
-;;;;;;;;
-1;;Selected;Visible;Material;#97D7C7 010%;team 100%;;
-;;;;Material Transparent;TRUE;FALSE;;
-;;;;Edge;#97D7C7;#97D7C7;;
-;;;Hidden;Material;#97D7C7 010%;team 050%;;
-;;;;Material Transparent;TRUE;TRUE;;
-;;;;Edge;#97D7C7;#97D7C7;;
-;;Not Selected;Visible;Material;#FFFFFF 080%;team 100%;;
-;;;;Material Transparent;TRUE;TRUE;;
-;;;;Edge;#FFFFFF;team;;
-;;;Hidden;Material;#FFFFFF 100%;team 050%;;
-;;;;Material Transparent;TRUE;TRUE;;
-;;;;Edge;;;;
-;;;;;;;;
-2;;Selected;Visible;Material;#97D7C7 090%;team 100%;;
-;;;;Material Transparent;FALSE;FALSE;;
-;;;;Edge;#000000;;;
-;;;Hidden;Material;#97D7C7 090%;team 050%;;
-;;;;Material Transparent;TRUE;TRUE;;
-;;;;Edge;;;;
-;;Not Selected;Visible;Material;#FFFFFF 080%;team 100%;;
-;;;;Material Transparent;FALSE;FALSE;;
-;;;;Edge;#000000;#000000;;
-;;;Hidden;Material;#FFFFFF 080%;team 100%;;
-;;;;Material Transparent;TRUE;TRUE;;
-;;;;Edge;;;;
-;;;;;;;;
-3;;Selected;Visible;Material;#97D7C7 070%;team 100%;;
-;;;;Material Transparent;FALSE;FALSE;;
-;;;;Edge;#97D7C7;;;
-;;;Hidden;Material;#97D7C7 070%;team 050%;;
-;;;;Material Transparent;TRUE;TRUE;;
-;;;;Edge;;;;
-;;Not Selected;Visible;Material;#97D7C7 010%;team 090%;;
-;;;;Material Transparent;FALSE;FALSE;;
-;;;;Edge;#97D7C7;#97D7C7;;
-;;;Hidden;Material;#97D7C7 010%;team 050%;;
-;;;;Material Transparent;TRUE;TRUE;;
-;;;;Edge;;;;
-;;;;;;;;
-4;1;Selected;Visible;Material;#000000 090%;team 050%;;
-;;;;Material Transparent;FALSE;FALSE;;
-;;;;Edge;#97D7C7;team;;
-;;;Hidden;Material;#000000 090%;team 050%;;
-;;;;Material Transparent;TRUE;TRUE;;
-;;;;Edge;;;;
-;;Not Selected;Visible;Material;#000000 010%;team 050%;;
-;;;;Material Transparent;FALSE;FALSE;;
-;;;;Edge;;;;
-;;;Hidden;Material;#000000 010%;team 050%;;
-;;;;Material Transparent;TRUE;TRUE;;
-;;;;Edge;;;;
-;;;;;;;;
-4;2;Selected;Visible;Material;#00FF00 100%;team 050%;;
-;;;;Material Transparent;FALSE;FALSE;;
-;;;;Edge;#FF0000;team;;
-;;;Hidden;Material;#000000 090%;team 050%;;
-;;;;Material Transparent;TRUE;TRUE;;
-;;;;Edge;#FF0000;;;
-;;Not Selected;Visible;Material;#00FF00 100%;team 050%;;
-;;;;Material Transparent;FALSE;FALSE;;
-;;;;Edge;#FF0000;;;
-;;;Hidden;Material;#000000 010%;team 050%;;
-;;;;Material Transparent;TRUE;TRUE;;
-;;;;Edge;#FF0000;;;
->>>>>>> 0618ef57ec409fe3c49b806f5811156cfb6f3e43
+Timeline status,Constraints,,,,Basic Materials ,Teams ,<--- Filtres,
+0,,Selected,Visible,Material,,,,
+,,,,Material Transparent,,,,
+,,,,Edge,,,,
+,,,Hidden,Material,,,,
+,,,,Material Transparent,,,,team = teamColor 
+,,,,Edge,,,,
+,,Not Selected,Visible,Material,#000000 010%,#000000 010%,Timeline status :,0 : Existent - not part of the project
+,,,,Material Transparent,FALSE,FALSE,,1 : Upcoming part of the project
+,,,,Edge,,,,2 : Upcoming in 6weeks
+,,,Hidden,Material,#000000 010%,#000000 010%,,3 : Ongoing
+,,,,Material Transparent,TRUE,TRUE,,4 : Done
+,,,,Edge,,,,
+,,,,,,,,
+1,,Selected,Visible,Material,#97D7C7 090%,team 100%,Constraints :, 
+,,,,Material Transparent,TRUE,FALSE,,1 : New
+,,,,Edge,#97D7C7,#97D7C7,,2 : To be demolished
+,,,Hidden,Material,#97D7C7 050%,team 050%,,3 : Temporary
+,,,,Material Transparent,TRUE,TRUE,,
+,,,,Edge,#97D7C7,#97D7C7,,
+,,Not Selected,Visible,Material,#FFFFFF 080%,team 100%,,
+,,,,Material Transparent,TRUE,TRUE,,
+,,,,Edge,#FFFFFF,team,,
+,,,Hidden,Material,#FFFFFF 100%,team 050%,,
+,,,,Material Transparent,TRUE,TRUE,,
+,,,,Edge,,,,
+,,,,,,,,
+1,,Selected,Visible,Material,#97D7C7 010%,team 100%,,
+,,,,Material Transparent,TRUE,FALSE,,
+,,,,Edge,#97D7C7,#97D7C7,,
+,,,Hidden,Material,#97D7C7 010%,team 050%,,
+,,,,Material Transparent,TRUE,TRUE,,
+,,,,Edge,#97D7C7,#97D7C7,,
+,,Not Selected,Visible,Material,#FFFFFF 080%,team 100%,,
+,,,,Material Transparent,TRUE,TRUE,,
+,,,,Edge,#FFFFFF,team,,
+,,,Hidden,Material,#FFFFFF 100%,team 050%,,
+,,,,Material Transparent,TRUE,TRUE,,
+,,,,Edge,,,,
+,,,,,,,,
+2,,Selected,Visible,Material,#97D7C7 090%,team 100%,,
+,,,,Material Transparent,FALSE,FALSE,,
+,,,,Edge,#000000,,,
+,,,Hidden,Material,#97D7C7 090%,team 050%,,
+,,,,Material Transparent,TRUE,TRUE,,
+,,,,Edge,,,,
+,,Not Selected,Visible,Material,#FFFFFF 080%,team 100%,,
+,,,,Material Transparent,FALSE,FALSE,,
+,,,,Edge,#000000,#000000,,
+,,,Hidden,Material,#FFFFFF 080%,team 100%,,
+,,,,Material Transparent,TRUE,TRUE,,
+,,,,Edge,,,,
+,,,,,,,,
+3,,Selected,Visible,Material,#97D7C7 070%,team 100%,,
+,,,,Material Transparent,FALSE,FALSE,,
+,,,,Edge,#97D7C7,,,
+,,,Hidden,Material,#97D7C7 070%,team 050%,,
+,,,,Material Transparent,TRUE,TRUE,,
+,,,,Edge,,,,
+,,Not Selected,Visible,Material,#97D7C7 010%,team 090%,,
+,,,,Material Transparent,FALSE,FALSE,,
+,,,,Edge,#97D7C7,#97D7C7,,
+,,,Hidden,Material,#97D7C7 010%,team 050%,,
+,,,,Material Transparent,TRUE,TRUE,,
+,,,,Edge,,,,
+,,,,,,,,
+4,1,Selected,Visible,Material,#000000 090%,team 050%,,
+,,,,Material Transparent,FALSE,FALSE,,
+,,,,Edge,#97D7C7,team,,
+,,,Hidden,Material,#000000 090%,team 050%,,
+,,,,Material Transparent,TRUE,TRUE,,
+,,,,Edge,,,,
+,,Not Selected,Visible,Material,#000000 010%,team 050%,,
+,,,,Material Transparent,FALSE,FALSE,,
+,,,,Edge,,,,
+,,,Hidden,Material,#000000 010%,team 050%,,
+,,,,Material Transparent,TRUE,TRUE,,
+,,,,Edge,,,,
+,,,,,,,,
+4,2,Selected,Visible,Material,#00FF00 100%,team 050%,,
+,,,,Material Transparent,FALSE,FALSE,,
+,,,,Edge,#FF0000,team,,
+,,,Hidden,Material,#000000 090%,team 050%,,
+,,,,Material Transparent,TRUE,TRUE,,
+,,,,Edge,#FF0000,,,
+,,Not Selected,Visible,Material,#00FF00 100%,team 050%,,
+,,,,Material Transparent,FALSE,FALSE,,
+,,,,Edge,#FF0000,,,
+,,,Hidden,Material,#000000 010%,team 050%,,
+,,,,Material Transparent,TRUE,TRUE,,
+,,,,Edge,#FF0000,,,
