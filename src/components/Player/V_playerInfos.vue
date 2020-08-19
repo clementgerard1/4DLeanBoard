@@ -108,13 +108,13 @@ export default {
 	<div v-tap="handleTap" v-pan="handlePan" class="svgPlayer" v-bind:class="svgClass">
 		<svg height="` + scssVariables.playerHeight.replace("px", "") + `" fill="none" xmlns="http://www.w3.org/2000/svg">
 			
-			<rect class="playerBackground" stroke-width="2"/>
+			<rect class="playerBackground" fill="url(#paint0_linear_playerRect)" stroke-width="2"/>
 			<rect class="playerBackgroundFilled" v-bind:width="playerX" stroke-width="2"/>
 
 			<playermilestone v-if="displayM" v-bind:widthh="widthh" v-bind:time="time" v-for="m in milestones" :key="m.getId()" v-bind:milestone="m"></playermilestone>
 
 			<g filter="url(#filter0_d_playerButton)">
-				<circle class="playerButton" v-bind:cx="playerX" r="21" stroke-width="2" stroke="black" fill="white"/>
+				<circle class="playerButton" v-bind:cx="playerX" r="21" stroke-width="2" fill="white"/>
 			</g>
 
 		</svg>

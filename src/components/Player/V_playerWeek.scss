@@ -11,15 +11,18 @@
 
 }
 
+.playerWeek.hightlighted{
+	background: v.$white_transparent_reverse;
+	color : #808080;
+}
+
 .playerWeek.selected{
 	/*border: 2px solid v.$greenbluish_light;*/
 	/*background : v.$greenbluish_light !important;*/
-	border : 3px solid black;
+	border : 3px solid v.$greenbluish_light;
+	color : v.$greenbluish_light;
 	margin:0px;
-}
-
-.playerWeek.hightlighted{
-	background: v.$white_transparent_reverse;
+	border-radius : 5px;
 }
 
 .playerWeek.built{
@@ -28,6 +31,6 @@
 
 .playerWeek.toBuild{
 	box-sizing: border-box;
-	border: solid 1px v.$white;
+	border: solid 2px v.$white;
 	margin:1px;
 }
