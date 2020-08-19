@@ -21,7 +21,6 @@ let logScript = `
     log(...args);
     sendToServerConsole("log",args);
   }
-
   const error = console.error.bind(console);
   console.error = (...args) => {
     error(...args);
@@ -99,12 +98,12 @@ if(process.argv[2] == "dev"){
 		}
 	});
 
-	app.get('/:url',function(req,res){
+	app.get('/*',function(req,res){
 		if(req.params.url != "favicon.ico"){
-			if(fs.existsSync(__dirname + '/public/' + req.params.url)){
-	    	res.sendFile(__dirname + '/public/' + req.params.url);
+			if(fs.existsSync(__dirname + '/public' + req.url)){
+	    	res.sendFile(__dirname + '/public' + req.url);
 	    }else{
-	    	res.sendFile(__dirname + '/dev/' + req.params.url);
+	    	res.sendFile(__dirname + '/dev' + req.url);
 	    }
 		}else{
 			res.status(404).send(null);

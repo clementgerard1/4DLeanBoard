@@ -42,9 +42,7 @@ body{
 		}
 
 		#mainPlayer{
-			position : absolute;
 			height : v.$playerHeight;
-			bottom : 0px;
 			width : 100%;
 		}
 	}
@@ -68,7 +66,7 @@ body{
 		p{
 			display: inline-block;
 			font-size: 10px;
-			color: #808080;
+			color: white;
 		}
 
 

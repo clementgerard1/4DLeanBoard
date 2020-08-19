@@ -4,6 +4,24 @@
 
 	position: relative;
 
+	.milestoneInfos{
+		height : 15%;
+		position : absolute;
+		top : 0%;
+		background-color : rgba(255,255,255,0.3);
+		width : fit-content;
+		border-radius : 5px 5px 0px 0px;
+		margin-left : v.$playerDateWidth;
+		z-index: 40;
+
+		p{
+			font-family: Roboto Condensed;
+			font-style: italic;
+			font-weight: normal;
+			font-size: 28px;
+		}
+	}
+
 	#timelineOffset{
 
 		height : 100%;
@@ -34,7 +52,7 @@
 			font-family: Oswald;
 			font-style: normal;
 			font-weight: 500;
-			font-size: 24px;
+			font-size: 22px;
 			line-height: 36px;
 			display: flex;
 			align-items: center;

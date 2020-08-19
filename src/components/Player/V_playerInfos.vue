@@ -18,6 +18,11 @@ export default {
 			playerX : 0,
 			playerflag : false,
 			milestones : this.model.getMilestones(),
+			playerTimeout : null,
+			milestoneTimeout : {
+				milestoneId : null,
+				timeout : null,
+			},
 		}
 	},
 	inject:[
@@ -58,6 +63,9 @@ export default {
 			}
 		},
 		handlePan : function(event){
+
+			if(event.target.localName == "rect" && event.target.classList.item(0) != null) return;
+
 			const x = event.srcEvent.clientX - this.svg.getBoundingClientRect().x;
 			const weekWidth = (this.svg.clientWidth) / this.nbweek;
 
@@ -78,15 +86,80 @@ export default {
 					this.playerX = this.time * weekWidth + (weekWidth / 2);
 					this.playerflag = false;
 				}
+
+				if(this.playerTimeout != null){ 
+					clearTimeout(this.playerTimeout);
+					this.playerTimeout = null;
+				}
+				this.svg.querySelector("svg").getElementById("playerCircle").style.fill = scssVariables["greenbluish_light"];
+				this.svg.querySelector("svg").getElementById("playerCircle").style.r = 25;
+				this.playerTimeout = setTimeout( () => {
+					this.svg.querySelector("svg").getElementById("playerCircle").style.fill = "white";
+					this.svg.querySelector("svg").getElementById("playerCircle").style.r = 21;
+				}, 1000);
 			//}
 		},
 		handleTap : function(event){
+			if(event.target.localName == "rect" && event.target.classList.item(0) != null){
+				let milestone = null;
+				for(let m in this.milestones){
+					if(this.milestones[m].getId() == parseInt(event.target.classList.item(0).replace("milestone-", ""))){
+						milestone = this.milestones[m];
+					}
+				}
+				if(milestone == null) return;
+
+
+				this.$parent.milestoneSelected = milestone;
+				event.target.style.filter = "drop-shadow(1px 1px 15px #97D7C7)";
+
+				if(this.milestoneTimeout.milestoneId != milestone.getId()){
+
+				}
+				if(this.milestoneTimeout.timeout != null){
+					clearTimeout(this.milestoneTimeout.timeout);
+					this.milestoneTimeout.timeout = null;
+				}
+				this.milestoneTimeout.timeout = setTimeout( ()=>{
+					this.$parent.milestoneSelected = null;
+				}, 2000);
+				return;
+			}
 			const x = event.srcEvent.clientX - this.svg.getBoundingClientRect().x;
 			const weekWidth = (this.svg.clientWidth) / this.nbweek;
 			this.playerX = x;
 			const time = Math.trunc(x / weekWidth);
 			if(time != this.time){
 				V_socketUtils.setTime(time);
+			}
+			if(this.playerTimeout != null){ 
+				clearTimeout(this.playerTimeout);
+				this.playerTimeout = null;
+			}
+			this.svg.querySelector("svg").getElementById("playerCircle").style.fill = scssVariables["greenbluish_light"];
+			this.svg.querySelector("svg").getElementById("playerCircle").style.r = 25;
+			this.playerTimeout = setTimeout( () => {
+				this.svg.querySelector("svg").getElementById("playerCircle").style.fill = "white";
+				this.svg.querySelector("svg").getElementById("playerCircle").style.r = 21;
+			}, 1000);
+		},
+
+		handlePress : function(event){
+			if(event.target.localName == "rect" && event.target.classList.item(0) != null){
+				if(event.type == "press"){
+					let milestone = null;
+					for(let m in this.milestones){
+						if(this.milestones[m].getId() == parseInt(event.target.classList.item(0).replace("milestone-", ""))){
+							milestone = this.milestones[m];
+						}
+					}
+					if(milestone == null) return;
+					this.$parent.milestoneSelected = milestone;
+				}
+				
+				if(event.type == "pressup"){
+					this.$parent.milestoneSelected = null;
+				}
 			}
 		}
 	},
@@ -105,7 +178,7 @@ export default {
 		}
 	},
 	template : `
-	<div v-tap="handleTap" v-pan="handlePan" class="svgPlayer" v-bind:class="svgClass">
+	<div v-tap="handleTap" v-press="handlePress" v-pan="handlePan" class="svgPlayer" v-bind:class="svgClass">
 		<svg height="` + scssVariables.playerHeight.replace("px", "") + `" fill="none" xmlns="http://www.w3.org/2000/svg">
 			
 			<rect class="playerBackground" fill="url(#paint0_linear_playerRect)" stroke-width="2"/>
@@ -114,7 +187,7 @@ export default {
 			<playermilestone v-if="displayM" v-bind:widthh="widthh" v-bind:time="time" v-for="m in milestones" :key="m.getId()" v-bind:milestone="m"></playermilestone>
 
 			<g filter="url(#filter0_d_playerButton)">
-				<circle class="playerButton" v-bind:cx="playerX" r="21" stroke-width="2" fill="white"/>
+				<circle id="playerCircle" class="playerButton" v-bind:cx="playerX" r="21" stroke-width="2" fill="white"/>
 			</g>
 
 		</svg>
