@@ -267,6 +267,7 @@ export default {
 			}else{
 				result += lpsEmpty;
 			}
+			result = result.replace(/svgcolor/g, this.svgcolor);
 			return result;
 		}
 
