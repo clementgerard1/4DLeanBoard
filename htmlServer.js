@@ -21,7 +21,6 @@ let logScript = `
     log(...args);
     sendToServerConsole("log",args);
   }
-
   const error = console.error.bind(console);
   console.error = (...args) => {
     error(...args);

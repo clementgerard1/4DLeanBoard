@@ -5,6 +5,9 @@ import V_timelineOffset from "./V_timelineOffset.vue";
 import V_playerInfos from "./V_playerInfos.vue";
 import V_playerUtils from "../Utils/V_playerUtils.class.js";
 import V_timelineUtils from "../Utils/V_timelineUtils.class.js";
+import scssVariables from "../SixWeekView/assets/_variables.scss";
+
+import Utils from "../../class/Utils.class.js";
 
 export default {
 	components:{
@@ -18,6 +21,9 @@ export default {
 				maximum : Math.trunc(this.duration / 7),
 				displayM : true,
 				offset : 0,
+				milestoneSelected : null,
+				startTimeout : null,
+				endTimeout : null,
 		}
 	},
 	created : function(){
@@ -44,10 +50,33 @@ export default {
 	},
 	methods:{
 		handleStartButtonTap : function(){
+			const button = document.getElementById("startDateButton");
+			button.style.backgroundColor = scssVariables["greenbluish_light"];
+			button.style.filter = "drop-shadow(1px 1px 15px #97D7C7)";
 			V_socketUtils.setTime(0);
+			if(this.startTimeout != null){
+				clearTimeout(this.startTimeout);
+				this.startTimeout = null;
+			}
+			this.startTimeout = setTimeout( () => {
+				button.style.backgroundColor = "rgba(0,0,0,0)";
+				button.style.filter = "unset";
+			}, 1000);
+
 		},
 		handleEndButtonTap : function(){
+			const button = document.getElementById("endDateButton");
+			button.style.backgroundColor = scssVariables["greenbluish_light"];
+			button.style.filter = "drop-shadow(1px 1px 15px #97D7C7)";
 			V_socketUtils.setTime(Math.trunc((this.duration - 1) / 7));
+			if(this.endTimeout != null){
+				clearTimeout(this.endTimeout);
+				this.endTimeout = null;
+			}
+			this.endTimeout = setTimeout( () => {
+				button.style.backgroundColor = "rgba(0,0,0,0)";
+				button.style.filter = "unset";
+			}, 1000);
 		},
 		displayMilestones : function(bool){
 			this.displayM = bool;
@@ -70,16 +99,24 @@ export default {
 		},
 		_playerinit : function(){
 			return this.playerinit;
+		},
+		milestoneSelectedText : function(){
+			if(this.milestoneSelected != null){
+				const date = this.milestoneSelected.getEndDate();
+				return this.milestoneSelected.getName() + " - " + date.getDay() + "/" + date.getMonth() + "/" + date.getFullYear();
+			}
 		}
 	},
 	template : `
 	<div class="player">
-
+		<div v-if="milestoneSelected != null" class="milestoneInfos">
+			<p v-html="milestoneSelectedText" >Nom de la milestone - EndDate</p>
+		</div>
 		<timelineOffset v-bind:offsettime="offset" v-bind:playerinit="_playerinit" v-bind:nbweek="nbweek" id="timelineOffset"></timelineOffset>
 		<div class="backgroundPlayer">
-			<div v-tap="handleStartButtonTap" class="date"><p class="r90">{{startdate}}</p></div>
+			<div v-tap="handleStartButtonTap" id="startDateButton" class="date"><p class="r90">{{startdate}}</p></div>
 			<timelinePlayer v-bind:playerinit="_playerinit" v-bind:nbweek="nbweek" id="timelinePlayer"></timelinePlayer>
-			<div v-tap="handleEndButtonTap" class="date" ><p class="r90">{{enddate}}</p></div>
+			<div v-tap="handleEndButtonTap" id="endDateButton" class="date" ><p class="r90">{{enddate}}</p></div>
 		</div>
 		<playerinfos v-bind:displayM="displayM" v-bind:playerinit="_playerinit" class="svgPlayer" v-bind:nbweek="nbweek"></playerinfos>
 

@@ -22,6 +22,7 @@ export default {
 			scene : null,
 			time : null,
 			playerinit : null,
+			offset : null,
 			menuopen : false,
 			modelShown : []
 		}
@@ -39,17 +40,17 @@ export default {
 			return this.scene;
 		},
 
-		watchTime : function(time){
-			if(this.time != time){
+		watchTime : function(time, forced = false){
+			if(this.time != time || forced){
 
 				this.time = time;
 				//State
 				const startActualWeek = this.time * 7;
-
-				const start6Weeks = Math.trunc(this.time / 6) * 42;
+				const start6Weeks = (Math.floor((this.time - this.offset) / 6) * 6 + this.offset) * 7;
+				//const start6Weeks = Math.trunc(this.time / 6) * 42;
 				const previousTasks = this.timeline.getTasksBetweenTwoDates(0, startActualWeek - 1);
 				const thisWeek = this.timeline.getTasksBetweenTwoDates(startActualWeek, startActualWeek + 6);
-				const weeksTasks = this.timeline.getTasksBetweenTwoDates(startActualWeek + 7, start6Weeks + 41);
+				const weeksTasks = this.timeline.getTasksBetweenTwoDates(startActualWeek, start6Weeks + 41);
 				const nextTasks = this.timeline.getTasksBetweenTwoDates(start6Weeks + 42, this.model.getDuration() * 7);
 
 				for(let n in nextTasks){
@@ -138,10 +139,8 @@ export default {
 					}
 				}
 				Memory.refresh();
-
 				const objsSelected = Memory.getSelected();
 				for(let o in objsSelected){
-					console.log(objsSelected);
 					const properties = objsSelected[o].getProperties();
 					for(let p in properties){
 						if(typeof properties[p].getInfo().displayValue == "undefined"){
@@ -183,6 +182,11 @@ export default {
 
 		setTime(time){
 			this.playerinit = time;
+		},
+
+		setOffset(offset){
+			this.offset = offset;
+			this.watchTime(this.time, true);
 		},
 
 		handleMenuOpen(){
@@ -284,6 +288,7 @@ export default {
 		this.objs = this.model.getObjects3D();
 
 		V_timelineUtils.addListener("time", this, this.setTime);
+		V_timelineUtils.addListener("offset", this, this.setOffset);
 
 		Memory.setNb3DModels(this.urns.length);
 		Memory.setNbStyles(this.scene.getEdgeStyles().length);

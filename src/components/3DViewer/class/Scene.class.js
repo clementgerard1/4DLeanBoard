@@ -129,7 +129,6 @@ class Scene{
 	}
 
 	getStyle(timeMode, constraint, selected, shown, filterMode){
-
 		let select = "selected";
 		if(!selected) select = "notSelected";
 		let visible = "visible";

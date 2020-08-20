@@ -16,13 +16,15 @@ export default {
 		"model"
 	],
 	computed:{
+		vacation : function(){
+			return this.timeline.getTasksBetweenTwoDates(this.innertime * 7, this.innertime * 7 + 6).length == 0;
+		},
 		selected: function(){
 			return this.innertime == this.time;
 		},
 		highlighted: function(){
 			const firstTimeWeek = Math.floor((this.time - this.offset) / 6) * 6 + this.offset;
 			const calc = this.innertime - firstTimeWeek;
-			//console.log(Math.trunc((this.time - (this.offset % 6)) / 6), Math.trunc(this.innertime / 6));
 			return calc >= 0 && calc <= 5;
 		},
 		built : function(){
@@ -53,9 +55,10 @@ export default {
 		}
 	},
 	template : `
-	<div class="playerWeek" v-bind:class='{selected : selected, hightlighted : highlighted, built : built, toBuild : tobuild }'>
+	<div class="playerWeek" v-bind:class='{selected : selected, hightlighted : highlighted, built : built, toBuild : tobuild }'>		
 		<p v-if="highlighted" v-html="weeknumber">
-
 		</p>
+
+		<img v-if="vacation" src="/imgs/vacationIcon.svg" class="vacationIcon" />
 	</div>`,
 }

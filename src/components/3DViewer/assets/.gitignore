@@ -1,0 +1,4 @@
+# Ignore everything in this directory
+styles3D.csv
+# Except this file
+!.gitignore

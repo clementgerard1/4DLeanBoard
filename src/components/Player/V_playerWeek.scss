@@ -2,13 +2,27 @@
 
 .playerWeek{
 
+	position : relative;
+
 	p{
-		padding-top: 10px;
+		padding-top: 5px;
 	    width: 100%;
 	    text-align: center;
 	    font-family: Oswald;
 	}
 
+	.vacationIcon{
+		width :100%;
+		height : 100%;
+		position : absolute;
+		top : 0px;
+	}
+
+}
+
+.playerWeek.hightlighted{
+	background: v.$white_transparent_reverse;
+	color : #808080;
 }
 
 .playerWeek.hightlighted{
@@ -19,7 +33,7 @@
 .playerWeek.selected{
 	/*border: 2px solid v.$greenbluish_light;*/
 	/*background : v.$greenbluish_light !important;*/
-	border : 3px solid v.$greenbluish_light;
+	border : 2px solid v.$greenbluish_light;
 	color : v.$greenbluish_light;
 	margin:0px;
 	border-radius : 5px;
@@ -32,5 +46,5 @@
 .playerWeek.toBuild{
 	box-sizing: border-box;
 	border: solid 2px v.$white;
-	margin:1px;
+	margin:0px;
 }
