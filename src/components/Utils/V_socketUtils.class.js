@@ -107,7 +107,7 @@ class V_socketUtils{
 
 		let timeBlockBool = false;
 		let timeBlockTimeout = null;
-		const timeBlock = 10000;
+		const timeBlock = 2000;
 		this.socket.on("setTime", (datas) => {
 
 			V_blockUtils.setDisplay(true);

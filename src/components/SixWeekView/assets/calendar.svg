@@ -1,0 +1,8 @@
+<svg width="20" height="13" viewBox="0 0 20 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="6" width="5" height="4" v-bind:fill="svgcolor"/>
+<rect x="12" width="5" height="4" v-bind:fill="svgcolor"/>
+<rect x="6" y="6" width="5" height="4" v-bind:fill="svgcolor"/>
+<rect width="5" height="4" v-bind:fill="svgcolor"/>
+<rect y="6.00024" width="5" height="4" v-bind:fill="svgcolor"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M16 13C18.2091 13 20 11.2091 20 9C20 6.79086 18.2091 5 16 5C13.7909 5 12 6.79086 12 9C12 11.2091 13.7909 13 16 13ZM15.5 5.66675V8.79298L13.6464 10.6465L14.3536 11.3536L16.3536 9.35364L16.5 9.20719V9.00008V5.66675H15.5Z" v-bind:fill="svgcolor"/>
+</svg>

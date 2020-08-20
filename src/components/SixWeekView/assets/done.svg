@@ -1,0 +1,3 @@
+<svg width="19" height="21" viewBox="0 0 19 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M2 10.6923L8.85714 18C8.98169 13.4603 14.3099 4.41236 17 3" stroke="black" v-bind:stroke-opacity="[done ? 1 : 0.26]" stroke-width="5" stroke-linejoin="round"/>
+</svg>

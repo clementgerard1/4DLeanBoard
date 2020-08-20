@@ -410,6 +410,16 @@ export default {
 				<stop offset="1" stop-color="#F7F7F7"/>
 				</linearGradient>
 
+				<pattern id="pattern0_pause" patternContentUnits="objectBoundingBox" width="1" height="1">
+				<use xlink:href="#image0_pause" transform="scale(0.0333333)"/>
+				</pattern>
+				<image id="image0_pause" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAABSklEQVRIie2VsUoDQRRFD2IQBLGwtBRsBBsrC2u10ELxA/QL0usXpNY/yBdoZ2FvYZEIiprGiIpCCjWFRs1a+AaGZHb2TTIbRHLhNvvu3jOzzO7CUH9c68CDeG1Q0CmgASTihlzLXQcW1Hg/b+gc8OkAfwHzeYKPHVDjk7ygmx6o8UZs6BhwowDfAuMxwXsKqPFuLOg08NZRXgO2xLWOWVPu6VtlundVseZVx7zcL3QRaDuKr6zMtWPeBpZ6hY4Ap45Sc4iM6imZM+kI1k5KYQI8WblnT247FDrB7w8grfDFyr5mLHAyBFzylCVAC1gQtzKyJS10BnjPKAvxBzCrAR8qCx/FmuxRFnRZWVQBRoECcK68ZyUNWgAulCVVyYeALyXfpaKyoJdHbVx0gX2vTyzfG5j9Zfl2rSaynIxV4I78dlvHc8CG+n/6AYlnNG3mTKRiAAAAAElFTkSuQmCC"/>
+
+				<pattern id="pattern0_done" patternContentUnits="objectBoundingBox" width="1" height="1">
+				<use xlink:href="#image0_done" transform="scale(0.0333333)"/>
+				</pattern>
+				<image id="image0_done" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAACO0lEQVRIie3WO2iUQRAH8J8aH8EHiAiaXBIjPlLYKRKIID4QRI1ptLfQQk0s7dOmEkEiioWVBBujIvZWIkSCghbGVzCNglFRiDljsXvc3kfucncJqTKw7DI7O/+Z/zc737IkiyTLarBtxWmcwDbkon4cH/AID/B5oYJrxk1MY2aOkcdQDGxe0oOfVQBmxw901wt6RcigVtA0+75aQXvmCZqCV515Tn30VqK9qRrgOwsIWhi3siDZ69SKMaxIdFN4honIRidWzxLwCF6jEV3YkuzlhUofL5dtbybSEbRnbNpiIAWbbziSsVmF/oyvS+VA4Uli+BstUb8fA0LRwSbFOijomnAeexJ/9xJ/jysBv00MhxKQX1H3D1dxQaD1k/C5GvEx2vxBRzzblfh7kwItzwBvTdav4tyJtUJ13sdeHBXqYDQ6PSjUB6zBmbgeTfyVVHZDudRjdhQLcBxnk/0B7IrrdZmz6+OcL+c8m/FEst4Z5+cCfTvwDoeivk2R0pdJoPAizh2J7ku5ICgtru/YGPXHBJr7BYpXCn+hGRyINn3C57muyOQNVRbXZaVX4Ck2ZGwaMJjYvMfuWXydU9p2L6ab2QbSEh2lDeQrhmOGOYHq7ZlzU3goZNyIw9iX7E8L/aBsA4HbSrNeiDFYCbAgzcLVWSjQSaXXtKIcV92LY66Rx6lqQQvSZ/4Pgd5aQQvSrT7aJ3GyXtCCbMY1/K0CMI+7qvimtTxvc4rP23alz9sxoUEMm+PKLMmiy38bLDk1tyA58gAAAABJRU5ErkJggg=="/>
+
 			</defs>
 		</svg>
 

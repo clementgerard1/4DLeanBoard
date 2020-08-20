@@ -6,11 +6,15 @@
 	overflow:visible;
 
 	.highlighted{
-		border: 2px solid red;
-    border-radius: 10px;
+
+		div{
+			background-color : v.$greenbluish_light  !important;
+		}
+    	border-radius: 10px;
 	}
 
 	.taskWrapper{
+		padding: 0px 10px 0px 10px;
 		margin-right : list.nth(v.$rowHeaderColumnMargin , 2);
 		min-height : 30px;
 
@@ -25,6 +29,77 @@
 
 			.taskContent{
 
+				.idFaceFrame{
+					display : flex;
+					flex-direction : column;
+
+					height : 100%;
+
+					.icon{
+						padding-top : 5%;
+						padding-left : 5%;
+
+						p{
+							display : flex;
+							align-items : center;
+							font-family: Oswald;
+							font-style: normal;
+							font-weight: 500;
+							font-size: 24px;
+						}
+
+						svg{
+
+							width : 20%;
+							margin-right : 5%;
+						}
+					}
+
+					div{
+						flex: 1;
+					}
+				}
+
+				.descriptionFaceFrame{
+					height: 100%;
+				}
+
+				.lpsFaceFrame{
+					background : v.$light;
+					height: 100%;
+					display : flex;
+					justify-content : center;
+					align-items : center;
+					>div{
+						position :relative;
+						width : 100%;
+						display : flex;
+						align-items : center;
+						font-family: Oswald;
+						font-style: normal;
+						font-weight: 500;
+						font-size: 1.3em;
+						text-align:center;
+
+						p{
+							width : 100%;
+							text-align : center;
+						}
+
+						svg{
+							width : 15%;
+						}
+						svg:nth-child(1){
+							position : absolute;
+							left:5%;
+						}
+						svg:nth-child(3){
+							position : absolute;
+							right:5%;
+						}
+					}
+				}
+
 				.main{
 					overflow: hidden;
 					position : relative;
@@ -33,9 +108,9 @@
 						margin-left : 10px;
 						margin-top : 10px;
 						overflow: hidden;
-	   			  text-overflow: ellipsis;
-	   			  overflow-wrap: anywhere;
-	   			  font-family: Roboto Condensed;
+		   			  	text-overflow: ellipsis;
+		   			  	overflow-wrap: anywhere;
+		   			  	font-family: Roboto Condensed;
 						font-style: italic;
 						font-weight: normal;
 						font-size: 1.5em;
@@ -53,7 +128,6 @@
 					display : flex;
 					p{
 						display: inline-block;
-
 					}
 
 					p:nth-child(1){
@@ -63,7 +137,8 @@
 						max-width : 30%;
 
 						svg{
-							width : 100%;
+							width : 70%;
+							margin-left : 10%;
 							display : block;
 						}
 
@@ -71,22 +146,41 @@
 
 					p:nth-child(2){
 
-						flex : 5;
+						flex : 1;
 						display : flex;
 						justify-content : center;
-						align-items : center;
-						max-width : 50%;
-						margin-left : 10px;
+						span{
+							display : flex;
+							align-items : center;
+							font-family: Oswald;
+							font-style: normal;
+							font-weight: 500;
+							font-size: 2em;
+							padding-bottom : 10%;
+						}
 						svg{
-							flex : 1;
-							width : 100%;
+							width : 30%;
 						}
 					}
 
 					p:nth-child(3){
 
 						flex : 1;
-						text-align : right;
+
+						display : flex;
+						justify-content : center;
+						span{
+							display : flex;
+							align-items : center;
+							font-family: Oswald;
+							font-style: normal;
+							font-weight: 500;
+							font-size: 2em;
+							padding-bottom : 10%;
+						}
+						svg{
+							width : 30%;
+						}
 					}
 				}
 
@@ -122,7 +216,30 @@
 							margin-left : 5%;
 						}
 
+
 						p:nth-child(2){
+
+							flex : 5;
+							display : flex;
+							justify-content : center;
+							align-items : center;
+							max-width : 35%;
+							margin-right : 10px;
+							margin-left : 10px;
+							
+							div{
+								width : 100%;
+							}
+
+							svg{
+								height: 100%;
+								flex : 1;
+								width : 100%;
+							}
+						}
+
+
+						/*p:nth-child(2){
 
 							*{
 								max-width : 48%;
@@ -153,8 +270,13 @@
 								display : inline-block;
 								margin-left : 3%;
 							}
-						}
+						}*/
 
+					}
+
+					.lpsSelected{
+						border : 0px solid black;
+						flex: 4 !important;
 					}
 
 				}

@@ -9,6 +9,16 @@ import scssVariables from "./assets/_variables.scss";
 import lpsEmpty from "./assets/lpsEmpty.svg";
 import lpsDone from "./assets/lpsDone.svg";
 
+import manIcon from "./assets/mans.svg";
+import calendarIcon from "./assets/calendar.svg";
+
+import arrowL from "./assets/arrowL.svg";
+import arrowR from "./assets/arrowR.svg";
+
+import doneIcon from "./assets/done.svg";
+import goIcon from "./assets/go.svg";
+import pauseIcon from "./assets/pause.svg";
+
 export default {
 	data : function(){
 
@@ -105,11 +115,25 @@ export default {
 			previousTask : previousTask,
 			previouscolor : previousColor,
 			done : done,
+			go : false,
 			paused : paused,
 			constraintTap : constraintTap,
 			isFirst : false,
 			index : null,
 			taskHeight : "0px",
+			idFace : false,
+			lpsFace : false,
+			descriptionFace : false,
+			lpsList : [
+				"Constraint",
+				"Information",
+				"Materials",
+				"Manpower",
+				"Equipement",
+				"Safety",
+				"Space",
+			],
+			lpsIndex : 0,
 		}
 	},
 	inject : [
@@ -168,6 +192,13 @@ export default {
 		},
 		svgcolor : function(){
 			return scssVariables[this.color.replace("BG_", "").toLowerCase()];
+		},
+		idcolor : function(){
+			if(!this.ready){
+				return this.svgcolor;
+			}else{
+				return "black";
+			}
 		},
 		headercolors : function(){
 			if(this.done){
@@ -230,6 +261,46 @@ export default {
 		taskteam : function(){
 			return this.task.getTaskTeam().getName();
 		},
+		tasksSVG2 : function(){
+			let result = "";
+			if(this.constraint){
+				this.lpsIndex == 0 ? result += "<div v-tap='handleLpsButtonTap' class='lpsSelected'>" + lpsDone.replace("<circle ", "<circle class='lpsSelected' ") + "</div>" : result += lpsDone;
+			}else{
+				this.lpsIndex == 0 ? result += "<div v-tap='handleLpsButtonTap' class='lpsSelected'>" + lpsEmpty.replace("<circle ", "<circle class='lpsSelected' ") + "</div>"  : result += lpsEmpty;
+			}
+			if(this.information){
+				this.lpsIndex == 1 ? result += "<div v-tap='handleLpsButtonTap' class='lpsSelected'>" + lpsDone.replace("<circle ", "<circle class='lpsSelected' ") + "</div>"  : result += lpsDone;
+			}else{
+				this.lpsIndex == 1 ? result += "<div v-tap='handleLpsButtonTap' class='lpsSelected'>" + lpsEmpty.replace("<circle ", "<circle class='lpsSelected' ") + "</div>"  : result += lpsEmpty;
+			}
+			if(this.materials){
+				this.lpsIndex == 2 ? result += "<div v-tap='handleLpsButtonTap' class='lpsSelected'>" + lpsDone.replace("<circle ", "<circle class='lpsSelected' ") + "</div>"  : result += lpsDone;
+			}else{
+				this.lpsIndex == 2 ? result += "<div v-tap='handleLpsButtonTap' class='lpsSelected'>" + lpsEmpty.replace("<circle ", "<circle class='lpsSelected' ") + "</div>"  : result += lpsEmpty;
+			}
+			if(this.manpower){
+				this.lpsIndex == 3 ? result += "<div v-tap='handleLpsButtonTap' class='lpsSelected'>" + lpsDone.replace("<circle ", "<circle class='lpsSelected' ") + "</div>"  : result += lpsDone;
+			}else{
+				this.lpsIndex == 3 ? result += "<div v-tap='handleLpsButtonTap' class='lpsSelected'>" + lpsEmpty.replace("<circle ", "<circle class='lpsSelected' ") + "</div>"  : result += lpsEmpty;
+			}
+			if(this.equipement){
+				this.lpsIndex == 4 ? result += "<div v-tap='handleLpsButtonTap' class='lpsSelected'>" + lpsDone.replace("<circle ", "<circle class='lpsSelected' ") + "</div>"  : result += lpsDone;
+			}else{
+				this.lpsIndex == 4 ? result += "<div v-tap='handleLpsButtonTap' class='lpsSelected'>" + lpsEmpty.replace("<circle ", "<circle class='lpsSelected' ") + "</div>"  : result += lpsEmpty;
+			}
+			if(this.safety){
+				this.lpsIndex == 5 ? result += "<div v-tap='handleLpsButtonTap' class='lpsSelected'>" + lpsDone.replace("<circle ", "<circle class='lpsSelected' ") + "</div>"  : result += lpsDone;
+			}else{
+				this.lpsIndex == 5 ? result += "<div v-tap='handleLpsButtonTap' class='lpsSelected'>" + lpsEmpty.replace("<circle ", "<circle class='lpsSelected' ") + "</div>"  : result += lpsEmpty;
+			}
+			if(this.space){
+				this.lpsIndex == 6 ? result += "<div v-tap='handleLpsButtonTap' class='lpsSelected'>" + lpsDone.replace("<circle ", "<circle class='lpsSelected' ") + "</div>"  : result += lpsDone;
+			}else{
+				this.lpsIndex == 6 ? result += "<div v-tap='handleLpsButtonTap' class='lpsSelected'>" + lpsEmpty.replace("<circle ", "<circle class='lpsSelected' ") + "</div>"  : result += lpsEmpty;
+			}
+			result = result.replace(/svgcolor/g, this.svgcolor);
+			return result;
+		},
 		tasksSVG : function(){
 			let result = "";
 			if(this.constraint){
@@ -269,7 +340,8 @@ export default {
 			}
 			result = result.replace(/svgcolor/g, this.svgcolor);
 			return result;
-		}
+
+		},
 
 	},
 	watch:{
@@ -520,22 +592,28 @@ export default {
 		handleConstraintChange : function(event){
 			this.constraintTap = true;
 			switch(event.target.id){
-				case "constraintTap": 	this.task.getRequirement("constraint").setValue(!this.task.getRequirement("constraint").getValue()); 
+				case "constraintTap": 	this.task.getRequirement("constraint").setValue(!this.task.getRequirement("constraint").getValue());
+										V_socketUtils.setRequirement(this.model, this.task.getRequirement("constraint"), this.task);
 										break;
 				case "informationTap": 	this.task.getRequirement("information").setValue(!this.task.getRequirement("information").getValue()); 
+										V_socketUtils.setRequirement(this.model, this.task.getRequirement("information"), this.task);
 										break;
 				case "materialsTap": 	this.task.getRequirement("materials").setValue(!this.task.getRequirement("materials").getValue()); 
+										V_socketUtils.setRequirement(this.model, this.task.getRequirement("materials"), this.task);
 										break;
 				case "manpowerTap": 	this.task.getRequirement("manpower").setValue(!this.task.getRequirement("manpower").getValue()); 
+										V_socketUtils.setRequirement(this.model, this.task.getRequirement("manpower"), this.task);
 										break;
 				case "equipementTap": 	this.task.getRequirement("equipement").setValue(!this.task.getRequirement("equipement").getValue()); 
+										V_socketUtils.setRequirement(this.model, this.task.getRequirement("equipement"), this.task);
 										break;
 				case "safetyTap": 		this.task.getRequirement("safety").setValue(!this.task.getRequirement("safety").getValue()); 
+										V_socketUtils.setRequirement(this.model, this.task.getRequirement("safety"), this.task);
 										break;
 				case "spaceTap": 		this.task.getRequirement("space").setValue(!this.task.getRequirement("space").getValue()); 
+										V_socketUtils.setRequirement(this.model, this.task.getRequirement("space"), this.task);
 										break;
 			}
-			V_socketUtils.setRequirement(this.model, this.task.getRequirement(event.target.id.replace("Tap", "")), this.task);
 		},
 		updateTaskState(){
 			if(this.ready){
@@ -591,25 +669,113 @@ export default {
 			if(elem != null){
 				this.taskHeight = ((elem.clientWidth) - 30);
 			}
-		}
+		},
+
+		handleIdTap(){
+			this.idFace = !this.idFace;
+			this.lpsFace = false;
+			this.descriptionFace = false;
+		},
+
+		handleLpsTap(event){
+			if(event.target.classList.contains("lpsSelected")){
+				this.handleLpsButtonTap();
+				return;
+			}
+			this.lpsFace = !this.lpsFace;
+			this.idFace = false;
+			this.descriptionFace = false;
+		},
+
+		handleDescriptionTap(){
+			this.descriptionFace = !this.descriptionFace;
+			this.idFace = false;
+			this.lpsFace = false;
+		},
+
+		handleLpsPlus(){
+			this.lpsIndex = (this.lpsIndex + 1) % 7
+		},
+
+		handleLpsMinus(){
+			if(this.lpsIndex == 0){
+				this.lpsIndex = 6;
+			}else{
+				this.lpsIndex--;
+			}
+		},
+
+		handleGoTap(){
+			this.go = !this.go;
+		},
+		handleDoneTap(){
+			this.task.setDone(!this.done);
+			this.task.setPaused(false);
+			this.done = !this.done;
+		},
+		handlePauseTap(){
+			this.task.setPaused(!this.paused);
+			this.task.setDone(false);
+			this.paused = !this.paused;
+		},
+
+		handleLpsButtonTap(){
+			this.constraintTap = true;
+			switch(this.lpsIndex){
+				case 0: 	this.task.getRequirement("constraint").setValue(!this.task.getRequirement("constraint").getValue()); 
+							V_socketUtils.setRequirement(this.model, this.task.getRequirement("constraint"), this.task);
+							break;
+				case 1: 	this.task.getRequirement("information").setValue(!this.task.getRequirement("information").getValue());
+							V_socketUtils.setRequirement(this.model, this.task.getRequirement("information"), this.task);
+							break;
+				case 2: 	this.task.getRequirement("materials").setValue(!this.task.getRequirement("materials").getValue()); 
+							V_socketUtils.setRequirement(this.model, this.task.getRequirement("materials"), this.task);
+							break;
+				case 3: 	this.task.getRequirement("manpower").setValue(!this.task.getRequirement("manpower").getValue()); 
+							V_socketUtils.setRequirement(this.model, this.task.getRequirement("manpower"), this.task);
+							break;
+				case 4: 	this.task.getRequirement("equipement").setValue(!this.task.getRequirement("equipement").getValue()); 
+							V_socketUtils.setRequirement(this.model, this.task.getRequirement("equipement"), this.task);
+							break;
+				case 5: 	this.task.getRequirement("safety").setValue(!this.task.getRequirement("safety").getValue()); 
+							V_socketUtils.setRequirement(this.model, this.task.getRequirement("safety"), this.task);
+							break;
+				case 6: 	this.task.getRequirement("space").setValue(!this.task.getRequirement("space").getValue()); 
+							V_socketUtils.setRequirement(this.model, this.task.getRequirement("space"), this.task);
+							break;
+			}
+		},
 	},
 
 	template : `
 	<div class="taskWrapper" v-bind:class='[highlighted ? "highlighted" : ""]'>
-		<div v-tap='handleDoubleTap' class="task">
+		<div class="task">
 			
 			<div v-if="notEmpty" v-bind:id="_uid + '-task'" >
 
 				<div class="taskHeader">
 					<div >
+						
+						<!-- description face -->
+						<div v-if="descriptionFace" v-bind:style="{backgroundColor : headercolors.body, borderColor : headercolors.border}" >
+							<p v-tap="handleIdTap" v-bind:style="{ color : idcolor }" v-html="'#' + task.getId()"></p>
+						</div>
+						<!-- lps face -->
+						<div v-else-if="lpsFace" v-bind:style="{backgroundColor : headercolors.body, borderColor : headercolors.border}" >
+							<p v-tap="handleIdTap" v-bind:style="{ color : idcolor }" v-html="'#' + task.getId()"></p>
+							<p v-tap="handleLpsTap" v-html="tasksSVG2">` + `</p>
+						</div>
+						<!-- id face -->
+						<div v-else-if="idFace" v-bind:style="{backgroundColor : headercolors.body, borderColor : headercolors.border}" >
+							<p v-tap="handleIdTap" v-bind:style="{ color : idcolor }" v-html="'#' + task.getId()"></p>
+							<p v-tap="handleLpsTap" v-html="tasksSVG"></p>
+						</div>
 						<!-- home face -->
-						<div v-bind:style="{backgroundColor : headercolors.body, borderColor : headercolors.border}" >
-							<p v-html="'#' + task.getId()"></p>
-							<p><img src="/img/w6/durationIcon.svg"/><span v-html="dr"></span></p>
-							<p><img src="/img/w6/manIcon.svg" /><span v-html="mn"></span></p>
+						<div v-else v-bind:style="{backgroundColor : headercolors.body, borderColor : headercolors.border}" >
+							<p v-tap="handleIdTap"v-bind:style="{ color : idcolor }" v-html="'#' + task.getId()"></p>
+							<p v-tap="handleLpsTap" v-html="tasksSVG"></p>
 						</div>
 
-						<!-- description face -->
 
 
 					</div>
@@ -617,15 +783,34 @@ export default {
 
 				<div v-if="isOpen" class="taskContent" v-bind:style="{ height : taskHeight  + 'px'}">
 					
+					<!-- description face -->
+					<div v-tap="handleDescriptionTap" v-if="descriptionFace" class="descriptionFaceFrame">
+						<div><p>Description</p></div>
+					</div>
+
+					<!-- lps face -->
+					<div v-else-if="lpsFace" class="lpsFaceFrame">
+						<div>` + arrowL + `<p v-html="lpsList[lpsIndex]"></p>` + arrowR + `</div>
+					</div>
+
+					<!-- id face -->
+					<div v-else-if="idFace" class="idFaceFrame">
+						<div class="icon"><p v-tap="handleGoTap">` + goIcon + `Launch</p></div>
+						<div class="icon"><p v-tap="handleDoneTap">` + doneIcon + `Done</p></div>
+						<div class="icon"><p v-tap="handlePauseTap">` + pauseIcon + `Pause</p></div>
+					</div>
+
 					<!-- home face -->
-					<div v-if="taskname != ''">
-						<div class="main" v-bind:style="{ height : (taskHeight * 0.7)  + 'px'}">
-							<p class="taskDescription" v-html="taskname"></p>
-						</div>
-						<div class="footer" v-bind:style="{ height : (taskHeight * 0.3)  + 'px'}">
-							<p>` + previousTask + `</p>
-							<p v-html="tasksSVG"></p>
-							<p></p>
+					<div v-else>
+						<div v-if="taskname != ''">
+							<div v-tap="handleDescriptionTap" class="main" v-bind:style="{ height : (taskHeight * 0.7)  + 'px'}">
+								<p class="taskDescription" v-html="taskname"></p>
+							</div>
+							<div class="footer" v-bind:style="{ height : (taskHeight * 0.3)  + 'px'}">
+								<p v-press="handlePress" >` + previousTask + `</p>
+								<p>` + calendarIcon + `<span v-html="dr"></span></p>
+								<p>` + manIcon + `<span v-html="mn"></span></p>
+							</div>
 						</div>
 					</div>
 
