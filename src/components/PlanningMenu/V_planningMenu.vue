@@ -4,6 +4,11 @@ import V_planningMenuUtils from "../Utils/V_planningMenuUtils.class.js";
 
 import PlanningBar from "./assets/PlanningBar.svg";
 
+import milestone from "./assets/Milestone.svg";
+import phases from "./assets/Phases.svg";
+import weeks from "./assets/Weeks.svg";
+import week from "./assets/Week.svg";
+
 export default {
 	data : function(){
 		return {
@@ -13,6 +18,7 @@ export default {
 			weeksDisplay : true,
 			weekDisplay : false,
 			topclose : "0vw",
+			menuopen :false,
 		}
 	},
 	computed : {
@@ -28,14 +34,7 @@ export default {
 	created : function(){
 		V_planningMenuUtils.addPlanningMenu(this);
 	},
-	mounted : function(){
-		window.addEventListener('resize', this.onResize);
-		this.onResize();
-	},
 	methods: {
-		onResize : function(){
-			this.topclose = (-document.querySelector(".planningMenu").clientWidth * 0.092) + "px";
-		},
 		handleTap : function(event){
 			if(event.target.id == "openPlanningMenu" || event.target.id == "openPlanningMenuButton"){
 				this.isOpen = !this.isOpen;
@@ -55,10 +54,26 @@ export default {
 			this.phasesDisplay = phases;
 			this.weeksDisplay = weeks;
 			this.weekDisplay = week;
-		}
+		},
+
+		handleMenuOpen(){
+			this.menuopen = !this.menuopen;
+		},
+
 	},
 	template : `
-	<div v-tap="handleTap" v-bind:style="{top : top}" class="planningMenu" > ` + PlanningBar + `
-		
-	</div>`,
+		<div id="planningMenu"> 
+			
+			<div class="openMenu" >
+				<div v-if="menuopen">
+					<div class="modelName"> 
+						<div v-tap="()=>handleMenuTap(0)" v-bind:class='[ milestoneDisplay ? "shown" : "hide"]'><p>` + milestone + `Milestones</p></div>
+						<div v-tap="()=>handleMenuTap(1)" v-bind:class='[ phasesDisplay ? "shown" : "hide"]'><p>` + phases + `Phases</p></div>
+						<div v-tap="()=>handleMenuTap(2)" v-bind:class='[ weeksDisplay ? "shown" : "hide"]'><p>` + weeks + `6 Weeks</p></div>
+						<div v-tap="()=>handleMenuTap(3)" v-bind:class='[ weekDisplay ? "shown" : "hide"]'><p>` + week + `Gantt</p></div>
+					</div>
+				</div>
+			`+ PlanningBar + `
+			</div>
+		</div>`,
 }

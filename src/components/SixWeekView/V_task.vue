@@ -181,6 +181,12 @@ export default {
 		}
 	},
 	computed:{
+		wrapclass : function(){
+			let result = "";
+			if(this.highlighted) result += "highlighted ";
+			if(this.task == null) result += "empty ";
+			return result;
+		},
 		notEmpty : function(){
 			return this.task != null;
 		},
@@ -232,12 +238,12 @@ export default {
 			const duration = this.task.getDuration();
 			const startTask = this.task.getStartDate();
 			const offset = Math.round((startTask.getTime() - startWeek.getTime())  / (1000 * 3600 * 24));
-			if(this.task.getId() == 139 || this.task.getId() == 140){
-			}
-			if(offset >= 0 && (offset + duration) <= 7){
-				this.index = 1;
-				return this.getTwoLineFormat(this.task.getName());
-			}else{
+			// if(this.task.getId() == 139 || this.task.getId() == 140){
+			// }
+			 if(offset >= 0 && (offset + duration) <= 7){
+			 	this.index = 1;
+			 	return this.task.getName();
+			 }else{
 				let nbWeeks = null;
 				let index = null;
 				const initialOffset = ((offset % 7) + 7) % 7; //https://stackoverflow.com/questions/4467539/javascript-modulo-gives-a-negative-result-for-negative-numbers
@@ -672,25 +678,31 @@ export default {
 		},
 
 		handleIdTap(){
-			this.idFace = !this.idFace;
-			this.lpsFace = false;
-			this.descriptionFace = false;
+			if(this.isOpen){
+				this.idFace = !this.idFace;
+				this.lpsFace = false;
+				this.descriptionFace = false;
+			}
 		},
 
 		handleLpsTap(event){
-			if(event.target.classList.contains("lpsSelected")){
-				this.handleLpsButtonTap();
-				return;
+			if(this.isOpen){
+				if(event.target.classList.contains("lpsSelected")){
+					this.handleLpsButtonTap();
+					return;
+				}
+				this.lpsFace = !this.lpsFace;
+				this.idFace = false;
+				this.descriptionFace = false;
 			}
-			this.lpsFace = !this.lpsFace;
-			this.idFace = false;
-			this.descriptionFace = false;
 		},
 
 		handleDescriptionTap(){
-			this.descriptionFace = !this.descriptionFace;
-			this.idFace = false;
-			this.lpsFace = false;
+			if(this.isOpen){
+				this.descriptionFace = !this.descriptionFace;
+				this.idFace = false;
+				this.lpsFace = false;
+			}
 		},
 
 		handleLpsPlus(){
@@ -748,7 +760,7 @@ export default {
 	},
 
 	template : `
-	<div class="taskWrapper" v-bind:class='[highlighted ? "highlighted" : ""]'>
+	<div class="taskWrapper" v-bind:class='wrapclass'>
 		<div class="task">
 			
 			<div v-if="notEmpty" v-bind:id="_uid + '-task'" >

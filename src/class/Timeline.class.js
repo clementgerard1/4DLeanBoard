@@ -9,6 +9,7 @@ class Timeline{
 	#steps;
 	#startDate;
 	#startWeekDate;
+	#optimisationResult;
 	#tasksNth;
 
 	/**
@@ -25,6 +26,7 @@ class Timeline{
 		this.#tasksNth = {};
 		this.#startDate = null;
 		this.#startWeekDate = null;
+		this.#optimisationResult = {};
 		this.#constructTimeline();
 	}
 
@@ -505,11 +507,31 @@ class Timeline{
 
 		}
 
+		this.#optimisationResult[taskTeam.getId() + "-" + nth + "-" + start + "-" + end] = {
+			array : arrayReturn,
+			count : count
+		}
+
 		return {
 			array : arrayReturn,
 			count : count
 		}
 	}
+
+	/*
+		get task for a taskteam between two date with Memory
+		@param {TaskTeam} taskTeam
+		@param {int} nth id of line for this taskTeam
+		@param {uint} start
+		@param {uint} end
+		@returns {object} array : tasks, count : number of tasks
+	*/
+	getTasksByTaskTeamAndNthBetweenTwoDatesFromMemory(taskTeam, nth, start, end){
+		if(typeof this.#optimisationResult[taskTeam.getId() + "-" + nth + "-" + start + "-" + end] != "undefined") return this.#optimisationResult[taskTeam.getId() + "-" + nth + "-" + start + "-" + end];
+		return this.getTasksByTaskTeamAndNthBetweenTwoDates(taskTeam, nth, start, end);
+	}
+
+
 
 	/*
 		get tasks between two moments

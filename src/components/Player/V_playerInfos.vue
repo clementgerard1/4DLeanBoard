@@ -19,6 +19,7 @@ export default {
 			playerflag : false,
 			milestones : this.model.getMilestones(),
 			playerTimeout : null,
+			// timeTimeout : null,
 			milestoneTimeout : {
 				milestoneId : null,
 				timeout : null,
@@ -53,8 +54,18 @@ export default {
 			backRect.setAttribute("width",  this.svg.clientWidth + 2);
 			this.playerX = this.time * weekWidth + (weekWidth / 2);
 		},
+		setTime(time){
+			// if(this.timeTimeout != null){ 
+			// 	clearTimeout(this.timeTimeout);
+			// 	this.timeTimeout = null;
+			// }
+			// this.timeTimeout = setTimeout( () => {
+				V_socketUtils.setTime(time);
+			// }, 50);
+		},
+
 		handleTimeChange: function(event){
-			V_socketUtils.setTime(event.target.id);
+			this.setTime(event.target.id);
 		},
 		watchTime : function(time){
 			this.time = time;
@@ -77,7 +88,7 @@ export default {
 						this.playerX = x;
 						const time = Math.trunc(x / weekWidth);
 						if(time != this.time){
-							V_socketUtils.setTime(time);
+							this.setTime(time);
 						}
 					}
 				}
@@ -130,7 +141,7 @@ export default {
 			this.playerX = x;
 			const time = Math.trunc(x / weekWidth);
 			if(time != this.time){
-				V_socketUtils.setTime(time);
+				this.setTime(time);
 			}
 			if(this.playerTimeout != null){ 
 				clearTimeout(this.playerTimeout);

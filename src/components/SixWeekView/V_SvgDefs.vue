@@ -420,6 +420,27 @@ export default {
 				</pattern>
 				<image id="image0_done" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAACO0lEQVRIie3WO2iUQRAH8J8aH8EHiAiaXBIjPlLYKRKIID4QRI1ptLfQQk0s7dOmEkEiioWVBBujIvZWIkSCghbGVzCNglFRiDljsXvc3kfucncJqTKw7DI7O/+Z/zc737IkiyTLarBtxWmcwDbkon4cH/AID/B5oYJrxk1MY2aOkcdQDGxe0oOfVQBmxw901wt6RcigVtA0+75aQXvmCZqCV515Tn30VqK9qRrgOwsIWhi3siDZ69SKMaxIdFN4honIRidWzxLwCF6jEV3YkuzlhUofL5dtbybSEbRnbNpiIAWbbziSsVmF/oyvS+VA4Uli+BstUb8fA0LRwSbFOijomnAeexJ/9xJ/jysBv00MhxKQX1H3D1dxQaD1k/C5GvEx2vxBRzzblfh7kwItzwBvTdav4tyJtUJ13sdeHBXqYDQ6PSjUB6zBmbgeTfyVVHZDudRjdhQLcBxnk/0B7IrrdZmz6+OcL+c8m/FEst4Z5+cCfTvwDoeivk2R0pdJoPAizh2J7ku5ICgtru/YGPXHBJr7BYpXCn+hGRyINn3C57muyOQNVRbXZaVX4Ck2ZGwaMJjYvMfuWXydU9p2L6ab2QbSEh2lDeQrhmOGOYHq7ZlzU3goZNyIw9iX7E8L/aBsA4HbSrNeiDFYCbAgzcLVWSjQSaXXtKIcV92LY66Rx6lqQQvSZ/4Pgd5aQQvSrT7aJ3GyXtCCbMY1/K0CMI+7qvimtTxvc4rP23alz9sxoUEMm+PKLMmiy38bLDk1tyA58gAAAABJRU5ErkJggg=="/>
 
+				<pattern id="pattern0_milestoneIcon" patternContentUnits="objectBoundingBox" width="1" height="1">
+				<use xlink:href="#image0_milestoneIcon" transform="scale(0.0333333)"/>
+				</pattern>
+				<image id="image0_milestoneIcon" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAABUElEQVRIie3VvytFYRzH8ZcfyeJH+bEyWAwyGCiKDTuT1WYwWsS/wOQPYLFKKRSLzSLJRl1KSpQSUpfhPqd76dxwnXMMfOpTT+f7fZ739/uc55yHv6aaH8w9wDxacInbRCr6gl4/+BCzaM0aHPk8a/AJ5mTY8TJ604bFgStSdYKFZAIeLzNOVX14UNzqRwykDe3AVQCuBL+GZx1pQRtwFEDbqFX4820qfk5NSUOrsREAp2guiTXiOMS2QkGJaTksfIOumHgnrkPOUlLQ6bDgM0YwhJ0wLtUgnkLuzE+ho3hBHmsKN1J0mvcwjH3soh9TIfclzK1I3bhT/jKI847iWbhHz3ehbTj7JjRyvmR8hvavQusUtq8SaJwPUP8ZtAqrCUIjr4e1y2oxBWjkhXLQCe/fT9LOYzIOfJEiNHIugv3afVyqcel2ncNYZt3869f1Buw28ByOuimtAAAAAElFTkSuQmCC"/>
+				</defs>
+
+				<pattern id="pattern0_phasesIcon" patternContentUnits="objectBoundingBox" width="1" height="1">
+				<use xlink:href="#image0_phasesIcon" transform="scale(0.0333333)"/>
+				</pattern>
+				<image id="image0_phasesIcon" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAAAjUlEQVRIie2WSQ6AIBAEW+PnjM/Gl4j/wBPGsBiRaR0jlXDhQGWaYQEaf2MCsAJwwsMCGM/EliD1YzmKukDsLqRSw+7ryaIsr4mHzHy4BbVEW6g2aoO4O80T4hSUzvdV0de9U7FI/FLNVZ2S6qhTFMfPPMdFyamJul0gYuuqexbZP5Go4pnoEmnKxnfYADkVXJTgCWwSAAAAAElFTkSuQmCC"/>
+
+				<pattern id="pattern0_weekIcon" patternContentUnits="objectBoundingBox" width="1" height="1">
+				<use xlink:href="#image0_weekIcon" transform="scale(0.0333333)"/>
+				</pattern>
+				<image id="image0_weekIcon" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAAAbklEQVRIie2VQQrAIAwEp6X//5Ttu+zJS1rRQJQWd8BbwhgSEhArkoAc/JKV7IOLKORJnh9yUe/X6Yx/9Bdgq4hbPbF53niORoKX7g/NmmqJJZZ4HNELpPsKRVX8tr8LQ3e1m/WG63Ni97AIYbkBDxItquXeH/4AAAAASUVORK5CYII="/>
+
+				<pattern id="pattern0_weeksIcon" patternContentUnits="objectBoundingBox" width="1" height="1">
+				<use xlink:href="#image0_weeksIcon" transform="scale(0.0333333)"/>
+				</pattern>
+				<image id="image0_weeksIcon" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAAAjElEQVRIie2WOw6AIBBEnx7LTy/x2MaLqOcQG02QQFQULNiXbDNsmGUoAAQhAT2wADpSzYByGc8RTY+aXMZmQwU0lubrD9JL1wS7XnjWPucqJoARGKz+EN17Yh8r7hif6ifyuGNz86tI7EH0G/3pHX+GGItxPsY10P5hnPR1+u0joCKbT0D3LhtBuMEGh0iZz80lV3QAAAAASUVORK5CYII="/>
+
 			</defs>
 		</svg>
 

@@ -1,5 +1,76 @@
-.planningMenu{
+#planningMenu{
+	background-color : rgba(0,0,0,0);
 	position : absolute;
+	z-index: 10;
 	width : 100%;
-	z-index: 20;
+	display : flex;
+	justify-content : center;
+
+	.openMenu{
+		display : flex;
+		flex-direction : column;
+		width : 100%;
+		align-items: center;
+		justify-content : center;
+
+		> div{
+			width : 100%;
+			padding : 10px;
+			display : flex;
+			justify-content: center;
+			align-items : center;
+			background: linear-gradient(180deg, #FFFFFF 0%, #EEEEEE 0%);
+
+			div{
+				margin : 10px;
+				font-family: Oswald;
+				font-style: normal;
+				font-weight: 500;
+				font-size: 24px;
+				text-indent: 3px;
+				text-transform: capitalize;
+
+				display : flex;
+				align-items : center;
+				width : 75%;
+
+				div{
+					flex : 1;
+					display : inline-block;
+
+					*{
+						font-size : 0.7em;
+					}
+
+					svg{
+						width : 23%;
+						margin-right : 5px;
+					}
+				}
+
+			}
+
+			.shown{
+
+				p{
+					color : #000000;
+				}
+
+			}
+
+			.hide{
+
+				p{
+					color : #808080;
+				}
+
+			}
+
+		}
+
+		svg{
+
+			width : 25%;
+		}
+	}
 }

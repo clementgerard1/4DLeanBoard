@@ -58,6 +58,9 @@ function init(){
 
 				TouchGesturesUtils.updateHammer(el);
 			}
+		},
+		unbind: function(el, binding){
+			TouchGesturesUtils.destroy(el);
 		}
 	});
 
@@ -79,6 +82,9 @@ function init(){
 
 				TouchGesturesUtils.updateHammer(el);
 			}
+		},
+		unbind: function(el, binding){
+			TouchGesturesUtils.destroy(el);
 		}
 	});
 
@@ -104,6 +110,9 @@ function init(){
 
 				TouchGesturesUtils.updateHammer(el);
 			}
+		},
+		unbind: function(el, binding){
+			TouchGesturesUtils.destroy(el);
 		}
 	});
 
@@ -129,6 +138,9 @@ function init(){
 
 				TouchGesturesUtils.updateHammer(el);
 			}
+		},
+		unbind: function(el, binding){
+			TouchGesturesUtils.destroy(el);
 		}
 	});
 

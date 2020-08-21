@@ -1,6 +1,6 @@
 class V_TouchGesturesUtils{
 
-	static touchObjects = [];
+	static touchObjects = {};
 
 	/**
 		Add a HTML which have a touch gesture
@@ -9,6 +9,11 @@ class V_TouchGesturesUtils{
 	*/
 	static addHammer(domObj, hammer){
 		this.touchObjects[domObj.getAttribute("hammerid")] = hammer;
+	}	
+
+	static destroy(domObj){
+		this.getHammer(domObj).destroy();
+		delete this.touchObjects[domObj.getAttribute("hammerid")];
 	}	
 
 	/**

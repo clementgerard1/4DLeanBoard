@@ -52,7 +52,7 @@ export default {
 	template : `
 
 		<div class="teamLine">
-			<div class="teamAbr" v-tap="handleTap">
+			<div v-if="nth == 0" class="teamAbr" v-tap="handleTap">
 				<p v-html="team.getAbr()"></p>
 			</div>
 			<div v-if="teamdescription" class="teamDescription">

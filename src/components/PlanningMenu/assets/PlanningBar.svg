@@ -1,46 +1,6 @@
-<svg width="1276" height="150" viewBox="0 0 1276 150" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-	<g filter="url(#filter0_b_planBar)">
-		<path id="openPlanningMenu"  d="M798 120C798 136.569 784.569 150 768 150L508 150C491.431 150 478 136.569 478 120L478 118L798 118L798 120Z" fill="#CCCCCC" fill-opacity="1"/>
+<svg width="320" height="32" viewBox="0 0 320 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<g opacity="1" filter="url(#filter0_b_model3DMenu)">
+	<path v-tap="handleMenuOpen" d="M320 2C320 18.5685 306.569 32 290 32L30 32C13.4315 32 -1.17422e-06 18.5686 -2.62268e-06 2.00003L-2.79753e-06 2.79753e-05L320 0L320 2Z" fill="#EEEEEE"/>
 	</g>
-	<path id="openPlanningMenuButton" d="M623 134H638H653" stroke="#808080" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-	<g filter="url(#filter1_b_planBar)">
-	<path d="M1276 88C1276 104.569 1262.57 118 1246 118L30 118C13.4315 118 -1.17422e-06 104.569 -2.62268e-06 88.0001L-1.03159e-05 0.000111551L1276 0L1276 88Z" fill="#CCCCCC" fill-opacity="1"/>
-	</g>
-
-	<g v-tap="()=>handleMenuTap(0)" v-if="milestoneDisplay">
-		<text fill='#000000' xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="24" font-weight="500" letter-spacing="0em"><tspan x="377" y="65.873">Jalon</tspan></text>
-		<rect opacity='1' x="342" y="41" width="30" height="30" fill="url(#pattern0_planBar)"/>
-	</g>
-	<g v-tap="()=>handleMenuTap(0)" v-else="milestoneDisplay">
-		<text fill='#808080' xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="24" font-weight="500" letter-spacing="0em"><tspan x="377" y="65.873">Jalon</tspan></text>
-		<rect opacity='0.5' x="342" y="41" width="30" height="30" fill="url(#pattern0_planBar)"/>
-	</g>
-
-	<g  v-tap="()=>handleMenuTap(1)" v-if="phasesDisplay">
-		<text fill='#000000' xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="24" font-weight="500" letter-spacing="0em"><tspan x="550" y="65.873">Phases</tspan></text>
-		<rect opacity='1' x="515" y="41" width="30" height="30" fill="url(#pattern1_planBar)"/>
-	</g>
-	<g  v-tap="()=>handleMenuTap(1)" v-else="phasesDisplay">
-		<text fill='#808080' xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="24" font-weight="500" letter-spacing="0em"><tspan x="550" y="65.873">Phases</tspan></text>
-		<rect opacity='0.5' x="515" y="41" width="30" height="30" fill="url(#pattern1_planBar)"/>
-	</g>
-
-	<g  v-tap="()=>handleMenuTap(2)" v-if="weeksDisplay">
-		<text fill='#000000' xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="24" font-weight="500" letter-spacing="0em"><tspan x="723" y="65.873">6 semaines</tspan></text>
-		<rect opacity='1' x="688" y="41" width="30" height="30" fill="url(#pattern2_planBar)"/>
-	</g>
-	<g  v-tap="()=>handleMenuTap(2)" v-else="weeksDisplay">
-		<text fill='#808080' xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="24" font-weight="500" letter-spacing="0em"><tspan x="723" y="65.873">6 semaines</tspan></text>
-		<rect opacity='0.5' x="688" y="41" width="30" height="30" fill="url(#pattern2_planBar)"/>
-	</g>
-
-	<g  v-tap="()=>handleMenuTap(3)" v-if="weekDisplay">
-		<text fill='#000000' xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="24" font-weight="500" letter-spacing="0em"><tspan x="896" y="65.873">Gantt</tspan></text>
-		<rect opacity='1' x="861" y="41" width="30" height="30" fill="url(#pattern3_planBar)"/>
-	</g>
-	<g  v-tap="()=>handleMenuTap(3)" v-else="weekDisplay">
-		<text fill='#808080' xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="24" font-weight="500" letter-spacing="0em"><tspan x="896" y="65.873">Gantt</tspan></text>
-		<rect opacity='0.5' x="861" y="41" width="30" height="30" fill="url(#pattern3_planBar)"/>
-	</g>
-
+	<path v-tap="handleMenuOpen" d="M175 16L160 16L145 16" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
