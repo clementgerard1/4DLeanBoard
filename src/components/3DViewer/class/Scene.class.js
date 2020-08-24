@@ -152,14 +152,14 @@ class Scene{
 			return;
 		}
 
-	   	that.#documents[0].loadModels(that.#viewer, that.#initInfos.objs, that.#initInfos.properties, ()=>{that._onModelLoaded(that)});
+	   	that.#documents[0].loadModels(that.#viewer, that.#initInfos.objs, that.#initInfos.properties, that.#initInfos.oauth, ()=>{that._onModelLoaded(that)});
 
 	}
 
 	_onModelLoaded(that){
 		that.#modelInitLoaded2++;
 		if(that.#modelInitLoaded2 < that.#initInfos.urns.length){
-			that.#documents[that.#modelInitLoaded2].loadModels(that.#viewer, that.#initInfos.objs, that.#initInfos.properties, ()=>{that._onModelLoaded(that)});
+			that.#documents[that.#modelInitLoaded2].loadModels(that.#viewer, that.#initInfos.objs, that.#initInfos.properties, that.#initInfos.oauth, ()=>{that._onModelLoaded(that)});
 			return;
 		}
 		that._endOfInit(that);

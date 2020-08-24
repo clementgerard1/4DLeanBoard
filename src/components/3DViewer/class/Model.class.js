@@ -48,10 +48,11 @@ class Model{
 		this.#properties = properties;
 		this.#viewer.addEventListener(Autodesk.Viewing.OBJECT_TREE_CREATED_EVENT, () => { this._onTreeLoaded(this, this.#id) });
 		//console.log(path);
+		console.log(viewer);
 		viewer.loadModel(path, {
             keepCurrentModels: true,
             globalOffset: {x:0,y:0,z:0},
-            isAEC:true,
+            isAEC:true
 		}, (model)=> {this._onModelLoaded(model, that)});
 	}
 

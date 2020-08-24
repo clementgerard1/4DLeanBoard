@@ -1,6 +1,8 @@
 import Utils from "../../../class/Utils.class.js";
 import Model from "./Model.class.js";
 
+import axios from "axios";
+
 class Document{
 
 	#id;
@@ -18,11 +20,23 @@ class Document{
 
 	}
 
-	loadModels(viewer, objs, properties, callback){
+	loadModels(viewer, objs, properties, oauth, callback){
 
 		const that = this;
 		this.#models[this.#models.length] = new Model();
 		const path = this.#doc.getViewablePath(this.#doc.getRoot().getDefaultGeometry());
+
+		// let config = {
+		// 	headers : {'Authorization' : 'Bearer ' + oauth.credentials.access_token}
+		// }
+		// axios.get(path, config)
+		// .then( (t) => {
+		// 	var myblob = new Blob([t.data], {
+		// 	    type: 'application/octet-stream'
+		// 	});
+		// 	const localUrl = URL.createObjectURL(myblob);
+			//this.#models[this.#models.length - 1].load(viewer, this.#modelsNeeded[0].style, path, objs, properties, () => that._onModelLoaded(that, viewer, objs, properties, path, callback));
+		// });
 		this.#models[this.#models.length - 1].load(viewer, this.#modelsNeeded[0].style, path, objs, properties, () => that._onModelLoaded(that, viewer, objs, properties, path, callback));
 		
 	}
