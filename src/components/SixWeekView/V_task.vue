@@ -120,7 +120,7 @@ export default {
 			constraintTap : constraintTap,
 			isFirst : false,
 			index : null,
-			taskHeight : "0px",
+			taskHeight : 0,
 			idFace : false,
 			lpsFace : false,
 			descriptionFace : false,
@@ -147,7 +147,8 @@ export default {
 		"task",
 		"color",
 		"isOpen",
-		"isopen"
+		"isopen",
+		"headerheight"
 	],
 	mounted: function(){
 		this.updateStateDiv();
@@ -673,7 +674,7 @@ export default {
 		watchResize(){
 			const elem = document.getElementById(this._uid + "-" + "task");
 			if(elem != null){
-				this.taskHeight = ((elem.clientWidth) - 30);
+				this.taskHeight = elem.clientWidth;
 			}
 		},
 
@@ -760,12 +761,12 @@ export default {
 	},
 
 	template : `
-	<div class="taskWrapper" v-bind:class='wrapclass'>
+	<div class="taskWrapper" v-bind:class='wrapclass' v-bind:style="[isOpen ? { pointerEvents : 'none'} : {}]">
 		<div class="task">
 			
 			<div v-if="notEmpty" v-bind:id="_uid + '-task'" >
 
-				<div class="taskHeader">
+				<div class="taskHeader" v-bind:style="{ height : headerheight }">
 					<div >
 						
 						<!-- description face -->
@@ -793,7 +794,7 @@ export default {
 					</div>
 				</div>
 
-				<div v-if="isOpen" class="taskContent" v-bind:style="{ height : taskHeight  + 'px'}">
+				<div v-if="isOpen" class="taskContent" v-bind:style="{ height : (taskHeight - parseFloat(headerheight.replace('px', '')))  + 'px'}">
 					
 					<!-- description face -->
 					<div v-tap="handleDescriptionTap" v-if="descriptionFace" class="descriptionFaceFrame">
@@ -815,10 +816,10 @@ export default {
 					<!-- home face -->
 					<div v-else>
 						<div v-if="taskname != ''">
-							<div v-tap="handleDescriptionTap" class="main" v-bind:style="{ height : (taskHeight * 0.7)  + 'px'}">
+							<div v-tap="handleDescriptionTap" class="main" v-bind:style="{ height : ((taskHeight - parseFloat(headerheight.replace('px', ''))) * 0.7)  + 'px'}">
 								<p class="taskDescription" v-html="taskname"></p>
 							</div>
-							<div class="footer" v-bind:style="{ height : (taskHeight * 0.3)  + 'px'}">
+							<div class="footer" v-bind:style="{ height : ((taskHeight - parseFloat(headerheight.replace('px', ''))) * 0.3)  + 'px'}">
 								<p v-press="handlePress" >` + previousTask + `</p>
 								<p>` + calendarIcon + `<span v-html="dr"></span></p>
 								<p>` + manIcon + `<span v-html="mn"></span></p>

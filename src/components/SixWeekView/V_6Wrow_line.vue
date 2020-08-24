@@ -23,7 +23,8 @@ export default {
 		"team",
 		"teamdescription",
 		"time",
-		"nth"
+		"nth",
+		"taskheight"
 	],
 	methods: {
 		handleTap : function(){
@@ -51,7 +52,7 @@ export default {
 	},
 	template : `
 
-		<div class="teamLine">
+		<div class="teamLine" v-bind:style="{ height : taskheight }">
 			<div v-if="nth == 0" class="teamAbr" v-tap="handleTap">
 				<p v-html="team.getAbr()"></p>
 			</div>

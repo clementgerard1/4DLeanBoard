@@ -290,5 +290,31 @@ class V_taskTableUtils{
 		return this.infosLines[teamId + "-" + nth];
 	}
 
+	/**
+		Set contractor displayed by id on Forge Viewer
+		@param {string} Object4Did id of Object4D to hightlight
+		@static
+	*/
+	static setTeamDisplayedById(teamId, bool){
+		for(let r in this.rows){
+			if(this.rows[r].taskteam.getId() == teamId){
+				this.rows[r].teamDisplayed = bool;
+			}
+		}
+	}
+
+	/**
+		Set taskteam displayed on Forge Viewer
+		@param {uid} taskTeam id
+		@static
+	*/
+	static setTeamDisplayed(taskTeam, bool){
+		for(let r in this.rows){
+			if(this.rows[r].taskteam.getId() == taskTeam.getId()){
+				this.rows[r].teamDisplayed = bool;
+			}
+		}
+	}
+
 }
 export default V_taskTableUtils;

@@ -6,12 +6,15 @@
 	position:relative;
 	pointer-events: none;
 
+	.rowTransparent{
+		opacity : 0.3;
+	}
+
 	padding-left :  #{list.nth(v.$taskFramePadding, 2)};
 	padding-right :  #{list.nth(v.$taskFramePadding, 2)};
 
 	.phaseLine{
 		overflow: hidden;
-		height: v.$phaseHeight;
 		position : relative;
 		z-index: 0;
 		width : calc(100% + #{list.nth(v.$taskFramePadding, 2) * 2});
@@ -33,18 +36,17 @@
 	}
 
 	.open{
-		top: 5px;
-		right: 1.5%;
+		right: 0.5%;
 		width : 26px;
 		height: 30px;
 	}
 
 	.close{
-		top:4px;
-		right: 1.5%;
+		right: 0.5%;
 		width : 23px;
 		height: 30px;
 	}
+
 
 	.tasksWrapper {
 
@@ -52,8 +54,6 @@
 		/*height: v.$taskSize;*/
 		padding: 0px 25px;
 		position: relative;		
-		top : - (v.$phaseHeight);
-		margin-bottom : - (v.$phaseHeight);
 
 		display : flex;
 		flex-shrink : 1;

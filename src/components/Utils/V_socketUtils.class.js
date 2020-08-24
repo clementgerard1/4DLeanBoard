@@ -75,6 +75,8 @@ class V_socketUtils{
 			for(let d in this.initDatas.teamDisplayed){
 				V_filterMenuUtils.setTeamDisplayedById(d, this.initDatas.teamDisplayed[d]);
 				V_4DUtils.setTeamDisplayedById(d, this.initDatas.teamDisplayed[d]);
+				V_taskTableUtils.setTeamDisplayedById(d, this.initDatas.teamDisplayed[d]);
+				V_phasesUtils.setTeamDisplayedById(d, this.initDatas.teamDisplayed[d]);
 			}
 
 		}
@@ -145,6 +147,8 @@ class V_socketUtils{
 		this.socket.on("updateTeamDisplayed", (datas) => {
 			V_4DUtils.setTeamDisplayedById(datas.team, datas.value);
 			V_filterMenuUtils.setTeamDisplayedById(datas.team, datas.value);
+			V_taskTableUtils.setTeamDisplayedById(datas.team, datas.value);
+			V_phasesUtils.setTeamDisplayedById(datas.team, datas.value);
 		});
 
 		this.socket.on("updateDisplayMenu", (datas) => {
@@ -242,6 +246,8 @@ class V_socketUtils{
 	static setTeamDisplayed(team, bool){
 		V_filterMenuUtils.setTeamDisplayed(team, bool);
 		V_4DUtils.setTeamDisplayed(team, bool);
+		V_taskTableUtils.setTeamDisplayed(team, bool);
+		V_phasesUtils.setTeamDisplayed(team, bool);
 		if(team != null){
 			this.socket.emit("updateTeamDisplayed", { team : team.getId(), value : bool});
 		}else{

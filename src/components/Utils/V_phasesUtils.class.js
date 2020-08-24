@@ -15,5 +15,27 @@ class V_phasesUtils{
 		}
 	}
 
+	/**
+		Set contractor displayed by id on Forge Viewer
+		@param {string} Object4Did id of Object4D to hightlight
+		@static
+	*/
+	static setTeamDisplayedById(teamId, bool){
+		for(let p in this.phasesPanel){
+			this.phasesPanel[p].displayTeam(teamId, bool);
+		}
+	}
+
+	/**
+		Set contractor displayed by id on Forge Viewer
+		@param {string} Object4Did id of Object4D to hightlight
+		@static
+	*/
+	static setTeamDisplayed(team, bool){
+		for(let p in this.phasesPanel){
+			this.phasesPanel[p].displayTeam(team.getId(), bool);
+		}
+	}
+
 }
 export default V_phasesUtils;
