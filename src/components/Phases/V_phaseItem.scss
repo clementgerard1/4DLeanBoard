@@ -7,6 +7,20 @@
 	align-items : center;
 	border-bottom : 1px solid rgba(0,0,0,0.1);
 	height: 37px;
+	pointer-events:initial;
+
+	.phaseDescription{
+		width : 100%;
+		height : 100%;
+		background-color : #EEEEEE;
+		position : absolute;
+		z-index: 30;
+		font-family : Oswald;
+		font-size : 18px;
+		display : flex;
+		align-items : center;
+		padding-left : 10px;
+	}
 
 	.phaseItem{
 		position : relative;
@@ -44,7 +58,7 @@
 		margin : 2px 0px;
 		background-color : v.$phaseGrey;
 		border : v.$phaseGrey 3px solid;
-		height : 32px;
+		height : 33px;
 		z-index : -1;
 	}
 
@@ -55,7 +69,30 @@
 		z-index: 10;
 		border : v.$white 3px solid;
 		background-color : rgba(0,0,0,0);
-		height : 32px;
+		height : 33px;
+	}
+
+	.colorDiv{
+		width : 10px;
+		display : flex;
+		justify-content : flex-end;
+		position : absolute;
+		height : 33px;
+		.teamCircles{
+
+			height : 33px;
+			display : flex;
+			flex-direction : column;
+			margin-right : 5px;
+			align-items : center;
+			justify-content : center;
+			.teamCircle{
+				margin-bottom : 1px;
+				width : 20px;
+				height :10px;
+			}
+		}
+
 	}
 }
 

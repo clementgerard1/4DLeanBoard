@@ -18,6 +18,7 @@ class Task extends PlanningObject{
 	#parentPhase;
 	#paused;
 	#done;
+	#go;
 	#colorClass;
 
 	/**
@@ -38,6 +39,7 @@ class Task extends PlanningObject{
 		this.#parentPhase = null;
 		this.#paused = false;
 		this.#done = false;
+		this.#go = false;
 		this.#colorClass = "defaultcolor";
 	}
 
@@ -303,6 +305,15 @@ class Task extends PlanningObject{
 		}
 	}
 
+	/** set the go state of the task
+		@param {bool}
+	*/
+	setGo(bool){
+		if(typeof bool != "undefined"){
+			this.#go = bool;
+		}
+	}
+
 	/** set the paused state of the task
 		@param {bool}
 	*/
@@ -317,6 +328,13 @@ class Task extends PlanningObject{
 	*/
 	isDone(){
 		return this.#done;
+	}
+
+	/** verify if task is go
+		@returns {bool}
+	*/
+	isGo(){
+		return this.#go;
 	}
 
 	/** verify if task is paused

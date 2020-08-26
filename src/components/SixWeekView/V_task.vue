@@ -101,7 +101,6 @@ export default {
 			"selected" : false,
 			"state" :false,
 			"stateDiv" : null,
-			"readytaskface" : null,
 			"highlighted" : false,
 			constraint : constraint, 
 			information : information, 
@@ -114,6 +113,9 @@ export default {
 			previousready : previousready,
 			previousTask : previousTask,
 			previouscolor : previousColor,
+			previousarrow : previousColor,
+			previousfill : previousColor,
+			previousborder : previousColor,
 			done : done,
 			go : false,
 			paused : paused,
@@ -124,6 +126,7 @@ export default {
 			idFace : false,
 			lpsFace : false,
 			descriptionFace : false,
+			lpsHighlightTimeout : null,
 			lpsList : [
 				"Constraint",
 				"Information",
@@ -152,7 +155,6 @@ export default {
 	],
 	mounted: function(){
 		this.updateStateDiv();
-		this.updateStateButtons();
 		this.watchResize();
 		window.addEventListener('resize', this.watchResize);
 	},
@@ -201,7 +203,11 @@ export default {
 			return scssVariables[this.color.replace("BG_", "").toLowerCase()];
 		},
 		idcolor : function(){
-			if(!this.ready){
+			if(this.go){
+				return scssVariables["greenbluish_light"];
+			}else if(this.paused){
+				return "red";
+			}if(!this.ready){
 				return this.svgcolor;
 			}else{
 				return "black";
@@ -363,9 +369,16 @@ export default {
 			}
 		},
 		ready : function(){
-			this.updateStateButtons();
+			if(!this.ready){
+				this.done = false;
+				this.go = false;
+				this.paused = false;
+			}
 		},
 		isOpen : function(){
+			this.idFace = false;
+			this.lpsFace = false;
+			this.descriptionFace = false;
 			if(!this.isOpen) this.state = false;
 		}
 	},
@@ -438,6 +451,11 @@ export default {
 				done = this.task.isDone();
 			}
 
+			let go = false;
+			if(this.task != null){
+				go = this.task.isGo();
+			}
+
 			let previousready = false;
 			if(previousTask != null){
 				previousready = previousTask.isReady();
@@ -451,27 +469,14 @@ export default {
 			this.equipement = equipement;
 			this.safety = safety;
 			this.space = space;
-			this.previouscolor = previousColor;
 			this.ready = ready;
 			this.paused = paused;
 			this.done = done;
-			this.previousready = previousready;
+			this.go = go;
+			this.updatePrevious();
 		},
 		hightlight: function(bool){
 			this.highlighted = bool;
-		},
-		updateStateButtons: function(){
-			if(!this.ready){
-				this.readytaskface = '<g filter="url(#filter1_d_task)"><circle cx="171" cy="164" r="16" fill="white"></circle><circle cx="171" cy="164" r="15" stroke="black" stroke-width="2"></circle></g>';
-			}else{ 
-				if(this.done){
-					this.readytaskface = '<g filter="url(#filter1_d_donetask)"><circle cx="171" cy="164" r="16" fill="black"/></g>';
-				}else if(this.paused){
-					this.readytaskface = '<g filter="url(#filter1_d_pausedtask)"><circle cx="171" cy="164" r="16" fill="black"/></g>';
-				}else{
-					this.readytaskface = '<g filter="url(#filter1_d_taskfaceready)"><circle cx="171" cy="164" r="16" fill="black"/></g>';
-				}
-			}
 		},
 		updateStateDiv: function(){
 			if(this.task != null){
@@ -626,9 +631,24 @@ export default {
 			if(this.ready){
 				this.paused = this.task.isPaused();
 				this.done = this.task.isDone();
+				this.go = this.task.isGo();
+
+				if(this.paused){
+					document.getElementById("pauseIcon").style.color = "red";
+				}else{
+					document.getElementById("pauseIcon").style.color = "black";
+				}
+
+				if(this.go){
+					document.getElementById("goIcon").style.color = scssVariables["greenbluish_light"];
+				}else{
+					document.getElementById("goIcon").style.color = "black";
+				}
 			}
 		},
 		updateRequirements(){
+
+
 			let previousReady = this.ready;
 			let constraint = false;
 			if(this.task != null){
@@ -644,15 +664,17 @@ export default {
 				this.paused = this.task.isPaused();
 			}
 
-			if(this.ready != previousReady){
+			//if(this.ready != previousReady){
 				V_taskTableUtils.updatePrevious(this.task);
-			}
+			//}
 
 			if(!this.ready){
 				this.done = false;
 				this.task.setDone(false);
 				this.paused = false;
 				this.task.setPaused(false);
+				this.go = false;
+				this.task.setGo(false);
 			}
 
 		},
@@ -660,6 +682,27 @@ export default {
 
 			if(this.previousTask != null){
 				this.previouscolor =  scssVariables[this.previousTask.getTaskTeam().getColorClass().replace("BG_", "").toLowerCase()];
+				if(this.previousTask.isPaused()){
+					this.previousfill = "white";
+					this.previousborder = this.previouscolor;
+					this.previousarrow = "red";
+				}else if(this.previousTask.isDone()){
+					this.previousfill = this.previouscolor;
+					this.previousborder = this.previouscolor;
+					this.previousarrow = "black";
+				}else if(this.previousTask.isGo()){
+					this.previousfill = "white";
+					this.previousborder = this.previouscolor;
+					this.previousarrow = scssVariables["greenbluish_light"];
+				}else if(this.previousTask.isReady()){
+					this.previousfill = this.previouscolor;
+					this.previousborder = "white";
+					this.previousarrow = "white";
+				}else{
+					this.previousfill = "white";
+					this.previousborder = this.previouscolor;
+					this.previousarrow = this.previouscolor;
+				} 
 			}
 
 			if(this.previousTask != null){
@@ -679,7 +722,7 @@ export default {
 		},
 
 		handleIdTap(){
-			if(this.isOpen){
+			if(this.isOpen && this.taskname != ""){
 				this.idFace = !this.idFace;
 				this.lpsFace = false;
 				this.descriptionFace = false;
@@ -687,7 +730,7 @@ export default {
 		},
 
 		handleLpsTap(event){
-			if(this.isOpen){
+			if(this.isOpen && this.taskname != ""){
 				if(event.target.classList.contains("lpsSelected")){
 					this.handleLpsButtonTap();
 					return;
@@ -699,7 +742,7 @@ export default {
 		},
 
 		handleDescriptionTap(){
-			if(this.isOpen){
+			if(this.isOpen && this.taskname != ""){
 				this.descriptionFace = !this.descriptionFace;
 				this.idFace = false;
 				this.lpsFace = false;
@@ -719,17 +762,37 @@ export default {
 		},
 
 		handleGoTap(){
+			if(!this.ready) return this.highlightRequirements();
+			this.task.setDone(false);
+			this.task.setPaused(false);
+			this.task.setGo(!this.go);
 			this.go = !this.go;
+			V_socketUtils.setTaskState(this.model, this.task);
 		},
 		handleDoneTap(){
+			if(!this.ready) return this.highlightRequirements();
 			this.task.setDone(!this.done);
 			this.task.setPaused(false);
+			this.task.setGo(false);
 			this.done = !this.done;
+			V_socketUtils.setTaskState(this.model, this.task);
 		},
 		handlePauseTap(){
+			if(!this.ready) return this.highlightRequirements();
 			this.task.setPaused(!this.paused);
 			this.task.setDone(false);
+			this.task.setGo(false);
 			this.paused = !this.paused;
+			V_socketUtils.setTaskState(this.model, this.task);
+		},
+
+		highlightRequirements(){
+			document.getElementById("lpsRequirements").style.border = "2px solid red";
+			if(this.lpsHighlightTimeout != null) clearTimeout(this.lpsHighlightTimeout);
+			this.lpsHighlightTimeout = setTimeout( ()=>{
+				document.getElementById("lpsRequirements").style.border = "0px solid red";
+			}, 500);
+
 		},
 
 		handleLpsButtonTap(){
@@ -761,7 +824,7 @@ export default {
 	},
 
 	template : `
-	<div class="taskWrapper" v-bind:class='wrapclass' v-bind:style="[isOpen ? { pointerEvents : 'none'} : {}]">
+	<div class="taskWrapper" v-bind:class='wrapclass' v-bind:style="[!isOpen ? { pointerEvents : 'none'} : {}]">
 		<div class="task">
 			
 			<div v-if="notEmpty" v-bind:id="_uid + '-task'" >
@@ -781,7 +844,7 @@ export default {
 						<!-- id face -->
 						<div v-else-if="idFace" v-bind:style="{backgroundColor : headercolors.body, borderColor : headercolors.border}" >
 							<p v-tap="handleIdTap" v-bind:style="{ color : idcolor }" v-html="'#' + task.getId()"></p>
-							<p v-tap="handleLpsTap" v-html="tasksSVG"></p>
+							<p id="lpsRequirements" v-tap="handleLpsTap" v-html="tasksSVG"></p>
 						</div>
 						<!-- home face -->
 						<div v-else v-bind:style="{backgroundColor : headercolors.body, borderColor : headercolors.border}" >
@@ -808,9 +871,9 @@ export default {
 
 					<!-- id face -->
 					<div v-else-if="idFace" class="idFaceFrame">
-						<div class="icon"><p v-tap="handleGoTap">` + goIcon + `Launch</p></div>
-						<div class="icon"><p v-tap="handleDoneTap">` + doneIcon + `Done</p></div>
-						<div class="icon"><p v-tap="handlePauseTap">` + pauseIcon + `Pause</p></div>
+						<div id="goIcon" class="icon"><p v-tap="handleGoTap">` + goIcon + `Launch</p></div>
+						<div id="doneIcon" class="icon"><p v-tap="handleDoneTap">` + doneIcon + `Done</p></div>
+						<div id="pauseIcon" class="icon"><p v-tap="handlePauseTap">` + pauseIcon + `Pause</p></div>
 					</div>
 
 					<!-- home face -->
@@ -820,7 +883,17 @@ export default {
 								<p class="taskDescription" v-html="taskname"></p>
 							</div>
 							<div class="footer" v-bind:style="{ height : ((taskHeight - parseFloat(headerheight.replace('px', ''))) * 0.3)  + 'px'}">
-								<p v-press="handlePress" >` + previousTask + `</p>
+								<p v-press="handlePress" >
+
+								<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<g v-if="previousTask != null">
+										<rect width="28" height="20" rx="2" x="2" v-bind:fill="previousfill" stroke-width="4" v-bind:stroke="previousborder" y="5"></rect>
+										<path d="M15 10L9 15L15 20" v-bind:stroke="previousarrow" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+										<path d="M23 10L17 15L23 20" v-bind:stroke="previousarrow" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+									</g>
+								</svg>
+								</p>
+
 								<p>` + calendarIcon + `<span v-html="dr"></span></p>
 								<p>` + manIcon + `<span v-html="mn"></span></p>
 							</div>

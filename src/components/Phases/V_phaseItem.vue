@@ -5,13 +5,17 @@ export default {
 	data : function(){
 		return {
 			mounted : false,
+			scssvariables : scssVariables,
+			descriptionShown : false,
+			descriptionTimeout : null,
 		};
 	},
 	props : [
 		"phase",
 		'timeline',
 		'model',
-		'time'
+		'time',
+		'teamDisplayed'
 	],
 	computed : {
 		left : function(){
@@ -27,7 +31,7 @@ export default {
 		leftName : function(){
 			if(this.mounted){
 				if(this.model != null && this.timeline != null){
-					return "calc( " + ((this.timeline.getTime(this.phase.getStartDate()) / this.model.getDuration()) * 100) + "% - "  + (document.querySelector("#phaseDisplay-" + this.phase.getId() + " .phaseItemNameLeft").clientWidth + 10) + "px)";
+					return "calc( " + ((this.timeline.getTime(this.phase.getStartDate()) / this.model.getDuration()) * 100) + "% - "  + (document.querySelector("#phaseDisplay-" + this.phase.getId() + " .phaseItemNameLeft").clientWidth + 30) + "px)";
 				}
 			}
 			
@@ -61,6 +65,10 @@ export default {
 		isRight : function(){
 			return (this.timeline.getTime(this.phase.getEndDate()) / this.model.getDuration()) < 0.5;
 		},
+		descriptionText : function(){
+			const dates = this.phase.getStartDate().getDay() + "/" + this.phase.getStartDate().getMonth() + "/" + this.phase.getStartDate().getFullYear() + "-" + this.phase.getEndDate().getDay() + "/" + this.phase.getEndDate().getMonth() + "/" + this.phase.getEndDate().getFullYear()
+			return this.phase.getName() + " - " + dates + " - " + Object.keys(this.phase.getTasks()).length + " tasks";
+		},
 		// gradient : function(){
 		// 	if(this.mounted){
 		// 		const teams = this.phase.getTaskTeams();
@@ -83,29 +91,58 @@ export default {
 		// 		return null;
 		// 	}
 		// }
+		teams : function(){
+			//const toReturn = [];
+			const teams = this.phase.getTaskTeams();
+			// for(let t in teams){
+			// 	if(this.teamDisplayed[teams[t].getId()]){
+			// 		toReturn.push(teams[t]);
+			// 	}
+			// }
+			return teams;
+		}
+	},
+	methods:{
+		handleDescription : function(){
+			this.descriptionShown = true;
+			if(this.descriptionTimeout != null) clearTimeout(this.descriptionTimeout);
+			this.descriptionTimeout = setTimeout(()=>{
+				this.descriptionShown = false;
+				this.descriptionTimeout = null;
+			}, 2000)
+		}
 	},
 	mounted : function(){
 		this.mounted = true;
 	},
 	template : `
 	<div class="phaseRow" v-bind:id="'phaseDisplay-' + phase.getId()" >
-		<div class="">
-			
+		<div v-if="descriptionShown" class="phaseDescription">
+			<p v-html="descriptionText"></p>
 		</div>
 
 		<!-- PhasesFrame -->
 		<template v-if="isRight">
-			<p class="phaseItem" v-bind:style="{left : left, width : width}" v-html="completion"></p>
-			<p class="phaseItemNameRight" v-bind:style="{ left : left}" v-html="phase.getName()"></p>
-			<div v-if="!(completion == '0%')" v-bind:style="{ left : left, width : pourcent}" class="phaseItemFilled"></div>
-			<div v-if="!(completion == '100%')" v-bind:style="{ left : lleft, width : antipourcent}" class="phaseItemNotFilled"></div>
+			<div class="colorDiv" v-bind:style="{width : left}">
+				<div class="teamCircles">
+					<p v-for="team in teams" class="teamCircle" v-bind:style='[teamDisplayed[team.getId()] ? { opacity : 1, backgroundColor : scssvariables[team.getColorClass().replace("BG_", "").toLowerCase()] } : { opacity : 0.5, backgroundColor : scssvariables[team.getColorClass().replace("BG_", "").toLowerCase()] } ]'></p>
+				</div>
+			</div>
+			<p v-tap="handleDescription" class="phaseItem" v-bind:style="[(!(completion == '0%') && !(completion == '100%')) ? {left : left, width : width, color : scssvariables['greenbluish_light']} : {left : left, width : width, color : 'black' }]" v-html="completion"></p>
+			<p v-tap="handleDescription" class="phaseItemNameRight" v-bind:style="{ left : left}" v-html="phase.getName()"></p>
+			<div v-tap="handleDescription" v-if="!(completion == '0%')" v-bind:style="{ left : left, width : pourcent}" class="phaseItemFilled"></div>
+			<div v-tap="handleDescription" v-if="!(completion == '100%')" v-bind:style="{ left : lleft, width : antipourcent}" class="phaseItemNotFilled"></div>
 		</template>
 		<template v-else="isRight">
-
-			<p class="phaseItemNameLeft" v-bind:style="{ left : leftName}" v-html="phase.getName()"></p>
-			<p class="phaseItem" v-bind:style="{left : left, width : width}" v-html="completion"></p>
-			<div v-if="!(completion == '0%')" v-bind:style="{ left : left, width : pourcent}" class="phaseItemFilled"></div>
-			<div v-if="!(completion == '100%')" v-bind:style="{ left : lleft, width : antipourcent}" class="phaseItemNotFilled"></div>
+			<div class="colorDiv" v-bind:style="{width : left}">
+				<div class="teamCircles">
+					<p v-for="team in teams" class="teamCircle" v-bind:style='[teamDisplayed[team.getId()] ? { opacity : 1, backgroundColor : scssvariables[team.getColorClass().replace("BG_", "").toLowerCase()] } : { opacity : 0.5, backgroundColor : scssvariables[team.getColorClass().replace("BG_", "").toLowerCase()] } ]'></p>
+				</div>
+			</div>
+			<p v-tap="handleDescription" class="phaseItemNameLeft" v-bind:style="{ left : leftName}" v-html="phase.getName()"></p>
+			<p v-tap="handleDescription" class="phaseItem" v-bind:style="[(!(completion == '0%') && !(completion == '100%')) ? {left : left, width : width, color : scssvariables['greenbluish_light']} : {left : left, width : width, color : 'black' }]" v-html="completion"></p>
+			<div v-tap="handleDescription" v-if="!(completion == '0%')" v-bind:style="{ left : left, width : pourcent}" class="phaseItemFilled"></div>
+			<div v-tap="handleDescription" v-if="!(completion == '100%')" v-bind:style="{ left : lleft, width : antipourcent}" class="phaseItemNotFilled"></div>
 		</template>
 	</div>`,
 }

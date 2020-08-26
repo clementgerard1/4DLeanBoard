@@ -86,6 +86,7 @@ export default {
 	},
 	methods: {
 		handleOpenPhase : function(event){
+			console.log("BONJOUR");
 			if(event.target.tagName != "P" && !(event.target.classList.contains("teamAbr"))){
 				this.isOpen = !this.isOpen;
 				V_socketUtils.setTeamOpening(this.taskteam, this.nth, this.isOpen); 
@@ -103,13 +104,13 @@ export default {
 	}
 	,
 	template : `
-	<div v-if="teamDisplayed" class="phaserow" v-bind:style="[ isVisible ? { paddingBottom : (parseFloat(headerHeight.replace('px', '')) / 3)+ 'px' } : { paddingBottom : '0px' }]">
+	<div v-if="teamDisplayed" class="phaserow" v-bind:style="[ isVisible ? { paddingBottom : (parseFloat(headerHeight.replace('px', '')) / 3)+ 'px' } : {paddingBottom : '0px' }]">
 
 		<!-- line -->
-		<taskline v-show="isVisible" class="phaseLine" v-bind:taskheight="headerHeight" v-tap="handleOpenPhase" v-bind:time="_time" v-bind:nth="_nth" v-bind:team="_team" v-bind:class="[nth == 0 ? color : '']" v-bind:teamdescription="teamDescription" v-bind:style='zIndex'></taskline>
+		<taskline v-show="isVisible" class="phaseLine" v-bind:taskheight="headerHeight" v-tap="handleOpenPhase" v-bind:time="_time" v-bind:nth="_nth" v-bind:team="_team" v-bind:class="color" v-bind:teamdescription="teamDescription" v-bind:style='zIndex'></taskline>
 
 		<!-- tasks -->
-		<div v-tap="handleOpenPhase" v-show="isVisible" class="tasksWrapper" v-bind:style="{ top : '-' + headerHeight, marginBottom : '-' + headerHeight} ">
+		<div v-show="isVisible" class="tasksWrapper" v-bind:style="{ top : '-' + headerHeight, marginBottom : '-' + headerHeight} ">
 			<task v-bind:headerheight="headerHeight" v-bind:color="color" v-bind:team="_team" nth=0 v-for="(task, i) in tasks.array" :key="i" v-bind:isopen="isOpen" v-bind:task="task" v-bind:isOpen="isOpen" v-bind:time="_tasktablestart + i"  ></task>
 		</div>
 

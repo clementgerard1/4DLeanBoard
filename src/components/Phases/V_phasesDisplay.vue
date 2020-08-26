@@ -18,12 +18,21 @@ export default {
 		}
 	},
 	data : function(){
+
+		
+		const toReturn = {};
+		const teams = this.model.getTaskTeams();
+		for(let t in teams){
+			toReturn[teams[t].getId()] = true;
+		}
+		const teamDisplayStatus = toReturn;
 		return {
 			time : null,
 			isDisplayed : true,
 			playerWidth : "0%",
 			width2 : "10px",
-			temp : 0
+			temp : 0,
+			teamDisplayStatus : teamDisplayStatus
 		}
 	},
 	computed : {
@@ -32,14 +41,6 @@ export default {
 				return this.model.getPhases();
 			}
 			return null;
-		},
-		teamDisplayStatus : function(){
-			const toReturn = {};
-			const teams = this.model.getTaskTeams();
-			for(let t in teams){
-				toReturn[teams[t].getId()] = true;
-			}
-			return toReturn;
 		},
 		_model : function(){
 			return this.model;
@@ -74,7 +75,9 @@ export default {
 			this.isDisplayed = bool;
 		},
 		displayTeam : function(teamId, bool){
-			this.teamDisplayStatus[teamId] = bool;
+			this.$set(this.teamDisplayStatus, teamId, bool);
+			// const temp = {};
+			// this.teamDisplayStatus = Object.assign(temp, this.teamDisplayStatus);
 			this.temp++;
 		}
 	},
@@ -88,6 +91,6 @@ export default {
 		<div class="playerLineWrapper">
 			<div class="playerLine" v-bind:style="{ left : playerWidth, width : width2, height : ((phases.length - 1) * 41 + 23) + 'px'}"></div>
 		</div>
-		<phaseitem v-for="p in displayedPhases" :key="p.getId()" v-bind:time="time" v-bind:model="_model" v-bind:timeline="_timeline" v-bind:phase="p"></phaseitem>
+		<phaseitem v-bind:teamDisplayed="teamDisplayStatus" v-for="p in displayedPhases" :key="p.getId()" v-bind:time="time" v-bind:model="_model" v-bind:timeline="_timeline" v-bind:phase="p"></phaseitem>
 	</div>`,
 }
