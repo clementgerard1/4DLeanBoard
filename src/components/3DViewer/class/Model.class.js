@@ -146,7 +146,6 @@ class Model{
 							// }
 							//IFC Props
 							const tag = that.getIFCTag(dbObjects, d);
-
 							const nameDone = false;
 
 							that.#dbObjects[dbObjects[d].dbId] = new ForgeObject(dbObjects[d].dbId, that.#model);
@@ -165,6 +164,7 @@ class Model{
 									that.#dbObjects[dbObjects[d].dbId].isLinked(true);
 									ifcId2Obj3D[tag].addForgeObject(that.#dbObjects[dbObjects[d].dbId]);
 									Memory.addForgeObject(that.#dbObjects[dbObjects[d].dbId], true);
+
 									for(let p in dbObjects[d].properties){
 										if(!nameDone && dbObjects[d].properties[p].displayName == "Source File"){
 											const toSplit = dbObjects[d].properties[p].displayValue.split("_");

@@ -156,9 +156,10 @@ class Timeline{
 		@returns {Array(TaskTeam)} 
 	*/
 	getTaskTeamsBetweenTwoDates(start, end){
-
 		const teams = [];
 		for(let i = start; i <= end ; i++){
+
+			this.#initialiseStepArray(i);
 			const tasks = this.#steps[i].tasks;
 			for(let t in tasks){
 				//const tTeams = tasks[t].getTaskTeam();

@@ -86,7 +86,6 @@ export default {
 	},
 	methods: {
 		handleOpenPhase : function(event){
-			console.log("BONJOUR");
 			if(event.target.tagName != "P" && !(event.target.classList.contains("teamAbr"))){
 				this.isOpen = !this.isOpen;
 				V_socketUtils.setTeamOpening(this.taskteam, this.nth, this.isOpen); 

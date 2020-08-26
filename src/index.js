@@ -212,7 +212,6 @@ function init(){
 						const phase = this.timeline.getModel().getMilestones()[0].getPhases()[0];
 					  	this.duration = this.model.getDuration();
 
-
 						//Socket Server Connexion
 						const socket = openSocket("http://" + Config.socketServerIp + ":" + Config.socketServerPort + "?model=" + this.model.getName());
 						V_socketUtils.setSocket(socket);

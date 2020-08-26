@@ -63,7 +63,7 @@ export default {
 			return Math.trunc(Math.max(0, Math.min(100, ((((this.time * 7) - start ) / (end - start)) * 100)))) + "%";
 		},
 		isRight : function(){
-			return (this.timeline.getTime(this.phase.getEndDate()) / this.model.getDuration()) < 0.5;
+			return (this.timeline.getTime(this.phase.getEndDate()) / this.model.getDuration()) < 0.6;
 		},
 		descriptionText : function(){
 			const dates = this.phase.getStartDate().getDay() + "/" + this.phase.getStartDate().getMonth() + "/" + this.phase.getStartDate().getFullYear() + "-" + this.phase.getEndDate().getDay() + "/" + this.phase.getEndDate().getMonth() + "/" + this.phase.getEndDate().getFullYear()
@@ -109,7 +109,7 @@ export default {
 			this.descriptionTimeout = setTimeout(()=>{
 				this.descriptionShown = false;
 				this.descriptionTimeout = null;
-			}, 2000)
+			}, 5000)
 		}
 	},
 	mounted : function(){

@@ -309,6 +309,39 @@ class Utils{
   	return temp.join("/");
   }
 
+  static getFormatedDate2(date){
+  	const n = date.split(" ");
+  	const temp = [];
+  	temp[0] = n[1];
+  	temp[2] = n[3];
+  	switch(n[2]){
+  		case "janvier" : temp[1] = '01'; break;
+  		case "février" : temp[1] = '02'; break;
+  		case "mars" : temp[1] = '03'; break;
+  		case "avril" : temp[1] = '04'; break;
+  		case "mai" : temp[1] = '05'; break;
+  		case "juin" : temp[1] = '06'; break;
+  		case "juillet" : temp[1] = '07'; break;
+  		case "aout" : temp[1] = '08'; break;
+  		case "septembre" : temp[1] = '09'; break;
+  		case "octobre" : temp[1] = '10'; break;
+  		case "novembre" : temp[1] = '11'; break;
+  		case "décembre" : temp[1] = '12'; break;
+  	}
+  	if(temp[0].length == 1){
+  		temp[0] = "0" + temp[0];
+  	}
+  	if(temp[1].length == 1){
+  		temp[1] = "0" + temp[1];
+  	}
+  	const tempp = temp[0];
+  	temp[0] = temp[1];
+  	temp[1] = tempp;
+  	return temp.join("/");
+  }
+
+
+
   static addDaysToDate(dateInit, nb){
     const date = new Date(dateInit.valueOf());
     date.setDate(date.getDate() + nb);

@@ -115,7 +115,7 @@ class Loader{
 			if(columns.length > 1){
 				if(i==0){
 					json.name = columns[0];
-				}else if(i>2){
+				}else if(i>1){
 
 					//New milestone
 					if(columns[0] != ''){
@@ -161,32 +161,34 @@ class Loader{
 
 						phase["Tasks"][phase["Tasks"].length - 1]["Name"] = columns[11];
 						phase["Tasks"][phase["Tasks"].length - 1]["TID"] = columns[12];
-						phase["Tasks"][phase["Tasks"].length - 1]["Duration"] = columns[13];
-						phase["Tasks"][phase["Tasks"].length - 1]["Workers"] = columns[14];
-						phase["Tasks"][phase["Tasks"].length - 1]["Previous"] = columns[15];
-						phase["Tasks"][phase["Tasks"].length - 1]["Team"] = columns[16];
-						phase["Tasks"][phase["Tasks"].length - 1]["IDS4D"] = columns[17];
+						phase["Tasks"][phase["Tasks"].length - 1]["StartDate"] = columns[13];
+						phase["Tasks"][phase["Tasks"].length - 1]["EndDate"] = columns[14];
+						phase["Tasks"][phase["Tasks"].length - 1]["Duration"] = columns[15];
+						phase["Tasks"][phase["Tasks"].length - 1]["Workers"] = columns[16];
+						phase["Tasks"][phase["Tasks"].length - 1]["Previous"] = columns[17];
+						phase["Tasks"][phase["Tasks"].length - 1]["Team"] = columns[18];
+						phase["Tasks"][phase["Tasks"].length - 1]["IDS4D"] = columns[19];
 						phase["Tasks"][phase["Tasks"].length - 1]["Zone"] = columns[20];
-						phase["Tasks"][phase["Tasks"].length - 1]["Level"] = columns[18];
+						phase["Tasks"][phase["Tasks"].length - 1]["Level"] = columns[21];
 						phase["Tasks"][phase["Tasks"].length - 1]["Requirements"] = {
-							"Constraint" : columns[22] != "No", 
-							"Information" : columns[23] != "No",
-							"Materials" : columns[24] != "No",
-							"Manpower" : columns[25] != "No",
-							"Equipement" : columns[26] != "No",
-							"Safety" : columns[27] != "No",
-							"Space" : columns[28] != "No",
+							"Constraint" : columns[25] != "No", 
+							"Information" : columns[26] != "No",
+							"Materials" : columns[27] != "No",
+							"Manpower" : columns[28] != "No",
+							"Equipement" : columns[29] != "No",
+							"Safety" : columns[30] != "No",
+							"Space" : columns[31] != "No",
 						}
 						memoTask = phase["Tasks"].length - 1;
 					}
 
 
 					//Teams
-					if(columns[29] != '' && typeof columns[29] != "undefined"){
+					if(columns[32] != '' && typeof columns[32] != "undefined"){
 
 						json.teams[json.teams.length] = {
-							name : columns[29],
-							color : columns[30].replace("\r", "")
+							name : columns[32],
+							color : columns[33].replace("\r", "")
 						}
 					}
 
@@ -265,23 +267,22 @@ class Loader{
 				milestone.addRequirement(requirement);
 			}
 
-			const startDate = new Date(Utils.getFormatedDate(milestones[m]["StartDate"]));
+			const startDate = new Date(Utils.getFormatedDate2(milestones[m]["StartDate"]));
 			milestone.setStartDate(startDate);
-			const endDate = new Date(Utils.getFormatedDate(milestones[m]["EndDate"]));
+			const endDate = new Date(Utils.getFormatedDate2(milestones[m]["EndDate"]));
 			milestone.setEndDate(endDate);
 
 			const phases = milestones[m]["Phases"];
 			for(let p in phases){
-				
 				const phase = new Phase(phases[p]["Name"]);
 				if(typeof contractors["facticeContractor"] == "undefined") contractors["facticeContractor"] = new Contractor("facticeContractor");
 				phase.setContractor(contractors["facticeContractor"]);
 				phase.setNum(phases[p]["Num"]);
 				milestone.addPhase(phase);
 
-				const PstartDate = new Date(Utils.getFormatedDate(phases[p]["StartDate"]));
+				const PstartDate = new Date(Utils.getFormatedDate2(phases[p]["StartDate"]));
 				phase.setStartDate(PstartDate);
-				const PendDate = new Date(Utils.getFormatedDate(phases[p]["EndDate"]));
+				const PendDate = new Date(Utils.getFormatedDate2(phases[p]["EndDate"]));
 				phase.setEndDate(PendDate);
 
 				const tasks = phases[p]["Tasks"];
@@ -294,13 +295,16 @@ class Loader{
 						object4D.setTask(task);
 						//task.setDuration(tasks[t]["Duration"]);
 						
-						const startDate = actualDate;
+						//const startDate = actualDate;
 						//const startDate = new Date(tasks[t]["Start"].slice(6, 10), parseInt(tasks[t]["Start"].slice(3, 5)) - 1, tasks[t]["Start"].slice(0, 2));
 						//console.log("hey", startDate);
-						task.setStartDate(startDate);
-						const endDate = Utils.addDaysToDate(startDate, parseInt(tasks[t]["Duration"]) - 1);
+
+						const TstartDate = new Date(Utils.getFormatedDate2(tasks[t]["StartDate"]));
+						task.setStartDate(TstartDate);
+						//const endDate = Utils.addDaysToDate(startDate, parseInt(tasks[t]["Duration"]) - 1);
 						//const endDate = new Date(tasks[t]["End"].slice(6, 10), parseInt(tasks[t]["End"].slice(3, 5)) - 1, tasks[t]["End"].slice(0, 2));
-						task.setEndDate(endDate);
+						const TendDate = new Date(Utils.getFormatedDate2(tasks[t]["EndDate"]));
+						task.setEndDate(TendDate);
 
 
 						actualDate = endDate;
@@ -361,7 +365,6 @@ class Loader{
 			}
 
 		}
-
 		const phases = model.getPhases();
 		for(let p in phases){
 			const tasks = phases[p].getTasks();
@@ -369,7 +372,7 @@ class Loader{
 				const actualTask = tasks[t];
 
 				if(tasksForPreviousNext[actualTask.getId()].previous != 0 && tasksForPreviousNext[actualTask.getId()].previous != null && tasksForPreviousNext[actualTask.getId()].previous != ""){
-					const mults = tasksForPreviousNext[actualTask.getId()].previous.split(".");
+					const mults = tasksForPreviousNext[actualTask.getId()].previous.split(",");
 					for(let m in mults){
 						actualTask.addPreviousTask(tasksCollection[mults[m]]);
 						tasksCollection[mults[m]].addFollowingTask(actualTask);
