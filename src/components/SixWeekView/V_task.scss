@@ -13,6 +13,14 @@
     	border-radius: 10px;
 	}
 
+	.selected{
+
+		div{
+			background-color : #00B9F6 !important;
+		}
+    	border-radius: 10px;
+	}
+
 	.taskWrapper.empty{
 		pointer-events: none;
 	}

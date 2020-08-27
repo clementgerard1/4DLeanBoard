@@ -199,6 +199,7 @@ export default {
 			let result = "";
 			if(this.highlighted) result += "highlighted ";
 			if(this.task == null) result += "empty ";
+			if(this.selected) result += "selected ";
 			return result;
 		},
 		notEmpty : function(){
@@ -903,7 +904,7 @@ export default {
 			<div v-if="notEmpty" v-doubletap="handleTap" v-bind:id="_uid + '-task'" >
 
 				<div class="taskHeader" v-bind:style="{ height : headerheight }">
-					<div >
+					<div>
 						
 						<!-- calendar face -->
 						<div v-if="calFace" v-bind:style="{backgroundColor : headercolors.body, borderColor : headercolors.border}" >
