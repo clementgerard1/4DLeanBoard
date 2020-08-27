@@ -15,9 +15,11 @@
 		.playerLine{
 			z-index: 15;
 			/*border-right : 5px solid v.$greenbluish_light;*/
-			background-color : v.$greenbluish_light;
-			opacity : 0.6;
+			border : #97D7C7 2px solid;
+			background-color:  rgba(255,255,255,0.5);
+			border-radius : 5px;
 			position : absolute;
+			pointer-events : initial;
 		}
 	}
 

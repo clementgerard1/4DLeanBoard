@@ -3,6 +3,8 @@ import Property from "./interfaces/Property.class.js";
 import Milestone from './Milestone.class.js';
 import Phase from './Phase.class.js';
 import Task from './Task.class.js';
+import Day from './Day.class.js';
+import Person from './Person.class.js';
 import Operation from './Operation.class.js';
 import Contractor from './Contractor.class.js';
 import TaskTeam from './TaskTeam.class.js';
@@ -25,6 +27,8 @@ class Model{
 	#milestones;
 	#startDate;
 	#duration;
+	#holidays;
+	#dayWorked;
 
 	/**
 		@class Model
@@ -42,6 +46,8 @@ class Model{
 		this.#milestones = [];
 		this.#startDate = Date.now();
 		this.#duration = null;
+		this.#holidays = {};
+		this.#dayWorked = [true, true, true, true, true, false, false];
 	}
 
 	/**
@@ -75,6 +81,14 @@ class Model{
 		return this.#milestones;
 	}
 
+	/*
+		Get dayWorked Array
+		@returns {Array}
+	*/
+	getDayWorked(){
+		return this.#dayWorked;
+	}
+
 	/**
 		Get a milestone by ordernumber
 		@param {uint} order order number of the milestone
@@ -86,6 +100,36 @@ class Model{
 			return null;
 		}else{
 			return this.#milestones[order];
+		}
+	}
+
+	/**
+		Get all holidays days
+		@returns {Array} Array of Day
+	*/
+	getHolidays(){
+		return this.#holidays;
+	}
+
+	/**
+		Add a holyday
+		@param {Day day Milestone to add to the collection
+	*/
+	addHoliday(day){
+		this.#holidays[day.getId()] = day;
+	}
+
+	/**
+		Remove a holyday
+		@param {Day} day
+	*/
+	removeHoliday(day){
+		if(!(day instanceof Day)){
+			console.error("removeHoliday(holyday) : holyday " + day + " not of type Day");
+		}else if(!(this.#holidays.includes(day))){
+			console.error("removeHoliday(holyday) : holyday " + day + " not in the collection");
+		}else{
+			delete this.#holidays[day.getId()];
 		}
 	}
 
@@ -185,6 +229,19 @@ class Model{
 			if(!taskTeams.includes(taskTeam)) taskTeams[taskTeams.length] = taskTeam;
 		}
 		return taskTeams;
+	}
+
+	getPersons(){
+		const teams = this.getTaskTeams();
+		const toReturn = [];
+		for(let t in teams){
+			const persons = teams[t].getPersons();
+			toReturn.push(teams[t].getBoss());
+			for(let p in persons){
+				toReturn.push(persons[p]);
+			}
+		}
+		return toReturn;
 	}
 
 	/**
@@ -444,20 +501,24 @@ class Model{
 	serialize(){
 		let jsonObj = {
 			name : this.getName(),
+			week : this.#dayWorked,
 			milestones : [],	
 			phases : [],
 			tasks : [],
 			operations : [],
+			holidays : [],
 
 			contractors : [],
 			taskTeams : [],
 			operationUnits : [],
+			persons : [],
 
 			properties : [],
 			delivrables : [],
 			objects4D : [],
 			objects3D : [],
 		};
+		
 
 		//Milestones
 		const milestones = this.getMilestones();
@@ -557,6 +618,7 @@ class Model{
 				contractor : p.getContractor().getId(),
 				colorClass : p.getColorClass(),
 				delivrables : delivrableIds,
+				requirements : p.getRequirementsString(),
 			}
 
 			jsonObj.phases.push(phase);
@@ -603,7 +665,10 @@ class Model{
 				taskTeam : t.getTaskTeam().getId(),
 				object4D : t.getObject4D().getId(),
 				done : t.isDone(),
-				paused : t.isPaused()
+				paused : t.isPaused(),
+				go : t.isGo(),
+				description : t.getDescription(),
+				workers : t.getWorkers()
 			}
 
 			jsonObj.tasks.push(task);
@@ -666,6 +731,18 @@ class Model{
 			jsonObj.contractors.push(contractor);
 		}
 
+		// Persons
+		const persons = this.getPersons();
+		for(let p in persons){
+			const person = {
+				id : persons[p].getId(),
+				name : persons[p].getName(),
+				email : persons[p].getEmail(),
+				phone : persons[p].getPhone(),
+			};
+			jsonObj.persons.push(person);
+		}
+
 		//taskTeams
 		const taskTeams = this.getTaskTeams();
 		for(let key in taskTeams){
@@ -677,25 +754,20 @@ class Model{
 				operationUnitIds.push(operationUnits[o].getId());
 			}
 
-			let leaderName = null;
-			let leaderEmail = null;
-			let leaderPhone = null;
-			if(t.getLeader() != null){
-				leaderName = t.getLeader().name;
-				leaderEmail = t.getLeader().email;
-				leaderPhone = t.getLeader().phone;
+			const persons = [];
+			const pp = t.getPersons();
+			for(let p in pp){
+				persons.push(pp[p].getId());
 			}
 
 			const taskTeam = {
 				id : t.getId(),
 				name : t.getName(),
 				abr : t.getAbr(),
-				workers : t.getWorkers(),
 				operationUnits : operationUnits,
 				color : t.getColorClass(),
-				leaderName : leaderName,
-				leaderEmail : leaderEmail,
-				leaderPhone : leaderPhone
+				boss : t.getBoss().getId(),
+				persons : persons,
 			}
 
 			jsonObj.taskTeams.push(taskTeam);
@@ -782,6 +854,16 @@ class Model{
 			jsonObj.objects3D.push(object3D);
 		}
 
+		//Holidays
+		const holidays = this.getHolidays();
+		for(let h in holidays){
+			const hd = {
+				id : holidays[h].getId(),
+				date : holidays[h].getDate(),
+			}
+			jsonObj.holidays.push(hd);
+		}
+
 		return Serialize(jsonObj);
 
 	}
@@ -796,6 +878,7 @@ class Model{
 
 		//Init
 		this.setName(datas.name);
+		this.#dayWorked = datas.week;
 		this.#milestones = [];
 		this.#duration = null;
 
@@ -818,14 +901,18 @@ class Model{
 			phase.setStartDate(infos.start);
 			phase.setEndDate(infos.end);
 			phase.setColorClass(infos.colorClass);
+			phase.setRequirementsString(infos.requirements);
 			phases[phase.getId()] = phase;
 		}
 		for(let t in datas.tasks){
 			const infos = datas.tasks[t];
 			const task = new Task(infos.name, infos.id);
+			task.setWorkers(infos.workers);
 			task.setStartDate(infos.start);
 			task.setEndDate(infos.end);
 			task.setDone(infos.done);
+			task.setDescription(infos.description);
+			task.setGo(infos.go);
 			task.setPaused(infos.paused);
 			tasks[task.getId()] = task;
 		}
@@ -849,7 +936,7 @@ class Model{
 		for(let t in datas.taskTeams){
 			const infos = datas.taskTeams[t];
 			const taskTeam = new TaskTeam(infos.name, infos.abr, infos.id);
-			taskTeam.setWorkers(infos.workers);
+			//taskTeam.setWorkers(infos.workers);
 			taskTeam.setColorClass(infos.color);
 			taskTeams[taskTeam.getId()] = taskTeam;
 			if(infos.leaderName != "null"){
@@ -896,6 +983,15 @@ class Model{
 				properties[property.getId()] = property;
 
 			}
+		}
+		const persons = [];
+
+		for(let p in datas.persons){
+			const infos = datas.persons[p];
+			const person = new Person(infos.name, infos.id);
+			person.setEmail(infos.email);
+			person.setPhone(infos.phone);
+			persons[person.getId()] = person;
 		}
 
 		for(let d in datas.delivrables){
@@ -1016,6 +1112,13 @@ class Model{
 		for(let t in datas.taskTeams){
 			const infos = datas.taskTeams[t];
 			const taskTeam = taskTeams[infos.id];
+
+			taskTeam.setBoss(persons[infos.boss]);
+
+			for(let p in infos.persons){
+				taskTeam.addPerson(persons[infos.persons[p]]);
+			}
+
 			for(let o in infos.operationUnits){
 				taskTeam.addOperationUnit(operationUnits[infos.operationUnits[o]]);
 			}
@@ -1035,6 +1138,12 @@ class Model{
 			const infos = datas.objects3D[o];
 			const object3D = objects3D[infos.id];
 			object3D.setParent(objects4D[infos.parentObject4D]);
+		}	
+
+		for(let h in datas.holidays){
+			const infos = datas.holidays[h];
+			const d = new Day(datas.holidays[h].date, datas.holidays[h].id);
+			this.addHoliday(d);
 		}		
 	}
 

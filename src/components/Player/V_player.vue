@@ -108,7 +108,7 @@ export default {
 		}
 	},
 	template : `
-	<div class="player">
+	<div v-show="displayM" class="player">
 		<div v-if="milestoneSelected != null" class="milestoneInfos">
 			<p v-html="milestoneSelectedText" >Nom de la milestone - EndDate</p>
 		</div>

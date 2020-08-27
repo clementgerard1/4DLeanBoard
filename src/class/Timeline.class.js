@@ -124,11 +124,22 @@ class Timeline{
 	}
 
 	#initialiseStepArray(t){		
+
+			//Holiday
+			const date = this.getDateObject(t);
+			const week = this.#model.getDayWorked()[date.getDay() - 1];	
+			let holiday = false;	
+			const holidays = this.#model.getHolidays();
+			for(let h in holidays){
+				if((date.getDate() == holidays[h].getDate().getDate()) && (date.getMonth() == holidays[h].getDate().getMonth()) && (date.getFullYear() == holidays[h].getDate().getFullYear())) holiday = true;
+			}
+
 			if(typeof this.#steps[t] == "undefined") this.#steps[t] = { 
 				milestones : [],
 				phases : [],
 				tasks : [],
-				operations : []
+				operations : [],
+				holiday : (!week || holiday)
 			};
 	}
 
@@ -147,6 +158,17 @@ class Timeline{
 	*/
 	getValueAtTime(time){
 		return this.#steps[time];
+	}
+
+	isHolidayBetweenTwoDates(start, end){
+		for(let i = start; i <= end; i++){
+			if(!this.#steps[i].holiday) return false;
+		}
+		return true;
+	}
+
+	isHoliday(i){
+		return this.#steps[i].holiday
 	}
 
 	/**
@@ -196,11 +218,12 @@ class Timeline{
 		const tasks = this.#model.getTasks();
 		for(let t in tasks){
 			if(tasks[t].getTaskTeam().getId() == team.getId()){
-				if(start == null || tasks[t].getStartDate() < start) start = tasks[t].getStartDate();
-				if(end == null || tasks[t].getEndDate() > end) end = tasks[t].getEndDate();
+
+				if(start == null || tasks[t].getStartDate().getTime() < start.getTime()) start = tasks[t].getStartDate();
+				if(end == null || tasks[t].getEndDate().getTime() > end.getTime()) end = tasks[t].getEndDate();
 			}
 		}
-		return start.getDay() + "/" + start.getMonth() + "/" + start.getFullYear() + "-" + end.getDay() + "/" + end.getMonth() + "/" + end.getFullYear();
+		return start.getDate() + "/" + (start.getMonth()+1) + "/" + start.getFullYear() + "-" + end.getDate() + "/" + (end.getMonth()+1) + "/" + end.getFullYear();
 	}
 
 	/**

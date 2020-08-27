@@ -12,6 +12,7 @@ class Phase extends PlanningObject{
 	#delivrables;
 	#contractor;
 	#colorClass;
+	#requirementsString;
 	#num;
 	/**
  		@class Phase
@@ -31,6 +32,7 @@ class Phase extends PlanningObject{
 		this.#contractor = null;
 		this.#colorClass = "defaultcolor";
 		this.#num = null;
+		this.#requirementsString ="";
 	}
 
 	/**
@@ -328,6 +330,14 @@ class Phase extends PlanningObject{
 	*/
 	getColorClass(){
 		return this.#colorClass;
+	}
+
+	setRequirementsString(str){
+		this.#requirementsString = str;
+	}
+
+	getRequirementsString(){
+		return this.#requirementsString;
 	}
 
 }

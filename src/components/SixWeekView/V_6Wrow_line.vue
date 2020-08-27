@@ -13,9 +13,9 @@ export default {
 			"checklisticon" : CheckList,
 			"admin" : AdminSettingsMale,
 			"schedule" : Schedule,
-			"leaderName" : this.team.getLeader().name,
-			"leaderEmail" : this.team.getLeader().email,
-			"leaderPhone" : this.team.getLeader().phone,
+			"leaderName" : this.team.getBoss().getName(),
+			"leaderEmail" : this.team.getBoss().getEmail(),
+			"leaderPhone" : this.team.getBoss().getPhone(),
 			"dates" : this.timeline.getStartEndDateByTeam(this.team),
 		}
 	},

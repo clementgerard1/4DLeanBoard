@@ -20,6 +20,8 @@ class Task extends PlanningObject{
 	#done;
 	#go;
 	#colorClass;
+	#description;
+	#workers;
 
 	/**
  		@class Task
@@ -41,6 +43,8 @@ class Task extends PlanningObject{
 		this.#done = false;
 		this.#go = false;
 		this.#colorClass = "defaultcolor";
+		this.#description = "";
+		this.#workers = null;
 	}
 
 	/**
@@ -168,11 +172,45 @@ class Task extends PlanningObject{
 	}
 
 	/**
+		Set the state from a string
+		@param {String} str
+	*/
+	setStateFromString(str){
+		if(str == "Not Ready"){
+
+		}else if(str == "Ready"){
+
+		}else if(str == "Done"){
+			this.setDone(true);
+		}else if(str == "Go"){
+			this.setGo(true);
+		}else if(str == "Pause"){
+			this.setPaused(true);
+		}
+	}
+
+	/**
 		Get the taskTeam
 		@returns {Array} Array of TaskTeam
 	*/
 	getTaskTeam(){
 		return this.#taskTeam;
+	}
+
+	/**
+		Set the description
+		@param {String} description
+	*/
+	setDescription(description){
+		this.#description = description;
+	}
+
+	/**
+		Get the description
+		@returns {String}
+	*/
+	getDescription(){
+		return this.#description;
 	}
 
 	/**
@@ -362,6 +400,14 @@ class Task extends PlanningObject{
 	*/
 	getColorClass(){
 		return this.#colorClass;
+	}
+
+	setWorkers(n){
+		this.#workers = n;
+	}
+
+	getWorkers(){
+		return this.#workers;
 	}
 
 

@@ -2,6 +2,7 @@ import "./V_phasesDisplay.scss";
 import V_phaseItem from "./V_phaseItem.vue";
 import V_timelineUtils from "../Utils/V_timelineUtils.class.js";
 import V_phasesUtils from "../Utils/V_phasesUtils.class.js";
+import V_socketUtils from "../Utils/V_socketUtils.class.js";
 
 export default {
 	components : {
@@ -9,7 +10,8 @@ export default {
 	},
 	props :[
 		"timeline",
-		"model"
+		"model",
+		"duration"
 	],
 	provide: function(){
 		return {
@@ -68,7 +70,8 @@ export default {
 	methods : {
 		watchTime : function(time){
 			this.time = time;
-			this.playerWidth = (((this.time * 7) / this.model.getDuration()) * 100) + "%";
+			const nbWeek = Math.ceil(this.duration / 7);
+			this.playerWidth = (((this.time * 7) / this.model.getDuration()) * 98.95) + "%" ;
 			this.width2 = ((7 / this.model.getDuration()) * 100) + "%";
 		},
 		displayed : function(bool){
@@ -79,6 +82,27 @@ export default {
 			// const temp = {};
 			// this.teamDisplayStatus = Object.assign(temp, this.teamDisplayStatus);
 			this.temp++;
+		},
+		handlePan : function(event){
+
+
+			const nbWeek = Math.ceil(this.duration / 7);
+
+			const x = event.srcEvent.clientX - document.getElementById("phaseF").getBoundingClientRect().x - 30;
+			const weekWidth = (document.getElementById("phaseF").clientWidth  - 60) / nbWeek;
+
+			if(event.type == "panmove" || event.type == "panstart"){
+				if( x > (weekWidth / 2) && x < ((nbWeek-1) * weekWidth + (weekWidth / 2)) ){
+					const time = Math.trunc(x / weekWidth);
+					if(time != this.time){
+						this.setTime(time);
+					}
+				}
+			}
+
+		},
+		setTime : function(time){
+			V_socketUtils.setTime(time);
 		}
 	},
 	created : function(){
@@ -89,7 +113,7 @@ export default {
 	<div v-if="isDisplayed" id="phaseF">
 		<!-- PhasesFrame -->
 		<div class="playerLineWrapper">
-			<div class="playerLine" v-bind:style="{ left : playerWidth, width : width2, height : ((phases.length - 1) * 41 + 23) + 'px'}"></div>
+			<div v-pan="handlePan" class="playerLine" v-bind:style="{ left : playerWidth, width : width2, height : ((phases.length - 1) * 41 + 23) + 'px'}"></div>
 		</div>
 		<phaseitem v-bind:teamDisplayed="teamDisplayStatus" v-for="p in displayedPhases" :key="p.getId()" v-bind:time="time" v-bind:model="_model" v-bind:timeline="_timeline" v-bind:phase="p"></phaseitem>
 	</div>`,

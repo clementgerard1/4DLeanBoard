@@ -4,6 +4,8 @@ class Team{
 
 	#id;
 	#name;
+	#boss;
+	#persons;
 
 	/**
 		@class Team
@@ -20,6 +22,8 @@ class Team{
 		}
 		this.#id = id;
 		this.#name = name;
+		this.#boss = null;
+		this.#persons = {};
 	}
 
 	/**
@@ -37,6 +41,44 @@ class Team{
 	getName(){
 		return this.#name;
 	}	
+
+	/**
+		Add a person to the team
+		@param {Person} [person = new Person] Person to add to the collection
+	*/
+	addPerson(person = new Person()){
+		this.#persons[person.getId()] = person;
+	}
+
+	/**
+		Remove a person
+		@param {Person} person Person to remove
+	*/
+	removePerson(person){
+		if(!(person instanceof Person)){
+			console.error("removePerson(person) : person " + person + " not of type Person");
+		}else if(!(Object.keys(this.#persons).includes("" + person.getId()))){
+			console.error("removePerson(person) : person " + person + " not in the collection");
+		}else{
+			delete this.#persons[person.getId()];
+		}
+	}
+
+	/**
+		Get all persons
+		@returns {Array} Array of Person
+	*/
+	getPersons(){
+		return this.#persons;
+	}
+
+	setBoss(person){
+		this.#boss = person;
+	}
+
+	getBoss(){
+		return this.#boss;
+	}
 
 }
 export default Team;

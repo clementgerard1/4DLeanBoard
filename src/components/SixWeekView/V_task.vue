@@ -248,7 +248,7 @@ export default {
 			}
 		},
 		mn : function(){
-			return this.task.getTaskTeam().getWorkers();
+			return this.task.getWorkers();
 		},
 		taskname : function(){
 			const startWeek = this.timeline.getDateObject(this.time * 7);
@@ -815,10 +815,10 @@ export default {
 		},
 
 		highlightRequirements(){
-			document.getElementById("lpsRequirements").style.border = "2px solid red";
+			document.getElementById("lpsRequirements-" + this._uid).style.border = "2px solid red";
 			if(this.lpsHighlightTimeout != null) clearTimeout(this.lpsHighlightTimeout);
 			this.lpsHighlightTimeout = setTimeout( ()=>{
-				document.getElementById("lpsRequirements").style.border = "0px solid red";
+				document.getElementById("lpsRequirements-" + this._uid).style.border = "0px solid red";
 			}, 500);
 
 		},
@@ -868,6 +868,7 @@ export default {
 		getCalendarClass(i, startBool){
 			let comp = null; 
 			let comp2 = null;
+			if(this.timeline.isHoliday((this.time * 7) + (i-1))) return "holiday";
 			if(startBool){
 				comp = this.addDays(this.startweek, (i-1));
 				comp2 = this.task.getStartDate();
@@ -899,7 +900,7 @@ export default {
 	<div class="taskWrapper" v-bind:class='wrapclass' v-bind:style="[!isOpen ? { pointerEvents : 'none'} : {}]">
 		<div class="task">
 			
-			<div v-if="notEmpty" v-bind:id="_uid + '-task'" >
+			<div v-if="notEmpty" v-doubletap="handleTap" v-bind:id="_uid + '-task'" >
 
 				<div class="taskHeader" v-bind:style="{ height : headerheight }">
 					<div >
@@ -921,7 +922,7 @@ export default {
 						<!-- id face -->
 						<div v-else-if="idFace" v-bind:style="{backgroundColor : headercolors.body, borderColor : headercolors.border}" >
 							<p v-tap="handleIdTap" v-bind:style="{ color : idcolor }" v-html="'#' + task.getId()"></p>
-							<p id="lpsRequirements" v-tap="handleLpsTap" v-html="tasksSVG"></p>
+							<p v-bind:id="'lpsRequirements-' + _uid" v-tap="handleLpsTap" v-html="tasksSVG"></p>
 						</div>
 						<!-- home face -->
 						<div v-else v-bind:style="{backgroundColor : headercolors.body, borderColor : headercolors.border}" >
@@ -958,7 +959,7 @@ export default {
 
 					<!-- description face -->
 					<div v-tap="handleDescriptionTap" v-else-if="descriptionFace" class="descriptionFaceFrame">
-						<div><p>Description</p></div>
+						<div><p v-html="task.getDescription()"></p></div>
 					</div>
 
 					<!-- lps face -->

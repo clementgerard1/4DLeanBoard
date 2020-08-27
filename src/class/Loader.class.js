@@ -2,6 +2,7 @@ import Model from "./Model.class.js";
 import Milestone from "./Milestone.class.js";
 import Phase from "./Phase.class.js";
 import Task from "./Task.class.js";
+import Person from "./Person.class.js";
 import Object4D from "./Object4D.class.js";
 import Object3D from "./Object3D.class.js";
 import Operation from "./Operation.class.js";
@@ -12,6 +13,7 @@ import Zone from "./Zone.class.js";
 import Contractor from "./Contractor.class.js";
 import Requirement from "./Requirement.class.js";
 import Utils from "./Utils.class.js";
+import Day from "./Day.class.js";
 
 /**
  * @class Loader
@@ -103,6 +105,7 @@ class Loader{
 			name: null,
 			milestones : [],
 			teams : [],
+			holidays : []
 		}
 
 		let memoMilestone = null;
@@ -168,8 +171,10 @@ class Loader{
 						phase["Tasks"][phase["Tasks"].length - 1]["Previous"] = columns[17];
 						phase["Tasks"][phase["Tasks"].length - 1]["Team"] = columns[18];
 						phase["Tasks"][phase["Tasks"].length - 1]["IDS4D"] = columns[19];
-						phase["Tasks"][phase["Tasks"].length - 1]["Zone"] = columns[20];
-						phase["Tasks"][phase["Tasks"].length - 1]["Level"] = columns[21];
+						phase["Tasks"][phase["Tasks"].length - 1]["Level"] = columns[20];
+						phase["Tasks"][phase["Tasks"].length - 1]["Zone"] = columns[22];
+						phase["Tasks"][phase["Tasks"].length - 1]["Description"] = columns[23];
+						phase["Tasks"][phase["Tasks"].length - 1]["State"] = columns[24];
 						phase["Tasks"][phase["Tasks"].length - 1]["Requirements"] = {
 							"Constraint" : columns[25] != "No", 
 							"Information" : columns[26] != "No",
@@ -188,8 +193,16 @@ class Loader{
 
 						json.teams[json.teams.length] = {
 							name : columns[32],
-							color : columns[33].replace("\r", "")
+							color : columns[33].replace("\r", ""),
+							bossName : columns[34].replace("\r", ""),
+							bossMail : columns[35].replace("\r", ""),
+							bossPhone : columns[36].replace("\r", ""),
+							teamPersons : columns[37].replace("\r", "").split(","),
 						}
+					}
+
+					if(columns[38].replace("\r", "") != ''){
+						json.holidays.push(columns[38].replace("\r", ""));
 					}
 
 				}
@@ -246,8 +259,26 @@ class Loader{
 		//Teams
 		for(let i in infos.teams){
 			taskTeams[infos.teams[i].name] = new TaskTeam(infos.teams[i].name);
-			taskTeams[infos.teams[i].name].setLeader("Michel Dupond", "michel@dupond.com", "06 35 48 03 02");
+
+			//Boss 
+			const boss = new Person(infos.teams[i].bossName);
+			boss.setEmail(infos.teams[i].bossMail);
+			boss.setPhone(infos.teams[i].bossPhone);
+			taskTeams[infos.teams[i].name].setBoss(boss);
+			//TeamPersons
+			for(let p in infos.teams[i].teamPersons){
+				const person = new Person(infos.teams[i].teamPersons[p]);
+				taskTeams[infos.teams[i].name].addPerson(person);
+			}
+
+			//taskTeams[infos.teams[i].name].setLeader("Michel Dupond", "michel@dupond.com", "06 35 48 03 02");
 			taskTeams[infos.teams[i].name].setColorClass(infos.teams[i].color);
+		}
+
+		//Holidays
+		for(let h in infos.holidays){
+			const hd = new Day(new Date(Utils.getFormatedDate2(infos.holidays[h])));
+			model.addHoliday(hd);
 		}
 
 		//Model
@@ -284,6 +315,7 @@ class Loader{
 				phase.setStartDate(PstartDate);
 				const PendDate = new Date(Utils.getFormatedDate2(phases[p]["EndDate"]));
 				phase.setEndDate(PendDate);
+				phase.setRequirementsString(phases[p]["Requirements"]);
 
 				const tasks = phases[p]["Tasks"];
 				let actualDate = PstartDate;
@@ -311,9 +343,11 @@ class Loader{
 
 						//const teams = taskTeams[tasks[t]["Team"]].split(",");
 						task.setTaskTeam(taskTeams[tasks[t]["Team"]]);
-						taskTeams[tasks[t]["Team"]].setWorkers(parseInt(tasks[t]["Workers"]));
+						task.setWorkers(parseInt(tasks[t]["Workers"]));
 						if(typeof zones[tasks[t]["Zone"]] == "undefined") zones[tasks[t]["Zone"]] = new Zone(tasks[t]["Zone"]);
 						task.setZone(zones[tasks[t]["Zone"]]);
+						task.setDescription(tasks[t]["Description"]);
+						task.setStateFromString(tasks[t]["State"]);
 
 						//Requirements
 						const constraint = new Requirement("constraint");
@@ -380,6 +414,8 @@ class Loader{
 				} 
 			}
 		}
+
+
 
 		return model;
 	}
@@ -481,7 +517,7 @@ class Loader{
 								taskTeams[tasks[t]["Team"]].setColorClass(phases[p]["color"]);
 							}
 							task.setTaskTeam(taskTeams[tasks[t]["Team"]]);
-							taskTeams[tasks[t]["Team"]].setWorkers(tasks[t]["Workers"]);
+							//taskTeams[tasks[t]["Team"]].setWorkers(tasks[t]["Workers"]);
 							if(typeof zones[tasks[t]["Zone"]] == "undefined") zones[tasks[t]["Zone"]] = new Zone(tasks[t]["Zone"]);
 							task.setZone(zones[tasks[t]["Zone"]]);
 

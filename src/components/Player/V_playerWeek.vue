@@ -17,7 +17,8 @@ export default {
 	],
 	computed:{
 		vacation : function(){
-			return this.timeline.getTasksBetweenTwoDates(this.innertime * 7, this.innertime * 7 + 6).length == 0;
+			return this.timeline.isHolidayBetweenTwoDates(this.innertime * 7, this.innertime * 7 + 6);
+			//return this.timeline.getTasksBetweenTwoDates(this.innertime * 7, this.innertime * 7 + 6).length == 0;
 		},
 		selected: function(){
 			return this.innertime == this.time;

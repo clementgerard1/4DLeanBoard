@@ -67,7 +67,7 @@ export default {
 		},
 		descriptionText : function(){
 			const dates = this.phase.getStartDate().getDay() + "/" + this.phase.getStartDate().getMonth() + "/" + this.phase.getStartDate().getFullYear() + "-" + this.phase.getEndDate().getDay() + "/" + this.phase.getEndDate().getMonth() + "/" + this.phase.getEndDate().getFullYear()
-			return this.phase.getName() + " - " + dates + " - " + Object.keys(this.phase.getTasks()).length + " tasks";
+			return this.phase.getName() + " - " + this.phase.getRequirementsString() + " - " + dates + " - " + Object.keys(this.phase.getTasks()).length + " tasks";
 		},
 		// gradient : function(){
 		// 	if(this.mounted){

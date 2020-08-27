@@ -64,6 +64,35 @@ function init(){
 		}
 	});
 
+		//Touch gestures
+	Vue.directive("doubletap", {
+		bind: function(el, binding) 
+		{
+			if(el.getAttribute("hammerid") == null){
+				el.setAttribute("hammerid", Utils.getId("hammer"));
+			}
+			if (typeof binding.value === "function") {
+				let hammer = TouchGesturesUtils.getHammer(el);
+				if(hammer == null){
+					hammer = new Hammer(el);
+					TouchGesturesUtils.addHammer(el, hammer);
+				} 
+				
+				const doubleTap = new Hammer.Tap(
+					{event: 'tap2', taps: 2, interval: 300, posThreshold: 150, threshold: 50 }
+				);
+				doubleTap.recognizeWith(hammer.recognizers)
+				hammer.add(doubleTap);
+				hammer.on("tap2", binding.value);
+
+				TouchGesturesUtils.updateHammer(el);
+			}
+		},
+		unbind: function(el, binding){
+			TouchGesturesUtils.destroy(el);
+		}
+	});
+
 	Vue.directive("press", {
 		bind: function(el, binding) 
 		{
@@ -277,7 +306,7 @@ function init(){
 	 			<div v-if="forgeReady" id="planningFrame">
 	 				<planningmenu></planningmenu>
 	 				<tasktableframe v-if="modelSelected" id="taskTableFrame" v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit" v-bind:duration="duration"></tasktableframe>
-	 				<phasesdisplay  v-bind:model="model" v-bind:timeline="timeline" class="phasesFrame" ></phasesdisplay>
+	 				<phasesdisplay  v-bind:model="model" v-bind:timeline="timeline" class="phasesFrame" v-bind:duration="duration"></phasesdisplay>
 	 				<player id="mainPlayer" v-bind:duration="duration" v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit"></player>
 	 			</div>
 
