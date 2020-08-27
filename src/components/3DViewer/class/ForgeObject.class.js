@@ -198,13 +198,11 @@ class ForgeObject{
 
 		let constrType = 0;
 		if(this.#constructionState != null) constrType = this.#constructionState;
-		if(this.#id == 7) console.log(this.#timeState, constrType, this.#selected, visible, this.#filterMode, Memory.getSceneObject().getStyle(this.#timeState, constrType, this.#selected, visible, this.#filterMode));
 		const styles = Memory.getSceneObject().getStyle(this.#timeState, constrType, this.#selected, visible, this.#filterMode);
 
 		if(typeof styles != "undefined"){
 
 
-			if(this.#id == 7) console.log("hey");
 			let edgeStyle = styles.edge;
 			if(styles.edge == "team"){
 				edgeStyle = scssVariables[this.#object3D.getParent().getTask().getTaskTeam().getColorClass().replace("BG_", "").toLowerCase()];

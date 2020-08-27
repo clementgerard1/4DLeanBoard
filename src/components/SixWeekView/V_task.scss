@@ -68,6 +68,95 @@
 					height: 100%;
 				}
 
+				.calendarFaceFrame{
+					height: 100%;
+					background : v.$light;
+
+					.calendarFaceContent{
+						height : 77%;
+						> p{
+							font-family: Oswald;
+							font-style: normal;
+							font-weight: 500;
+							font-size: 1.15rem;
+							padding-left : 5%;
+						}
+
+						.calendarWeek{
+							display : flex;
+
+							p{
+								flex : 1;
+								text-align : center;
+								margin-right : 3%;
+							}
+
+							.next, .previous{
+								background-color : white;
+							}
+
+							.startTask, .endTask{
+								flex : 2;
+								background-color :red;
+							}
+
+						}
+
+					}
+
+					.calendarFaceFooter{
+						display : flex;
+						justify-content : center;
+						height : 20%;
+						p{
+							display : block;
+							flex:1;
+						}
+
+						p:nth-child(1), p:nth-child(3){
+							color : white;
+							width : 25%;
+							display : flex;
+							justify-content : center;
+							align-items : center;
+							border-radius : 100%;
+
+			   			  	font-family: Oswald;
+							font-weight: normal;
+							font-size: 1.5rem;
+						}
+
+						p:nth-child(1){
+							margin-left : 15%;
+							margin-right : 3%;
+							padding-bottom : 3%;
+						}
+
+						p:nth-child(3){
+							margin-right : 15%;
+							margin-left : 3%;
+						}
+
+						p:nth-child(2){
+							display : flex;
+							justify-content :center;
+							align-items: center;
+							/* Oswald 24 */
+							font-family: Oswald;
+							font-style: normal;
+							font-weight: 500;
+							font-size: 2rem;
+							display: flex;
+							text-transform: capitalize;
+							flex:2;
+							svg{
+								width :  90%;
+							}
+						}
+
+					}
+				}
+
 				.lpsFaceFrame{
 					background : v.$light;
 					height: 100%;

@@ -97,6 +97,13 @@ export default {
 		//For avoid tap propagation, need to delete it
 		let constraintTap = false
 
+		let startWeekDate = null;
+		let endWeekDate = null;
+		if(this.task != null){
+			startWeekDate = this.addDays(this.task.getStartDate(), -(this.task.getStartDate().getDay() - 1));
+			endWeekDate = this.addDays(this.task.getEndDate(), -(this.task.getEndDate().getDay() - 1));
+		}
+
 		return {
 			"selected" : false,
 			"state" :false,
@@ -125,6 +132,7 @@ export default {
 			taskHeight : 0,
 			idFace : false,
 			lpsFace : false,
+			calFace : false,
 			descriptionFace : false,
 			lpsHighlightTimeout : null,
 			lpsList : [
@@ -137,6 +145,8 @@ export default {
 				"Space",
 			],
 			lpsIndex : 0,
+			startweek : startWeekDate,
+			endweek : endWeekDate
 		}
 	},
 	inject : [
@@ -184,6 +194,7 @@ export default {
 		}
 	},
 	computed:{
+
 		wrapclass : function(){
 			let result = "";
 			if(this.highlighted) result += "highlighted ";
@@ -383,6 +394,11 @@ export default {
 		}
 	},
 	methods:{
+		addDays : function(date, days){
+			var dat = new Date(date.valueOf());
+		    dat.setDate(dat.getDate() + days);
+		    return dat;
+		},
 		updateDatas: function(){
 			let previousTask = null;
 			if(this.task != null){
@@ -726,6 +742,7 @@ export default {
 				this.idFace = !this.idFace;
 				this.lpsFace = false;
 				this.descriptionFace = false;
+				this.calFace = false;
 			}
 		},
 
@@ -738,6 +755,7 @@ export default {
 				this.lpsFace = !this.lpsFace;
 				this.idFace = false;
 				this.descriptionFace = false;
+				this.calFace = false;
 			}
 		},
 
@@ -746,6 +764,16 @@ export default {
 				this.descriptionFace = !this.descriptionFace;
 				this.idFace = false;
 				this.lpsFace = false;
+				this.calFace = false;
+			}
+		},
+
+		handleCalendarTap(){
+			if(this.isOpen && this.taskname != ""){
+				this.descriptionFace = false;
+				this.idFace = false;
+				this.lpsFace = false;
+				this.calFace = !this.calFace;
 			}
 		},
 
@@ -821,6 +849,50 @@ export default {
 							break;
 			}
 		},
+		getMonthAbr(num){
+			switch(num){
+				case 0 : return "Janv";
+				case 1 : return "Fevr";
+				case 2 : return "Mars";
+				case 3 : return "Avril";
+				case 4 : return "Mai";
+				case 5 : return "Juin";
+				case 6 : return "Juil";
+				case 7 : return "Aout";
+				case 8 : return "Sept";
+				case 9 : return "Oct";
+				case 10 : return "Nov";
+				case 11 : return "Dec";
+			}
+		},
+		getCalendarClass(i, startBool){
+			let comp = null; 
+			let comp2 = null;
+			if(startBool){
+				comp = this.addDays(this.startweek, (i-1));
+				comp2 = this.task.getStartDate();
+				if(comp.getTime() < comp2.getTime()){
+					return "previous";
+				}else if(comp.getTime() == comp2.getTime()){
+					return "startTask";
+				}else{
+					return "inTask";
+				}
+			}else{
+				comp = this.addDays(this.endweek, (i-1));
+				comp2 = this.task.getEndDate();
+				if(comp.getTime() < comp2.getTime()){
+					return "inTask";
+				}else if(comp.getTime() == comp2.getTime()){
+					return "endTask";
+				}else{
+					return "next";
+				}
+			}
+
+
+		}
+
 	},
 
 	template : `
@@ -832,8 +904,13 @@ export default {
 				<div class="taskHeader" v-bind:style="{ height : headerheight }">
 					<div >
 						
+						<!-- calendar face -->
+						<div v-if="calFace" v-bind:style="{backgroundColor : headercolors.body, borderColor : headercolors.border}" >
+							<p v-tap="handleIdTap" v-bind:style="{ color : idcolor }" v-html="'#' + task.getId()"></p>
+						</div>
+
 						<!-- description face -->
-						<div v-if="descriptionFace" v-bind:style="{backgroundColor : headercolors.body, borderColor : headercolors.border}" >
+						<div v-else-if="descriptionFace" v-bind:style="{backgroundColor : headercolors.body, borderColor : headercolors.border}" >
 							<p v-tap="handleIdTap" v-bind:style="{ color : idcolor }" v-html="'#' + task.getId()"></p>
 						</div>
 						<!-- lps face -->
@@ -859,8 +936,28 @@ export default {
 
 				<div v-if="isOpen" class="taskContent" v-bind:style="{ height : (taskHeight - parseFloat(headerheight.replace('px', '')))  + 'px'}">
 					
+					<!-- calendar face -->
+					<div v-if="calFace" class="calendarFaceFrame">
+						<div class="calendarFaceContent">
+							<p>Début : <span v-html="task.getStartDate().getDate() + ' ' + getMonthAbr(task.getStartDate().getMonth()) + ' ' + task.getStartDate().getFullYear()" ></span></p>
+							<div class="calendarWeek">
+								<p v-for="i in 7" v-bind:class="getCalendarClass(i, true)" v-html="addDays(startweek, (i-1)).getDate()"></p>
+							</div>
+							<div v-if="startweek.getTime() !== endweek.getTime()" class="calendarWeek">
+								<p v-for="i in 7" v-bind:class="getCalendarClass(i, false)" v-html="addDays(endweek, (i-1)).getDate()"></p>
+							</div>
+							<p>Fin : <span v-html="task.getEndDate().getDate() + ' ' + getMonthAbr(task.getEndDate().getMonth()) + ' ' + task.getEndDate().getFullYear()" ></span></p>
+						</div>
+						<!--footer-->
+						<div class="calendarFaceFooter">
+							<p v-bind:style="{ backgroundColor : svgcolor}" >-</p>
+							<p  v-tap="handleCalendarTap"><span>` + calendarIcon + `</span><span v-html="task.getDuration()"></span></p>
+							<p v-bind:style="{ backgroundColor : svgcolor}" >+</p>
+						</div>
+					</div>
+
 					<!-- description face -->
-					<div v-tap="handleDescriptionTap" v-if="descriptionFace" class="descriptionFaceFrame">
+					<div v-tap="handleDescriptionTap" v-else-if="descriptionFace" class="descriptionFaceFrame">
 						<div><p>Description</p></div>
 					</div>
 
@@ -894,7 +991,7 @@ export default {
 								</svg>
 								</p>
 
-								<p>` + calendarIcon + `<span v-html="dr"></span></p>
+								<p v-tap="handleCalendarTap">` + calendarIcon + `<span v-html="dr"></span></p>
 								<p>` + manIcon + `<span v-html="mn"></span></p>
 							</div>
 						</div>
