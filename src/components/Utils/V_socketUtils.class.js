@@ -258,6 +258,21 @@ class V_socketUtils{
 	}
 
 	/**
+		Set the team displayed on viewer
+		@param {TaskTeam} team
+		@static
+	*/	
+	static setLayerDisplayed(layer, bool){
+		V_filterMenuUtils.setLayerDisplayed(layer, bool);
+		V_4DUtils.setLayerDisplayed(layer, bool);
+		if(layer != null){
+			this.socket.emit("updateLayerDisplayed", { layer : layer, value : bool});
+		}else{
+			this.socket.emit("updateLayerDisplayed", { layer : null, value : null});
+		}
+	}
+
+	/**
 		Set the team mode of viewer
 		@param {bool} active
 		@static
@@ -352,6 +367,14 @@ class V_socketUtils{
 		});
 	}
 
+	static triggerTeamDisplay(team, bool){
+		V_4DUtils.triggerTeamDisplay(team, bool);
+		this.socket.emit("triggerTeamDisplay", { 
+			teamId : team.getId(),
+			value : bool
+		});
+	}
+
 	/* ---------------------------- FILTER MENU INTERACTIONS ---------------------------- */
 
 	static setIfcMenuChange(ifcs){
@@ -392,7 +415,6 @@ class V_socketUtils{
 			phaseId : phase.getId(),
 			value : bool
 		});
-
 	}
 
 }

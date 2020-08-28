@@ -110,6 +110,23 @@ class V_4DUtils{
 	}
 
 	/**
+		Set taskteam displayed on Forge Viewer
+		@param {uid} taskTeam id
+		@static
+	*/
+	static setLayerDisplayed(layer, bool){
+		if(this.viewer != null){
+			this.viewer.setLayerDisplayed(layer, bool);
+		}else{
+			// this.waitViewer.teamsDisplayed[this.waitViewer.teamsDisplayed.length] = {
+			// 	taskTeam : taskTeam,
+			// 	bool : bool
+			// }
+			// this.needInit = true;
+		}
+	}
+
+	/**
 		Set contractor display mode on Forge Viewer
 		@param {bool} bool
 		@static
@@ -142,6 +159,15 @@ class V_4DUtils{
 	static triggerPhaseDisplay(phase, bool){
 		if(this.viewer != null){
 			this.viewer.triggerPhaseDisplay(phase, bool);
+		}/*else{
+			this.waitViewer.ifcs = ifcs;
+			this.needInit = true;
+		}*/
+	}
+
+	static triggerTeamDisplay(team, bool){
+		if(this.viewer != null){
+			this.viewer.triggerTeamDisplay(team, bool);
 		}/*else{
 			this.waitViewer.ifcs = ifcs;
 			this.needInit = true;

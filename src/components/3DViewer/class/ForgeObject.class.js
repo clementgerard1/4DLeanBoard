@@ -12,6 +12,7 @@ class ForgeObject{
 	#object3D;
 	#teamDisplayed;
 	#teamSelected;
+	#layerSelected;
 	#layerHided;
 	#inLayerSelected;
 	#linked;
@@ -22,7 +23,9 @@ class ForgeObject{
 	#ifcVisible;
 	#started;
 	#phaseVisible;
+	#teamVisible;
 	#phasemode;
+	#teammode;
 
 	#constructionState;
 
@@ -35,6 +38,7 @@ class ForgeObject{
 		this.#object3D = null;
 		this.#teamDisplayed = false;
 		this.#teamSelected = true;
+		this.#layerSelected = true;
 		this.#layerHided = false;
 		this.#inLayerSelected = false;
 		this.#linked = false;
@@ -46,6 +50,8 @@ class ForgeObject{
 		this.#ifcVisible = true;
 		this.#phaseVisible = true;
 		this.#phasemode = false;
+		this.#teammode = false;
+		this.#teamVisible = true;
 
 		this.#started = false;
 	}
@@ -113,6 +119,16 @@ class ForgeObject{
 		}else{
 			this.#teamSelected = false;
 		}
+		this.updateMaterial();
+	}
+
+	isLayerSelected(layers){
+		// if(typeof this.#properties["Layer"].getValue() != "undefined"){
+		// 	this.#layerSelected = true;
+		// }else{
+		// 	this.#layerSelected = false;
+		// }
+		console.log(this.#properties["Layer"].getInfo());
 		this.updateMaterial();
 	}
 
@@ -196,19 +212,26 @@ class ForgeObject{
 	updateMaterial(){
 		const viewer = Memory.getViewer();
 		let visible = this.#ifcVisible;
-		if((this.#teamDisplayed && !this.#teamSelected) || !this.#phaseVisible){
+		if((this.#teamDisplayed && !this.#teamSelected) || !this.#phaseVisible || !this.#teamVisible){
 			visible = false;
 		}
 
 		let constrType = 0;
 		if(this.#constructionState != null) constrType = this.#constructionState;
 		let selected = false;
+		let filterMode = this.#filterMode;
 		if(this.#phasemode){
 			selected = (this.#linked && this.#phaseVisible);
 		}else{
 			selected = this.#selected;
 		}
-		const styles = Memory.getSceneObject().getStyle(this.#timeState, constrType, selected, visible, this.#filterMode);
+		if(this.#teammode){
+			selected = (this.#linked && this.#teamVisible);
+			filterMode = "teamMaterial";
+		}else{
+			selected = this.#selected;
+		}
+		const styles = Memory.getSceneObject().getStyle(this.#timeState, constrType, selected, visible, filterMode);
 
 		if(typeof styles != "undefined"){
 
@@ -321,6 +344,16 @@ class ForgeObject{
 			this.#phaseVisible = false;
 		}else{
 			this.#phaseVisible = true;
+		}
+		this.updateMaterial();
+	}
+
+	triggerTeamDisplay(team, bool){
+		this.#teammode = bool;
+		if(bool && (this.#object3D == null || this.#object3D.getParent().getTask().getTaskTeam().getId() != team.getId()) ) {
+			this.#teamVisible = false;
+		}else{
+			this.#teamVisible = true;
 		}
 		this.updateMaterial();
 	}

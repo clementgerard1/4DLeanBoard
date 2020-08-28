@@ -195,6 +195,17 @@ class Model{
 											that.setName(namee.charAt(0).toUpperCase() + namee.slice(1));
 										}
 									}
+
+									for(let p in dbObjects[d].properties){
+										if(!nameDone && dbObjects[d].properties[p].displayName == "Source File"){
+											const toSplit = dbObjects[d].properties[p].displayValue.split("_");
+											const namee = toSplit[toSplit.length - 1].replace(".ifc", "");
+											that.setName(namee.charAt(0).toUpperCase() + namee.slice(1));
+										}
+										const property = new IFCProperty(dbObjects[d].properties[p].displayName, dbObjects[d].properties[p]);
+										that.#dbObjects[dbObjects[d].dbId].addProperty(property);
+									}
+
 									that.#dbObjects[dbObjects[d].dbId].isLinked(false);
 									//that.#dbObjects[dbObjects[d].dbId].setColor(true, new THREE.Vector4(1, 1, 1, 1));
 									// <that.#viewer.lockSelection(dbObjects[d].dbId, true, that.#model)
@@ -337,5 +348,6 @@ class Model{
 	getModel(){
 		return this.#model;
 	}
+
 }
 export default Model;

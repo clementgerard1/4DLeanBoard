@@ -3,8 +3,9 @@ import V_socketUtils from "../Utils/V_socketUtils.class.js";
 import V_filterMenuUtils from "../Utils/V_filterMenuUtils.class.js";
 import MenuStart from "./assets/MenuStart.svg";
 import Menu3D from "./assets/Menu3D.svg";
-import MenuPlanning from "./assets/MenuPlanning.svg";
-import MenuDisplay from "./assets/MenuDisplay.svg";
+import MenuVertical from "./assets/MenuVertical.svg";
+import ColorPalette from "./assets/ColorPalette.svg";
+import Layers from "./assets/Layers.svg";
 import scssVariables from "../SixWeekView/assets/_variables.scss";
 
 import StandardButton from "./V_standardButton.vue";
@@ -23,6 +24,16 @@ export default {
 				color : scssVariables[teams[t].getColorClass().replace("BG_", "").toLowerCase()]
 			};
 		}
+
+		const layers = this.model.getLayers();
+		const layersArray = {};
+		for(let l in layers){
+			layersArray[layers[l]] = {
+				name : layers[l],
+				display : true,
+			};
+		}
+
 		return {
 			displayByTeam : false,
 			displayTeamSelect : 0, // = All teams
@@ -30,9 +41,8 @@ export default {
 			teamSelected : "all",
 			teams : teams,
 			menuOpen : false,
-			menu3DOpen : false,
-			menuPlanningOpen : false,
 			menuDisplayOpen : false,
+			menuDisplayLayersOpen : false,
 
 			menuArchitecture : true,
 			menuStructure : false,
@@ -58,6 +68,8 @@ export default {
 			teamdisplaycond : false,
 			colorTeams : colorTeams,
 
+			layers : layers,
+			layersArray : layersArray,
 		}
 	},
 	computed: {
@@ -76,30 +88,21 @@ export default {
 		handleMenuTap : function(e){
 			this.menuOpen = !this.menuOpen
 			if(!this.menuOpen){
-				this.menu3DOpen = false;
-				this.menuPlanningOpen = false;
 				this.menuDisplayOpen = false;
-			}
-		}, 
-		handle3DTap : function(e){
-			this.menu3DOpen= !this.menu3DOpen
-			if(this.menu3DOpen){
-				this.menuPlanningOpen = false;
-				this.menuDisplayOpen = false;
-			}
-		}, 
-		handlePlanningTap : function(e){
-			this.menuPlanningOpen = !this.menuPlanningOpen
-			if(this.menuPlanningOpen){
-				this.menu3DOpen = false;
-				this.menuDisplayOpen = false;
+				this.menuDisplayLayersOpen = false;
 			}
 		}, 
 		handleDisplayTap : function(e){
 			this.menuDisplayOpen = !this.menuDisplayOpen
 			if(this.menuDisplayOpen){
-				this.menu3DOpen = false;
-				this.menuPlanningOpen = false;
+				this.menuDisplayLayersOpen = false;
+			}
+		},
+
+		handleLayerTap : function(e){
+			this.menuDisplayLayersOpen = !this.menuDisplayLayersOpen;
+			if(this.menuDisplayLayersOpen){
+				this.menuDisplayOpen = false;
 			}
 		},
 
@@ -137,9 +140,15 @@ export default {
 			V_socketUtils.setTeamDisplayMode(true);
 		},
 
+
 		handleTeamSelected : function(e){
 			const team = this.model.getTaskTeamById(parseInt(e.target.id.replace("teamitem-", "")));
 			V_socketUtils.setTeamDisplayed(team, !this.colorTeams[team.getId()].display);
+		},
+
+		handleLayerSelected : function(e){
+			const layer = e.target.id.replace("layeritem-", "");
+			V_socketUtils.setLayerDisplayed(layer, !this.layersArray[layer].display);
 		},
 
 		setIfcMenuChange : function(archi, struct, mep, construct){
@@ -174,6 +183,17 @@ export default {
 					this.colorTeams[t].display = false;
 				}
 			}
+		},
+
+		setLayersSelected : function(layers){
+			for(let l in this.layersArray){
+
+				if(typeof layers[this.layersArray[l].name] == "undefined"){
+					this.layersArray[l].display = false;
+				}else{
+					this.layersArray[l].display = true;
+				}
+			}
 		}
 
 	},
@@ -195,6 +215,13 @@ export default {
 		<div class="subMenuContainer">
 			<div v-bind:class="offsetclass"></div>
 
+			<div key="menuDisplayLayer" class="menuDisplayLayer" v-if="menuDisplayLayersOpen">
+				<div v-tap="handleLayerSelected" class="layersItems" v-for="layer in layersArray" :key="layer.name">
+					<standardbutton v-bind:id="'layeritem-' + layer.name.replace(' ', '')" v-bind:condition="layer.display"></standardbutton>
+					<p v-html="layer.name"></p>
+				</div>
+			</div>
+
 			<div key="menuDisplay" class="menuDisplay" v-if="menuDisplayOpen">
 				<div v-if="teamdisplaycond">
 					<div class="offsetTeamDisplay"></div>
@@ -214,15 +241,21 @@ export default {
 					<p>Basic colors</p>
 				</div>
 			</div>
+			
 
 		</div>
 		<div class="mainMenu">
 			<div v-tap="handleMenuTap" class="filterMenu">
-				` + MenuStart +  `
+				` + MenuVertical +  `
+			</div>
+			<div class="itemContainer" v-if="menuOpen">
+				<div class="menuItem" v-tap="handleLayerTap">
+					` + Layers +  `
+				</div>
 			</div>
 			<div class="itemContainer" v-if="menuOpen">
 				<div class="menuItem" v-tap="handleDisplayTap">
-					` + MenuDisplay +  `
+					` + ColorPalette +  `
 				</div>
 			</div>
 		</div>

@@ -342,6 +342,19 @@ class Model{
 		return toReturn;
 	}
 
+	getLayers(){
+		const tasks = this.getTasks();
+		const toReturn = {};
+		for(let t in tasks){
+			const layer = tasks[t].getZone().getValue();
+			const layers = layer.split(",");
+			for(let l in layers){
+				if(typeof toReturn[layers[l].replace(" ", "")] == "undefined" && layers[l] != "") toReturn[layers[l].replace(" ", "")] = layers[l].replace(" ", "");
+			}
+		}
+		return toReturn;
+	}
+
 	/*
 		get all operations of the model
 		@returns {Array} Array of operations

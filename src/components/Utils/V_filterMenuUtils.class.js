@@ -1,6 +1,7 @@
 class V_filterMenuUtils{
 
 	static teamsDisplayed = [];
+	static layersDisplayed = [];
 	static teams = [];
 
 	static filters = [];
@@ -45,6 +46,26 @@ class V_filterMenuUtils{
 		}
 		for(let f in this.filters){
 			this.filters[f].setTeamsSelected(this.teamsDisplayed);
+		}
+		
+	}
+
+	/**
+		Add layer displayed to the list
+		@param {TaskTeam} team  
+		@param {bool}
+		@static
+	*/
+	static setLayerDisplayed(layer, bool){
+		if(bool){
+			this.layersDisplayed[layer] = {
+				layer : layer,
+			};
+		}else{
+			delete this.layersDisplayed[layer];
+		}
+		for(let f in this.filters){
+			this.filters[f].setLayersSelected(this.layersDisplayed);
 		}
 		
 	}

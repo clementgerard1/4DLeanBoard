@@ -120,7 +120,6 @@ export default {
 		trigger3DPhase : function(event){
 			const display = event.type == "press";
 			this.pressed = display;
-			console.log(this.pressed);
 			V_socketUtils.triggerPhaseDisplay(this.phase , display);
 
 		}

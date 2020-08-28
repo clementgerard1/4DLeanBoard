@@ -12,8 +12,8 @@ class Memory{
 	static #forgeObjectsNotLinked = {};
 	static #teamDisplay = false;
 	static #layerDisplay = false;
-	static #layerSelected = [];
 	static #teamSelected = {};
+	static #layerSelected = {};
 	static nbModels = 0;
 	static nbStyles = 1;
 	static sceneObj = null;
@@ -177,36 +177,23 @@ class Memory{
 		}
 	}
 
-	static hideLayer(layer, bool){
+	static setLayerSelected(layer, bool){
 		if(bool){
-			this.#layerSelected.push(layer);
+			this.#layerSelected[layer] = true;
 		}else{
-			delete this.#layerSelected[this.#layerSelected.indexOf(layer)];
+			delete this.#layerSelected[layer];
 		}
 		for(let f in this.#forgeObjects){
 			for(let ff in this.#forgeObjects[f]){
-				this.#forgeObjects[f][ff].hideInLayer(this.#layerSelected);
+				this.#forgeObjects[f][ff].isLayerSelected(this.#layerSelected);
 			}
 		}
-		/* for(let f in this.#forgeObjectsNotLinked) {
-			this.#forgeObjectsNotLinked[f].hideInLayer(this.#layerSelected);
-		} */
-	}
-
-	static setLayerHideMode(bool){
-		if(this.#layerDisplay != bool){
-			this.#layerDisplay = bool;
-			for(let f in this.#forgeObjects){
-				for(let ff in this.#forgeObjects[f]){
-					this.#forgeObjects[f][ff].isLayerHided(bool);
-				}
+		for(let f in this.#forgeObjectsNotLinked){
+			for(let ff in this.#forgeObjectsNotLinked[f]){
+				this.#forgeObjectsNotLinked[f][ff].isLayerSelected(this.#layerSelected);
 			}
-			/* for(let f in this.#forgeObjectsNotLinked) {
-				this.#forgeObjectsNotLinked[f].isLayerHided(bool);
-			} */
 		}
 	}
-	
 
 	static setTeamDisplayMode(bool){
 		if(this.#teamDisplay != bool){
@@ -277,6 +264,19 @@ class Memory{
 		for(let f in this.#forgeObjectsNotLinked){
 			for(let ff in this.#forgeObjectsNotLinked[f]){
 				this.#forgeObjectsNotLinked[f][ff].triggerPhaseDisplay(phase, bool);
+			}
+		}
+	}
+
+	static triggerTeamDisplay(team, bool){
+		for(let f in this.#forgeObjects){
+			for(let ff in this.#forgeObjects[f]){
+				this.#forgeObjects[f][ff].triggerTeamDisplay(team, bool);
+			}
+		}
+		for(let f in this.#forgeObjectsNotLinked){
+			for(let ff in this.#forgeObjectsNotLinked[f]){
+				this.#forgeObjectsNotLinked[f][ff].triggerTeamDisplay(team, bool);
 			}
 		}
 	}

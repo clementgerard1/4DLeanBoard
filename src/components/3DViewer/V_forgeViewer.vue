@@ -175,6 +175,11 @@ export default {
 			Memory.refresh();
 		},
 
+		setLayerDisplayed(layer, bool){
+			Memory.setLayerSelected(layer, bool);
+			Memory.refresh();
+		},
+
 		setTeamDisplayMode(bool){
 			Memory.setTeamDisplayMode(bool);
 			Memory.refresh();
@@ -221,6 +226,11 @@ export default {
 
 		triggerPhaseDisplay(phase, bool){
 			Memory.triggerPhaseDisplay(phase, bool);
+			Memory.refresh();
+		},
+
+		triggerTeamDisplay(team, bool){
+			Memory.triggerTeamDisplay(team, bool);
 			Memory.refresh();
 		},
 

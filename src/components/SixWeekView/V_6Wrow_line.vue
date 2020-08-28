@@ -17,6 +17,7 @@ export default {
 			"leaderEmail" : this.team.getBoss().getEmail(),
 			"leaderPhone" : this.team.getBoss().getPhone(),
 			"dates" : this.timeline.getStartEndDateByTeam(this.team),
+			"pressed" : false,
 		}
 	},
 	props: [
@@ -35,6 +36,12 @@ export default {
 			if(this.team.getId() == teamId && this.nth == nth){
 				this.$parent.teamDescription = bool;
 			}
+		},
+		trigger3DTeam : function(event){
+			const display = event.type == "press";
+			this.pressed = display;
+			V_socketUtils.triggerTeamDisplay(this.team , display);
+
 		}
 	},
 	inject : [
@@ -53,7 +60,7 @@ export default {
 	template : `
 
 		<div class="teamLine" v-bind:style="{ height : taskheight }">
-			<div v-if="nth == 0" class="teamAbr" v-tap="handleTap">
+			<div v-press="trigger3DTeam" v-if="nth == 0" class="teamAbr" v-tap="handleTap">
 				<p v-html="team.getAbr()"></p>
 			</div>
 			<div v-if="teamdescription" class="teamDescription">
