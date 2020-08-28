@@ -12,8 +12,10 @@ class V_TouchGesturesUtils{
 	}	
 
 	static destroy(domObj){
-		this.getHammer(domObj).destroy();
-		delete this.touchObjects[domObj.getAttribute("hammerid")];
+		if(this.getHammer(domObj) != null){
+			this.getHammer(domObj).destroy();
+			delete this.touchObjects[domObj.getAttribute("hammerid")];
+		}
 	}	
 
 	/**

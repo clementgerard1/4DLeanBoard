@@ -71,6 +71,7 @@ class V_socketUtils{
 			//Team Display
 			V_filterMenuUtils.setDisplayMenuChange(this.initDatas.teamdisplay);
 			V_4DUtils.setTeamDisplayMode(this.initDatas.teamdisplay == 2);
+			V_phasesUtils.setTeamDisplayMode(this.initDatas.teamdisplay == 2);
 			//Teams	
 			for(let d in this.initDatas.teamDisplayed){
 				V_filterMenuUtils.setTeamDisplayedById(d, this.initDatas.teamDisplayed[d]);
@@ -154,6 +155,7 @@ class V_socketUtils{
 		this.socket.on("updateDisplayMenu", (datas) => {
 			V_filterMenuUtils.setDisplayMenuChange(datas.choice);
 			V_4DUtils.setTeamDisplayMode(datas.choice == 2);
+			V_phasesUtils.setTeamDisplayMode(datas.choice == 2);
 		});
 
 		this.socket.on("clearHighlighting", (datas) => {
@@ -262,6 +264,7 @@ class V_socketUtils{
 	*/	
 	static setTeamDisplayMode(active){
 		V_4DUtils.setTeamDisplayMode(active);
+		V_phasesUtils.setTeamDisplayMode(active);
 		if(active){
 			V_filterMenuUtils.setDisplayMenuChange(2);
 		}else{
@@ -380,6 +383,16 @@ class V_socketUtils{
 		this.socket.emit("setPlanningDisplay", { 
 			choices : [milestone, phases, weeks, week]
 		});
+	}
+
+	/* ----------------------------- PHASE PANEL INTERACTION --------------------------- */
+	static triggerPhaseDisplay(phase, bool){
+		V_4DUtils.triggerPhaseDisplay(phase, bool);
+		this.socket.emit("triggerPhaseDisplay", { 
+			phaseId : phase.getId(),
+			value : bool
+		});
+
 	}
 
 }

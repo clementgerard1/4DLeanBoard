@@ -1,0 +1,53 @@
+@use "../SixWeekView/assets/variables" as v;
+
+.phaseBackground{
+	position : absolute;
+	z-index : -10;
+	top : 0px;
+	left : 0px;
+	width : 100%;
+	height : calc(100% + 30px);
+	display : flex;
+	padding-left : 34px;
+	padding-right : 34px;
+	div{
+		flex : 1;
+		margin:2px;
+		position : relative;
+		border-radius:3px;
+
+		p{
+			width : 100%;
+			position : absolute;
+			text-align: center;
+	    	font-family: Oswald;
+	    	font-size : 1em;
+			bottom : 0px;
+		}
+
+	}
+
+	.doneWeek{
+		background-color: rgba(0,0,0,0.05);
+	}
+
+	.nextWeek{
+		background: v.$white_transparent_reverse;
+	}
+
+	.w6Week{
+		background-color: rgba(255,255,255,0.3);
+	}
+
+	.dateActual{
+		color : v.$greenbluish_light;
+	}
+
+	.date6W{
+		color : black;
+	}
+
+	.dateOther{
+		color : rgba(0,0,0,0);
+	}
+}

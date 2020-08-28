@@ -5,7 +5,6 @@
 	position :relative;
 	display: flex;
 	align-items : center;
-	border-bottom : 1px solid rgba(0,0,0,0.1);
 	height: 37px;
 	pointer-events:initial;
 
@@ -33,6 +32,7 @@
 
 		font-family : Oswald;
 		font-size : 18px;
+		z-index:100;
 	}
 
 	.phaseItemNameLeft{
@@ -96,6 +96,16 @@
 	}
 }
 
-.phaseRow:nth-child(12), .phaseRow:nth-child(13){
-	border-bottom : 0px solid rgba(0,0,0,0.2);
+.phaseRow.pressed{
+	.phaseItemFilled, .phaseItemNotFilled{
+		background-color : v.$greenbluish_light;
+		color:black !important;
+		border-color : v.$greenbluish_light;
+	}
+	.phaseItem{
+		color : black !important;
+	}
+	.phaseItemNameRight, .phaseItemNameLeft{
+		color : v.$greenbluish_light !important;
+	}
 }

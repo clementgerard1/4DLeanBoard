@@ -21,6 +21,8 @@ class ForgeObject{
 	#selected;
 	#ifcVisible;
 	#started;
+	#phaseVisible;
+	#phasemode;
 
 	#constructionState;
 
@@ -42,6 +44,8 @@ class ForgeObject{
 		this.#timeState = -1;
 		this.#selected = false;
 		this.#ifcVisible = true;
+		this.#phaseVisible = true;
+		this.#phasemode = false;
 
 		this.#started = false;
 	}
@@ -192,13 +196,19 @@ class ForgeObject{
 	updateMaterial(){
 		const viewer = Memory.getViewer();
 		let visible = this.#ifcVisible;
-		if(visible && this.#teamDisplayed && !this.#teamSelected){
+		if((this.#teamDisplayed && !this.#teamSelected) || !this.#phaseVisible){
 			visible = false;
 		}
 
 		let constrType = 0;
 		if(this.#constructionState != null) constrType = this.#constructionState;
-		const styles = Memory.getSceneObject().getStyle(this.#timeState, constrType, this.#selected, visible, this.#filterMode);
+		let selected = false;
+		if(this.#phasemode){
+			selected = (this.#linked && this.#phaseVisible);
+		}else{
+			selected = this.#selected;
+		}
+		const styles = Memory.getSceneObject().getStyle(this.#timeState, constrType, selected, visible, this.#filterMode);
 
 		if(typeof styles != "undefined"){
 
@@ -303,6 +313,16 @@ class ForgeObject{
 
 	getObject3D(){
 		return this.#object3D;
+	}
+
+	triggerPhaseDisplay(phase, bool){
+		this.#phasemode = bool;
+		if(bool && (this.#object3D == null || this.#object3D.getParent().getPhase().getId() != phase.getId()) ) {
+			this.#phaseVisible = false;
+		}else{
+			this.#phaseVisible = true;
+		}
+		this.updateMaterial();
 	}
 
 }

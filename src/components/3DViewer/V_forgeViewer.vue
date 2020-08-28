@@ -144,9 +144,9 @@ export default {
 					const properties = objsSelected[o].getProperties();
 					for(let p in properties){
 						if(typeof properties[p].getInfo().displayValue == "undefined"){
-							console.log(properties[p].getName(), properties[p].getInfo());
+							//console.log(properties[p].getName(), properties[p].getInfo());
 						}else{
-							console.log(properties[p].getName(), properties[p].getInfo().displayValue);
+							//console.log(properties[p].getName(), properties[p].getInfo().displayValue);
 						}
 					}
 				}
@@ -217,6 +217,11 @@ export default {
 				});
 				Memory.setIfcTransparent(i, this.modelShown[i].shown);
 			}
+		},
+
+		triggerPhaseDisplay(phase, bool){
+			Memory.triggerPhaseDisplay(phase, bool);
+			Memory.refresh();
 		},
 
 		hackEdges(){

@@ -267,5 +267,18 @@ class Memory{
 	static refresh(){
 		this.#viewer.impl.invalidate(true);
 	}
+
+	static triggerPhaseDisplay(phase, bool){
+		for(let f in this.#forgeObjects){
+			for(let ff in this.#forgeObjects[f]){
+				this.#forgeObjects[f][ff].triggerPhaseDisplay(phase, bool);
+			}
+		}
+		for(let f in this.#forgeObjectsNotLinked){
+			for(let ff in this.#forgeObjectsNotLinked[f]){
+				this.#forgeObjectsNotLinked[f][ff].triggerPhaseDisplay(phase, bool);
+			}
+		}
+	}
 }
 export default Memory;

@@ -371,14 +371,14 @@ export default {
 	},
 	watch:{
 		time : function(){
-			if(this.task != null){
-				this.selected = V_taskTableUtils.isTokenOwner(this);
-				if(this.selected){
-					V_socketUtils.highlightObject4D(this.task.getObject4D(), true);
-				}
-			}else{
-				this.selected = null;
-			}
+			// if(this.task != null){
+			// 	this.selected = V_taskTableUtils.isTokenOwner(this);
+			// 	if(this.selected){
+			// 		V_socketUtils.highlightObject4D(this.task.getObject4D(), true);
+			// 	}
+			// }else{
+			// 	this.selected = null;
+			// }
 		},
 		ready : function(){
 			if(!this.ready){

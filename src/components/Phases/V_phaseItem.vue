@@ -1,5 +1,6 @@
 import "./V_phaseItem.scss";
 import scssVariables from "../SixWeekView/assets/_variables.scss";
+import V_socketUtils from "../Utils/V_socketUtils.class.js";
 
 export default {
 	data : function(){
@@ -8,6 +9,7 @@ export default {
 			scssvariables : scssVariables,
 			descriptionShown : false,
 			descriptionTimeout : null,
+			pressed : false,
 		};
 	},
 	props : [
@@ -15,7 +17,11 @@ export default {
 		'timeline',
 		'model',
 		'time',
-		'teamDisplayed'
+		'teamDisplayed',
+		"displayPhase"
+	],
+	provide : [
+		'timeline'
 	],
 	computed : {
 		left : function(){
@@ -110,39 +116,46 @@ export default {
 				this.descriptionShown = false;
 				this.descriptionTimeout = null;
 			}, 5000)
+		},
+		trigger3DPhase : function(event){
+			const display = event.type == "press";
+			this.pressed = display;
+			console.log(this.pressed);
+			V_socketUtils.triggerPhaseDisplay(this.phase , display);
+
 		}
 	},
 	mounted : function(){
 		this.mounted = true;
 	},
 	template : `
-	<div class="phaseRow" v-bind:id="'phaseDisplay-' + phase.getId()" >
+	<div class="phaseRow" v-bind:id="'phaseDisplay-' + phase.getId()" v-bind:class="[pressed ? 'pressed' : '']">
 		<div v-if="descriptionShown" class="phaseDescription">
 			<p v-html="descriptionText"></p>
 		</div>
 
 		<!-- PhasesFrame -->
-		<template v-if="isRight">
-			<div class="colorDiv" v-bind:style="{width : left}">
+		<template v-if="isRight" >
+			<div v-if="displayPhase" class="colorDiv" v-bind:style="{width : left}">
 				<div class="teamCircles">
 					<p v-for="team in teams" class="teamCircle" v-bind:style='[teamDisplayed[team.getId()] ? { opacity : 1, backgroundColor : scssvariables[team.getColorClass().replace("BG_", "").toLowerCase()] } : { opacity : 0.5, backgroundColor : scssvariables[team.getColorClass().replace("BG_", "").toLowerCase()] } ]'></p>
 				</div>
 			</div>
-			<p v-tap="handleDescription" class="phaseItem" v-bind:style="[(!(completion == '0%') && !(completion == '100%')) ? {left : left, width : width, color : scssvariables['greenbluish_light']} : {left : left, width : width, color : 'black' }]" v-html="completion"></p>
-			<p v-tap="handleDescription" class="phaseItemNameRight" v-bind:style="{ left : left}" v-html="phase.getName()"></p>
-			<div v-tap="handleDescription" v-if="!(completion == '0%')" v-bind:style="{ left : left, width : pourcent}" class="phaseItemFilled"></div>
-			<div v-tap="handleDescription" v-if="!(completion == '100%')" v-bind:style="{ left : lleft, width : antipourcent}" class="phaseItemNotFilled"></div>
+			<p v-press="trigger3DPhase" v-tap="handleDescription" class="phaseItem" v-bind:style="[(!(completion == '0%') && !(completion == '100%')) ? {left : left, width : width, color : scssvariables['greenbluish_light']} : {left : left, width : width, color : 'black' }]" v-html="completion"></p>
+			<p v-press="trigger3DPhase" v-tap="handleDescription" class="phaseItemNameRight" v-bind:style="{ left : left}" v-html="phase.getName()"></p>
+			<div v-press="trigger3DPhase" v-tap="handleDescription" v-if="!(completion == '0%')" v-bind:style="{ left : left, width : pourcent}" class="phaseItemFilled"></div>
+			<div v-press="trigger3DPhase" v-tap="handleDescription" v-if="!(completion == '100%')" v-bind:style="{ left : lleft, width : antipourcent}" class="phaseItemNotFilled"></div>
 		</template>
-		<template v-else="isRight">
-			<div class="colorDiv" v-bind:style="{width : left}">
+		<template v-else="isRight" v-bind:class="[pressed ? 'pressed' : '']">
+			<div v-if="displayPhase" class="colorDiv" v-bind:style="{width : left}">
 				<div class="teamCircles">
 					<p v-for="team in teams" class="teamCircle" v-bind:style='[teamDisplayed[team.getId()] ? { opacity : 1, backgroundColor : scssvariables[team.getColorClass().replace("BG_", "").toLowerCase()] } : { opacity : 0.5, backgroundColor : scssvariables[team.getColorClass().replace("BG_", "").toLowerCase()] } ]'></p>
 				</div>
 			</div>
-			<p v-tap="handleDescription" class="phaseItemNameLeft" v-bind:style="{ left : leftName}" v-html="phase.getName()"></p>
-			<p v-tap="handleDescription" class="phaseItem" v-bind:style="[(!(completion == '0%') && !(completion == '100%')) ? {left : left, width : width, color : scssvariables['greenbluish_light']} : {left : left, width : width, color : 'black' }]" v-html="completion"></p>
-			<div v-tap="handleDescription" v-if="!(completion == '0%')" v-bind:style="{ left : left, width : pourcent}" class="phaseItemFilled"></div>
-			<div v-tap="handleDescription" v-if="!(completion == '100%')" v-bind:style="{ left : lleft, width : antipourcent}" class="phaseItemNotFilled"></div>
+			<p v-press="trigger3DPhase" v-tap="handleDescription" class="phaseItemNameLeft" v-bind:style="{ left : leftName}" v-html="phase.getName()"></p>
+			<p v-press="trigger3DPhase" v-tap="handleDescription" class="phaseItem" v-bind:style="[(!(completion == '0%') && !(completion == '100%')) ? {left : left, width : width, color : scssvariables['greenbluish_light']} : {left : left, width : width, color : 'black' }]" v-html="completion"></p>
+			<div v-press="trigger3DPhase" v-tap="handleDescription" v-if="!(completion == '0%')" v-bind:style="{ left : left, width : pourcent}" class="phaseItemFilled"></div>
+			<div v-press="trigger3DPhase" v-tap="handleDescription" v-if="!(completion == '100%')" v-bind:style="{ left : lleft, width : antipourcent}" class="phaseItemNotFilled"></div>
 		</template>
 	</div>`,
 }

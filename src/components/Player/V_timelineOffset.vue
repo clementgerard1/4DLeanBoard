@@ -72,7 +72,7 @@ export default {
 	},
 	template : `
 	<div id="timelineOffset" class="timelineOffset">
-		<div v-press="handlePress" v-pan="handleOffsetChange" id="sixWeekSetter" v-bind:style="{left : (startWeekTime * (100 / nbWeeks+1)) + '%', width : ((100 / nbWeeks) * 6) + '%'}">
+		<div v-press="handlePress" v-pan="handleOffsetChange" id="sixWeekSetter" v-bind:style="{left : (startWeekTime * (100 / nbWeeks)) + '%', width : ((100 / nbWeeks) * 6) + '%'}">
 			<div v-bind:style="{backgroundColor : bgcolor}"></div>
 		</div>
 		<div id="sixWeekSelected" v-bind:style="{left : (startWeekTime * (100 / nbWeeks)) + '%', width : ((100 / nbWeeks) * 6) + '%'}">

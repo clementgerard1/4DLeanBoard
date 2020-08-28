@@ -139,5 +139,14 @@ class V_4DUtils{
 		}
 	}
 
+	static triggerPhaseDisplay(phase, bool){
+		if(this.viewer != null){
+			this.viewer.triggerPhaseDisplay(phase, bool);
+		}/*else{
+			this.waitViewer.ifcs = ifcs;
+			this.needInit = true;
+		}*/
+	}
+
 }
 export default V_4DUtils;

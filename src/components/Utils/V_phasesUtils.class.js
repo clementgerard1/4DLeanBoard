@@ -37,5 +37,11 @@ class V_phasesUtils{
 		}
 	}
 
+	static setTeamDisplayMode(bool){
+		for(let p in this.phasesPanel){
+			this.phasesPanel[p].displayMode(bool);
+		}
+	}
+
 }
 export default V_phasesUtils;

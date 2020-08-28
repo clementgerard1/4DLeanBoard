@@ -91,7 +91,7 @@ export default {
 		},
 		newheight : function(){
 			if(this.phasesDisplayed){
-				return 'calc(100vh - ' + ((parseInt(scssVariables["playerHeight"].replace("px", "")) / 2) + 6) + 'px - ' + ((this.nbPhases * 41) + 7) + 'px ) !important';
+				return 'calc(100vh - ' + ((parseInt(scssVariables["playerHeight"].replace("px", "")) / 2) + 6) + 'px - ' + ((this.nbPhases * 41) + 27) + 'px ) !important';
 			}else{
 				return 'calc(100vh - ' + scssVariables["playerHeight"] + ') !important';
 			}
