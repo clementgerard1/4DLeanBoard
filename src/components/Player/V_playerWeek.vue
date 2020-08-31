@@ -9,7 +9,8 @@ export default {
 	props:[
 		'innertime',
 		'time',
-		'offset'
+		'offset',
+		'highlightedpress'
 	],	
 	inject:[
 		"timeline",
@@ -45,6 +46,10 @@ export default {
 		// 		return 0.5;
 		// 	}
 		// }
+		highlightedP : function(){
+			if(this.highlightedpress.indexOf(this.innertime) != -1) return true;
+			return false;
+		}
 	},
 	data : function(){
 
@@ -56,7 +61,7 @@ export default {
 		}
 	},
 	template : `
-	<div class="playerWeek" v-bind:class='{selected : selected, hightlighted : highlighted, built : built, toBuild : tobuild }'>		
+	<div class="playerWeek" v-bind:class='{ presshighlighted :  highlightedP, selected : selected, hightlighted : highlighted, built : built, toBuild : tobuild }'>		
 		<p v-if="highlighted" v-html="weeknumber">
 		</p>
 

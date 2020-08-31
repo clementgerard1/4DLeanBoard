@@ -30,6 +30,11 @@
 	color : #808080;
 }
 
+.playerWeek.presshighlighted{
+	background-color : v.$greenbluish_light !important;
+	color : black !important;
+}
+
 .playerWeek.selected{
 	/*border: 2px solid v.$greenbluish_light;*/
 	/*background : v.$greenbluish_light !important;*/

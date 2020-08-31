@@ -19,7 +19,8 @@
 			display : flex;
 			justify-content: center;
 			align-items : center;
-			background: linear-gradient(180deg, #FFFFFF 0%, #EEEEEE 0%);
+			background: linear-gradient(180deg,  rgba(196, 196, 196, 0) 0%, #FFFFFF 100%);
+			backdrop-filter: blur(2px);
 
 			div{
 				margin : 10px;

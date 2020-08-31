@@ -43,5 +43,11 @@ class V_phasesUtils{
 		}
 	}
 
+	static highlightTask(task, display){
+		for(let p in this.phasesPanel){
+			this.phasesPanel[p].highlightTask(task, display);
+		}
+	}
+
 }
 export default V_phasesUtils;

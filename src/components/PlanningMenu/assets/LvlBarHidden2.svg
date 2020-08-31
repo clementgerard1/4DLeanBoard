@@ -1,0 +1,18 @@
+<svg width="320" height="32" viewBox="0 0 320 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g filter="url(#filter0_b)">
+<path v-tap="handleMenuOpen" d="M320 2C320 18.5685 306.569 32 290 32L30 32C13.4315 32 -1.17422e-06 18.5686 -2.62268e-06 2.00003L-2.79753e-06 2.79753e-05L320 0L320 2Z" fill="white"/>
+</g>
+<path v-tap="handleMenuOpen" d="M175 16L160 16L145 16" stroke="url(#paint0_linear)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<defs>
+<filter id="filter0_b" x="-10" y="-10" width="340" height="52" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feGaussianBlur in="BackgroundImage" stdDeviation="5"/>
+<feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur" result="shape"/>
+</filter>
+<linearGradient id="paint0_linear" x1="160" y1="16" x2="160" y2="16" gradientUnits="userSpaceOnUse">
+<stop stop-color="#D9D9D9"/>
+<stop offset="1" stop-color="#F7F7F7"/>
+</linearGradient>
+</defs>
+</svg>

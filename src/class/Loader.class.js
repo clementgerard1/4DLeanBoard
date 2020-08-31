@@ -907,6 +907,7 @@ class Loader{
 		const infos= {};
 
 		for(let t in tab){
+			//Properties
 			const relDef = /(IFCRELDEFINESBYPROPERTIES)\(([\(\) \-'_:$#A-Z0-9a-z]*),([\(\) \-'_:$#A-Z0-9a-z]*),([\(\) \-'_:$#A-Z0-9a-z]*),([\(\) \-'_:$#A-Z0-9a-z]*),([\(\) \-'_:$#A-Z0-9a-z]*),([\(\) \-'_:$#A-Z0-9a-z]*)\)/g;
 			const res1 = relDef.exec(tab[t]);
 			if(res1 != null){
@@ -985,6 +986,7 @@ class Loader{
 				}
 
 			}
+			
 		}
 
 		return JSON.stringify(infos);

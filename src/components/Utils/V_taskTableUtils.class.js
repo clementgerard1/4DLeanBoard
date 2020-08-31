@@ -118,6 +118,15 @@ class V_taskTableUtils{
 		@static
 	*/
 	static setToken(task, bool){
+
+		for(let tt in this.tokens){
+			for(let t in this.tasks){
+				if(this.tasks[t].task == this.tokens[tt].task && this.tasks[t].vTask != null){
+					this.tasks[t].vTask.setSelectedValue(false);
+				}
+			}
+		}
+
 		this.tokens = {};
 		if(bool){
 			this.tokens[task.getId()] = {

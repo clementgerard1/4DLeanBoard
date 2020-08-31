@@ -2,7 +2,7 @@ import "./V_planningMenu.scss";
 import V_socketUtils from "../Utils/V_socketUtils.class.js";
 import V_planningMenuUtils from "../Utils/V_planningMenuUtils.class.js";
 
-import PlanningBar from "./assets/PlanningBar.svg";
+import PlanningBar from "./assets/LvlBarHidden2.svg";
 
 import milestone from "./assets/Milestone.svg";
 import phases from "./assets/Phases.svg";

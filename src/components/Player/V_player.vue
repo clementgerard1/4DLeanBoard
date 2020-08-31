@@ -24,6 +24,7 @@ export default {
 				milestoneSelected : null,
 				startTimeout : null,
 				endTimeout : null,
+				highlighted : [],
 		}
 	},
 	created : function(){
@@ -83,6 +84,13 @@ export default {
 		},
 		watchOffset : function(offset){
 			this.offset = offset;
+		},
+		highlightTask : function(task, display){
+			if(display){
+				this.highlighted = this.timeline.getWeeks(task);
+			}else{
+				this.highlighted = [];
+			}
 		}
 	},
 	computed:{
@@ -115,7 +123,7 @@ export default {
 		<timelineOffset v-bind:offsettime="offset" v-bind:playerinit="_playerinit" v-bind:nbweek="nbweek" id="timelineOffset"></timelineOffset>
 		<div class="backgroundPlayer">
 			<div v-tap="handleStartButtonTap" id="startDateButton" class="date"><p class="r90">{{startdate}}</p></div>
-			<timelinePlayer v-bind:playerinit="_playerinit" v-bind:nbweek="nbweek" id="timelinePlayer"></timelinePlayer>
+			<timelinePlayer v-bind:highlighted="highlighted" v-bind:playerinit="_playerinit" v-bind:nbweek="nbweek" id="timelinePlayer"></timelinePlayer>
 			<div v-tap="handleEndButtonTap" id="endDateButton" class="date" ><p class="r90">{{enddate}}</p></div>
 		</div>
 		<playerinfos v-bind:displayM="displayM" v-bind:playerinit="_playerinit" class="svgPlayer" v-bind:nbweek="nbweek"></playerinfos>

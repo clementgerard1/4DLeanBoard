@@ -16,7 +16,8 @@ export default {
 		'nbweek',
 		"timeline",
 		"model",
-		"playerinit"
+		"playerinit",
+		"highlighted"
 	],
 	inject:[
 		"timeline",
@@ -38,8 +39,13 @@ export default {
 		V_timelineUtils.addListener("time", this, this.watchTime);
 		V_timelineUtils.addListener("offset", this, this.watchOffset);
 	},
+	computed : {
+		_highlighted : function(){
+			return this.highlighted;
+		}
+	},
 	template : `
 	<div class="timelinePlayer">
-		<playerweek class="week" v-bind:offset="offset" v-bind:time="time" v-for="i in nbweek" :key="i" v-bind:innertime="i-1" v-bind:id="i-1"></playerweek>
+		<playerweek v-bind:highlightedpress="_highlighted" class="week" v-bind:offset="offset" v-bind:time="time" v-for="i in nbweek" :key="i" v-bind:innertime="i-1" v-bind:id="i-1"></playerweek>
 	</div>`,
 }

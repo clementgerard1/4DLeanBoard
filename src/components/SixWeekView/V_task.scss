@@ -16,7 +16,12 @@
 	.selected{
 
 		div{
-			background-color : #00B9F6 !important;
+			background-color : v.$greenbluish_light  !important;
+
+			*{
+				color : black !important;
+			}
+
 		}
     	border-radius: 10px;
 	}
@@ -293,6 +298,7 @@
 
 			.taskHeader{
 				width : 100%;
+				pointer-events : initial;
 
 				div {
 

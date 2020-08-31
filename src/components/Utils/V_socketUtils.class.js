@@ -335,6 +335,8 @@ class V_socketUtils{
 
 	static pressHighlightTask(task , display){
 		V_taskTableUtils.highlightTask(task, display);
+		V_playerUtils.highlightTask(task, display);
+		V_phasesUtils.highlightTask(task, display);
 		this.socket.emit("pressHighlightTask", { 
 			taskId : task.getId(),
 			value : display

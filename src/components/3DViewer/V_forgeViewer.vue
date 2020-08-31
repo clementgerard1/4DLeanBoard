@@ -13,7 +13,7 @@ import Memory from "./class/Memory.class.js";
 import Tool from "./Tool.js";
 import Camera from "./class/Camera.class.js";
 
-import modelBar from "./assets/modelBar.svg";
+import modelBar from "./assets/LvlBarHidden2.svg";
 
 
 export default {
@@ -117,8 +117,8 @@ export default {
 				}
 			}
 			if(selection.length != 0){
-				this.scene.getViewer().clearSelection();
 				this.clearSelection();
+				this.scene.getViewer().clearSelection();
 				for(let s in selection){
 					const dbId = selection[s].selection;
 					const model = selection[s].model;
@@ -162,7 +162,7 @@ export default {
 					Memory.select(fobjs[f], bool);
 				}
 			}
-			Memory.refresh();
+			this.setSelectDisplayMode(bool);
 		},
 
 		clearSelection(){
@@ -182,6 +182,11 @@ export default {
 
 		setTeamDisplayMode(bool){
 			Memory.setTeamDisplayMode(bool);
+			Memory.refresh();
+		},
+
+		setSelectDisplayMode(bool){
+			Memory.setSelectDisplayMode(bool);
 			Memory.refresh();
 		},
 

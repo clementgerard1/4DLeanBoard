@@ -39,6 +39,7 @@ export default {
 			teamDisplayStatus : teamDisplayStatus,
 			displayPhase : false,
 			offset : 0,
+			highlighted : [],
 		}
 	},
 	computed : {
@@ -114,6 +115,13 @@ export default {
 		},
 		setTime : function(time){
 			V_socketUtils.setTime(time);
+		},
+		highlightTask(task, display){
+			if(display){
+				this.highlighted = this.timeline.getWeeks(task);
+			}else{
+				this.highlighted = [];
+			}
 		}
 
 
@@ -126,7 +134,7 @@ export default {
 	template : `
 	<div v-if="isDisplayed" id="phaseF" v-bind:style="{ height : ((phases.length * 36) + 7) + 'px' }">
 		<!-- PhasesFrame -->
-		<phasesbackground v-bind:offset="offset" v-bind:time="time" v-bind:duration="duration"></phasesbackground>
+		<phasesbackground v-bind:highlighted="highlighted" v-bind:offset="offset" v-bind:time="time" v-bind:duration="duration"></phasesbackground>
 		<div class="playerLineWrapper">
 			<div v-pan="handlePan" class="playerLine" v-bind:style="{ left : playerWidth, width : width2, height : ((phases.length - 1) * 41 + 23) + 'px'}"></div>
 		</div>

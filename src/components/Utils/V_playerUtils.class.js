@@ -13,5 +13,11 @@ class V_playerUtils{
 		}
 	}
 
+	static highlightTask(task, display){
+		for(let p in this.players){
+			this.players[p].highlightTask(task, display);
+		}
+	}
+
 }
 export default V_playerUtils;

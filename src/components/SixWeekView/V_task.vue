@@ -556,13 +556,14 @@ export default {
 
 		},
 		handleTap: function(event){
-			if(!this.constraintTap){
-				if(this.task != null){
-					V_socketUtils.highlightObject4D(this.task.getObject4D(), !this.selected);
-				}
-			}else{
-				this.constraintTap = false;
+			const display = event.type == "press";
+			// if(!this.constraintTap){
+			if(this.task != null){
+				V_socketUtils.highlightObject4D(this.task.getObject4D(), display);
 			}
+			// }else{
+			// 	this.constraintTap = false;
+			// }
 		},
 		handleReadyTap: function(event){
 			this.constraintTap = true;
@@ -893,42 +894,47 @@ export default {
 			}
 
 
+		},
+		handleOpen(){
+			if(!this.isOpen){
+				this.$parent.isOpen = true;
+			}
 		}
 
 	},
 
 	template : `
-	<div class="taskWrapper" v-bind:class='wrapclass' v-bind:style="[!isOpen ? { pointerEvents : 'none'} : {}]">
+	<div v-tap="handleOpen" class="taskWrapper" v-bind:class='wrapclass'>
 		<div class="task">
 			
-			<div v-if="notEmpty" v-doubletap="handleTap" v-bind:id="_uid + '-task'" >
+			<div v-if="notEmpty" v-bind:id="_uid + '-task'" v-bind:style="[!isOpen ? { pointerEvents : 'none'} : {}]">
 
-				<div class="taskHeader" v-bind:style="{ height : headerheight }">
+				<div v-press="handleTap" class="taskHeader" v-bind:style="{ height : headerheight }">
 					<div>
 						
 						<!-- calendar face -->
 						<div v-if="calFace" v-bind:style="{backgroundColor : headercolors.body, borderColor : headercolors.border}" >
-							<p v-tap="handleIdTap" v-bind:style="{ color : idcolor }" v-html="'#' + task.getId()"></p>
+							<p v-doubletap="()=>{}" v-tap="handleIdTap" v-bind:style="{ color : idcolor }" v-html="'#' + task.getId()"></p>
 						</div>
 
 						<!-- description face -->
 						<div v-else-if="descriptionFace" v-bind:style="{backgroundColor : headercolors.body, borderColor : headercolors.border}" >
-							<p v-tap="handleIdTap" v-bind:style="{ color : idcolor }" v-html="'#' + task.getId()"></p>
+							<p v-doubletap="()=>{}" v-tap="handleIdTap" v-bind:style="{ color : idcolor }" v-html="'#' + task.getId()"></p>
 						</div>
 						<!-- lps face -->
 						<div v-else-if="lpsFace" v-bind:style="{backgroundColor : headercolors.body, borderColor : headercolors.border}" >
-							<p v-tap="handleIdTap" v-bind:style="{ color : idcolor }" v-html="'#' + task.getId()"></p>
-							<p v-tap="handleLpsTap" v-html="tasksSVG2">` + `</p>
+							<p v-doubletap="()=>{}" v-tap="handleIdTap" v-bind:style="{ color : idcolor }" v-html="'#' + task.getId()"></p>
+							<p v-doubletap="()=>{}" v-tap="handleLpsTap" v-html="tasksSVG2">` + `</p>
 						</div>
 						<!-- id face -->
 						<div v-else-if="idFace" v-bind:style="{backgroundColor : headercolors.body, borderColor : headercolors.border}" >
-							<p v-tap="handleIdTap" v-bind:style="{ color : idcolor }" v-html="'#' + task.getId()"></p>
-							<p v-bind:id="'lpsRequirements-' + _uid" v-tap="handleLpsTap" v-html="tasksSVG"></p>
+							<p v-doubletap="()=>{}" v-tap="handleIdTap" v-bind:style="{ color : idcolor }" v-html="'#' + task.getId()"></p>
+							<p v-doubletap="()=>{}" v-bind:id="'lpsRequirements-' + _uid" v-tap="handleLpsTap" v-html="tasksSVG"></p>
 						</div>
 						<!-- home face -->
 						<div v-else v-bind:style="{backgroundColor : headercolors.body, borderColor : headercolors.border}" >
-							<p v-tap="handleIdTap"v-bind:style="{ color : idcolor }" v-html="'#' + task.getId()"></p>
-							<p v-tap="handleLpsTap" v-html="tasksSVG"></p>
+							<p v-doubletap="()=>{}" v-tap="handleIdTap"v-bind:style="{ color : idcolor }" v-html="'#' + task.getId()"></p>
+							<p v-doubletap="()=>{}" v-tap="handleLpsTap" v-html="tasksSVG"></p>
 						</div>
 
 
@@ -939,7 +945,7 @@ export default {
 				<div v-if="isOpen" class="taskContent" v-bind:style="{ height : (taskHeight - parseFloat(headerheight.replace('px', '')))  + 'px'}">
 					
 					<!-- calendar face -->
-					<div v-if="calFace" class="calendarFaceFrame">
+					<div v-press="handleTap" v-if="calFace" class="calendarFaceFrame">
 						<div class="calendarFaceContent">
 							<p>Début : <span v-html="task.getStartDate().getDate() + ' ' + getMonthAbr(task.getStartDate().getMonth()) + ' ' + task.getStartDate().getFullYear()" ></span></p>
 							<div class="calendarWeek">
@@ -953,32 +959,32 @@ export default {
 						<!--footer-->
 						<div class="calendarFaceFooter">
 							<p v-bind:style="{ backgroundColor : svgcolor}" >-</p>
-							<p  v-tap="handleCalendarTap"><span>` + calendarIcon + `</span><span v-html="task.getDuration()"></span></p>
+							<p v-doubletap="()=>{}"  v-tap="handleCalendarTap"><span>` + calendarIcon + `</span><span v-html="task.getDuration()"></span></p>
 							<p v-bind:style="{ backgroundColor : svgcolor}" >+</p>
 						</div>
 					</div>
 
-					<!-- description face -->
-					<div v-tap="handleDescriptionTap" v-else-if="descriptionFace" class="descriptionFaceFrame">
+					<!-- v-press="handleTap" description face -->
+					<div v-doubletap="()=>{}" v-tap="handleDescriptionTap" v-else-if="descriptionFace" class="descriptionFaceFrame">
 						<div><p v-html="task.getDescription()"></p></div>
 					</div>
 
 					<!-- lps face -->
-					<div v-else-if="lpsFace" class="lpsFaceFrame">
+					<div v-press="handleTap" v-else-if="lpsFace" class="lpsFaceFrame">
 						<div>` + arrowL + `<p v-html="lpsList[lpsIndex]"></p>` + arrowR + `</div>
 					</div>
 
 					<!-- id face -->
-					<div v-else-if="idFace" class="idFaceFrame">
-						<div id="goIcon" class="icon"><p v-tap="handleGoTap">` + goIcon + `Launch</p></div>
-						<div id="doneIcon" class="icon"><p v-tap="handleDoneTap">` + doneIcon + `Done</p></div>
-						<div id="pauseIcon" class="icon"><p v-tap="handlePauseTap">` + pauseIcon + `Pause</p></div>
+					<div v-press="handleTap" v-else-if="idFace" class="idFaceFrame">
+						<div id="goIcon" class="icon"><p v-doubletap="()=>{}" v-tap="handleGoTap">` + goIcon + `Launch</p></div>
+						<div id="doneIcon" class="icon"><p v-doubletap="()=>{}" v-tap="handleDoneTap">` + doneIcon + `Done</p></div>
+						<div id="pauseIcon" class="icon"><p v-doubletap="()=>{}" v-tap="handlePauseTap">` + pauseIcon + `Pause</p></div>
 					</div>
 
 					<!-- home face -->
 					<div v-else>
 						<div v-if="taskname != ''">
-							<div v-tap="handleDescriptionTap" class="main" v-bind:style="{ height : ((taskHeight - parseFloat(headerheight.replace('px', ''))) * 0.7)  + 'px'}">
+							<div v-press="handleTap" v-doubletap="()=>{}" v-tap="handleDescriptionTap" class="main" v-bind:style="{ height : ((taskHeight - parseFloat(headerheight.replace('px', ''))) * 0.7)  + 'px'}">
 								<p class="taskDescription" v-html="taskname"></p>
 							</div>
 							<div class="footer" v-bind:style="{ height : ((taskHeight - parseFloat(headerheight.replace('px', ''))) * 0.3)  + 'px'}">
@@ -993,8 +999,8 @@ export default {
 								</svg>
 								</p>
 
-								<p v-tap="handleCalendarTap">` + calendarIcon + `<span v-html="dr"></span></p>
-								<p>` + manIcon + `<span v-html="mn"></span></p>
+								<p v-press="handleTap" v-doubletap="()=>{}" v-tap="handleCalendarTap">` + calendarIcon + `<span v-html="dr"></span></p>
+								<p v-press="handleTap">` + manIcon + `<span v-html="mn"></span></p>
 							</div>
 						</div>
 					</div>

@@ -457,6 +457,18 @@ export default {
 				</pattern>
 				<image id="image0_layers" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAABKklEQVRIie3VsUoDQRCA4S8SRAQRUUEbQfAVtFFBsNHCVqwkr5DSN/AVbO2sbSystPIVNBbGVkW0EBSMhUcSLhduc7dBi/wwzXIz/+wuO8eIEb2Mo477JOrJ2lDZwx1aqXjAISqxhWu4yhCm4wabMYRLOMV3gLQ7zrFSRDiDY3wMKOyOT5xgPlS6jeecomeYTb7Pa+AlqZlLI6fQGxZ07jJk940QcV6RLzzhaABxKy0ZC+kkRVXnmAtTRByFPxNnTZqe+xiGK2vHUSZPivX0QpY4+rzN8vyrow4tUvH7tFZxW7IphA+DGi4wh/3AnDZlntMitjCN9xJ12oTueAKTmMJlYE4U8QGu8TpATptqSCd9WMZGifweHhX/+feLZoh4N7K8iZ1iZzAiAj+YMtKeFKcbvQAAAABJRU5ErkJggg=="/>
 
+				<filter id="filter0_b_lvlBar2" x="-10" y="-10" width="340" height="52" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+				<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+				<feGaussianBlur in="BackgroundImage" stdDeviation="5"/>
+				<feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur"/>
+				<feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur" result="shape"/>
+				</filter>
+
+				<linearGradient id="paint0_linear_lvlBar2" x1="160" y1="32" x2="160" y2="1.39876e-05" gradientUnits="userSpaceOnUse">
+				<stop stop-color="white"/>
+				<stop offset="1" stop-color="white" stop-opacity="0"/>
+				</linearGradient>
+
 			</defs>
 		</svg>
 

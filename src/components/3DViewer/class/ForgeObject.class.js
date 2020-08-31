@@ -26,6 +26,7 @@ class ForgeObject{
 	#teamVisible;
 	#phasemode;
 	#teammode;
+	#selectmode;
 
 	#constructionState;
 
@@ -51,6 +52,7 @@ class ForgeObject{
 		this.#phaseVisible = true;
 		this.#phasemode = false;
 		this.#teammode = false;
+		this.#selectmode = false;
 		this.#teamVisible = true;
 
 		this.#started = false;
@@ -209,10 +211,12 @@ class ForgeObject{
 		}
 	}
 
+
+
 	updateMaterial(){
 		const viewer = Memory.getViewer();
 		let visible = this.#ifcVisible;
-		if((this.#teamDisplayed && !this.#teamSelected) || !this.#phaseVisible || !this.#teamVisible){
+		if((this.#teamDisplayed && !this.#teamSelected) || !this.#phaseVisible || !this.#teamVisible || (this.#selectmode && !this.#selected)){
 			visible = false;
 		}
 
@@ -222,13 +226,13 @@ class ForgeObject{
 		let filterMode = this.#filterMode;
 		if(this.#phasemode){
 			selected = (this.#linked && this.#phaseVisible);
-		}else{
-			selected = this.#selected;
 		}
 		if(this.#teammode){
 			selected = (this.#linked && this.#teamVisible);
 			filterMode = "teamMaterial";
-		}else{
+		}
+
+		if(this.#selectmode){
 			selected = this.#selected;
 		}
 		const styles = Memory.getSceneObject().getStyle(this.#timeState, constrType, selected, visible, filterMode);
@@ -355,6 +359,11 @@ class ForgeObject{
 		}else{
 			this.#teamVisible = true;
 		}
+		this.updateMaterial();
+	}
+
+	isSelectDisplayed(bool){
+		this.#selectmode = bool;
 		this.updateMaterial();
 	}
 

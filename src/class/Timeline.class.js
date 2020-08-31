@@ -591,6 +591,16 @@ class Timeline{
 		return tasks.indexOf(task);
 	}
 
+	getWeeks(task){
+		const toReturn = [];
+		const start = this.getTime(task.getStartDate());
+		const end = this.getTime(task.getEndDate());
+		for(let i = start; i <= end ; i++){
+			if(typeof toReturn[Math.trunc(i / 7)] == "undefined") toReturn.push(Math.trunc(i / 7));
+		}
+		return toReturn;
+	}
+
 }
 
 export default Timeline;

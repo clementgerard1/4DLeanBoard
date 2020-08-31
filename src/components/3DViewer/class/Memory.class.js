@@ -12,6 +12,7 @@ class Memory{
 	static #forgeObjectsNotLinked = {};
 	static #teamDisplay = false;
 	static #layerDisplay = false;
+	static #selectDisplay = false;
 	static #teamSelected = {};
 	static #layerSelected = {};
 	static nbModels = 0;
@@ -206,6 +207,22 @@ class Memory{
 			for(let f in this.#forgeObjectsNotLinked){
 				for(let ff in this.#forgeObjectsNotLinked[f]){
 					this.#forgeObjectsNotLinked[f][ff].isTeamDisplayed(bool);
+				}
+			}
+		}
+	}
+
+	static setSelectDisplayMode(bool){
+		if(this.#selectDisplay != bool){
+			this.#selectDisplay = bool;
+			for(let f in this.#forgeObjects){
+				for(let ff in this.#forgeObjects[f]){
+					this.#forgeObjects[f][ff].isSelectDisplayed(bool);
+				}
+			}
+			for(let f in this.#forgeObjectsNotLinked){
+				for(let ff in this.#forgeObjectsNotLinked[f]){
+					this.#forgeObjectsNotLinked[f][ff].isSelectDisplayed(bool);
 				}
 			}
 		}

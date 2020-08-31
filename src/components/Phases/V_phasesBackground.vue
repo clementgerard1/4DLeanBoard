@@ -15,7 +15,8 @@ export default {
 	props:[
 		"time",
 		"duration",
-		"offset"
+		"offset",
+		"highlighted"
 	],
 	inject:[
 		"timeline"
@@ -47,10 +48,16 @@ export default {
 		},
 		getNbWeek : function(n){
 			return Utils.getWeekNumber(this.timeline.getDateObject(n * 7));
+		},
+		isHighlighted : function(n){
+			if(this.highlighted.indexOf(n) != -1) return true;
+			return false;
 		}
+
+		
 	},
 	template : `
 	<div class="phaseBackground">
-		<div v-for="n in weeks" v-bind:class="getClass(n)"><p v-bind:class="getDateClass(n)" v-html="getNbWeek(n)"></p></div>
+		<div v-for="n in weeks" v-bind:class="[isHighlighted(n) ? 'highlight ' + getClass(n) : getClass(n)]"><p v-bind:class="getDateClass(n)" v-html="getNbWeek(n)"></p></div>
 	</div>`,
 }

@@ -106,7 +106,7 @@ export default {
 	<div v-if="teamDisplayed" class="phaserow" v-bind:style="[ isVisible ? { paddingBottom : (parseFloat(headerHeight.replace('px', '')) / 3)+ 'px' } : {paddingBottom : '0px' }]">
 
 		<!-- line -->
-		<taskline v-show="isVisible" class="phaseLine" v-bind:taskheight="headerHeight" v-tap="handleOpenPhase" v-bind:time="_time" v-bind:nth="_nth" v-bind:team="_team" v-bind:class="color" v-bind:teamdescription="teamDescription" v-bind:style='zIndex'></taskline>
+		<taskline v-show="isVisible" class="phaseLine" v-bind:taskheight="headerHeight" v-doubletap="()=>{}" v-tap="handleOpenPhase" v-bind:time="_time" v-bind:nth="_nth" v-bind:team="_team" v-bind:class="color" v-bind:teamdescription="teamDescription" v-bind:style='zIndex'></taskline>
 
 		<!-- tasks -->
 		<div v-show="isVisible" class="tasksWrapper" v-bind:style="{ top : '-' + headerHeight, marginBottom : '-' + headerHeight} ">
