@@ -23,5 +23,17 @@
 		}
 	}
 
+	#modifyPhaseButton{
+		width : 24px;
+		height : 24px;
+		background-color :white;
+		z-index: 500;
+		position : absolute;
+		left: 0px;
+		pointer-events : initial;
+		bottom: -30px;
+		border-radius: 5px;
+	}
+
 
 }

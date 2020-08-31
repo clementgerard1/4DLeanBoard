@@ -117,6 +117,37 @@ function init(){
 		}
 	});
 
+	Vue.directive("doublepress", {
+		bind: function(el, binding) 
+		{
+			if(el.getAttribute("hammerid") == null){
+				el.setAttribute("hammerid", Utils.getId("hammer"));
+			}
+			if (typeof binding.value === "function") {
+				let hammer = TouchGesturesUtils.getHammer(el);
+				if(hammer == null){
+					hammer = new Hammer(el);
+					TouchGesturesUtils.addHammer(el, hammer);
+				} 
+
+				const doubleTap = new Hammer.Tap(
+					{event: 'doublepress', pointers : 2}
+				);
+				doubleTap.recognizeWith(hammer.recognizers)
+				hammer.add(doubleTap);
+				hammer.on("tap2", binding.value);
+
+				hammer.on("press", binding.value);
+				hammer.on("pressup", binding.value);
+
+				TouchGesturesUtils.updateHammer(el);
+			}
+		},
+		unbind: function(el, binding){
+			TouchGesturesUtils.destroy(el);
+		}
+	});
+
 	Vue.directive("pan", {
 		bind: function(el, binding) 
 		{
