@@ -20,14 +20,23 @@ export default {
 	],
 	computed:{
 		lineplayed : function(){
+			this.handleResize();
 			return (this.time - this.tasktablestart) + 1;
 		}
 	},
 	methods:{
 		handleResize : function(){
-			const heightOpened = this.tasksize + 30;
-			this.heightcolumn =  (this.nbopened * heightOpened + this.nbclosed * (heightOpened * (scssVariables.taskHeightClosedPourcent.replace("%", "") / 100))) + 30;
-			this.minheightcolumn = "calc(100vh - " + (2 * heightOpened) + "px)";
+			const elems = document.getElementsByClassName("phaserow");
+			let toReturn = 0;
+			for(let e in elems){
+				if(typeof elems[e] == "object"){
+					toReturn += elems[e].clientHeight;
+					if(elems[e].style.height != "0px"){
+						toReturn += 17;
+					}
+				}
+			}
+			this.heightcolumn = toReturn;
 			/*padding-top : v.$taskSize;
 			padding-bottom : v.$taskSize;*/
 		},
@@ -54,6 +63,6 @@ export default {
 	},
 	template : `
 	<div>
-		<div v-for="c in 6" :key="c" v-bind:class='[c == lineplayed ? "played" : "", "backgroundcolumn"]' v-tap="()=>{handleTap(c)}" v-bind:style="{ height : heightcolumn + 'px', minHeight : minheightcolumn}"></div>
+		<div v-for="c in 6" :key="c" v-bind:class='[c == lineplayed ? "played" : "", "backgroundcolumn"]' v-tap="()=>{handleTap(c)}" v-bind:style="{ height : heightcolumn + 'px'}"></div>
 	</div>`,
 }

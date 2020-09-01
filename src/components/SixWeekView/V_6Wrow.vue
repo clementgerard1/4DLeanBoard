@@ -28,7 +28,8 @@ export default {
 		"taskteam",
 		"tasktablestart",
 		"nth",
-		"tasksize"
+		"tasksize",
+		"ifcProperties"
 	],
 	inject :[
 		"timeline",
@@ -99,18 +100,36 @@ export default {
 			if(elem != null){
 				this.headerHeight = (elem.clientWidth / 40) + "px";
 			}
+		},
+		getProperties(task){
+			if(task != null){
+				const toReturn = [];
+				const objs = task.getObject4D().getObjects3D();
+				for(let o in objs){
+					const obj = objs[o];
+					const properties = this.ifcProperties[obj.getIFCId()];
+					for(let p in properties){
+						if(properties[p][0][1] == "'Renovation Status'"){
+							if(toReturn.indexOf(properties[p][0][2]) == -1) toReturn.push(properties[p][0][2]); 
+						} 
+					}
+				}
+				return toReturn;
+			}else{
+				return null;
+			}
 		}
 	}
 	,
 	template : `
-	<div v-if="teamDisplayed" class="phaserow" v-bind:style="[ isVisible ? { paddingBottom : (parseFloat(headerHeight.replace('px', '')) / 3)+ 'px' } : {paddingBottom : '0px' }]">
+	<div v-if="teamDisplayed" class="phaserow" v-bind:style="[ isVisible ? { paddingBottom : (parseFloat(headerHeight.replace('px', '')) / 3)+ 'px' } : {paddingBottom : '0px', height : '0px' }]">
 
 		<!-- line -->
 		<taskline v-show="isVisible" class="phaseLine" v-bind:taskheight="headerHeight" v-doubletap="()=>{}" v-tap="handleOpenPhase" v-bind:time="_time" v-bind:nth="_nth" v-bind:team="_team" v-bind:class="color" v-bind:teamdescription="teamDescription" v-bind:style='zIndex'></taskline>
 
 		<!-- tasks -->
 		<div v-show="isVisible" class="tasksWrapper" v-bind:style="{ top : '-' + headerHeight, marginBottom : '-' + headerHeight} ">
-			<task v-bind:headerheight="headerHeight" v-bind:color="color" v-bind:team="_team" nth=0 v-for="(task, i) in tasks.array" :key="i" v-bind:isopen="isOpen" v-bind:task="task" v-bind:isOpen="isOpen" v-bind:time="_tasktablestart + i"  ></task>
+			<task v-bind:headerheight="headerHeight" v-bind:color="color" v-bind:team="_team" nth=0 v-for="(task, i) in tasks.array" :key="i" v-bind:properties="getProperties(task)" v-bind:isopen="isOpen" v-bind:task="task" v-bind:isOpen="isOpen" v-bind:time="_tasktablestart + i"  ></task>
 		</div>
 
 		<!-- button -->

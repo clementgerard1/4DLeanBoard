@@ -336,7 +336,7 @@ function init(){
 	 			</div>
 	 			<div v-if="forgeReady" id="planningFrame">
 	 				<planningmenu></planningmenu>
-	 				<tasktableframe v-if="modelSelected" id="taskTableFrame" v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit" v-bind:duration="duration"></tasktableframe>
+	 				<tasktableframe v-bind:ifcProperties="ifcProperties" v-if="modelSelected" id="taskTableFrame" v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit" v-bind:duration="duration"></tasktableframe>
 	 				<phasesdisplay  v-bind:model="model" v-bind:timeline="timeline" class="phasesFrame" v-bind:duration="duration"></phasesdisplay>
 	 				<player id="mainPlayer" v-bind:duration="duration" v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit"></player>
 	 			</div>

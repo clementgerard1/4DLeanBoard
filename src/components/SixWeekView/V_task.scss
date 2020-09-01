@@ -79,6 +79,81 @@
 
 				.descriptionFaceFrame{
 					height: 100%;
+					font-family: Oswald;
+					font-style: normal;
+					font-weight: 500;
+					font-size: 0.9rem;
+					padding-left : 5%;
+					padding-right : 5%;
+
+					.descriptionTask{
+						height : 80%;
+					}
+
+					.descriptionInfos{
+						position : relative;
+						display : flex;
+						bottom : 0px;
+						margin-bottom : 10px;
+						font-size: 0.7rem;
+					
+						p{
+							position : absolute;
+						}
+
+						p:first-child{
+							left : 0px;
+						}
+
+						p:last-child{
+							right : 0px
+						}
+					}
+
+					.descriptionTitle{
+						font-family: Roboto Condensed;
+						font-style: italic;
+						font-weight: normal;
+						font-size: 0.9rem;
+						padding-top : 10px;
+						word-break: break-all;
+					}
+
+				}
+
+
+				.manFaceFrame{
+					height : 100%;
+					.body{
+						overflow-y: scroll;
+						overflow-x: hidden;
+
+						span{
+							display : inline-block;
+							white-space: nowrap;
+							font-family: Roboto;
+							font-style: italic;
+							font-weight: normal;
+							font-size: 0.75rem;
+						}
+
+						.checkbox{
+							width : 10px;
+							height : 10px;
+							background-color : red;
+						}
+
+					}
+
+					.footer{
+						position : absolute;
+						bottom : 0px;
+						display : flex;
+						
+						>*{
+							flex: 1;
+						}
+					}
 				}
 
 				.calendarFaceFrame{
