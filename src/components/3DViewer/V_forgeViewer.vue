@@ -24,7 +24,10 @@ export default {
 			playerinit : null,
 			offset : null,
 			menuopen : false,
-			modelShown : []
+			modelShown : [],
+			nextCameraUpdate : false,
+			cameraTimeout : null,
+			infosBeforeView : null,
 		}
 	},
 	props : [
@@ -100,6 +103,8 @@ export default {
 				// 	this.select(tasks[t].getObject4D(), true);
 				// }
 
+				this.setTime(this.time);
+
 				Memory.refresh();
 
 			}
@@ -155,14 +160,71 @@ export default {
 		},
 
 		select(object4D, bool){
+			const toFit = [];
 			const objs = object4D.getObjects3D();
 			for(let o in objs){
 				const fobjs = objs[o].getForgeObjects();
 				for(let f in fobjs){
 					Memory.select(fobjs[f], bool);
+					let temp = null;
+					for(let t in toFit){
+						if(toFit[t].model.id == fobjs[f].getModel().id) temp = t;
+					}
+					if(temp == null){
+						toFit.push({
+							model : fobjs[f].getModel(),
+							selection : [fobjs[f].getId()]
+						});
+					}else{
+						toFit[temp].selection.push(fobjs[f].getId());
+					}
 				}
 			}
 			this.setSelectDisplayMode(bool);
+			
+
+			this.nextCameraUpdate = true;
+			if(bool){
+				this.infosBeforeView = {
+						position : {
+							x : this.scene.getViewer().autocamCamera.position.x,
+							y : this.scene.getViewer().autocamCamera.position.y,
+							z : this.scene.getViewer().autocamCamera.position.z,
+						},
+						target : {
+							x : this.scene.getViewer().autocamCamera.target.x,
+							y : this.scene.getViewer().autocamCamera.target.y,
+							z : this.scene.getViewer().autocamCamera.target.z,
+						},
+						up : {
+							x : this.scene.getViewer().autocamCamera.up.x,
+							y : this.scene.getViewer().autocamCamera.up.y,
+							z : this.scene.getViewer().autocamCamera.up.z,
+						},
+						pivot :{
+							x : this.scene.getViewer().autocamCamera.pivot.x,
+							y : this.scene.getViewer().autocamCamera.pivot.y,
+							z : this.scene.getViewer().autocamCamera.pivot.z,
+						},
+						world :{
+							x : this.scene.getViewer().autocamCamera.worldup.x,
+							y : this.scene.getViewer().autocamCamera.worldup.y,
+							z : this.scene.getViewer().autocamCamera.worldup.z,
+						}
+					}
+				this.scene.getViewer().utilities.autocam.shotParams.duration = 0;
+				requestAnimationFrame(()=>{
+					this.scene.getViewer().utilities.autocam.shotParams.duration = 2;
+					this.scene.getViewer().impl.fitToView(toFit, false);
+				})
+			}else{
+				this.scene.getViewer().utilities.autocam.shotParams.duration = 0;
+				requestAnimationFrame(()=>{
+					this.scene.getViewer().utilities.autocam.shotParams.duration = 2;
+					this.scene.getViewer().utilities.transitionView(new THREE.Vector3(this.infosBeforeView.position.x, this.infosBeforeView.position.y, this.infosBeforeView.position.z), new THREE.Vector3(this.infosBeforeView.target.x, this.infosBeforeView.target.y, this.infosBeforeView.target.z), this.scene.getViewer().autocamCamera.fov, new THREE.Vector3(this.infosBeforeView.up.x, this.infosBeforeView.up.y, this.infosBeforeView.up.z), new THREE.Vector3(this.infosBeforeView.world.x, this.infosBeforeView.world.y, this.infosBeforeView.world.z), false, new THREE.Vector3(0, 0, 0));
+				})
+			}
+			
 		},
 
 		clearSelection(){
@@ -192,6 +254,36 @@ export default {
 
 		setTime(time){
 			this.playerinit = time;
+			const tasks = this.timeline.getTasksBetweenTwoDates(time * 7, time * 7 + 6);
+			const zones = [];
+			let camera = null;
+			for(let t in tasks){
+				if(camera == 1) break;
+				switch (tasks[t].getZone().getValue()){
+					case "A, B, C, D" : camera = 1;
+										break;
+					case "A" : 	if(camera != null && camera != 2){camera = 1; break};
+							camera = 2;
+							break;
+					case "B" : 	if(camera != null && camera != 3){camera = 1; break};
+							camera = 3;
+							break;
+					case "C" : 	if(camera != null && camera != 4){camera = 1; break};
+							camera = 4;
+							break;
+					case "D" : 	if(camera != null && camera != 5){camera = 1; break};
+							camera = 5;
+							break;
+
+				}
+			}
+			if(camera == null) camera = 0;
+			this.scene.getViewer().utilities.autocam.shotParams.duration = 0;
+			requestAnimationFrame(()=>{
+				this.scene.getViewer().utilities.autocam.shotParams.duration = 2;
+				this.nextCameraUpdate = true;
+				this.scene.setFixCamera(camera);
+			})
 		},
 
 		setOffset(offset){
@@ -239,16 +331,22 @@ export default {
 			Memory.refresh();
 		},
 
+		setCamera(infos){
+			this.nextCameraUpdate = true;
+			this.scene.getViewer().utilities.autocam.shotParams.duration = 0;
+			this.scene.getViewer().utilities.transitionView(new THREE.Vector3(infos.position.x, infos.position.y, infos.position.z), new THREE.Vector3(infos.target.x, infos.target.y, infos.target.z), this.scene.getViewer().autocamCamera.fov, new THREE.Vector3(infos.up.x, infos.up.y, infos.up.z), new THREE.Vector3(infos.world.x, infos.world.y, infos.world.z), false, new THREE.Vector3(0, 0, 0));
+		},
+
 		hackEdges(){
 
 			this.scene.getViewer().setDisplayEdges(true);
 
-      const renderer = this.scene.getViewer().impl.renderer();
-      const viewer = this.scene.getViewer();
-      const _edgeMaterial = renderer.getEdgeMaterial();
-      Memory.addMaterialInformations(viewer.impl.getMaterials()._materials);
+	      const renderer = this.scene.getViewer().impl.renderer();
+	      const viewer = this.scene.getViewer();
+	      const _edgeMaterial = renderer.getEdgeMaterial();
+	      Memory.addMaterialInformations(viewer.impl.getMaterials()._materials);
 
-      const l = this.urns.length;
+	      const l = this.urns.length;
 			_edgeMaterial.getCustomOverrideMaterial = function(shapeMaterial) {
 					//console.log(shapeMaterial.id, shapeMaterial.lol);
 
@@ -315,6 +413,57 @@ export default {
 
 		this.scene.init(this.oauth, this.urns, this.objs, this.ifcProperties, ()=>{
 			console.log("init done");
+			this.scene.getViewer().utilities.autocam.shotParams.duration = 2;
+			this.scene.getViewer().setUsePivotAlways(true);
+
+			this.scene.addListener(Autodesk.Viewing.CAMERA_CHANGE_EVENT, (e)=>{
+				// console.log("position", e.camera.position);
+				// console.log("target", e.camera.target);
+				// console.log("up", e.camera.up);
+				// console.log("pivot", e.camera.pivot);
+				// console.log("worldup", e.camera.worldup);
+				if(!this.nextCameraUpdate){
+					V_socketUtils.setCamera({
+						position : {
+							x : e.camera.position.x,
+							y : e.camera.position.y,
+							z : e.camera.position.z,
+						},
+						target : {
+							x : e.camera.target.x,
+							y : e.camera.target.y,
+							z : e.camera.target.z,
+						},
+						up : {
+							x : e.camera.up.x,
+							y : e.camera.up.y,
+							z : e.camera.up.z,
+						},
+						pivot :{
+							x : e.camera.pivot.x,
+							y : e.camera.pivot.y,
+							z : e.camera.pivot.z,
+						},
+						world :{
+							x : e.camera.worldup.x,
+							y : e.camera.worldup.y,
+							z : e.camera.worldup.z,
+						}
+					})
+				}else{
+					if(this.cameraTimeout != null){
+						clearTimeout(this.cameraTimeout);
+						this.cameraTimeout = null;
+					}
+					this.cameraTimeout = setTimeout(()=>{
+						this.nextCameraUpdate = false;
+						this.scene.getViewer().utilities.autocam.shotParams.duration = 0;
+						requestAnimationFrame(()=>{
+							this.scene.getViewer().utilities.autocam.shotParams.duration = 2;
+						})
+					}, 400);
+				}
+			});
 
 			const models = this.scene.getModels();
 			for(let m in models){
@@ -341,7 +490,6 @@ export default {
 			// }
 
 			this.scene.addListener(Autodesk.Viewing.AGGREGATE_SELECTION_CHANGED_EVENT, this.highlightTask);
-			this.scene.addListener(Autodesk.Viewing.CAMERA_CHANGED_EVENT, this.refreshCamera);
 			this.scene.setLightPreset(15);
 
 			this.scene.setCube(true);

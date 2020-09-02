@@ -6,6 +6,7 @@ import TaskTeam from './TaskTeam.class.js';
 import Property from './interfaces/Property.class.js';
 import Requirement from './Requirement.class.js';
 import Zone from './Zone.class.js';
+import Person from './Person.class.js';
 import State from './State.class.js';
 import ConstructionType from './ConstructionType.class.js';
 import PlanningObject from "./interfaces/PlanningObject.class";
@@ -22,6 +23,7 @@ class Task extends PlanningObject{
 	#colorClass;
 	#description;
 	#workers;
+	#persons;
 
 	/**
  		@class Task
@@ -45,6 +47,7 @@ class Task extends PlanningObject{
 		this.#colorClass = "defaultcolor";
 		this.#description = "";
 		this.#workers = null;
+		this.#persons = {};
 	}
 
 	/**
@@ -94,6 +97,8 @@ class Task extends PlanningObject{
 	getPreviousTasks(){
 		return super.getPrevious();
 	}
+
+
 
 	/**
 		Add a operation
@@ -408,6 +413,36 @@ class Task extends PlanningObject{
 
 	getWorkers(){
 		return this.#workers;
+	}
+
+	/**
+		Add a person
+		@param {Person} person Person to add to the collection
+	*/
+	addPerson(person){
+		this.#persons[person.getId()] = person;
+	}
+
+	/**
+		Remove a person
+		@param {Person} person Person to remove
+	*/
+	removePerson(person){
+		if(!(person instanceof Person)){
+			console.error("removePerson(person) : person " + person + " not of type Person");
+		}else if(!(Object.keys(this.#persons).includes("" + person.getId()))){
+			console.error("removePerson(person) : person " + person + " not in the collection");
+		}else{
+			delete this.#persons[person.getId()];
+		}
+	}
+
+	/**
+		Get all persons
+		@returns {Array} Array of Person
+	*/
+	getPersons(){
+		return this.#persons;
 	}
 
 

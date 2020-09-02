@@ -150,6 +150,11 @@ io.on("connection", function(client){
         //client.broadcast.emit("setRequirement", datas);
     })
 
+    client.on("setCamera", (datas) => {
+        broadcast(client, modelName, "setCamera", datas);
+        //client.broadcast.emit("setRequirement", datas);
+    })
+
     client.on("setTaskState", (datas) => {
         broadcast(client, modelName, "setTaskState", datas);
         //client.broadcast.emit("setTaskState", datas);

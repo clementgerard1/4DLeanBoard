@@ -17,6 +17,7 @@ class Scene{
 	#modelInitLoaded2;
 	#modelsNeeded;
 	#planningModel;
+	#cameraPositions;
 
 	#styles;
 	/**
@@ -46,6 +47,63 @@ class Scene{
 		this.parseStyles(styles3D);
 		this.#modelsNeeded = this.determineModels();
 
+		this.cameraPositions = [
+			//Position accueil
+			{
+				//position
+				position : {x: 68.02633925341685, y: -98.55161393828413, z: 49.90499151685977},
+				target : {x: 20.10941642912082, y: -44.87735347360224, z: 10.793415509800447},
+				up : {x: -0.31805582789506753, y: 0.3562710279069489, z: 0.8785849105329031},
+				pivot : {x: 0, y: 0, z: 0},
+				world : {x: 0, y: 0, z: 1}
+			},
+			//Position top, ABCD
+			{
+				position : {x: -154.9668077607862, y: -74.3660765066464, z: 164.31020652559766},
+				target : {x: -97.58105627734194, y: -51.91659205167039, z: 110.36978307970458},
+				up : {x: 0.6133927226021029, y: 0.23996114078638597, z: 0.752441372314997},
+				pivot : {x: 0, y: 0, z: 0},
+				world : {x: 0, y: 0, z: 1}
+			},
+			//Position A
+			{
+				position : {x: 9.223389039290321, y: -54.01896386105711, z: 11.71775901546539},
+				target : {x: -25.258608411304944, y: -4.856835912459893, z: -43.966620612208864},
+				up : {x: -0.39044872498148153, y: 0.556675703094308, z: 0.7332543588310904},
+				pivot : {x: 0, y: 0, z: 0},
+				world : {x: 0, y: 0, z: 1}
+			},
+			//Position B
+			{
+				position : {x: -15.394322745046646, y: 0.24477469090506773, z: 21.942441990088277},
+				target : {x: 64.88447775379392, y: -2.9957277961861495, z: 6.0841179539690415},
+				up : {x: 0.19348628689559694, y: -0.00781019135820668, z: 0.981071892214991},
+				pivot : {x: 0, y: 0, z: 0},
+				world : {x: 0, y: 0, z: 1}
+			},
+			//Position C
+			{
+				position : {x: -43.37295995204263, y: 20.476442557284344, z: 8.773493292172084},
+				target : {x: 35.865041571035015, y: 0.14475835412967797, z: 12.599044131983353},
+				up : {x: -0.04524751307901153, y: 0.011610062460152145, z: 0.9989083386426586},
+				pivot : {x: 0, y: 0, z: 0},
+				world : {x: 0, y: 0, z: 1}
+			},
+			//Position D
+			{
+				position : {x: -2.742693448669119, y: -10.698429280478678, z: -17.943341988061},
+				target : {x: 10.27488485160662, y: -10.308668200182195, z: 62.908768983963235},
+				up : {x: -0.9868319795525218, y: -0.029546870358625608, z: 0.15902712531031285},
+				pivot : {x: 0, y: 0, z: 0},
+				world : {x: 0, y: 0, z: 1}
+			},
+		];
+
+	}
+
+	setFixCamera(i){
+		const infos = this.cameraPositions[i];
+		this.#viewer.utilities.transitionView(new THREE.Vector3(infos.position.x, infos.position.y, infos.position.z), new THREE.Vector3(infos.target.x, infos.target.y, infos.target.z), this.#viewer.autocamCamera.fov, new THREE.Vector3(infos.up.x, infos.up.y, infos.up.z), new THREE.Vector3(infos.world.x, infos.world.y, infos.world.z), false, new THREE.Vector3(infos.pivot.x, infos.pivot.y, infos.pivot.z));
 	}
 
 	init(oauth, urns, objs, ifcProperties, callback){

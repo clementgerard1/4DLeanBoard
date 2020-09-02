@@ -1,3 +1,5 @@
+import V_socketUtils from "../Utils/V_socketUtils.class.js";
+
 class Tool extends Autodesk.Viewing.ToolInterface {
 
     constructor(viewer) {
@@ -54,22 +56,31 @@ class Tool extends Autodesk.Viewing.ToolInterface {
         return false;
     }
 
-   /* handleWheelInput(delta) {
-        const deltaa = -Math.min(delta, 9);
-        const vec = this.viewer.navigation.getEyeToCenterOfBoundsVec(this.utilities.getBoundingBox());
-        const distance = vec.distanceTo(new THREE.Vector3( 0, 0, 0 ));
-        if((distance < this.maxZoom && deltaa > 0) || (distance > this.minZoom && deltaa < 0) ){
-            this.viewer.navigation.setPosition( new THREE.Vector3( -vec.x * (1 + ((deltaa / 3) / 20)), -vec.y * (1 + ((deltaa / 3) / 20)), -vec.z * (1 + ((deltaa / 3) / 20)) ) );
-            this.viewer.navigation.updateCamera();
-            this.viewer.impl.invalidate(true);
-        }
-        return true;
-    };*/
+    handleWheelInput(delta) {
+
+        const calc = Math.abs(this.viewer.autocamCamera.position.x) + Math.abs(this.viewer.autocamCamera.position.y) + Math.abs(this.viewer.autocamCamera.position.z);
+
+        if(calc > 700 || calc < 50) return true;
+        return false;
+        // const deltaa = -Math.min(delta, 9);
+        // const vec = this.viewer.navigation.getEyeToCenterOfBoundsVec(this.utilities.getBoundingBox());
+        // const distance = vec.distanceTo(new THREE.Vector3( 0, 0, 0 ));
+        // if((distance < this.maxZoom && deltaa > 0) || (distance > this.minZoom && deltaa < 0) ){
+        //     this.viewer.navigation.setPosition( new THREE.Vector3( -vec.x * (1 + ((deltaa / 3) / 20)), -vec.y * (1 + ((deltaa / 3) / 20)), -vec.z * (1 + ((deltaa / 3) / 20)) ) );
+        //     this.viewer.navigation.updateCamera();
+        //     this.viewer.impl.invalidate(true);
+        // }
+        // return true;
+    };
  
      handleGesture(event){
         if(event.type == "rotate" || event.type == "rotatestart" || event.type == "rotatemove" || event.type == "rotateend" || event.type == "rotatecancel"){
             return true;
         }
+
+        const calc = Math.abs(this.viewer.autocamCamera.position.x) + Math.abs(this.viewer.autocamCamera.position.y) + Math.abs(this.viewer.autocamCamera.position.z);
+        if(calc > 700 || calc < 50) return true;
+
         //this.viewer.navigation.orientCameraUp();
         
         /* if(event.type == "pinchmove" || event.type == "pinchstart" || event.type == "pinchend"){

@@ -104,6 +104,14 @@ export default {
 			endWeekDate = this.addDays(this.task.getEndDate(), -(this.task.getEndDate().getDay() - 1));
 		}
 
+		let persons = {};
+		if(this.task != null){
+			const pers = this.task.getTaskTeam().getPersons();
+			for(let p in pers){
+				persons[pers[p].getId()] = false;
+			}
+		}
+		console.log(persons);
 		return {
 			"selected" : false,
 			"state" :false,
@@ -149,6 +157,8 @@ export default {
 			startweek : startWeekDate,
 			endweek : endWeekDate,
 			openFlag : false,
+			persons : persons,
+
 		}
 	},
 	inject : [
@@ -809,6 +819,18 @@ export default {
 			}
 		},
 
+		handleCheckPerson(person){
+			const persons = this.task.getPersons();
+			if(typeof persons[person.getId()] == "undefined"){
+				this.task.addPerson(person);
+				this.$set("persons", person.getId(), true);
+				console.log("persons", person.getId(), true);
+			}else{
+				this.task.removePerson(person);
+				this.$set("persons", person.getId(), false);
+			}
+		},
+
 		handleLpsPlus(){
 			this.lpsIndex = (this.lpsIndex + 1) % 7
 		},
@@ -982,8 +1004,8 @@ export default {
 					<div v-if="manFace" class="manFaceFrame">
 						<div v-press="handleTap" v-bind:style="{ height : 'calc( 100% - ' + ((taskHeight - parseFloat(headerheight.replace('px', ''))) * 0.3)  + 'px)'}" class="body">
 							<div v-for=" person in task.getTaskTeam().getPersons()">
-								<p>
-									<span class="checkbox"></span>
+								<p v-tap="()=>{handleCheckPerson(person)}">
+									<span class="checkbox" v-bind:class="[persons[person.getId()] ? 'checked' : '']"></span>
 									<span v-html="person.getName()"></span>
 								</p>
 							</div>
@@ -991,7 +1013,7 @@ export default {
 						<div v-press="handleTap" v-bind:style="{ height : ((taskHeight - parseFloat(headerheight.replace('px', ''))) * 0.3)  + 'px'}" class="manFaceFooter">
 							<p></p>
 							<div>
-								<p v-bind:style="{ backgroundColor : svgcolor}" >-</p>
+								<p v-tap="" v-bind:style="{ backgroundColor : svgcolor}" >-</p>
 								<p v-bind:style="{ backgroundColor : svgcolor}" >+</p>
 							</div>
 							<p v-tap="handleManTap" >` + manIcon + `<span v-html="mn"></span></p>

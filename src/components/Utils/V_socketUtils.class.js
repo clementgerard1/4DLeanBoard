@@ -125,8 +125,14 @@ class V_socketUtils{
 			V_timelineUtils.setTime(datas.time);
 		});
 
+
+
 		this.socket.on("setTeamDisplay" , (datas) => {
 			V_taskTableUtils.setTeamDisplay(datas.teamId, datas.nth, datas.value);
+		});
+
+		this.socket.on("setCamera" , (datas) => {
+			V_4DUtils.setCamera(datas.infos);
 		});
 
 		this.socket.on("setRequirement", (datas) => {
@@ -236,6 +242,10 @@ class V_socketUtils{
 	static highlightTask(task, bool){
 		V_taskTableUtils.highlightTaskById(task.getId(), bool);
    		this.socket.emit("highlightTask", { id : task.getId(), value : bool});
+	}
+
+	static setCamera(infos){
+		this.socket.emit("setCamera", { infos : infos});
 	}
 
 

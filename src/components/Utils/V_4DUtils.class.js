@@ -60,6 +60,12 @@ class V_4DUtils{
 		}
 	}
 
+	static setCamera(infos){
+		if(this.viewer != null){
+			this.viewer.setCamera(infos);
+		}
+	}
+
 	/**
 		Highlight Object4D by id on Forge Viewer
 		@param {string} Object4Did id of Object4D to hightlight
