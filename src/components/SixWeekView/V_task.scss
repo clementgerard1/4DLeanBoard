@@ -146,14 +146,49 @@
 					}
 
 					.footer{
+					}
+
+					.manFaceFooter{
 						position : absolute;
 						bottom : 0px;
 						display : flex;
+						width : 100%;
 						
-						>*{
+						>p, >div{
 							flex: 1;
 						}
+
+						div{
+							display : flex;
+							flex:2;
+							p{
+								display : flex;
+								justify-content :center;
+								align-items: center;
+								/* Oswald 24 */
+								font-family: Oswald;
+								font-style: normal;
+								font-weight: 500;
+								font-size: 2rem;
+								display: flex;
+								text-transform: capitalize;
+								flex:1;
+								width : 25%;
+								border-radius: 100%;
+							}
+						}
+
+						p:last-child{
+							display : flex;
+
+							svg{
+								height : 50%;
+							}
+
+						}
+
 					}
+
 				}
 
 				.calendarFaceFrame{

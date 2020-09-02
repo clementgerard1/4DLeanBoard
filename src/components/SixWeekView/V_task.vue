@@ -941,7 +941,7 @@ export default {
 
 				<div v-press="handleTap" class="taskHeader" v-bind:style="{ height : headerheight }">
 					<div>
-						<!-- calendar face -->
+						<!-- man face -->
 						<div v-if="manFace" v-bind:style="{backgroundColor : headercolors.body, borderColor : headercolors.border}" >
 							<p v-tap="handleIdTap" v-bind:style="{ color : idcolor }" v-html="'#' + task.getId()"></p>
 						</div>
@@ -988,12 +988,12 @@ export default {
 								</p>
 							</div>
 						</div>
-						<div v-press="handleTap" v-bind:style="{ height : ((taskHeight - parseFloat(headerheight.replace('px', ''))) * 0.3)  + 'px'}" class="footer">
+						<div v-press="handleTap" v-bind:style="{ height : ((taskHeight - parseFloat(headerheight.replace('px', ''))) * 0.3)  + 'px'}" class="manFaceFooter">
 							<p></p>
-							<p>
+							<div>
 								<p v-bind:style="{ backgroundColor : svgcolor}" >-</p>
 								<p v-bind:style="{ backgroundColor : svgcolor}" >+</p>
-							</p>
+							</div>
 							<p v-tap="handleManTap" >` + manIcon + `<span v-html="mn"></span></p>
 						</div>
 					</div>
