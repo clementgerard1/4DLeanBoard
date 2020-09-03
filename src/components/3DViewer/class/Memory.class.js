@@ -18,6 +18,7 @@ class Memory{
 	static nbModels = 0;
 	static nbStyles = 1;
 	static sceneObj = null;
+	static layers = [];
 
 	static style2Model = {};
 
@@ -55,6 +56,10 @@ class Memory{
 
 	static getNbStyles(nb){
 		return this.nbStyles;
+	}
+
+	static getLayers(){
+		return this.layers;
 	}
 
 	static setSceneObject(sceneObj){
@@ -147,6 +152,10 @@ class Memory{
 
 	static setTarget() {
 		this.#camera.setTarget(this.#camera.getTarget());
+	}
+
+	static addLayer(layerName){
+		if(this.layers.indexOf(layerName) == -1) this.layers.push(layerName);
 	}
 
 	static isLayerDisplayed(){
@@ -297,5 +306,45 @@ class Memory{
 			}
 		}
 	}
+
+	static setZoneDisplayed(zone, bool){
+		for(let f in this.#forgeObjects){
+			for(let ff in this.#forgeObjects[f]){
+				this.#forgeObjects[f][ff].setZoneDisplayed(zone, bool);
+			}
+		}
+		for(let f in this.#forgeObjectsNotLinked){
+			for(let ff in this.#forgeObjectsNotLinked[f]){
+				this.#forgeObjectsNotLinked[f][ff].setZoneDisplayed(zone, bool);
+			}
+		}
+	}
+
+	static setConstructionStateDisplayed(constructionState, bool){
+		for(let f in this.#forgeObjects){
+			for(let ff in this.#forgeObjects[f]){
+				this.#forgeObjects[f][ff].setConstructionStateDisplayed(constructionState, bool);
+			}
+		}
+		for(let f in this.#forgeObjectsNotLinked){
+			for(let ff in this.#forgeObjectsNotLinked[f]){
+				this.#forgeObjectsNotLinked[f][ff].setConstructionStateDisplayed(constructionState, bool);
+			}
+		}
+	}
+
+	static setLayerDisplayed(layer, bool){
+		for(let f in this.#forgeObjects){
+			for(let ff in this.#forgeObjects[f]){
+				this.#forgeObjects[f][ff].setLayerDisplayed(layer, bool);
+			}
+		}
+		for(let f in this.#forgeObjectsNotLinked){
+			for(let ff in this.#forgeObjectsNotLinked[f]){
+				this.#forgeObjectsNotLinked[f][ff].setLayerDisplayed(layer, bool);
+			}
+		}
+	}
+
 }
 export default Memory;

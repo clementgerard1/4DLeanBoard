@@ -15,8 +15,15 @@ import Camera from "./class/Camera.class.js";
 
 import modelBar from "./assets/LvlBarHidden2.svg";
 
+import V_ifcPropertiesPanel from "./V_ifcPropertiesPanel.vue";
+import V_filterPanel from "../FilterPanel/V_filterPanel.vue";
+
 
 export default {
+	components : {
+		ifcPropertiesPanel : V_ifcPropertiesPanel,
+		filterPanel : V_filterPanel,
+	},
 	data : function(){
 		return {
 			scene : null,
@@ -28,6 +35,9 @@ export default {
 			nextCameraUpdate : false,
 			cameraTimeout : null,
 			infosBeforeView : null,
+			cameraLocked : false,
+			ifcPropertiesDisplayed : [],
+			layers : []
 		}
 	},
 	props : [
@@ -37,6 +47,11 @@ export default {
 		"model",
 		"ifcProperties"
 	],
+	computed : {
+		_model : function(){
+			return this.model;
+		}
+	},
 	methods : {
 
 		getScene : function(){
@@ -110,6 +125,21 @@ export default {
 			}
 		},
 
+		setZoneDisplayed(zone, bool){
+			Memory.setZoneDisplayed(zone, bool);
+			Memory.refresh();
+		},
+
+		setConstructionStateDisplayed(constructionState, bool){
+			Memory.setConstructionStateDisplayed(constructionState, bool);
+			Memory.refresh();
+		},
+
+		setLayerDisplayed(layer, bool){
+			Memory.setLayerDisplayed(layer, bool);
+			Memory.refresh();
+		},
+
 		highlightTask() {
 			const select = this.scene.getViewer().getAggregateSelection();
 			const selection = [];
@@ -119,9 +149,23 @@ export default {
 						selection : select[s].selection[ss],
 						model : select[s].model
 					});
+					//console.log(Memory.getForgeObject(select[s].selection[ss], select[s].model);
 				}
 			}
+
 			if(selection.length != 0){
+				
+				//IFC Properties
+				this.ifcPropertiesDisplayed = [];
+				for(let s in selection){
+					const objF = Memory.getForgeObject(selection[s].selection, selection[s].model);
+					const properties = objF.getProperties();
+					console.log(properties);
+					for(let p in properties){
+						this.ifcPropertiesDisplayed.push({ key : properties[p].getName(), value: properties[p].getInfo().displayValue});
+					}
+				}
+
 				this.clearSelection();
 				this.scene.getViewer().clearSelection();
 				for(let s in selection){
@@ -182,6 +226,11 @@ export default {
 			}
 			this.setSelectDisplayMode(bool);
 			
+			// if(bool){
+			// 	this.ifcPropertiesDisplayed = [{ key : "keyTest", value: "Bonjour"}];
+			// }else{
+			// 	this.ifcPropertiesDisplayed = [{ key : "key2", value: "Aurevoir"}];
+			// }
 
 			this.nextCameraUpdate = true;
 			if(bool){
@@ -237,11 +286,6 @@ export default {
 			Memory.refresh();
 		},
 
-		setLayerDisplayed(layer, bool){
-			Memory.setLayerSelected(layer, bool);
-			Memory.refresh();
-		},
-
 		setTeamDisplayMode(bool){
 			Memory.setTeamDisplayMode(bool);
 			Memory.refresh();
@@ -254,36 +298,39 @@ export default {
 
 		setTime(time){
 			this.playerinit = time;
-			const tasks = this.timeline.getTasksBetweenTwoDates(time * 7, time * 7 + 6);
-			const zones = [];
-			let camera = null;
-			for(let t in tasks){
-				if(camera == 1) break;
-				switch (tasks[t].getZone().getValue()){
-					case "A, B, C, D" : camera = 1;
-										break;
-					case "A" : 	if(camera != null && camera != 2){camera = 1; break};
-							camera = 2;
-							break;
-					case "B" : 	if(camera != null && camera != 3){camera = 1; break};
-							camera = 3;
-							break;
-					case "C" : 	if(camera != null && camera != 4){camera = 1; break};
-							camera = 4;
-							break;
-					case "D" : 	if(camera != null && camera != 5){camera = 1; break};
-							camera = 5;
-							break;
+			console.log(this.cameraLocked);
+			if(!this.cameraLocked){
+				const tasks = this.timeline.getTasksBetweenTwoDates(time * 7, time * 7 + 6);
+				const zones = [];
+				let camera = null;
+				for(let t in tasks){
+					if(camera == 1) break;
+					switch (tasks[t].getZone().getValue()){
+						case "A, B, C, D" : camera = 1;
+											break;
+						case "A" : 	if(camera != null && camera != 2){camera = 1; break};
+								camera = 2;
+								break;
+						case "B" : 	if(camera != null && camera != 3){camera = 1; break};
+								camera = 3;
+								break;
+						case "C" : 	if(camera != null && camera != 4){camera = 1; break};
+								camera = 4;
+								break;
+						case "D" : 	if(camera != null && camera != 5){camera = 1; break};
+								camera = 5;
+								break;
 
+					}
 				}
+				if(camera == null) camera = 0;
+				this.scene.getViewer().utilities.autocam.shotParams.duration = 0;
+				requestAnimationFrame(()=>{
+					this.scene.getViewer().utilities.autocam.shotParams.duration = 2;
+					this.nextCameraUpdate = true;
+					this.scene.setFixCamera(camera);
+				})
 			}
-			if(camera == null) camera = 0;
-			this.scene.getViewer().utilities.autocam.shotParams.duration = 0;
-			requestAnimationFrame(()=>{
-				this.scene.getViewer().utilities.autocam.shotParams.duration = 2;
-				this.nextCameraUpdate = true;
-				this.scene.setFixCamera(camera);
-			})
 		},
 
 		setOffset(offset){
@@ -335,6 +382,10 @@ export default {
 			this.nextCameraUpdate = true;
 			this.scene.getViewer().utilities.autocam.shotParams.duration = 0;
 			this.scene.getViewer().utilities.transitionView(new THREE.Vector3(infos.position.x, infos.position.y, infos.position.z), new THREE.Vector3(infos.target.x, infos.target.y, infos.target.z), this.scene.getViewer().autocamCamera.fov, new THREE.Vector3(infos.up.x, infos.up.y, infos.up.z), new THREE.Vector3(infos.world.x, infos.world.y, infos.world.z), false, new THREE.Vector3(0, 0, 0));
+		},
+
+		setCameraLocked(bool){
+			this.cameraLocked = bool;
 		},
 
 		hackEdges(){
@@ -413,8 +464,19 @@ export default {
 
 		this.scene.init(this.oauth, this.urns, this.objs, this.ifcProperties, ()=>{
 			console.log("init done");
+			this.layers = Memory.getLayers();
 			this.scene.getViewer().utilities.autocam.shotParams.duration = 2;
 			this.scene.getViewer().setUsePivotAlways(true);
+			console.log(this.scene.getViewer());
+			this.scene.getViewer().utilities.autocam.homeVector = {
+	            position: new THREE.Vector3(68.02633925341685, -98.55161393828413, 49.90499151685977),
+	                  up: new THREE.Vector3(-0.31805582789506753, 0.3562710279069489, 0.8785849105329031),
+	              center: new THREE.Vector3(20.10941642912082, -44.87735347360224, 10.793415509800447),
+	               pivot: new THREE.Vector3(0, 0, 0),
+	                 fov: this.scene.getViewer().utilities.autocam.camera.fov,
+	             worldUp: new THREE.Vector3(0, 0, 1),
+	             isOrtho: false
+	        };
 
 			this.scene.addListener(Autodesk.Viewing.CAMERA_CHANGE_EVENT, (e)=>{
 				// console.log("position", e.camera.position);
@@ -523,6 +585,7 @@ export default {
 	template : `
 	<div id="forgeViewer">
 		<!-- forgeViewer -->
+		<ifcPropertiesPanel v-bind:properties="ifcPropertiesDisplayed"></ifcPropertiesPanel>
 		<div id="modelMenu"> 
 			
 			<div class="openMenu" >
@@ -539,5 +602,7 @@ export default {
 		<div id="forgeV">
 			<div id="ifcStructures"></div>
 		</div>
+
+		<filterPanel id="filterPanel" v-bind:layers="layers" v-bind:model="_model"></filterPanel>
 	</div>`,
 }

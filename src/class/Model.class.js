@@ -342,7 +342,7 @@ class Model{
 		return toReturn;
 	}
 
-	getLayers(){
+	getZones(){
 		const tasks = this.getTasks();
 		const toReturn = {};
 		for(let t in tasks){

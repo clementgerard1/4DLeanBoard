@@ -151,58 +151,59 @@ class Loader{
 						milestone["Phases"][milestone["Phases"].length - 1]["Name"] = columns[7];
 						milestone["Phases"][milestone["Phases"].length - 1]["StartDate"] = columns[8];
 						milestone["Phases"][milestone["Phases"].length - 1]["EndDate"] = columns[9];
-						milestone["Phases"][milestone["Phases"].length - 1]["Requirements"] = columns[10];
+						milestone["Phases"][milestone["Phases"].length - 1]["Previous"] = columns[10];
+						milestone["Phases"][milestone["Phases"].length - 1]["Requirements"] = columns[11];
 						milestone["Phases"][milestone["Phases"].length - 1]["Tasks"] = [];
 
 						memoPhase = milestone["Phases"].length - 1;
 					}
 
 					//New task
-					if(columns[11] != ''){
+					if(columns[12] != ''){
 						const phase = json.milestones[memoMilestone]["Phases"][memoPhase];
 						phase["Tasks"][phase["Tasks"].length] = {};
 
-						phase["Tasks"][phase["Tasks"].length - 1]["Name"] = columns[11];
-						phase["Tasks"][phase["Tasks"].length - 1]["TID"] = columns[12];
-						phase["Tasks"][phase["Tasks"].length - 1]["StartDate"] = columns[13];
-						phase["Tasks"][phase["Tasks"].length - 1]["EndDate"] = columns[14];
-						phase["Tasks"][phase["Tasks"].length - 1]["Duration"] = columns[15];
-						phase["Tasks"][phase["Tasks"].length - 1]["Workers"] = columns[16];
-						phase["Tasks"][phase["Tasks"].length - 1]["Previous"] = columns[17];
-						phase["Tasks"][phase["Tasks"].length - 1]["Team"] = columns[18];
-						phase["Tasks"][phase["Tasks"].length - 1]["IDS4D"] = columns[19];
-						phase["Tasks"][phase["Tasks"].length - 1]["Level"] = columns[20];
-						phase["Tasks"][phase["Tasks"].length - 1]["Zone"] = columns[22];
-						phase["Tasks"][phase["Tasks"].length - 1]["Description"] = columns[23];
-						phase["Tasks"][phase["Tasks"].length - 1]["State"] = columns[24];
+						phase["Tasks"][phase["Tasks"].length - 1]["Name"] = columns[12];
+						phase["Tasks"][phase["Tasks"].length - 1]["TID"] = columns[13];
+						phase["Tasks"][phase["Tasks"].length - 1]["StartDate"] = columns[14];
+						phase["Tasks"][phase["Tasks"].length - 1]["EndDate"] = columns[15];
+						phase["Tasks"][phase["Tasks"].length - 1]["Duration"] = columns[16];
+						phase["Tasks"][phase["Tasks"].length - 1]["Workers"] = columns[17];
+						phase["Tasks"][phase["Tasks"].length - 1]["Previous"] = columns[18];
+						phase["Tasks"][phase["Tasks"].length - 1]["Team"] = columns[19];
+						phase["Tasks"][phase["Tasks"].length - 1]["IDS4D"] = columns[20];
+						phase["Tasks"][phase["Tasks"].length - 1]["Level"] = columns[21];
+						phase["Tasks"][phase["Tasks"].length - 1]["Zone"] = columns[23];
+						phase["Tasks"][phase["Tasks"].length - 1]["Description"] = columns[24];
+						phase["Tasks"][phase["Tasks"].length - 1]["State"] = columns[25];
 						phase["Tasks"][phase["Tasks"].length - 1]["Requirements"] = {
-							"Constraint" : columns[25] != "No", 
-							"Information" : columns[26] != "No",
-							"Materials" : columns[27] != "No",
-							"Manpower" : columns[28] != "No",
-							"Equipement" : columns[29] != "No",
-							"Safety" : columns[30] != "No",
-							"Space" : columns[31] != "No",
+							"Constraint" : columns[26] != "No", 
+							"Information" : columns[27] != "No",
+							"Materials" : columns[28] != "No",
+							"Manpower" : columns[29] != "No",
+							"Equipement" : columns[30] != "No",
+							"Safety" : columns[31] != "No",
+							"Space" : columns[32] != "No",
 						}
 						memoTask = phase["Tasks"].length - 1;
 					}
 
 
 					//Teams
-					if(columns[32] != '' && typeof columns[32] != "undefined"){
+					if(columns[33] != '' && typeof columns[33] != "undefined"){
 
 						json.teams[json.teams.length] = {
-							name : columns[32],
-							color : columns[33].replace("\r", ""),
-							bossName : columns[34].replace("\r", ""),
-							bossMail : columns[35].replace("\r", ""),
-							bossPhone : columns[36].replace("\r", ""),
-							teamPersons : columns[37].replace("\r", "").split(","),
+							name : columns[33],
+							color : columns[34].replace("\r", ""),
+							bossName : columns[35].replace("\r", ""),
+							bossMail : columns[36].replace("\r", ""),
+							bossPhone : columns[37].replace("\r", ""),
+							teamPersons : columns[38].replace("\r", "").split(","),
 						}
 					}
 
-					if(columns[38].replace("\r", "") != ''){
-						json.holidays.push(columns[38].replace("\r", ""));
+					if(columns[39].replace("\r", "") != ''){
+						json.holidays.push(columns[39].replace("\r", ""));
 					}
 
 				}
@@ -252,10 +253,13 @@ class Loader{
 
 
 		const tasksForPreviousNext = {};
+		const phasesForPreviousNext = {};
 		const tasksCollection = [];
+		const phasesCollection = [];
 
 		const milestones = infos["milestones"];
 
+		console.log(infos);
 		//Teams
 		for(let i in infos.teams){
 			taskTeams[infos.teams[i].name] = new TaskTeam(infos.teams[i].name);
@@ -277,10 +281,11 @@ class Loader{
 
 		//Holidays
 		for(let h in infos.holidays){
-			const hd = new Day(new Date(Utils.getFormatedDate2(infos.holidays[h])));
-			model.addHoliday(hd);
+			if(infos.holidays[h] != ''){
+				const hd = new Day(new Date(Utils.getFormatedDate2(infos.holidays[h])));
+				model.addHoliday(hd);
+			}
 		}
-
 		//Model
 		for(let m in milestones){
 
@@ -319,6 +324,12 @@ class Loader{
 
 				const tasks = phases[p]["Tasks"];
 				let actualDate = PstartDate;
+
+				phasesForPreviousNext[phase.getId()] = {
+					"previous" : phases[p]["Previous"],
+				}
+				phasesCollection[phase.getId()] = phase;
+				
 				for(let t in tasks){
 					if(tasks[t] != null){
 						const task = new Task(tasks[t]["Name"], tasks[t]["TID"]);
@@ -330,7 +341,6 @@ class Loader{
 						//const startDate = actualDate;
 						//const startDate = new Date(tasks[t]["Start"].slice(6, 10), parseInt(tasks[t]["Start"].slice(3, 5)) - 1, tasks[t]["Start"].slice(0, 2));
 						//console.log("hey", startDate);
-
 						const TstartDate = new Date(Utils.getFormatedDate2(tasks[t]["StartDate"]));
 						task.setStartDate(TstartDate);
 						//const endDate = Utils.addDaysToDate(startDate, parseInt(tasks[t]["Duration"]) - 1);
@@ -390,6 +400,7 @@ class Loader{
 						tasksForPreviousNext[task.getId()] = {
 							"previous" : tasks[t]["Previous"],
 						}
+						console.log(task.getId());
 						tasksCollection[task.getId()] = task;
 					}
 
@@ -413,6 +424,17 @@ class Loader{
 					}
 				} 
 			}
+		}
+
+		for(let p in phases){
+			const actualPhase = phases[p];
+			if(phasesForPreviousNext[actualPhase.getId()].previous != 0 && phasesForPreviousNext[actualPhase.getId()].previous != null && phasesForPreviousNext[actualPhase.getId()].previous != ""){
+				const mults = phasesForPreviousNext[actualPhase.getId()].previous.split(",");
+				for(let m in mults){
+					actualPhase.addPreviousPhase(phasesCollection[mults[m]]);
+					phasesCollection[mults[m]].addFollowingPhase(actualPhase);
+				}
+			} 
 		}
 
 

@@ -155,6 +155,11 @@ io.on("connection", function(client){
         //client.broadcast.emit("setRequirement", datas);
     })
 
+    client.on("setCameraLocked", (datas) => {
+        broadcast(client, modelName, "setCameraLocked", datas);
+        //client.broadcast.emit("setRequirement", datas);
+    })
+
     client.on("setTaskState", (datas) => {
         broadcast(client, modelName, "setTaskState", datas);
         //client.broadcast.emit("setTaskState", datas);

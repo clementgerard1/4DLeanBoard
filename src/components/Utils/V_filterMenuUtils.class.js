@@ -50,6 +50,12 @@ class V_filterMenuUtils{
 		
 	}
 
+	static setCameraLocked(bool){
+		for(let f in this.filters){
+			this.filters[f].setCameraLocked(bool);
+		}
+	}
+
 	/**
 		Add layer displayed to the list
 		@param {TaskTeam} team  
@@ -100,6 +106,24 @@ class V_filterMenuUtils{
 	static setDisplayMenuChange(choice){
 		for(let f in this.filters){
 			this.filters[f].setDisplayMenuChange(choice);
+		}
+	}
+
+	static setLayerDisplayed(layer, bool){
+		for(let f in this.filters){
+			this.filters[f].setLayerDisplayed(layer, bool);
+		}
+	}
+
+	static setZoneDisplayed(zone, bool){
+		for(let f in this.filters){
+			this.filters[f].setZoneDisplayed(zone, bool);
+		}
+	}
+
+	static setConstructionStateDisplayed(constructionState, bool){
+		for(let f in this.filters){
+			this.filters[f].setConstructionStateDisplayed(constructionState, bool);
 		}
 	}
 

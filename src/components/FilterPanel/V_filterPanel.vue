@@ -5,8 +5,12 @@ import MenuStart from "./assets/MenuStart.svg";
 import Menu3D from "./assets/Menu3D.svg";
 import MenuVertical from "./assets/MenuVertical.svg";
 import ColorPalette from "./assets/ColorPalette.svg";
+import ConstructionState from "./assets/Layers.svg";
 import Layers from "./assets/Layers.svg";
+import Zones from "./assets/Layers.svg";
 import scssVariables from "../SixWeekView/assets/_variables.scss";
+
+import temp from "./assets/temp.svg";
 
 import StandardButton from "./V_standardButton.vue";
 
@@ -25,14 +29,32 @@ export default {
 			};
 		}
 
-		const layers = this.model.getLayers();
-		const layersArray = {};
-		for(let l in layers){
-			layersArray[layers[l]] = {
-				name : layers[l],
+		const zones = this.model.getZones();
+		const zonesArray = {};
+		for(let l in zones){
+			zonesArray[zones[l]] = {
+				name : zones[l],
 				display : true,
 			};
 		}
+
+		const constructionTypes = [{ 	
+				name : "Existant",
+				display : true,
+			},
+			{ 	
+				name : "Nouveau",
+				display : true,
+			},
+			{ 	
+				name : "Démolition",
+				display : true,
+			},
+			{ 	
+				name : "Temporaire",
+				display : true,
+			}
+		];
 
 		return {
 			displayByTeam : false,
@@ -43,6 +65,8 @@ export default {
 			menuOpen : false,
 			menuDisplayOpen : false,
 			menuDisplayLayersOpen : false,
+			menuDisplayZoneOpen : false,
+			menuDisplayConstructionStateOpen : false,
 
 			menuArchitecture : true,
 			menuStructure : false,
@@ -68,13 +92,30 @@ export default {
 			teamdisplaycond : false,
 			colorTeams : colorTeams,
 
-			layers : layers,
-			layersArray : layersArray,
+			zonesArray : zonesArray,
+
+			constructionTypes : constructionTypes,
+
+			cameraLocked : false,
+			layersArray : {},
 		}
 	},
 	computed: {
 		offsetclass : function(){
 			return "offset3D";
+		},
+	},
+	watch : {
+		layers : function(){
+			const layers = this.layers;
+			const layersArray = {};
+			for(let l in layers){
+				layersArray[layers[l].replace(' ', '')] = {
+					name : layers[l],
+					display : true,
+				};
+			}
+			this.layersArray = layersArray;
 		}
 	},
 	created: function(){
@@ -82,7 +123,8 @@ export default {
 		V_socketUtils.addFilter();
 	},
 	props : [
-		"model"
+		"model",
+		"layers"
 	],
 	methods:{
 		handleMenuTap : function(e){
@@ -90,12 +132,15 @@ export default {
 			if(!this.menuOpen){
 				this.menuDisplayOpen = false;
 				this.menuDisplayLayersOpen = false;
+				this.menuDisplayZoneOpen = false;
 			}
 		}, 
 		handleDisplayTap : function(e){
 			this.menuDisplayOpen = !this.menuDisplayOpen
 			if(this.menuDisplayOpen){
 				this.menuDisplayLayersOpen = false;
+				this.menuDisplayZoneOpen = false;
+				this.menuDisplayConstructionStateOpen = false;
 			}
 		},
 
@@ -103,6 +148,24 @@ export default {
 			this.menuDisplayLayersOpen = !this.menuDisplayLayersOpen;
 			if(this.menuDisplayLayersOpen){
 				this.menuDisplayOpen = false;
+				this.menuDisplayZoneOpen = false;
+				this.menuDisplayConstructionStateOpen = false;
+			}
+		},
+		handleZoneTap : function(e){
+			this.menuDisplayZoneOpen = !this.menuDisplayZoneOpen;
+			if(this.menuDisplayZoneOpen){
+				this.menuDisplayOpen = false;
+				this.menuDisplayLayersOpen = false;
+				this.menuDisplayConstructionStateOpen = false;
+			}
+		},
+		handleConstructionStateTap : function(e){
+			this.menuDisplayConstructionStateOpen = !this.menuDisplayConstructionStateOpen;
+			if(this.menuDisplayConstructionStateOpen){
+				this.menuDisplayOpen = false;
+				this.menuDisplayLayersOpen = false;
+				this.menuDisplayZoneOpen = false;
 			}
 		},
 
@@ -140,15 +203,53 @@ export default {
 			V_socketUtils.setTeamDisplayMode(true);
 		},
 
+		handleLockCameraDisplay : function(e){
+			V_socketUtils.setLockCameraDisplay(!this.cameraLocked);
+		},
+
+		setCameraLocked : function(bool){
+			this.cameraLocked = bool;
+		},
 
 		handleTeamSelected : function(e){
 			const team = this.model.getTaskTeamById(parseInt(e.target.id.replace("teamitem-", "")));
 			V_socketUtils.setTeamDisplayed(team, !this.colorTeams[team.getId()].display);
 		},
 
+		handleZoneSelected : function(e){
+			 const zone = e.target.id.replace("zoneitem-", "");
+			 V_socketUtils.setZoneDisplayed(zone, !this.zonesArray[zone].display);
+		},
+
+		handleConstructSelected : function(e){
+			const state = e.target.id.replace("constructitem-", "");
+			let toReturn = 0;
+			switch(state){
+				case "Existant" : toReturn = 0; break;
+				case "Nouveau" : toReturn = 1; break;
+				case "Démolition" : toReturn = 2; break;
+				case "Temporaire" : toReturn = 3; break; 
+			}
+			V_socketUtils.setConstructionStateDisplayed(toReturn, !this.constructionTypes[toReturn].display);
+		},
+
 		handleLayerSelected : function(e){
 			const layer = e.target.id.replace("layeritem-", "");
 			V_socketUtils.setLayerDisplayed(layer, !this.layersArray[layer].display);
+		},
+
+		setLayerDisplayed : function(layer, bool){
+
+			console.log(this.layersArray, layer, bool);
+			this.layersArray[layer].display = bool;
+		},
+
+		setZoneDisplayed : function(zone, bool){
+			this.zonesArray[zone].display = bool;
+		},
+
+		setConstructionStateDisplayed : function(constructionState, bool){
+			this.constructionTypes[constructionState].display = bool;
 		},
 
 		setIfcMenuChange : function(archi, struct, mep, construct){
@@ -188,7 +289,7 @@ export default {
 		setLayersSelected : function(layers){
 			for(let l in this.layersArray){
 
-				if(typeof layers[this.layersArray[l].name] == "undefined"){
+				if(typeof this.layers[this.layersArray[l].name] == "undefined"){
 					this.layersArray[l].display = false;
 				}else{
 					this.layersArray[l].display = true;
@@ -214,11 +315,25 @@ export default {
 	<div class="filterPanel">
 		<div class="subMenuContainer">
 			<div v-bind:class="offsetclass"></div>
+				
+			<div key="menuDisplayConstruct" class="menuDisplayConstruct" v-if="menuDisplayConstructionStateOpen">
+				<div v-tap="handleConstructSelected" class="constructsItems" v-for="construct in constructionTypes" :key="construct.name">
+					<standardbutton v-bind:id="'constructitem-' + construct.name.replace(' ', '')" v-bind:condition="construct.display"></standardbutton>
+					<p v-html="construct.name"></p>
+				</div>
+			</div>
 
 			<div key="menuDisplayLayer" class="menuDisplayLayer" v-if="menuDisplayLayersOpen">
 				<div v-tap="handleLayerSelected" class="layersItems" v-for="layer in layersArray" :key="layer.name">
 					<standardbutton v-bind:id="'layeritem-' + layer.name.replace(' ', '')" v-bind:condition="layer.display"></standardbutton>
 					<p v-html="layer.name"></p>
+				</div>
+			</div>
+
+			<div key="menuDisplayZone" class="menuDisplayZone" v-if="menuDisplayZoneOpen">
+				<div v-tap="handleZoneSelected" class="zonesItems" v-for="zone in zonesArray" :key="zone.name">
+					<standardbutton v-bind:id="'zoneitem-' + zone.name.replace(' ', '')" v-bind:condition="zone.display"></standardbutton>
+					<p v-html="zone.name"></p>
 				</div>
 			</div>
 
@@ -249,13 +364,28 @@ export default {
 				` + MenuVertical +  `
 			</div>
 			<div class="itemContainer" v-if="menuOpen">
+				<div class="menuItem" v-tap="handleDisplayTap">
+					` + ColorPalette +  `
+				</div>
+			</div>
+			<div class="itemContainer" v-if="menuOpen">
 				<div class="menuItem" v-tap="handleLayerTap">
 					` + Layers +  `
 				</div>
 			</div>
 			<div class="itemContainer" v-if="menuOpen">
-				<div class="menuItem" v-tap="handleDisplayTap">
-					` + ColorPalette +  `
+				<div class="menuItem" v-tap="handleConstructionStateTap">
+					` + ConstructionState +  `
+				</div>
+			</div>
+			<div class="itemContainer" v-if="menuOpen">
+				<div class="menuItem" v-tap="handleZoneTap">
+					` + Zones +  `
+				</div>
+			</div>
+			<div class="itemContainer" v-if="menuOpen">
+				<div class="menuItem" v-tap="handleLockCameraDisplay">
+					` + temp +  `
 				</div>
 			</div>
 		</div>

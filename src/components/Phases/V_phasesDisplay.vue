@@ -147,6 +147,6 @@ export default {
 		<div class="playerLineWrapper">
 			<div v-pan="handlePan" class="playerLine" v-bind:style="{ left : playerWidth, width : width2, height : ((phases.length - 1) * 41 + 23) + 'px'}"></div>
 		</div>
-		<phaseitem v-bind:teamDisplayed="teamDisplayStatus" v-for="p in displayedPhases" :key="p.getId()" v-bind:time="time" v-bind:model="_model" v-bind:displayPhase="displayPhase" v-bind:timeline="_timeline" v-bind:phase="p"></phaseitem>
+		<phaseitem v-bind:modifymode="modifyMode" v-bind:teamDisplayed="teamDisplayStatus" v-for="p in displayedPhases" :key="p.getId()" v-bind:time="time" v-bind:model="_model" v-bind:displayPhase="displayPhase" v-bind:timeline="_timeline" v-bind:phase="p"></phaseitem>
 	</div>`,
 }

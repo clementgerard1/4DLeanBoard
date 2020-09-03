@@ -171,6 +171,7 @@ class Model{
 											const namee = toSplit[toSplit.length - 1].replace(".ifc", "");
 											that.setName(namee.charAt(0).toUpperCase() + namee.slice(1));
 										}
+										if(dbObjects[d].properties[p].displayName == "Layer") Memory.addLayer(dbObjects[d].properties[p].displayValue);
 										const property = new IFCProperty(dbObjects[d].properties[p].displayName, dbObjects[d].properties[p]);
 										that.#dbObjects[dbObjects[d].dbId].addProperty(property);
 									}
@@ -202,6 +203,7 @@ class Model{
 											const namee = toSplit[toSplit.length - 1].replace(".ifc", "");
 											that.setName(namee.charAt(0).toUpperCase() + namee.slice(1));
 										}
+										if(dbObjects[d].properties[p].displayName == "Layer") Memory.addLayer(dbObjects[d].properties[p].displayValue);
 										const property = new IFCProperty(dbObjects[d].properties[p].displayName, dbObjects[d].properties[p]);
 										that.#dbObjects[dbObjects[d].dbId].addProperty(property);
 									}

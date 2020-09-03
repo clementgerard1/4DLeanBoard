@@ -111,7 +111,6 @@ export default {
 				persons[pers[p].getId()] = false;
 			}
 		}
-		console.log(persons);
 		return {
 			"selected" : false,
 			"state" :false,
@@ -824,7 +823,6 @@ export default {
 			if(typeof persons[person.getId()] == "undefined"){
 				this.task.addPerson(person);
 				this.$set("persons", person.getId(), true);
-				console.log("persons", person.getId(), true);
 			}else{
 				this.task.removePerson(person);
 				this.$set("persons", person.getId(), false);

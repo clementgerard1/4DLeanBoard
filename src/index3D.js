@@ -4,7 +4,6 @@ import Utils from "./class/Utils.class.js";
 import Loader from "./class/Loader.class.js";
 import Timeline from "./class/Timeline.class.js";
 import V_player from "./components/Player/V_player.vue";
-import V_filterPanel from "./components/FilterPanel/V_filterPanel.vue";
 import V_svgDefs from "./components/SixWeekView/V_SvgDefs.vue";
 import V_forgeViewer from "./components/3DViewer/V_forgeViewer.vue";
 import V_modelSelect from "./components/V_modelSelect.vue";
@@ -117,7 +116,6 @@ function init(){
 	const app = new Vue({
 		el : '#content',
 		components : {
-			filterpanel : V_filterPanel,
 			forgeviewer : V_forgeViewer,
 			player : V_player,
 			svgdefs : V_svgDefs,
@@ -245,7 +243,7 @@ function init(){
 	 			</div>
 
 	 			<div v-if="forgeReady" id="viewerFrame">
-	 				<filterpanel id="filterPanel" v-bind:model="model"></filterpanel>
+	 				<!--<filterpanel id="filterPanel" v-bind:model="model"></filterpanel>-->
 	 				<forgeviewer id="forgeViewer" v-bind:model="model" v-bind:timeline="timeline" v-bind:urns="urns" v-bind:ifcProperties="ifcProperties" v-bind:oauth="oauth"></forgeviewer>
 		 			<div id="copyright">
 		 				<p>UMR 3495 MAP-CRAI © 2020</p>

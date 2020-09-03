@@ -24,6 +24,9 @@ class ForgeObject{
 	#started;
 	#phaseVisible;
 	#teamVisible;
+	#zoneVisible;
+	#layerVisible;
+	#stateVisible;
 	#phasemode;
 	#teammode;
 	#selectmode;
@@ -54,6 +57,9 @@ class ForgeObject{
 		this.#teammode = false;
 		this.#selectmode = false;
 		this.#teamVisible = true;
+		this.#zoneVisible = true;
+		this.#layerVisible = true;
+		this.#stateVisible = true;
 
 		this.#started = false;
 	}
@@ -130,7 +136,7 @@ class ForgeObject{
 		// }else{
 		// 	this.#layerSelected = false;
 		// }
-		console.log(this.#properties["Layer"].getInfo());
+		//console.log(this.#properties["Layer"].getInfo());
 		this.updateMaterial();
 	}
 
@@ -215,7 +221,7 @@ class ForgeObject{
 
 	updateMaterial(){
 		const viewer = Memory.getViewer();
-		let visible = this.#ifcVisible;
+		let visible = this.#ifcVisible && this.#layerVisible && this.#stateVisible && this.#zoneVisible;
 		if((this.#teamDisplayed && !this.#teamSelected) || !this.#phaseVisible || !this.#teamVisible || (this.#selectmode && !this.#selected)){
 			visible = false;
 		}
@@ -364,6 +370,28 @@ class ForgeObject{
 
 	isSelectDisplayed(bool){
 		this.#selectmode = bool;
+		this.updateMaterial();
+	}
+
+	setZoneDisplayed(zone, bool){
+		if(this.#object3D != null && (this.#object3D.getParent().getTask().getZone().getValue().match(new RegExp(zone)) != null )){
+			this.#zoneVisible = bool;
+		}
+		this.updateMaterial();
+	}
+
+	setConstructionStateDisplayed(constructionState, bool){
+		if(constructionState == this.#constructionState || (this.#constructionState == null && constructionState == 0)) {
+			this.#stateVisible = bool;
+		}
+
+		this.updateMaterial();
+	}
+
+	setLayerDisplayed(layer, bool){
+		 if(this.#properties["Layer"].getInfo().displayValue.replace(" ", "") == layer) {
+		 	this.#layerVisible = bool;
+		 }
 		this.updateMaterial();
 	}
 
