@@ -2,6 +2,7 @@ import "./V_phaseItem.scss";
 import scssVariables from "../SixWeekView/assets/_variables.scss";
 import V_socketUtils from "../Utils/V_socketUtils.class.js";
 import V_phasesUtils from "../Utils/V_phasesUtils.class.js";
+import V_timelineUtils from "../Utils/V_timelineUtils.class.js";
 
 export default {
 	data : function(){
@@ -15,6 +16,9 @@ export default {
 			modifyright : "",
 			panleftstart : 0,
 			panrightstart : 0,
+			originalStart : null,
+			originalEnd : null,
+			originalDuration : null,
 		};
 	},
 	props : [
@@ -24,7 +28,8 @@ export default {
 		'time',
 		'teamDisplayed',
 		"displayPhase",
-		'modifymode'
+		'modifymode',
+		"duration"
 	],
 	provide : [
 		'timeline'
@@ -35,6 +40,9 @@ export default {
 			this.modifyright = "";
 			this.panleftstart = 0;
 			this.panrightstart = 0;
+			this.originalStart = this.phase.getStartDate();
+			this.originalEnd = this.phase.getEndDate();
+			this.originalDuration = this.model.getDuration();
 		}
 	},
 	created : function(){
@@ -44,9 +52,9 @@ export default {
 		temporaryleft : function(){
 			if(this.model != null && this.timeline != null){
 				if(this.modifyleft != ""){
-					return ((this.timeline.getTime(this.timeline.addWorkingDaysToDate(this.phase.getStartDate(), parseInt(this.modifyleft))) / this.model.getDuration()) * 100) + "%";
+					return ((this.timeline.getTime(this.timeline.addWorkingDaysToDate(this.phase.originalStart, parseInt(this.modifyleft))) / this.duration) * 100) + "%";
 				}else{
-					return ((this.timeline.getTime(this.phase.getStartDate()) / this.model.getDuration()) * 100) + "%";
+					return ((this.timeline.getTime(this.originalStart) / this.duration) * 100) + "%";
 				}
 			}
 		},
@@ -56,33 +64,34 @@ export default {
 			if(modifyleft == "") modifyleft = 0;
 			if(modifyright == "") modifyright = 0;
 			if(this.model != null && this.timeline != null){
-				const left = this.timeline.getTime(this.timeline.addWorkingDaysToDate(this.phase.getStartDate(), parseInt(modifyleft))) / this.model.getDuration();
-				const right = this.timeline.getTime(this.timeline.addWorkingDaysToDate(this.phase.getEndDate(), parseInt(modifyright))) / this.model.getDuration();
+				const left = this.timeline.getTime(this.timeline.addWorkingDaysToDate(this.originalStart, parseInt(modifyleft))) / this.duration;
+				const right = this.timeline.getTime(this.timeline.addWorkingDaysToDate(this.originalEnd, parseInt(modifyright))) / this.duration;
 				return ((right - left) * 100) + "%";
 			}
 		},
 		left : function(){
 			if(this.model != null && this.timeline != null){
-				return ((this.timeline.getTime(this.phase.getStartDate()) / this.model.getDuration()) * 100) + "%";
+				return ((this.timeline.getTime(this.phase.getStartDate()) / this.duration) * 100) + "%";
 			}
 		},
 		lleft : function(){
 			if(this.model != null && this.timeline != null){
+				this.duration;
 				return "calc(" + this.left + " + " + this.pourcent + ")";
 			}
 		},
 		leftName : function(){
 			if(this.mounted){
 				if(this.model != null && this.timeline != null){
-					return "calc( " + ((this.timeline.getTime(this.phase.getStartDate()) / this.model.getDuration()) * 100) + "% - "  + (document.querySelector("#phaseDisplay-" + this.phase.getId() + " .phaseItemNameLeft").clientWidth + 30) + "px)";
+					return "calc( " + ((this.timeline.getTime(this.phase.getStartDate()) / this.duration) * 100) + "% - "  + (document.querySelector("#phaseDisplay-" + this.phase.getId() + " .phaseItemNameLeft").clientWidth + 30) + "px)";
 				}
 			}
 			
 		},
 		width : function(){
 			if(this.model != null && this.timeline != null){
-				const left = this.timeline.getTime(this.phase.getStartDate()) / this.model.getDuration();
-				const right = this.timeline.getTime(this.phase.getEndDate()) / this.model.getDuration();
+				const left = this.timeline.getTime(this.phase.getStartDate()) / this.duration;
+				const right = this.timeline.getTime(this.phase.getEndDate()) / this.duration;
 				return ((right - left) * 100) + "%";
 			}
 		},
@@ -90,15 +99,15 @@ export default {
 			const start = Math.ceil(this.timeline.getTime(this.phase.getStartDate()));
 			const end = Math.ceil(this.timeline.getTime(this.phase.getEndDate()));
 			if((this.time * 7) < start) return "0%";
-			if((this.time * 7) > end) return (((end - start) / this.model.getDuration()) * 100) + "%";
-			return (Math.min( ((this.time * 7) - start) / this.model.getDuration(), 1) * 100) + "%";
+			if((this.time * 7) > end) return (((end - start) / this.duration) * 100) + "%";
+			return (Math.min( ((this.time * 7) - start) / this.duration, 1) * 100) + "%";
 		}, 
 		antipourcent : function(){
 			const start = Math.ceil(this.timeline.getTime(this.phase.getStartDate()));
 			const end = Math.ceil(this.timeline.getTime(this.phase.getEndDate()));
-			if((this.time * 7) < start) return (((end - start) / this.model.getDuration()) * 100) + "%";
+			if((this.time * 7) < start) return (((end - start) / this.duration) * 100) + "%";
 			if((this.time * 7) > end) return "0%";
-			return (Math.min( (end - (this.time * 7)) / this.model.getDuration(), 1) * 100) + "%";
+			return (Math.min( (end - (this.time * 7)) / this.duration, 1) * 100) + "%";
 		},
 		completion : function(){
 			const start = Math.ceil(this.timeline.getTime(this.phase.getStartDate()));
@@ -106,7 +115,7 @@ export default {
 			return Math.trunc(Math.max(0, Math.min(100, ((((this.time * 7) - start ) / (end - start)) * 100)))) + "%";
 		},
 		isRight : function(){
-			return (this.timeline.getTime(this.phase.getEndDate()) / this.model.getDuration()) < 0.6;
+			return (this.timeline.getTime(this.phase.getEndDate()) / this.duration) < 0.6;
 		},
 		descriptionText : function(){
 			const dates = this.phase.getStartDate().getDay() + "/" + this.phase.getStartDate().getMonth() + "/" + this.phase.getStartDate().getFullYear() + "-" + this.phase.getEndDate().getDay() + "/" + this.phase.getEndDate().getMonth() + "/" + this.phase.getEndDate().getFullYear()
@@ -199,6 +208,21 @@ export default {
 				this.updateNext(nexts[n]);
 			}
 
+			let modifyleft = this.modifyleft;
+			if(this.modifyleft == "") modifyleft = 0;
+			let modifyright = this.modifyright;
+			if(this.modifyright == "") modifyright = 0;
+
+			this.phase.setStartDate(this.timeline.addWorkingDaysToDate(this.originalStart, parseInt(modifyleft)));
+			this.phase.setEndDate(this.timeline.addWorkingDaysToDate(this.originalEnd, parseInt(modifyright)));
+
+
+			if(this.phase.getEndDate() > this.model.getEndDate()){
+				this.phase.getParent().setEndDate(this.phase.getEndDate());
+			}
+
+			V_timelineUtils.updateModel();
+
 		},
 
 		updateNext : function(phase){
@@ -210,6 +234,15 @@ export default {
 			for(let n in nexts){
 				this.updateNext(nexts[n]);
 			}
+			
+			let modifyleft = this.modifyleft;
+			if(this.modifyleft == "") modifyleft = 0;
+			let modifyright = this.modifyright;
+			if(this.modifyright == "") modifyright = 0;
+
+			this.phase.setStartDate(this.timeline.addWorkingDaysToDate(this.originalStart, parseInt(this.modifyleft)));
+			this.phase.setEndDate(this.timeline.addWorkingDaysToDate(this.originalEnd, parseInt(this.modifyright)));
+
 		}
 
 	},
@@ -237,7 +270,7 @@ export default {
 			<div v-if="modifymode" v-pan="handlePanRight" class="phaseItemRightPan" v-bind:style="{ left : 'calc(' + temporaryleft + ' + ' + temporarywidth + ' - 30px)'}"><p v-html="modifyright"></p></div>
 
 			<!-- temporary display on modify mode-->
-			<div v-if="modifymode" class="temporaryPhase" v-bind:style="{ left : temporaryleft, width : temporarywidth}"></div>
+			<!--<div v-if="modifymode" class="temporaryPhase" v-bind:style="{ left : temporaryleft, width : temporarywidth}"></div>-->
 
 		</template>
 		<template v-else="isRight" v-bind:class="[pressed ? 'pressed' : '']">
@@ -254,7 +287,7 @@ export default {
 			<div v-if="modifymode" v-pan="handlePanRight" class="phaseItemRightPan" v-bind:style="{ left : 'calc(' + temporaryleft + ' + ' + temporarywidth + ' - 30px)'}"><p v-html="modifyright"></p></div>
 
 			<!-- temporary display on modify mode-->
-			<div v-if="modifymode" class="temporaryPhase" v-bind:style="{ left : temporaryleft, width : temporarywidth}"></div>
+			<!--<div v-if="modifymode" class="temporaryPhase" v-bind:style="{ left : temporaryleft, width : temporarywidth}"></div>-->
 
 		</template>
 	</div>`,

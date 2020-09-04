@@ -29,6 +29,8 @@ class Model{
 	#duration;
 	#holidays;
 	#dayWorked;
+	#shadowModel;
+	#endDate;
 
 	/**
 		@class Model
@@ -48,6 +50,8 @@ class Model{
 		this.#duration = null;
 		this.#holidays = {};
 		this.#dayWorked = [true, true, true, true, true, false, false];
+		this.#shadowModel = false;
+		this.#endDate = new Date();
 	}
 
 	/**
@@ -57,6 +61,11 @@ class Model{
 	*/
 	addMilestone(milestone = new Milestone(), order = this.#milestones.length){
 		this.#milestones.splice(order, 0, milestone);
+		if(milestone.getEndDate() > this.#endDate) this.#endDate = milestone.getEndDate();
+	}
+
+	getEndDate(){
+		return this.#endDate;
 	}
 
 	/**
@@ -289,10 +298,11 @@ class Model{
 		@returns {int}
 	*/
 	getDuration(){
-		if(this.#duration == null){
+		if(true || this.#duration == null){
 			let start = null;
 			let end = null;
 			for(let m in this.#milestones){
+				console.log(this.#milestones[m].getStartDate(), this.#milestones[m].getEndDate())
 				const startDate = this.#milestones[m].getStartDate();
 				const endDate = this.#milestones[m].getEndDate();
 
@@ -1042,6 +1052,7 @@ class Model{
 			}
 			for(let p in infos.phases){
 				milestone.addPhase(phases[infos.phases[p]]);
+				phases[infos.phases[p]].setParent(milestone);
 			}
 			this.addMilestone(milestone);
 		}
@@ -1166,6 +1177,51 @@ class Model{
 	*/
 	getFragToIdsArray(){
 		
+	}
+
+	setShadowModel(bool){
+		this.#shadowModel = bool;
+	}
+
+	setDayWorked(arr){
+		this.#dayWorked = arr;
+	}
+
+	setDuration(duration){
+		this.#duration = duration;
+	}
+
+	clone(){
+		const model = new Model(this.#name, this.#id);
+		model.setShadowModel(true);
+		model.setLastModifiedDate(this.#lastModifiedDate);
+		model.setStartDate(this.#startDate);
+		model.setDuration(this.#duration);
+		for(let h in this.#holidays){
+			model.addHoliday(this.#holidays[h]);
+		}
+		model.setDayWorked(this.#dayWorked);
+		for(let m in this.#milestones){
+			model.addMilestone(this.#milestones[m].clone());
+		}
+
+		console.log(model.getMilestone(0));
+
+		for(let m in this.#milestones){
+
+			const followings = this.#milestones[m].getFollowingMilestones();
+			for(let f in followings){
+				model.getMilestone(this.#milestones[m].getId()).addFollowingMilestone(model.getMilestone(followings[f].getId()));
+			}
+			const previous = this.#milestones[m].getPreviousMilestones();
+			for(let p in previous){
+				model.getMilestone(this.#milestones[m].getId()).addPreviousMilestone(model.getMilestone(previous[p].getId()));
+			}
+
+		}
+
+		return model;
+
 	}
 
 }

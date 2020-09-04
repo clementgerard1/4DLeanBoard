@@ -949,13 +949,17 @@ export default {
 			if(!this.isOpen){
 				this.$parent.isOpen = true;
 			}
+		},
+
+		handleDoublePress(event){
+			console.log("doublepress", event);
 		}
 
 	},
 
 	template : `
 	<div v-tap="handleOpen" class="taskWrapper" v-bind:class='wrapclass'>
-		<div class="task">
+		<div v-doublepress="handleDoublePress" class="task">
 			
 			<div v-if="notEmpty" v-bind:id="_uid + '-task'" v-bind:style="[!isOpen ? { pointerEvents : 'none'} : {}]">
 

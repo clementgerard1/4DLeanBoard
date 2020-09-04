@@ -225,8 +225,9 @@ class Scene{
 
 	_endOfInit(that){
 
-		let section = null;
-		console.log(that.#viewer);
+	let section = null;
+	let hierarchie = null;
+	console.log(that.#viewer);
 	  const toolbar = that.#viewer.getToolbar();
 	  const controls = []
 	  for(let i = 0 ; i < toolbar.getNumberOfControls() ; i++){
@@ -235,9 +236,13 @@ class Scene{
 	  	const contain = toolbar.getControl(id).getNumberOfControls();
 	  	if(contain > 0){
 	  		for(let j = 0 ; j < contain ; j++){
+	  			console.log(control.getControlId(j));
 	  			if(control.getControlId(j) == "toolbar-sectionTool"){
 	  				section = control.getControl(control.getControlId(j));
+	  			}else if(control.getControlId(j) == "toolbar-modelStructureTool"){
+	  				hierarchie = control.getControl(control.getControlId(j));
 	  			}
+
 	  		}
 	  	}
 	  	controls.push(control);
@@ -249,16 +254,7 @@ class Scene{
 		toolbar.addControl(container);
 
 		container.addControl(section);
-		const button = new Autodesk.Viewing.UI.Button("ifcHierarchie");
-		button.setIcon("adsk-icon-structure");
-		container.addControl(button);
-		const button2 = new Autodesk.Viewing.UI.Button("ifcProperties");
-		button2.setIcon("adsk-icon-properties");
-		container.addControl(button2);
-
-		button.onClick = function(event){
-
-		}
+		container.addControl(hierarchie);
 
 		const panel = new Autodesk.Viewing.UI.DockingPanel(document.getElementById("ifcStructures"), "ifcStructPanel", "IFC Structure");
 		that.#viewer.addPanel(panel);

@@ -188,6 +188,7 @@ function init(){
 			playerinit : null,
 			timeline : null,
 			model : null,
+			shadowModel : null,
 			duration : null,
 			modelSelected : false,
 			selectPanel : false,

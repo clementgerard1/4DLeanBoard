@@ -16,6 +16,7 @@ export default {
 		"model",
 		"playerinit",
 		"offsettime",
+		"duration"
 	],
 	inject:[
 		"timeline",
@@ -61,7 +62,7 @@ export default {
 	},
 	computed : {
 		nbWeeks : function(){
-			return (Math.trunc(this.model.getDuration() / 7) + 1);
+			return (Math.trunc(this.duration / 7) + 1);
 		},
 		startWeekTime : function(){
 			return Math.floor((this.time - this.offset) / 6) * 6 + this.offset;

@@ -219,6 +219,8 @@ function init(){
 			playerinit : null,
 			timeline : null,
 			model : null,
+			_model : null,
+			shadowModel : null,
 			duration : null,
 			urns : null,
 			oauth : null,
@@ -259,6 +261,7 @@ function init(){
 				.then( datas => {
 						//Model Loaded
 						this.model = datas.model;
+						this._model = this.model;
 						//DataApi.postModel(mod, "testt");
 						if(this.model.getName() == "") this.model.setName("test");
 						this.timeline = new Timeline(this.model);
@@ -290,6 +293,7 @@ function init(){
  			}
  		},
  		created : function(){
+
  			DataApi.isAvailable().then(available => {
  				if(available){
 		 			const modelName = this.findGetParameter("model");
@@ -304,6 +308,14 @@ function init(){
 		 			this.loadModel("");
 		 		}
 		 	});
+
+		 	V_timelineUtils.addListener("updateModel", this, ()=>{
+		 		this._model = this._model;
+		 		this.duration = this._model.getDuration();
+		 		console.log(this.duration);
+		 		this.$forceUpdate();
+		 	});
+
  		},
  		mounted : function(){
  			V_socketUtils.setInitAppFlag(true);
@@ -325,8 +337,8 @@ function init(){
 	 			</div>
 
 	 			<div v-if="forgeReady" id="viewerFrame">
-	 				<!--<filterpanel id="filterPanel" v-bind:model="model"></filterpanel>-->
-	 				<forgeviewer id="forgeViewer" v-bind:model="model" v-bind:timeline="timeline" v-bind:urns="urns" v-bind:ifcProperties="ifcProperties" v-bind:oauth="oauth"></forgeviewer>
+	 				<!--<filterpanel id="filterPanel" v-bind:model="_model"></filterpanel>-->
+	 				<forgeviewer id="forgeViewer" v-bind:model="_model" v-bind:timeline="timeline" v-bind:urns="urns" v-bind:ifcProperties="ifcProperties" v-bind:oauth="oauth"></forgeviewer>
 	 				<div id="copyright">
 		 				<p>UMR 3495 MAP-CRAI © 2020</p>
 		 				<a v-tap="infoTap" id="infoIcon" v-html="infoicon"></a>
@@ -335,7 +347,7 @@ function init(){
 	 			<div v-if="forgeReady" id="planningFrame">
 	 				<planningmenu></planningmenu>
 	 				<tasktableframe v-bind:ifcProperties="ifcProperties" v-if="modelSelected" id="taskTableFrame" v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit" v-bind:duration="duration"></tasktableframe>
-	 				<phasesdisplay  v-bind:model="model" v-bind:timeline="timeline" class="phasesFrame" v-bind:duration="duration"></phasesdisplay>
+	 				<phasesdisplay  v-bind:model="_model" v-bind:timeline="timeline" class="phasesFrame" v-bind:duration="duration"></phasesdisplay>
 	 				<player id="mainPlayer" v-bind:duration="duration" v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit"></player>
 	 			</div>
 

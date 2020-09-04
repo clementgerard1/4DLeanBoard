@@ -99,6 +99,7 @@ export default {
 			return date.getDay() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
 		},
 		enddate : function(){
+			console.log("HDQSMFLKJQSDFLMKJQSDf");
 			const date = new Date(this.model.getStartDate().valueOf() + 864E5 * this.model.getDuration());
 			return date.getDay() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
 		},
@@ -113,6 +114,9 @@ export default {
 				const date = this.milestoneSelected.getEndDate();
 				return this.milestoneSelected.getName() + " - " + date.getDay() + "/" + date.getMonth() + "/" + date.getFullYear();
 			}
+		},
+		_duration : function(){
+			return this.duration;
 		}
 	},
 	template : `
@@ -120,7 +124,7 @@ export default {
 		<div v-if="milestoneSelected != null" class="milestoneInfos">
 			<p v-html="milestoneSelectedText" >Nom de la milestone - EndDate</p>
 		</div>
-		<timelineOffset v-bind:offsettime="offset" v-bind:playerinit="_playerinit" v-bind:nbweek="nbweek" id="timelineOffset"></timelineOffset>
+		<timelineOffset v-bind:duration="_duration" v-bind:offsettime="offset" v-bind:playerinit="_playerinit" v-bind:nbweek="nbweek" id="timelineOffset"></timelineOffset>
 		<div class="backgroundPlayer">
 			<div v-tap="handleStartButtonTap" id="startDateButton" class="date"><p class="r90">{{startdate}}</p></div>
 			<timelinePlayer v-bind:highlighted="highlighted" v-bind:playerinit="_playerinit" v-bind:nbweek="nbweek" id="timelinePlayer"></timelinePlayer>

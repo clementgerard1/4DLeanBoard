@@ -59,7 +59,7 @@ export default {
 	},
 	template : `
 
-		<div class="teamLine" v-bind:style="{ height : taskheight }">
+		<div class="teamLine" v-bind:style="[nth != 0 ? { left : '24px', height : taskheight } : { height : taskheight }]">
 			<div v-press="trigger3DTeam" v-if="nth == 0" class="teamAbr" v-tap="handleTap">
 				<p v-html="team.getAbr()"></p>
 			</div>

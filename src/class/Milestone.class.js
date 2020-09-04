@@ -172,5 +172,38 @@ class Milestone extends PlanningObject{
 		return this.#num;
 	}
 
+	clone(){
+		const milestone = new Milestone(this.getName(), this.#event, this.getId());
+		milestone.setNum(this.#num);
+		milestone.setStartDate(this.getStartDate());
+		milestone.setEndDate(this.getEndDate());
+
+		for(let p in this.#phases){
+			const phase = this.#phases[p].clone();
+			milestone.addPhase(phase);
+			phase.setParent(milestone);
+		}
+
+		for(let p in this.#phases){
+
+			const followings = this.#phases[p].getFollowingPhases();
+			for(let f in followings){
+				milestone.getPhase(this.#phases[p].getId()).addFollowingPhase(milestone.getPhase(followings[f].getId()));
+			}
+			const previous = this.#phases[p].getPreviousPhases();
+			for(let pp in previous){
+				milestone.getPhase(this.#phases[p].getId()).addPreviousPhase(milestone.getPhase(previous[pp].getId()));
+			}
+
+		}
+
+		const properties = this.getProperties();
+		for(let pp in properties){
+			milestone.addProperty(properties[pp]);
+		}
+
+		return milestone;
+	}
+
 }
 export default Milestone;

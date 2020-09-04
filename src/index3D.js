@@ -126,6 +126,7 @@ function init(){
 			playerinit : null,
 			timeline : null,
 			model : null,
+			shadowModel : null,
 			duration : null,
 			urns : null,
 			oauth : null,

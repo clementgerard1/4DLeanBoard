@@ -57,7 +57,7 @@ class Tool extends Autodesk.Viewing.ToolInterface {
     }
 
     handleWheelInput(delta) {
-
+        return false;
         const calc = Math.abs(this.viewer.autocamCamera.position.x) + Math.abs(this.viewer.autocamCamera.position.y) + Math.abs(this.viewer.autocamCamera.position.z);
 
         if(calc > 700 || calc < 50) return true;
@@ -77,7 +77,7 @@ class Tool extends Autodesk.Viewing.ToolInterface {
         if(event.type == "rotate" || event.type == "rotatestart" || event.type == "rotatemove" || event.type == "rotateend" || event.type == "rotatecancel"){
             return true;
         }
-
+        return false;
         const calc = Math.abs(this.viewer.autocamCamera.position.x) + Math.abs(this.viewer.autocamCamera.position.y) + Math.abs(this.viewer.autocamCamera.position.z);
         if(calc > 700 || calc < 50) return true;
 

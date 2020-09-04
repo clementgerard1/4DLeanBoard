@@ -7,7 +7,8 @@ class V_timelineUtils{
 	static timeline = null;
 	static listeners = {
 		"time" : {},
-		"offset" : {}
+		"offset" : {},
+		"updateModel" : {}
 	};
 
 	static setTimeline(timeline){
@@ -65,6 +66,12 @@ class V_timelineUtils{
 		this.offset = offset;
 		for(let l in this.listeners["offset"]){
 			this.listeners["offset"][l](this.offset);
+		}
+	}
+
+	static updateModel(){
+		for(let l in this.listeners["updateModel"]){
+			this.listeners["updateModel"][l]();
 		}
 	}
 

@@ -14,6 +14,7 @@ class Phase extends PlanningObject{
 	#colorClass;
 	#requirementsString;
 	#num;
+	#parent;
 	/**
  		@class Phase
  		@extends PlanningObject
@@ -33,6 +34,7 @@ class Phase extends PlanningObject{
 		this.#colorClass = "defaultcolor";
 		this.#num = null;
 		this.#requirementsString ="";
+		this.#parent = null;
 	}
 
 	/**
@@ -138,7 +140,7 @@ class Phase extends PlanningObject{
 	*/
 	getTask(id){
 		if(typeof this.#tasks[id] == "undefined"){
-			//console.error("getTask(id) : id " + id + " unknowned on tasks colleciton")
+			console.error("getTask(id) : id " + id + " unknowned on tasks colleciton")
 			return null;
 		}else{
 			return this.#tasks[id];
@@ -338,6 +340,58 @@ class Phase extends PlanningObject{
 
 	getRequirementsString(){
 		return this.#requirementsString;
+	}
+
+	clone(){
+		const phase = new Phase(this.getName(), this.getId());
+		phase.setStartDate(this.getStartDate());
+		phase.setEndDate(this.getEndDate());
+		phase.setColorClass(this.#colorClass);
+		phase.setNum(this.#num);
+		phase.setRequirementsString(this.#requirementsString);
+		for(let t in this.#tasks){
+			const task = this.#tasks[t].clone();
+			phase.addTask(task);
+			task.setParentPhase(phase);
+		}
+		const tasks = phase.getTasks();
+		for(let t in tasks){
+			phase.addObject4D(tasks[t].getObject4D());
+		}
+
+		for(let t in this.#tasks){
+
+			const followings = this.#tasks[t].getFollowingTasks();
+			for(let f in followings){
+				phase.getTask(this.#tasks[t].getId()).addFollowingTask(phase.getTask(followings[f].getId()));
+			}
+			const previous = this.#tasks[t].getPreviousTasks();
+			for(let pp in previous){
+				phase.getTask(this.#tasks[t].getId()).addPreviousTask(phase.getTask(previous[pp].getId()));
+			}
+
+		}
+
+		const properties = this.getProperties();
+		for(let pp in properties){
+			phase.addProperty(properties[pp]);
+		}
+
+		//Not cloned
+		phase.setContractor(this.#contractor);
+		for(let d in this.#delivrables){
+			phase.addDelivrable(this.#delivrables[d]);
+		}
+
+		return phase;
+	}
+
+	setParent(milestone){
+		this.#parent = milestone;
+	}
+
+	getParent(){
+		return this.#parent;
 	}
 
 }

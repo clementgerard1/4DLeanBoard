@@ -445,6 +445,36 @@ class Task extends PlanningObject{
 		return this.#persons;
 	}
 
+	clone(){
+		const task = new Task(this.getName(), this.getId());
+		task.setWorkers(this.#workers);
+		task.setColorClass(this.#colorClass);
+		task.setGo(this.#go);
+		task.setDone(this.#done);
+		task.setPaused(this.#paused);
+		task.setDescription(this.#description);
+		task.setStartDate(this.getStartDate());
+		task.setEndDate(this.getEndDate());
+
+		const properties = this.getProperties();
+		for(let p in properties){
+			task.addProperty(properties[p]);
+		}
+
+		//Not cloned
+		task.setTaskTeam(this.#taskTeam);
+		for(let o in this.#operations){
+			task.addOperation(this.#operations[o]);
+		}
+		task.setObject4D(this.#object4D);
+		for(let p in this.#persons){
+			task.addPerson(this.#persons[p]);
+		}
+
+		return task;
+
+	}
+
 
 }
 export default Task;

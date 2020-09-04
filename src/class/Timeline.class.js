@@ -163,7 +163,7 @@ class Timeline{
 
 	isHolidayBetweenTwoDates(start, end){
 		for(let i = start; i <= end; i++){
-			if(!this.#steps[i].holiday) return false;
+			if(typeof this.#steps[i] != "undefined" && !this.#steps[i].holiday) return false;
 		}
 		return true;
 	}
