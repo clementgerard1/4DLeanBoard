@@ -2,6 +2,7 @@ import Milestone from "./Milestone.class.js";
 import Phase from "./Phase.class.js";
 import Task from "./Task.class.js";
 import Operation from "./Operation.class.js";
+import Utils from "./Utils.class.js";
 
 class Timeline{
 
@@ -168,7 +169,7 @@ class Timeline{
 	}
 
 	isHoliday(i){
-		return this.#steps[i].holiday
+		return (typeof this.#steps[i] != "undefined" && this.#steps[i].holiday)
 	}
 
 	/**
@@ -599,6 +600,14 @@ class Timeline{
 			if(typeof toReturn[Math.trunc(i / 7)] == "undefined") toReturn.push(Math.trunc(i / 7));
 		}
 		return toReturn;
+	}
+
+	addWorkingDaysToDate(date, days){
+		let toAdd = 0;
+		for(let i = 1 ; i <= (days + toAdd) ; i++){
+			if(this.isHoliday(parseInt(this.getTime(Utils.addDaysToDate(date, i))))) toAdd++;
+		}
+		return Utils.addDaysToDate(date, days + toAdd);
 	}
 
 }

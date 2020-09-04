@@ -41,6 +41,7 @@ export default {
 			offset : 0,
 			highlighted : [],
 			modifyMode : false,
+			displayPopUp : false,
 		}
 	},
 	computed : {
@@ -127,9 +128,18 @@ export default {
 		handleModifyMode(event){
 			const display = event.type == "press";
 			this.modifyMode = display;
+			if(!this.modifyMode){
+				this.displayPopUp = true;
+			}
 		},
 		handleDoublePress(event){
 			console.log(event);
+		},
+		handleModif(bool){
+			if(bool){
+				V_phasesUtils.updatePhases();
+			}
+			this.displayPopUp = false;
 		}
 
 
@@ -148,5 +158,8 @@ export default {
 			<div v-pan="handlePan" class="playerLine" v-bind:style="{ left : playerWidth, width : width2, height : ((phases.length - 1) * 41 + 23) + 'px'}"></div>
 		</div>
 		<phaseitem v-bind:modifymode="modifyMode" v-bind:teamDisplayed="teamDisplayStatus" v-for="p in displayedPhases" :key="p.getId()" v-bind:time="time" v-bind:model="_model" v-bind:displayPhase="displayPhase" v-bind:timeline="_timeline" v-bind:phase="p"></phaseitem>
+		<div v-if="displayPopUp" class="popUpModif">
+			<p>Ces modifications vous font gagné 3 jours, voulez vous les valider <span v-tap="()=>handleModif(true)">Oui</span> <span v-tap="()=>handleModif(false)">Non</span></p>
+		</div>
 	</div>`,
 }

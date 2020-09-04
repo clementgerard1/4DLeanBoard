@@ -259,7 +259,6 @@ class Loader{
 
 		const milestones = infos["milestones"];
 
-		console.log(infos);
 		//Teams
 		for(let i in infos.teams){
 			taskTeams[infos.teams[i].name] = new TaskTeam(infos.teams[i].name);
@@ -325,10 +324,10 @@ class Loader{
 				const tasks = phases[p]["Tasks"];
 				let actualDate = PstartDate;
 
-				phasesForPreviousNext[phase.getId()] = {
+				phasesForPreviousNext[phase.getNum()] = {
 					"previous" : phases[p]["Previous"],
 				}
-				phasesCollection[phase.getId()] = phase;
+				phasesCollection[phase.getNum()] = phase;
 				
 				for(let t in tasks){
 					if(tasks[t] != null){
@@ -400,7 +399,6 @@ class Loader{
 						tasksForPreviousNext[task.getId()] = {
 							"previous" : tasks[t]["Previous"],
 						}
-						console.log(task.getId());
 						tasksCollection[task.getId()] = task;
 					}
 
@@ -428,8 +426,8 @@ class Loader{
 
 		for(let p in phases){
 			const actualPhase = phases[p];
-			if(phasesForPreviousNext[actualPhase.getId()].previous != 0 && phasesForPreviousNext[actualPhase.getId()].previous != null && phasesForPreviousNext[actualPhase.getId()].previous != ""){
-				const mults = phasesForPreviousNext[actualPhase.getId()].previous.split(",");
+			if(phasesForPreviousNext[actualPhase.getNum()].previous != 0 && phasesForPreviousNext[actualPhase.getNum()].previous != null && phasesForPreviousNext[actualPhase.getNum()].previous != ""){
+				const mults = phasesForPreviousNext[actualPhase.getNum()].previous.split(",");
 				for(let m in mults){
 					actualPhase.addPreviousPhase(phasesCollection[mults[m]]);
 					phasesCollection[mults[m]].addFollowingPhase(actualPhase);

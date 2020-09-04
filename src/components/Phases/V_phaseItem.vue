@@ -1,6 +1,7 @@
 import "./V_phaseItem.scss";
 import scssVariables from "../SixWeekView/assets/_variables.scss";
 import V_socketUtils from "../Utils/V_socketUtils.class.js";
+import V_phasesUtils from "../Utils/V_phasesUtils.class.js";
 
 export default {
 	data : function(){
@@ -10,6 +11,10 @@ export default {
 			descriptionShown : false,
 			descriptionTimeout : null,
 			pressed : false,
+			modifyleft : "",
+			modifyright : "",
+			panleftstart : 0,
+			panrightstart : 0,
 		};
 	},
 	props : [
@@ -24,7 +29,38 @@ export default {
 	provide : [
 		'timeline'
 	],
+	watch : {
+		modifymode : function(){
+			this.modifyleft = "";
+			this.modifyright = "";
+			this.panleftstart = 0;
+			this.panrightstart = 0;
+		}
+	},
+	created : function(){
+		V_phasesUtils.addItemPhase(this);
+	},
 	computed : {
+		temporaryleft : function(){
+			if(this.model != null && this.timeline != null){
+				if(this.modifyleft != ""){
+					return ((this.timeline.getTime(this.timeline.addWorkingDaysToDate(this.phase.getStartDate(), parseInt(this.modifyleft))) / this.model.getDuration()) * 100) + "%";
+				}else{
+					return ((this.timeline.getTime(this.phase.getStartDate()) / this.model.getDuration()) * 100) + "%";
+				}
+			}
+		},
+		temporarywidth : function(){
+			let modifyleft = this.modifyleft;
+			let modifyright = this.modifyright;
+			if(modifyleft == "") modifyleft = 0;
+			if(modifyright == "") modifyright = 0;
+			if(this.model != null && this.timeline != null){
+				const left = this.timeline.getTime(this.timeline.addWorkingDaysToDate(this.phase.getStartDate(), parseInt(modifyleft))) / this.model.getDuration();
+				const right = this.timeline.getTime(this.timeline.addWorkingDaysToDate(this.phase.getEndDate(), parseInt(modifyright))) / this.model.getDuration();
+				return ((right - left) * 100) + "%";
+			}
+		},
 		left : function(){
 			if(this.model != null && this.timeline != null){
 				return ((this.timeline.getTime(this.phase.getStartDate()) / this.model.getDuration()) * 100) + "%";
@@ -123,9 +159,59 @@ export default {
 			this.pressed = display;
 			V_socketUtils.triggerPhaseDisplay(this.phase , display);
 		},
-		handlePan : function(event){
-			
+		handlePanLeft : function(event){
+			if(event.type == "panstart"){
+				if(this.modifyleft == ""){
+					this.panleftstart = 0;
+				} else{
+					this.panleftstart = parseInt(this.modifyleft);
+				}
+			}
+			if(this.modifymode){
+				if((this.panleftstart + Math.trunc(event.deltaX / 20)) > 0){
+					this.modifyleft = '+' + (this.panleftstart + Math.trunc(event.deltaX / 20));
+				}else{
+					this.modifyleft = (this.panleftstart + Math.trunc(event.deltaX / 20));
+				}
+			} 
+		},
+		handlePanRight : function(event){
+			if(this.modifymode){
+				
+				if(event.type == "panstart"){
+					if(this.modifyright == ""){
+						this.panrightstart = 0;
+					} else{
+						this.panrightstart = parseInt(this.modifyright);
+					}
+				}
+
+				if((this.panrightstart + Math.trunc(event.deltaX / 20)) > 0){
+					this.modifyright = '+' + (this.panrightstart + Math.trunc(event.deltaX / 20));
+				}else{
+					this.modifyright = (this.panrightstart + Math.trunc(event.deltaX / 20));
+				}
+
+			}
+
+			const nexts = this.phase.getFollowingPhases();
+			for(let n in nexts){
+				this.updateNext(nexts[n]);
+			}
+
+		},
+
+		updateNext : function(phase){
+
+			const item = V_phasesUtils.getItemPhaseByPhaseId(phase.getId());
+			item.modifyleft = this.modifyright;
+			item.modifyright = this.modifyright;
+			const nexts = phase.getFollowingPhases();
+			for(let n in nexts){
+				this.updateNext(nexts[n]);
+			}
 		}
+
 	},
 	mounted : function(){
 		this.mounted = true;
@@ -143,10 +229,16 @@ export default {
 					<p v-for="team in teams" class="teamCircle" v-bind:style='[teamDisplayed[team.getId()] ? { opacity : 1, backgroundColor : scssvariables[team.getColorClass().replace("BG_", "").toLowerCase()] } : { opacity : 0.5, backgroundColor : scssvariables[team.getColorClass().replace("BG_", "").toLowerCase()] } ]'></p>
 				</div>
 			</div>
-			<p v-pan="handlePan" v-press="trigger3DPhase" v-tap="handleDescription" class="phaseItem" v-bind:style="[(!(completion == '0%') && !(completion == '100%')) ? {left : left, width : width, color : scssvariables['greenbluish_light']} : {left : left, width : width, color : 'black' }]" v-html="completion"></p>
+			<p v-press="trigger3DPhase" v-tap="handleDescription" class="phaseItem" v-bind:style="[(!(completion == '0%') && !(completion == '100%')) ? {left : left, width : width, color : scssvariables['greenbluish_light']} : {left : left, width : width, color : 'black' }]" v-html="completion"></p>
 			<p v-press="trigger3DPhase" v-tap="handleDescription" class="phaseItemNameRight" v-bind:style="{ left : left}" v-html="phase.getName()"></p>
-			<div v-pan="handlePan" v-press="trigger3DPhase" v-tap="handleDescription" v-if="!(completion == '0%')" v-bind:style="{ left : left, width : pourcent}" class="phaseItemFilled"></div>
-			<div v-pan="handlePan" v-press="trigger3DPhase" v-tap="handleDescription" v-if="!(completion == '100%')" v-bind:style="{ left : lleft, width : antipourcent}" class="phaseItemNotFilled"></div>
+			<div v-press="trigger3DPhase" v-tap="handleDescription" v-if="!(completion == '0%')" v-bind:style="{ left : left, width : pourcent}" class="phaseItemFilled"></div>
+			<div v-press="trigger3DPhase" v-tap="handleDescription" v-if="!(completion == '100%')" v-bind:style="{ left : lleft, width : antipourcent}" class="phaseItemNotFilled"></div>
+			<div v-if="modifymode" v-pan="handlePanLeft" class="phaseItemLeftPan" v-bind:style="{ left : temporaryleft}"><p v-html="modifyleft"></p></div>
+			<div v-if="modifymode" v-pan="handlePanRight" class="phaseItemRightPan" v-bind:style="{ left : 'calc(' + temporaryleft + ' + ' + temporarywidth + ' - 30px)'}"><p v-html="modifyright"></p></div>
+
+			<!-- temporary display on modify mode-->
+			<div v-if="modifymode" class="temporaryPhase" v-bind:style="{ left : temporaryleft, width : temporarywidth}"></div>
+
 		</template>
 		<template v-else="isRight" v-bind:class="[pressed ? 'pressed' : '']">
 			<div v-if="displayPhase" class="colorDiv" v-bind:style="{width : left}">
@@ -155,9 +247,15 @@ export default {
 				</div>
 			</div>
 			<p v-press="trigger3DPhase" v-tap="handleDescription" class="phaseItemNameLeft" v-bind:style="{ left : leftName}" v-html="phase.getName()"></p>
-			<p v-pan="handlePan" v-press="trigger3DPhase" v-tap="handleDescription" class="phaseItem" v-bind:style="[(!(completion == '0%') && !(completion == '100%')) ? {left : left, width : width, color : scssvariables['greenbluish_light']} : {left : left, width : width, color : 'black' }]" v-html="completion"></p>
-			<div v-pan="handlePan" v-press="trigger3DPhase" v-tap="handleDescription" v-if="!(completion == '0%')" v-bind:style="{ left : left, width : pourcent}" class="phaseItemFilled"></div>
-			<div v-pan="handlePan" v-press="trigger3DPhase" v-tap="handleDescription" v-if="!(completion == '100%')" v-bind:style="{ left : lleft, width : antipourcent}" class="phaseItemNotFilled"></div>
+			<p v-press="trigger3DPhase" v-tap="handleDescription" class="phaseItem" v-bind:style="[(!(completion == '0%') && !(completion == '100%')) ? {left : left, width : width, color : scssvariables['greenbluish_light']} : {left : left, width : width, color : 'black' }]" v-html="completion"></p>
+			<div v-press="trigger3DPhase" v-tap="handleDescription" v-if="!(completion == '0%')" v-bind:style="{ left : left, width : pourcent}" class="phaseItemFilled"></div>
+			<div v-press="trigger3DPhase" v-tap="handleDescription" v-if="!(completion == '100%')" v-bind:style="{ left : lleft, width : antipourcent}" class="phaseItemNotFilled"></div>
+			<div v-if="modifymode" v-pan="handlePanLeft" class="phaseItemLeftPan" v-bind:style="{ left : temporaryleft}"><p v-html="modifyleft"></p></div>
+			<div v-if="modifymode" v-pan="handlePanRight" class="phaseItemRightPan" v-bind:style="{ left : 'calc(' + temporaryleft + ' + ' + temporarywidth + ' - 30px)'}"><p v-html="modifyright"></p></div>
+
+			<!-- temporary display on modify mode-->
+			<div v-if="modifymode" class="temporaryPhase" v-bind:style="{ left : temporaryleft, width : temporarywidth}"></div>
+
 		</template>
 	</div>`,
 }
