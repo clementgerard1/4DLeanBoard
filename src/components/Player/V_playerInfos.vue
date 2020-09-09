@@ -4,12 +4,18 @@ import V_timelineUtils from "../Utils/V_timelineUtils.class.js";
 import V_playerMilestone from "./V_playerMilestone.vue";
 import scssVariables from "../SixWeekView/assets/_variables.scss";
 import Utils from "../../class/Utils.class.js";
+import V_ModelUtils from "../Utils/V_ModelUtils.class.js";
 
 export default {
 	components: {
 		"playermilestone" : V_playerMilestone,
 	},
 	data: function(){
+
+		const model = V_ModelUtils.getModel();
+		const timeline = V_ModelUtils.getTimeline();
+		const duration = model.getDuration();
+
 		return {
 			svg : null,
 			widthh : null,
@@ -17,23 +23,18 @@ export default {
 			time : this.playerinit,
 			playerX : 0,
 			playerflag : false,
-			milestones : this.model.getMilestones(),
+			milestones : model.getMilestones(),
 			playerTimeout : null,
 			// timeTimeout : null,
 			milestoneTimeout : {
 				milestoneId : null,
 				timeout : null,
 			},
+			model : model,
+			timeline : timeline,
+			duration : duration,
 		}
 	},
-	inject:[
-		"timeline",
-		"model"
-	],
-	provide:[
-		"timeline",
-		"model"
-	],
 	props: [
 		"nbweek",
 		"playerinit",
@@ -42,6 +43,11 @@ export default {
 	created : function(){
 		window.addEventListener("resize", this.windowUpdate);
 		V_timelineUtils.addListener("time", this, this.watchTime);
+		V_ModelUtils.addModelListener((model)=>{
+			this.model = model;
+			this.timeline = V_ModelUtils.getTimeline();
+			this.duration = this.model.getDuration();
+		})
 	},
 	mounted : function(){
 		this.svg = document.querySelector(".svgPlayer" + this.id);

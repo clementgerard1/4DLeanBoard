@@ -302,7 +302,6 @@ class Model{
 			let start = null;
 			let end = null;
 			for(let m in this.#milestones){
-				console.log(this.#milestones[m].getStartDate(), this.#milestones[m].getEndDate())
 				const startDate = this.#milestones[m].getStartDate();
 				const endDate = this.#milestones[m].getEndDate();
 
@@ -334,6 +333,13 @@ class Model{
 		return toReturn;
 	}
 
+	getPhase(id){
+		const phases = this.getPhases();
+		for(let p in phases){
+			if(phases[p].getId() == id) return phases[p];
+		}
+	}
+
 	/*
 		get all tasks of the model
 		@returns {Array} Array of tasks
@@ -350,6 +356,13 @@ class Model{
 			}
 		}
 		return toReturn;
+	}
+
+	getTask(id){
+		const tasks = this.getTasks();
+		for(let t in tasks){
+			if(tasks[t].getId() == id) return tasks[t];
+		}
 	}
 
 	getZones(){
@@ -1205,9 +1218,11 @@ class Model{
 			model.addMilestone(this.#milestones[m].clone());
 		}
 
-		console.log(model.getMilestone(0));
+		// Followings/Previous
 
 		for(let m in this.#milestones){
+
+			const milestone = this.#milestones[m];
 
 			const followings = this.#milestones[m].getFollowingMilestones();
 			for(let f in followings){
@@ -1218,7 +1233,36 @@ class Model{
 				model.getMilestone(this.#milestones[m].getId()).addPreviousMilestone(model.getMilestone(previous[p].getId()));
 			}
 
+			const phases = this.#milestones[m].getPhases();
+			for(let p in phases){
+				const followings = phases[p].getFollowingPhases();
+				for(let f in followings){
+					model.getPhase(phases[p].getId()).addFollowingPhase(model.getPhase(followings[f].getId()));
+				}
+				const previous = phases[p].getPreviousPhases();
+				for(let pp in previous){
+					model.getPhase(phases[p].getId()).addPreviousPhase(model.getPhase(previous[pp].getId()));
+				}
+
+				const tasks = phases[p].getTasks();
+				for(let t in tasks){
+
+					const followings = tasks[t].getFollowingTasks();
+					for(let f in followings){
+						model.getTask(tasks[t].getId()).addFollowingTask(model.getTask(followings[f].getId()));
+					}
+					const previous = tasks[t].getPreviousTasks();
+					for(let pp in previous){
+						model.getTask(tasks[t].getId()).addPreviousTask(model.getTask(previous[pp].getId()));
+					}
+
+				}
+
+			}
+
 		}
+
+
 
 		return model;
 

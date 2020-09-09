@@ -4,32 +4,27 @@ import V_phasesBackground from "./V_phasesBackground.vue";
 import V_timelineUtils from "../Utils/V_timelineUtils.class.js";
 import V_phasesUtils from "../Utils/V_phasesUtils.class.js";
 import V_socketUtils from "../Utils/V_socketUtils.class.js";
+import V_ModelUtils from "../Utils/V_ModelUtils.class.js";
 
 export default {
 	components : {
 		phaseitem : V_phaseItem,
 		phasesbackground : V_phasesBackground
 	},
-	props :[
-		"timeline",
-		"model",
-		"duration",
-	],
-	provide: function(){
-		return {
-			'timeline' : this.timeline,
-			'model' : this.model,
-		}
-	},
 	data : function(){
 
-		
+		const model = V_ModelUtils.getModel();
+
+		const timeline = V_ModelUtils.getTimeline();
+		const duration = model.getDuration();
+
 		const toReturn = {};
-		const teams = this.model.getTaskTeams();
+		const teams = model.getTaskTeams();
 		for(let t in teams){
 			toReturn[teams[t].getId()] = true;
 		}
 		const teamDisplayStatus = toReturn;
+		const phases = model.getPhases();
 		return {
 			time : null,
 			isDisplayed : true,
@@ -42,19 +37,24 @@ export default {
 			highlighted : [],
 			modifyMode : false,
 			displayPopUp : false,
+			model : model,
+			timeline : timeline,
+			duration : duration,
+			phases : phases,
+			nbJourGagne : 0,
+		}
+	},
+	watch : {
+		duration : function(){
+			if(this.model != null){	
+				this.phases = this.model.getPhases();
+			}else{
+				this.phases =  null;
+			}
+			this.watchTime(this.time);
 		}
 	},
 	computed : {
-		phases : function(){
-			console.log(this.model);
-			if(this.model != null){	
-				return this.model.getPhases();
-			}
-			return null;
-		},
-		_timeline : function(){
-			return this.timeline;
-		},
 		displayedPhases : function(){
 			this.temp;
 			const toReturn = [];
@@ -125,12 +125,13 @@ export default {
 		},
 		handleModifyMode(event){
 			const display = event.type == "press";
-			this.modifyMode = display;
-			this.$root.shadowModel = this.model.clone();
-			this.$root._model = this.$root.shadowModel;
-			if(!this.modifyMode){
-				this.displayPopUp = true;
-				this.$root._model = this.$root.model;
+			if(display != this.modifyMode){
+				this.modifyMode = display;
+				if(this.modifyMode){
+					V_ModelUtils.setTemporaryMode(true);
+				}else{
+					this.displayPopUp = true;
+				}
 			}
 		},
 		handleDoublePress(event){
@@ -138,7 +139,11 @@ export default {
 		},
 		handleModif(bool){
 			if(bool){
-				//V_phasesUtils.updatePhases();
+				const temp = V_ModelUtils.getModel();
+				V_ModelUtils.setTemporaryMode(false);
+				V_ModelUtils.setModel(temp);
+			}else{
+				V_ModelUtils.setTemporaryMode(false);
 			}
 			this.displayPopUp = false;
 		}
@@ -148,6 +153,12 @@ export default {
 	created : function(){
 		V_timelineUtils.addListener("time", this, this.watchTime);
 		V_timelineUtils.addListener("offset", this, this.watchOffset);
+		V_ModelUtils.addModelListener((model)=>{
+			this.model = model;
+			this.timeline = V_ModelUtils.getTimeline();
+			this.duration = this.model.getDuration();
+			this.nbJourGagne = V_ModelUtils.getDayDifference();
+		})
 		V_phasesUtils.addPhasePanel(this);
 	},
 	template : `
@@ -158,9 +169,9 @@ export default {
 		<div class="playerLineWrapper">
 			<div v-pan="handlePan" class="playerLine" v-bind:style="{ left : playerWidth, width : width2, height : ((phases.length - 1) * 41 + 23) + 'px'}"></div>
 		</div>
-		<phaseitem v-bind:modifymode="modifyMode" v-bind:teamDisplayed="teamDisplayStatus" v-for="p in displayedPhases" :key="p.getId()" v-bind:time="time" v-bind:model="model" v-bind:displayPhase="displayPhase" v-bind:timeline="_timeline" v-bind:phase="p" v-bind:duration="duration"></phaseitem>
+		<phaseitem v-bind:modifymode="modifyMode" v-bind:teamDisplayed="teamDisplayStatus" v-for="p in displayedPhases" :key="p.getId()" v-bind:time="time" v-bind:displayPhase="displayPhase" v-bind:phaseId="p.getId()" v-bind:duration="duration"></phaseitem>
 		<div v-if="displayPopUp" class="popUpModif">
-			<p>Ces modifications vous font gagné 3 jours, voulez vous les valider <span v-tap="()=>handleModif(true)">Oui</span> <span v-tap="()=>handleModif(false)">Non</span></p>
+			<p>Ces modifications vous font gagné <span v-html="nbJourGagne"></span> jours, voulez vous les valider <span v-tap="()=>handleModif(true)">Oui</span> <span v-tap="()=>handleModif(false)">Non</span></p>
 		</div>
 	</div>`,
 }

@@ -3,9 +3,19 @@ import scssVariables from "../SixWeekView/assets/_variables.scss";
 import V_socketUtils from "../Utils/V_socketUtils.class.js";
 import V_phasesUtils from "../Utils/V_phasesUtils.class.js";
 import V_timelineUtils from "../Utils/V_timelineUtils.class.js";
+import V_ModelUtils from "../Utils/V_ModelUtils.class.js";
 
 export default {
 	data : function(){
+
+		const model = V_ModelUtils.getModel();
+		const timeline = V_ModelUtils.getTimeline();
+		const duration = model.getDuration();
+		let phase = null;
+		if(model != null){
+			phase = model.getPhase(this.phaseId);
+		}
+
 		return {
 			mounted : false,
 			scssvariables : scssVariables,
@@ -19,20 +29,19 @@ export default {
 			originalStart : null,
 			originalEnd : null,
 			originalDuration : null,
+			model : model,
+			timeline : timeline,
+			duration : duration,
+			phase : phase,
+			temp : 0,
 		};
 	},
 	props : [
-		"phase",
-		'timeline',
-		'model',
+		"phaseId",
 		'time',
 		'teamDisplayed',
 		"displayPhase",
 		'modifymode',
-		"duration"
-	],
-	provide : [
-		'timeline'
 	],
 	watch : {
 		modifymode : function(){
@@ -47,18 +56,27 @@ export default {
 	},
 	created : function(){
 		V_phasesUtils.addItemPhase(this);
+		V_ModelUtils.addModelListener((model)=>{
+			this.model = model;
+			this.timeline = V_ModelUtils.getTimeline();
+			this.duration = this.model.getDuration();
+			this.phase = model.getPhase(this.phaseId);
+			this.temp++;
+		})
 	},
 	computed : {
 		temporaryleft : function(){
+			this.temp;
 			if(this.model != null && this.timeline != null){
 				if(this.modifyleft != ""){
-					return ((this.timeline.getTime(this.timeline.addWorkingDaysToDate(this.phase.originalStart, parseInt(this.modifyleft))) / this.duration) * 100) + "%";
+					return ((this.timeline.getTime(this.timeline.addWorkingDaysToDate(this.originalStart, parseInt(this.modifyleft))) / this.duration) * 100) + "%";
 				}else{
 					return ((this.timeline.getTime(this.originalStart) / this.duration) * 100) + "%";
 				}
 			}
 		},
 		temporarywidth : function(){
+			this.temp;
 			let modifyleft = this.modifyleft;
 			let modifyright = this.modifyright;
 			if(modifyleft == "") modifyleft = 0;
@@ -70,25 +88,29 @@ export default {
 			}
 		},
 		left : function(){
+			this.temp;
 			if(this.model != null && this.timeline != null){
 				return ((this.timeline.getTime(this.phase.getStartDate()) / this.duration) * 100) + "%";
 			}
 		},
 		lleft : function(){
+			this.temp;
 			if(this.model != null && this.timeline != null){
 				this.duration;
 				return "calc(" + this.left + " + " + this.pourcent + ")";
 			}
 		},
 		leftName : function(){
+			this.temp;
 			if(this.mounted){
 				if(this.model != null && this.timeline != null){
-					return "calc( " + ((this.timeline.getTime(this.phase.getStartDate()) / this.duration) * 100) + "% - "  + (document.querySelector("#phaseDisplay-" + this.phase.getId() + " .phaseItemNameLeft").clientWidth + 30) + "px)";
+					return "calc( " + ((this.timeline.getTime(this.phase.getStartDate()) / this.duration) * 100) + "% - "  + (document.querySelector("#phaseDisplay-" + this.phase.getId() + " .phaseItemNameLeft, " + "#phaseDisplay-" + this.phase.getId() + " .phaseItemNameRight").clientWidth + 30) + "px)";
 				}
 			}
 			
 		},
 		width : function(){
+			this.temp;
 			if(this.model != null && this.timeline != null){
 				const left = this.timeline.getTime(this.phase.getStartDate()) / this.duration;
 				const right = this.timeline.getTime(this.phase.getEndDate()) / this.duration;
@@ -96,6 +118,7 @@ export default {
 			}
 		},
 		pourcent : function(){
+			this.temp;
 			const start = Math.ceil(this.timeline.getTime(this.phase.getStartDate()));
 			const end = Math.ceil(this.timeline.getTime(this.phase.getEndDate()));
 			if((this.time * 7) < start) return "0%";
@@ -103,6 +126,7 @@ export default {
 			return (Math.min( ((this.time * 7) - start) / this.duration, 1) * 100) + "%";
 		}, 
 		antipourcent : function(){
+			this.temp;
 			const start = Math.ceil(this.timeline.getTime(this.phase.getStartDate()));
 			const end = Math.ceil(this.timeline.getTime(this.phase.getEndDate()));
 			if((this.time * 7) < start) return (((end - start) / this.duration) * 100) + "%";
@@ -110,11 +134,13 @@ export default {
 			return (Math.min( (end - (this.time * 7)) / this.duration, 1) * 100) + "%";
 		},
 		completion : function(){
+			this.temp;
 			const start = Math.ceil(this.timeline.getTime(this.phase.getStartDate()));
 			const end = Math.ceil(this.timeline.getTime(this.phase.getEndDate()));
 			return Math.trunc(Math.max(0, Math.min(100, ((((this.time * 7) - start ) / (end - start)) * 100)))) + "%";
 		},
 		isRight : function(){
+			this.temp;
 			return (this.timeline.getTime(this.phase.getEndDate()) / this.duration) < 0.6;
 		},
 		descriptionText : function(){
@@ -183,6 +209,23 @@ export default {
 					this.modifyleft = (this.panleftstart + Math.trunc(event.deltaX / 20));
 				}
 			} 
+
+			let modifyleft = this.modifyleft;
+			if(this.modifyleft == "") modifyleft = 0;
+			let modifyright = this.modifyright;
+			if(this.modifyright == "") modifyright = 0;
+
+			this.phase.setStartDate(this.timeline.addWorkingDaysToDate(this.originalStart, parseInt(modifyleft)));
+			this.phase.setEndDate(this.timeline.addWorkingDaysToDate(this.originalEnd, parseInt(modifyright)));
+
+
+			if(this.phase.getEndDate() > this.model.getEndDate()){
+				this.phase.getParent().setEndDate(this.phase.getEndDate());
+			}
+
+			V_ModelUtils.dispatchUpdate();
+
+
 		},
 		handlePanRight : function(event){
 			if(this.modifymode){
@@ -221,27 +264,33 @@ export default {
 				this.phase.getParent().setEndDate(this.phase.getEndDate());
 			}
 
-			V_timelineUtils.updateModel();
+			V_ModelUtils.dispatchUpdate();
 
 		},
 
 		updateNext : function(phase){
 
 			const item = V_phasesUtils.getItemPhaseByPhaseId(phase.getId());
-			item.modifyleft = this.modifyright;
-			item.modifyright = this.modifyright;
-			const nexts = phase.getFollowingPhases();
-			for(let n in nexts){
-				this.updateNext(nexts[n]);
-			}
-			
+
 			let modifyleft = this.modifyleft;
 			if(this.modifyleft == "") modifyleft = 0;
 			let modifyright = this.modifyright;
 			if(this.modifyright == "") modifyright = 0;
 
-			this.phase.setStartDate(this.timeline.addWorkingDaysToDate(this.originalStart, parseInt(this.modifyleft)));
-			this.phase.setEndDate(this.timeline.addWorkingDaysToDate(this.originalEnd, parseInt(this.modifyright)));
+			const originalStartDate = V_ModelUtils.getMainModel().getPhase(phase.getId()).getStartDate();
+			const originalEndDate = V_ModelUtils.getMainModel().getPhase(phase.getId()).getEndDate();
+
+			phase.setStartDate(this.timeline.addWorkingDaysToDate(originalStartDate, parseInt(modifyright)));
+			phase.setEndDate(this.timeline.addWorkingDaysToDate(originalEndDate, parseInt(modifyright)));
+
+			const nexts = phase.getFollowingPhases();
+			for(let n in nexts){
+				this.updateNext(nexts[n]);
+			}
+
+			if(phase.getEndDate() > this.model.getEndDate()){
+				phase.getParent().setEndDate(phase.getEndDate());
+			}
 
 		}
 

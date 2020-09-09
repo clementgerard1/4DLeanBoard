@@ -1,31 +1,29 @@
 import "./V_timelinePlayer.scss";
 import V_timelineUtils from "../Utils/V_timelineUtils.class.js";
 import V_playerWeek from "./V_playerWeek.vue";
+import V_ModelUtils from "../Utils/V_ModelUtils.class.js";
+
 
 export default {
 	components : {
 		"playerweek" : V_playerWeek,
 	},
 	data : function(){
+
+		const model = V_ModelUtils.getModel();
+		const timeline = V_ModelUtils.getTimeline();
+
 		return {
 				time : this.playerinit,
 				offset : 0,
+				model : model,
+				timeline : timeline
 		}
 	},
 	props:[
 		'nbweek',
-		"timeline",
-		"model",
 		"playerinit",
 		"highlighted"
-	],
-	inject:[
-		"timeline",
-		"model"
-	],
-	provide :[
-		"timeline",
-		"model"
 	],
 	methods: {
 		watchTime : function(time){
@@ -38,6 +36,10 @@ export default {
 	created : function(){
 		V_timelineUtils.addListener("time", this, this.watchTime);
 		V_timelineUtils.addListener("offset", this, this.watchOffset);
+		V_ModelUtils.addModelListener((model)=>{
+			this.model = model;
+			this.timeline = V_ModelUtils.getTimeline();
+		})
 	},
 	computed : {
 		_highlighted : function(){

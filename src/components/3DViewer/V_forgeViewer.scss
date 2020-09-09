@@ -32,6 +32,27 @@
 	height: 100%;
 }
 
+#loadFrame{
+	position : absolute;
+	left : 0px;
+	top : 0px;
+	height : 100%;
+	width : 100%;
+	background-color : white;
+	z-index : 2000;
+	display : flex;
+	justify-content : center;
+	align-items : center;
+	margin : 10px;
+	font-family: Oswald;
+	font-style: normal;
+	font-weight: 500;
+	font-size: 24px;
+	text-indent: 3px;
+	text-transform: capitalize;
+	margin : 0%;
+}
+
 #modelMenu{
 	background-color : rgba(0,0,0,0);
 	position : absolute;
@@ -90,6 +111,18 @@
 					border-radius: 15px;
 					box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.5);
 				}
+
+				.ifcIcon{
+					height : 30px;
+					width : 30px;
+
+					svg{
+						width :90%;
+					}
+					opacity : 1;
+
+				}
+
 				p{
 					color : #000000;
 				}
@@ -112,6 +145,17 @@
 					border-radius: 15px;
 
 				}
+
+				.ifcIcon{
+					height : 30px;
+					width : 30px;
+
+					svg{
+						width :90%;
+					}
+					opacity : 0.6;
+				}
+
 				p{
 					color : #808080;
 				}

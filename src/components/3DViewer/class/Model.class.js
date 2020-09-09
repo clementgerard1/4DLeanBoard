@@ -156,6 +156,12 @@ class Model{
 							// 	that.#viewer.lockSelection(dbObjects[d].dbId, true, that.#model);
 							// }
 
+							// if(typeof ifcId2Obj3D[tag] == "undefined"){
+							// 	that.#viewer.lockSelection(dbObjects[d].dbId, true, that.#model);
+							// }else{
+							// 	that.#viewer.unlockSelection(dbObjects[d].dbId, that.#model);
+							// }
+
 							if(that.#style == null){
 
 								//that.#dbObjects[dbObjects[d].dbId].setModel(that.#model);
@@ -319,6 +325,7 @@ class Model{
 	}
 
 	_onModelLoaded(model, that){
+		Memory.addLoadCounter();
 
 		this.#model = model;
 		this.#modelLoaded = true;

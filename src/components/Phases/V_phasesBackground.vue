@@ -1,7 +1,13 @@
 import "./V_phasesBackground.scss";
 import Utils from "../../class/Utils.class.js";
+import V_ModelUtils from "../Utils/V_ModelUtils.class.js";
 
 export default {
+	data: function(){
+		return {
+			timeline : V_ModelUtils.getTimeline(),
+		}
+	},
 	computed:{
 		weeks : function(){
 			const toReturn = [];
@@ -12,14 +18,16 @@ export default {
 			return toReturn;
 		}
 	},
+	created : function(){
+		V_ModelUtils.addModelListener((model)=>{
+			this.timeline = V_ModelUtils.getTimeline();
+		})
+	},
 	props:[
 		"time",
 		"duration",
 		"offset",
 		"highlighted"
-	],
-	inject:[
-		"timeline"
 	],
 	methods:{
 		getClass : function(n){

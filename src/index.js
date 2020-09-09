@@ -15,6 +15,7 @@ import openSocket from "socket.io-client";
 import V_timelineUtils from "./components/Utils/V_timelineUtils.class.js";
 import V_taskTableUtils from "./components/Utils/V_taskTableUtils.class.js";
 import V_filterMenuUtils from "./components/Utils/V_filterMenuUtils.class.js";
+import V_ModelUtils from "./components/Utils/V_ModelUtils.class.js";
 import V_blockPage from "./components/BlockPage/V_blockPage.vue";
 
 //Hammer si already on viewer3D.min.js loaded on index.html
@@ -219,8 +220,6 @@ function init(){
 			playerinit : null,
 			timeline : null,
 			model : null,
-			_model : null,
-			shadowModel : null,
 			duration : null,
 			urns : null,
 			oauth : null,
@@ -229,6 +228,7 @@ function init(){
 			forgeReady : false,
 			infoicon : infoIcon,
 			infoDisplay : false,
+			teamUser : null,
  		},
  		methods:{
  			findGetParameter : function(parameterName) {
@@ -260,17 +260,21 @@ function init(){
 				})
 				.then( datas => {
 						//Model Loaded
+						V_ModelUtils.setModel(datas.model);
 						this.model = datas.model;
-						this._model = this.model;
+						const password = this.findGetParameter("password");
+						for(let p in Config.passwords){
+							if(Config.passwords[p] == password) this.teamUser = p;
+						}
+						// this._model = this.model;
 						//DataApi.postModel(mod, "testt");
 						if(this.model.getName() == "") this.model.setName("test");
-						this.timeline = new Timeline(this.model);
+						this.timeline = V_ModelUtils.getTimeline();
 						this.playerInit = 0;
 						V_taskTableUtils.setAllTasks(this.model.getTasks());
 						V_filterMenuUtils.setAllTeams(this.model.getTaskTeams());
 						V_timelineUtils.setTimeline(this.timeline);
 
-						const phase = this.timeline.getModel().getMilestones()[0].getPhases()[0];
 					  	this.duration = this.model.getDuration();
 
 						//Socket Server Connexion
@@ -309,13 +313,6 @@ function init(){
 		 		}
 		 	});
 
-		 	V_timelineUtils.addListener("updateModel", this, ()=>{
-		 		this._model = this._model;
-		 		this.duration = this._model.getDuration();
-		 		console.log(this.duration);
-		 		this.$forceUpdate();
-		 	});
-
  		},
  		mounted : function(){
  			V_socketUtils.setInitAppFlag(true);
@@ -337,8 +334,8 @@ function init(){
 	 			</div>
 
 	 			<div v-if="forgeReady" id="viewerFrame">
-	 				<!--<filterpanel id="filterPanel" v-bind:model="_model"></filterpanel>-->
-	 				<forgeviewer id="forgeViewer" v-bind:model="_model" v-bind:timeline="timeline" v-bind:urns="urns" v-bind:ifcProperties="ifcProperties" v-bind:oauth="oauth"></forgeviewer>
+	 				<!--<filterpanel id="filterPanel" v-bind:model="model"></filterpanel>-->
+	 				<forgeviewer id="forgeViewer" v-bind:model="model" v-bind:timeline="timeline" v-bind:urns="urns" v-bind:ifcProperties="ifcProperties" v-bind:oauth="oauth"></forgeviewer>
 	 				<div id="copyright">
 		 				<p>UMR 3495 MAP-CRAI © 2020</p>
 		 				<a v-tap="infoTap" id="infoIcon" v-html="infoicon"></a>
@@ -346,9 +343,9 @@ function init(){
 	 			</div>
 	 			<div v-if="forgeReady" id="planningFrame">
 	 				<planningmenu></planningmenu>
-	 				<tasktableframe v-bind:ifcProperties="ifcProperties" v-if="modelSelected" id="taskTableFrame" v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit" v-bind:duration="duration"></tasktableframe>
-	 				<phasesdisplay  v-bind:model="_model" v-bind:timeline="timeline" class="phasesFrame" v-bind:duration="duration"></phasesdisplay>
-	 				<player id="mainPlayer" v-bind:duration="duration" v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit"></player>
+	 				<tasktableframe v-bind:teamuser="teamUser" v-bind:ifcProperties="ifcProperties" v-if="modelSelected" id="taskTableFrame" v-bind:timeline="timeline" v-bind:playerinit="playerinit" v-bind:duration="duration"></tasktableframe>
+	 				<phasesdisplay  v-bind:timeline="timeline" class="phasesFrame" v-bind:duration="duration"></phasesdisplay>
+	 				<player id="mainPlayer" v-bind:duration="duration" v-bind:timeline="timeline" v-bind:playerinit="playerinit"></player>
 	 			</div>
 
 	 		</div>

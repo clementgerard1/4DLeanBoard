@@ -5,6 +5,7 @@ import lineOpen from "./assets/lineOpen.svg";
 import lineClose from "./assets/lineClose.svg";
 import V_Task from "./V_task.vue";
 import V_6Wrow_line from "./V_6Wrow_line.vue";
+import V_ModelUtils from "../Utils/V_ModelUtils.class.js";
 import V_taskTableUtils from "../Utils/V_taskTableUtils.class.js";
 
 export default {
@@ -13,14 +14,28 @@ export default {
 		taskline : V_6Wrow_line
 	},
 	data : function(){
+
+		const model = V_ModelUtils.getModel();
+		const timeline = V_ModelUtils.getTimeline();
+		const duration = model.getDuration();
+
 		const isOpen = V_taskTableUtils.isOpen(this.taskteam, this.nth);
+
+
+		const tasks = timeline.getTasksByTaskTeamAndNthBetweenTwoDatesFromMemory(this.taskteam, this.nth, this.tasktablestart * 7, (this.tasktablestart + 6) * 7 - 1);
+		const isVisible = !(tasks.count == 0  && this.nth != 0);
+
 		return {
 			"color" : "BG_" + this.taskteam.getColorClass(),
 			"isOpen" : isOpen, 
-			"isVisible" : true,
+			"isVisible" : isVisible,
 			"teamDescription" : false,
 			"headerHeight" : "30px",
-			"teamDisplayed" : true
+			"teamDisplayed" : true,
+			"model" : model,
+			"timeline" : timeline,
+			"duration" : duration,
+			"tasks" : tasks
 		}
 	},
 	props :[
@@ -29,30 +44,19 @@ export default {
 		"tasktablestart",
 		"nth",
 		"tasksize",
-		"ifcProperties"
-	],
-	inject :[
-		"timeline",
-		"model"
-	],
-	provide:[
-		"timeline",
-		"model"
+		"ifcProperties",
+		"teamuser"
 	],
 	computed:{
+		_teamuser : function(){
+			return this.teamuser;
+		},
 		icon : function(){
 			if(this.isOpen){
 				return lineOpen;
 			}else{
 				return lineClose;
 			}
-		},
-		tasks : function(){
-			const tasks = this.timeline.getTasksByTaskTeamAndNthBetweenTwoDatesFromMemory(this.taskteam, this.nth, this.tasktablestart * 7, (this.tasktablestart + 6) * 7 - 1);
-			//console.log(tasks.count, this.nth);
-			//this.isOpen = (tasks.count != 0);
-			this.isVisible = !(tasks.count == 0  && this.nth != 0);
-			return tasks;
 		},
 		_time : function(){
 			return this.time;
@@ -79,6 +83,13 @@ export default {
 		}
 	},
 	created: function(){
+
+		V_ModelUtils.addModelListener((model)=>{
+			this.model = model;
+			this.timeline = V_ModelUtils.getTimeline();
+			this.duration = this.model.getDuration();
+			this.tasks = this.timeline.getTasksByTaskTeamAndNthBetweenTwoDatesFromMemory(this.taskteam, this.nth, this.tasktablestart * 7, (this.tasktablestart + 6) * 7 - 1);
+		});
 		V_taskTableUtils.addRow(this);
 	},
 	mounted : function(){
@@ -129,7 +140,7 @@ export default {
 
 		<!-- tasks -->
 		<div v-show="isVisible" class="tasksWrapper" v-bind:style="{ top : '-' + headerHeight, marginBottom : '-' + headerHeight} ">
-			<task v-bind:headerheight="headerHeight" v-bind:color="color" v-bind:team="_team" nth=0 v-for="(task, i) in tasks.array" :key="i" v-bind:properties="getProperties(task)" v-bind:isopen="isOpen" v-bind:task="task" v-bind:isOpen="isOpen" v-bind:time="_tasktablestart + i"  ></task>
+			<task v-bind:teamuser="_teamuser" v-bind:headerheight="headerHeight" v-bind:color="color" v-bind:team="_team" nth=0 v-for="(task, i) in tasks.array" :key="i" v-bind:properties="getProperties(task)" v-bind:isopen="isOpen" v-bind:taskid="[typeof task != 'undefined' && task != null ? task.getId() : null]" v-bind:isOpen="isOpen" v-bind:tasktablestart="_tasktablestart" v-bind:time="_tasktablestart + i"  ></task>
 		</div>
 
 		<!-- button -->

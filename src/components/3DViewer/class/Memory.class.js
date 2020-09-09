@@ -19,6 +19,8 @@ class Memory{
 	static nbStyles = 1;
 	static sceneObj = null;
 	static layers = [];
+	static loadCounter = 0;
+	static loadCallback = null;
 
 	static style2Model = {};
 
@@ -43,11 +45,28 @@ class Memory{
 		}
 	}
 
+	static addLoadListener(callback){
+		this.loadCallback = callback;
+	}
+
+	static addLoadCounter(){
+		this.loadCounter++;
+		this.loadCallback();
+	}
+
+	static getLoadCounter(){
+		return this.loadCounter;
+	}
+
 	static setNb3DModels(nb){
 		this.nbModels = nb;
 		for(let i = 0 ; i < nb ; i++){
 			this.style2Model[i] = {};
 		}
+	}
+
+	static getNb3DModels(){
+		return this.nbModels;
 	}
 
 	static setNbStyles(nb){

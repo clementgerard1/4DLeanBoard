@@ -458,7 +458,7 @@ class Task extends PlanningObject{
 
 		const properties = this.getProperties();
 		for(let p in properties){
-			task.addProperty(properties[p]);
+			task.addProperty(properties[p], properties[p].getName());
 		}
 
 		//Not cloned

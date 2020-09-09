@@ -225,9 +225,10 @@ class Scene{
 
 	_endOfInit(that){
 
+	console.log(Autodesk.ModelStructure);
+
 	let section = null;
 	let hierarchie = null;
-	console.log(that.#viewer);
 	  const toolbar = that.#viewer.getToolbar();
 	  const controls = []
 	  for(let i = 0 ; i < toolbar.getNumberOfControls() ; i++){
@@ -236,7 +237,6 @@ class Scene{
 	  	const contain = toolbar.getControl(id).getNumberOfControls();
 	  	if(contain > 0){
 	  		for(let j = 0 ; j < contain ; j++){
-	  			console.log(control.getControlId(j));
 	  			if(control.getControlId(j) == "toolbar-sectionTool"){
 	  				section = control.getControl(control.getControlId(j));
 	  			}else if(control.getControlId(j) == "toolbar-modelStructureTool"){

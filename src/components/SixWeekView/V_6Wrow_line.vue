@@ -1,6 +1,7 @@
 import TimelineUtils from "../Utils/V_timelineUtils.class.js";
 import V_socketUtils from "../Utils/V_socketUtils.class.js";
 import V_taskTableUtils from "../Utils/V_taskTableUtils.class.js";
+import V_ModelUtils from "../Utils/V_ModelUtils.class.js";
 import Utils from "../../class/Utils.class.js";
 import CheckList from "./assets/CheckList.svg";
 import Schedule from "./assets/Schedule.svg";
@@ -9,6 +10,11 @@ import "./V_6Wrow_line.scss";
 
 export default {
 	data : function(){
+
+		const model = V_ModelUtils.getModel();
+		const timeline = V_ModelUtils.getTimeline();
+		const duration = model.getDuration();
+
 		return {
 			"checklisticon" : CheckList,
 			"admin" : AdminSettingsMale,
@@ -16,8 +22,11 @@ export default {
 			"leaderName" : this.team.getBoss().getName(),
 			"leaderEmail" : this.team.getBoss().getEmail(),
 			"leaderPhone" : this.team.getBoss().getPhone(),
-			"dates" : this.timeline.getStartEndDateByTeam(this.team),
+			"dates" : timeline.getStartEndDateByTeam(this.team),
 			"pressed" : false,
+			"model" : model,
+			"duration" : duration,
+			"timeline": timeline,
 		}
 	},
 	props: [
@@ -44,13 +53,14 @@ export default {
 
 		}
 	},
-	inject : [
-		'timeline',
-		'model',
-	],
 	created : function(){
 		V_taskTableUtils.addLine(this);
 		this.setTeamDisplay(this.team.getId(), this.nth, V_taskTableUtils.getInfosLine(this.team.getId(), this.nth));
+		V_ModelUtils.addModelListener((model)=>{
+			this.model = model;
+			this.timeline = V_ModelUtils.getTimeline();
+			this.duration = this.model.getDuration();
+		});
 	},
 	computed : {
 		doneStatus : function(){

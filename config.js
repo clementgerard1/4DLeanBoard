@@ -24,6 +24,50 @@ module.exports = {
 			clientId : null,
 			clientSecret : null,
 		}
+	},
+
+	//Passwords should be on server side with serverside verification
+	"passwords" : {
+		"EQA" : "a",
+		"EQB" : "b",
+		"EQC" : "c",
+		"EQD" : "d",
+		"EQE" : "e",
+	},
+
+	//Properties which will not displayed
+	"propertiesHidden" : [
+		"parent",
+		"Icon",
+		"Type",
+		"Hidden",
+		"Required",
+		"Source File",
+		"Ambient.Red",
+		"Ambient.Green",
+		"Ambient.Blue",
+		"Diffuse.Red",
+		"Diffuse.Green",
+		"Diffuse.Blue",
+		"Specular.Red",
+		"Specular.Green",
+		"Specular.Blue",
+		"Emissive.Red",
+		"Emissive.Green",
+		"Emissive.Blue",
+		"Shininess",
+		"Transparency",
+		"ext-'Site web'",
+		"ext-'IsExternal'",
+	],
+
+	
+
+	"propertiesNameConversion" : {
+		"viewable_in" : "IFC file",
+		"Layer" : "Etage",
+		"ext-'Renovation Status'" : "Status"
+
 	}
 
 }

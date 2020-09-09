@@ -6,6 +6,7 @@ import V_playerInfos from "./V_playerInfos.vue";
 import V_playerUtils from "../Utils/V_playerUtils.class.js";
 import V_timelineUtils from "../Utils/V_timelineUtils.class.js";
 import scssVariables from "../SixWeekView/assets/_variables.scss";
+import V_ModelUtils from "../Utils/V_ModelUtils.class.js";
 
 import Utils from "../../class/Utils.class.js";
 
@@ -16,8 +17,20 @@ export default {
 		timelineOffset : V_timelineOffset,
 	},
 	data : function(){
+
+		const model = V_ModelUtils.getModel();
+		const timeline = V_ModelUtils.getTimeline();
+		const duration = model.getDuration();
+
+		const date = model.getStartDate();
+		const startdate =  date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
+
+		const date2 = new Date(model.getStartDate().valueOf() + 864E5 * model.getDuration());
+		const enddate =  date2.getDate() + "/" + (date2.getMonth() + 1) + "/" + date2.getFullYear();
+
 		return {
 				time : this.playerinit,
+				duration : duration,
 				maximum : Math.trunc(this.duration / 7),
 				displayM : true,
 				offset : 0,
@@ -25,30 +38,37 @@ export default {
 				startTimeout : null,
 				endTimeout : null,
 				highlighted : [],
+				model : model,
+				timeline : timeline,
+				startdate : startdate,
+				enddate : enddate,
 		}
 	},
 	created : function(){
 		V_playerUtils.addPlayer(this);
 		V_socketUtils.addPlayer();
 		V_timelineUtils.addListener("offset", this, this.watchOffset);
+		V_ModelUtils.addModelListener((model)=>{
+			this.model = model;
+			this.timeline = V_ModelUtils.getTimeline();
+			this.duration = this.model.getDuration();
+		})
 	},
 	watch : {
 		time : function(){
 			V_socketUtils.setTime(this.time);
+		},
+		duration : function(){
+			const date = this.model.getStartDate();
+			this.startdate =  date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
+
+			const date2 = new Date(this.model.getStartDate().valueOf() + 864E5 * this.model.getDuration());
+			this.enddate =  date2.getDate() + "/" + (date2.getMonth() + 1) + "/" + date2.getFullYear();
 		}
 	},
 	props:[
 		'playerinit',
-		'duration',
-		"timeline",
-		"model"
 	],
-	provide : function(){
-		return {
-			'timeline' : this.timeline,
-			'model' : this.model,
-		}
-	},
 	methods:{
 		handleStartButtonTap : function(){
 			const button = document.getElementById("startDateButton");
@@ -94,15 +114,6 @@ export default {
 		}
 	},
 	computed:{
-		startdate : function(){
-			const date = this.model.getStartDate();
-			return date.getDay() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
-		},
-		enddate : function(){
-			console.log("HDQSMFLKJQSDFLMKJQSDf");
-			const date = new Date(this.model.getStartDate().valueOf() + 864E5 * this.model.getDuration());
-			return date.getDay() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
-		},
 		nbweek  : function(){
 			return Math.ceil(this.duration / 7);
 		},
@@ -112,11 +123,8 @@ export default {
 		milestoneSelectedText : function(){
 			if(this.milestoneSelected != null){
 				const date = this.milestoneSelected.getEndDate();
-				return this.milestoneSelected.getName() + " - " + date.getDay() + "/" + date.getMonth() + "/" + date.getFullYear();
+				return this.milestoneSelected.getName() + " - " + date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();
 			}
-		},
-		_duration : function(){
-			return this.duration;
 		}
 	},
 	template : `
@@ -124,11 +132,11 @@ export default {
 		<div v-if="milestoneSelected != null" class="milestoneInfos">
 			<p v-html="milestoneSelectedText" >Nom de la milestone - EndDate</p>
 		</div>
-		<timelineOffset v-bind:duration="_duration" v-bind:offsettime="offset" v-bind:playerinit="_playerinit" v-bind:nbweek="nbweek" id="timelineOffset"></timelineOffset>
+		<timelineOffset v-bind:duration="duration" v-bind:offsettime="offset" v-bind:playerinit="_playerinit" v-bind:nbweek="nbweek" id="timelineOffset"></timelineOffset>
 		<div class="backgroundPlayer">
-			<div v-tap="handleStartButtonTap" id="startDateButton" class="date"><p class="r90">{{startdate}}</p></div>
+			<div v-tap="handleStartButtonTap" id="startDateButton" class="date"><p class="r90" v-html="startdate"></p></div>
 			<timelinePlayer v-bind:highlighted="highlighted" v-bind:playerinit="_playerinit" v-bind:nbweek="nbweek" id="timelinePlayer"></timelinePlayer>
-			<div v-tap="handleEndButtonTap" id="endDateButton" class="date" ><p class="r90">{{enddate}}</p></div>
+			<div v-tap="handleEndButtonTap" id="endDateButton" class="date" ><p class="r90" v-html="enddate"></p></div>
 		</div>
 		<playerinfos v-bind:displayM="displayM" v-bind:playerinit="_playerinit" class="svgPlayer" v-bind:nbweek="nbweek"></playerinfos>
 

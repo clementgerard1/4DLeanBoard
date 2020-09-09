@@ -1,6 +1,7 @@
 import "./V_playerWeek.scss";
 import Utils from "../../class/Utils.class.js";
 import V_playerWeek from "./V_playerWeek.vue";
+import V_ModelUtils from "../Utils/V_ModelUtils.class.js";
 
 export default {
 	components : {
@@ -12,10 +13,6 @@ export default {
 		'offset',
 		'highlightedpress'
 	],	
-	inject:[
-		"timeline",
-		"model"
-	],
 	computed:{
 		vacation : function(){
 			return this.timeline.isHolidayBetweenTwoDates(this.innertime * 7, this.innertime * 7 + 6);
@@ -53,12 +50,23 @@ export default {
 	},
 	data : function(){
 
-		let date = new Date(this.timeline.getStartDate());
+		const model = V_ModelUtils.getModel();
+		const timeline = V_ModelUtils.getTimeline();
+		
+		let date = new Date(timeline.getStartDate());
 		date.setDate(date.getDate() + (this.time * 7));
-		const weekNumber = Utils.getWeekNumber(this.timeline.getDateObject(this.innertime * 7));
+		const weekNumber = Utils.getWeekNumber(timeline.getDateObject(this.innertime * 7));
 		return {
 			weeknumber : weekNumber,
+			model : model,
+			timeline : timeline,
 		}
+	},
+	created : function(){
+		V_ModelUtils.addModelListener((model)=>{
+			this.model = model;
+			this.timeline = V_ModelUtils.getTimeline();
+		})
 	},
 	template : `
 	<div class="playerWeek" v-bind:class='{ presshighlighted :  highlightedP, selected : selected, hightlighted : highlighted, built : built, toBuild : tobuild }'>		

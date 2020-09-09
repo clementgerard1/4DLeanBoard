@@ -359,19 +359,6 @@ class Phase extends PlanningObject{
 			phase.addObject4D(tasks[t].getObject4D());
 		}
 
-		for(let t in this.#tasks){
-
-			const followings = this.#tasks[t].getFollowingTasks();
-			for(let f in followings){
-				phase.getTask(this.#tasks[t].getId()).addFollowingTask(phase.getTask(followings[f].getId()));
-			}
-			const previous = this.#tasks[t].getPreviousTasks();
-			for(let pp in previous){
-				phase.getTask(this.#tasks[t].getId()).addPreviousTask(phase.getTask(previous[pp].getId()));
-			}
-
-		}
-
 		const properties = this.getProperties();
 		for(let pp in properties){
 			phase.addProperty(properties[pp]);

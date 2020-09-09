@@ -1,30 +1,25 @@
 import "./V_timelineOffset.scss";
 import V_timelineUtils from "../Utils/V_timelineUtils.class.js";
+import V_ModelUtils from "../Utils/V_ModelUtils.class.js";
 
 export default {
 	data : function(){
+
+		const model = V_ModelUtils.getModel();
+		const timeline = V_ModelUtils.getTimeline();
 		return {
 				time : this.playerinit,
 				startPan : null,
 				offset : 0,
 				bgcolor : '#CBC8C8',
+				model : model,
+				timeline : timeline
 		}
 	},
 	props:[
 		'nbweek',
-		"timeline",
-		"model",
 		"playerinit",
 		"offsettime",
-		"duration"
-	],
-	inject:[
-		"timeline",
-		"model"
-	],
-	provide :[
-		"timeline",
-		"model"
 	],
 	methods: {
 		watchTime : function(time){
@@ -70,6 +65,11 @@ export default {
 	},
 	created : function(){
 		V_timelineUtils.addListener("time", this, this.watchTime);
+		V_ModelUtils.addModelListener((model)=>{
+			this.model = model;
+			this.timeline = V_ModelUtils.getTimeline();
+			this.duration = this.model.getDuration();
+		})
 	},
 	template : `
 	<div id="timelineOffset" class="timelineOffset">

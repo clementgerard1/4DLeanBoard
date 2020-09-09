@@ -14,6 +14,7 @@ import Tool from "./Tool.js";
 import Camera from "./class/Camera.class.js";
 
 import modelBar from "./assets/LvlBarHidden2.svg";
+import ifcIcon from "./assets/IFCfileicon.svg";
 
 import V_ifcPropertiesPanel from "./V_ifcPropertiesPanel.vue";
 import V_filterPanel from "../FilterPanel/V_filterPanel.vue";
@@ -37,7 +38,9 @@ export default {
 			infosBeforeView : null,
 			cameraLocked : false,
 			ifcPropertiesDisplayed : [],
-			layers : []
+			layers : [],
+			loadingText : "Initialisation",
+			loaded : false,
 		}
 	},
 	props : [
@@ -159,11 +162,17 @@ export default {
 				this.ifcPropertiesDisplayed = [];
 				for(let s in selection){
 					const objF = Memory.getForgeObject(selection[s].selection, selection[s].model);
-					const properties = objF.getProperties();
-					console.log(properties);
-					for(let p in properties){
-						this.ifcPropertiesDisplayed.push({ key : properties[p].getName(), value: properties[p].getInfo().displayValue});
+					if(objF != null){
+						const properties = objF.getProperties();
+						for(let p in properties){
+							if(typeof properties[p].getInfo() == "object"){
+								this.ifcPropertiesDisplayed.push({ key : properties[p].getName(), value: properties[p].getInfo().displayValue});
+							}else{
+								this.ifcPropertiesDisplayed.push({ key : properties[p].getName(), value: properties[p].getInfo()});
+							}
+						}
 					}
+					
 				}
 
 				this.clearSelection();
@@ -188,18 +197,6 @@ export default {
 					}
 				}
 				Memory.refresh();
-				const objsSelected = Memory.getSelected();
-				for(let o in objsSelected){
-					const properties = objsSelected[o].getProperties();
-					for(let p in properties){
-						if(typeof properties[p].getInfo().displayValue == "undefined"){
-							//console.log(properties[p].getName(), properties[p].getInfo());
-						}else{
-							//console.log(properties[p].getName(), properties[p].getInfo().displayValue);
-						}
-					}
-				}
-
 			}
 		},
 
@@ -298,7 +295,6 @@ export default {
 
 		setTime(time){
 			this.playerinit = time;
-			console.log(this.cameraLocked);
 			if(!this.cameraLocked){
 				const tasks = this.timeline.getTasksBetweenTwoDates(time * 7, time * 7 + 6);
 				const zones = [];
@@ -462,6 +458,12 @@ export default {
 		Memory.setNb3DModels(this.urns.length);
 		Memory.setNbStyles(this.scene.getEdgeStyles().length);
 
+		Memory.addLoadListener(()=>{
+			this.loadingText = Memory.getLoadCounter() + " / " + (Memory.getNbStyles() * Memory.getNb3DModels());
+		});
+
+		console.log(Memory.getNbStyles(), Memory.getNb3DModels());
+
 		this.scene.init(this.oauth, this.urns, this.objs, this.ifcProperties, ()=>{
 			console.log("init done");
 			this.layers = Memory.getLayers();
@@ -572,6 +574,18 @@ export default {
 
 			//All informations are loaded / All objects are invisible on their models
 			console.log("LOADED");
+
+			//Properties extension
+			for(let i = 0 ; i < (Memory.getNbStyles() * Memory.getNb3DModels()); i++){
+				console.log(Memory.getNbStyles());
+				if((i % Memory.getNbStyles()) != 0){
+					const style = document.createElement('style');
+					style.innerHTML = '[lmv-modelid="' + (i + 1)  +  '"] { display : none }';
+					document.body.appendChild(style);
+				}
+			}
+
+			//
 			
 			Memory.setUnlinkedStyle();
 			this.watchTime(this.playerinit);
@@ -579,11 +593,14 @@ export default {
 				Memory.setIfcTransparent(this.modelShown[Math.trunc(models[m].getId() / Memory.getNbStyles())], this.modelShown[Math.trunc(models[m].getId() / Memory.getNbStyles())].shown);
 			}
 
+			this.loaded = true;
+
 		})
 
 	},
 	template : `
 	<div id="forgeViewer">
+		<div v-if="!loaded" id="loadFrame"><p v-html="loadingText"></p></div>
 		<!-- forgeViewer -->
 		<ifcPropertiesPanel v-bind:properties="ifcPropertiesDisplayed"></ifcPropertiesPanel>
 		<div id="modelMenu"> 
@@ -591,7 +608,7 @@ export default {
 			<div class="openMenu" >
 				<div v-if="menuopen">
 					<div class="modelName" v-for="model in modelShown" v-tap="() => handleMenuChange(model.id)" v-bind:class='[ model.shown ? "shown" : "hide"]'> 
-						<a class="fileButton"></a> 
+						<a class="ifcIcon">` + ifcIcon + `</a> 
 						<p v-html="model.name"></p>
 					</div>
 				</div>

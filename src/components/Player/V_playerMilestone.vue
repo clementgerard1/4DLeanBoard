@@ -1,13 +1,21 @@
 import "./V_playerMilestone.scss";
 import Utils from "../../class/Utils.class.js";
 import scssVariables from "../SixWeekView/assets/_variables.scss";
+import V_ModelUtils from "../Utils/V_ModelUtils.class.js";
+
 
 export default {
 	data: function(){
+
+		const model = V_ModelUtils.getModel();
+		const timeline = V_ModelUtils.getTimeline();
+
 		return {
 			id : Utils.getId("milestonePlayer"),
 			size : scssVariables.playerHeight.replace("px", "") / 4,
-			size2 : scssVariables.playerHeight.replace("px", "") / 4.2
+			size2 : scssVariables.playerHeight.replace("px", "") / 4.2,
+			timeline : timeline,
+			model : model,
 		}
 	},
 	props: [
@@ -17,6 +25,10 @@ export default {
 	],
 	created : function(){
 		window.addEventListener("resize", this.windowUpdate);
+		V_ModelUtils.addModelListener((model)=>{
+			this.model = model;
+			this.timeline = V_ModelUtils.getTimeline();
+		})
 	},
 	computed : {
 		done : function(){
@@ -46,10 +58,6 @@ export default {
 			const backRect = document.querySelector(".svgPlayer" + this.id + " .playerBackground");
 		},
 	},
-	inject:[
-		"timeline",
-		"model"
-	],
 	template : `
 	<g class="milestonePlayer" v-bind:class="milestoneClass">
 		<g v-if="done" v-bind:transform="transform" filter="url(#filter0_d_playermilestonedone)">

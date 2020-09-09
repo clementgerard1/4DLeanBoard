@@ -19,12 +19,21 @@ import doneIcon from "./assets/done.svg";
 import goIcon from "./assets/go.svg";
 import pauseIcon from "./assets/pause.svg";
 
+import V_ModelUtils from "../Utils/V_ModelUtils.class.js";
+import Utils from "../../class/Utils.class.js";
+
 export default {
 	data : function(){
 
+		const model = V_ModelUtils.getModel();
+		const timeline = V_ModelUtils.getTimeline();
+		const duration = model.getDuration();
+		let task = model.getTask(this.taskid);
+		if(typeof task == "undefined") task = null;
+
 		let previousTask = null;
-		if(this.task != null){
-			const previous = this.task.getPreviousTasks()[Object.keys(this.task.getPreviousTasks())[0]];
+		if(task != null){
+			const previous = task.getPreviousTasks()[Object.keys(task.getPreviousTasks())[0]];
 			if(typeof previous != "undefined"){
 				previousTask = previous;
 			}else{
@@ -35,38 +44,38 @@ export default {
 		}
 
 		let constraint = false;
-		if(this.task != null){
-			constraint = this.task.getRequirement("constraint").getValue();
+		if(task != null){
+			constraint = task.getRequirement("constraint").getValue();
 		}
 
 		let information = false;
-		if(this.task != null){
-			information = this.task.getRequirement("information").getValue();
+		if(task != null){
+			information = task.getRequirement("information").getValue();
 		}
 
 		let materials = false;
-		if(this.task != null){
-			materials = this.task.getRequirement("materials").getValue();
+		if(task != null){
+			materials = task.getRequirement("materials").getValue();
 		}		
 
 		let manpower = false;
-		if(this.task != null){
-			manpower = this.task.getRequirement("manpower").getValue();
+		if(task != null){
+			manpower = task.getRequirement("manpower").getValue();
 		}		
 
 		let equipement = false;
-		if(this.task != null){
-			equipement = this.task.getRequirement("equipement").getValue();
+		if(task != null){
+			equipement = task.getRequirement("equipement").getValue();
 		}		
 
 		let safety = false;
-		if(this.task != null){
-			safety = this.task.getRequirement("safety").getValue();
+		if(task != null){
+			safety = task.getRequirement("safety").getValue();
 		}		
 
 		let space = false;
-		if(this.task != null){
-			space = this.task.getRequirement("space").getValue();
+		if(task != null){
+			space = task.getRequirement("space").getValue();
 		}		
 
 		let previousColor = null;
@@ -75,18 +84,18 @@ export default {
 		}
 
 		let ready = false
-		if(this.task != null){
-			ready = this.task.isReady();
+		if(task != null){
+			ready = task.isReady();
 		}
 
 		let paused = false;
-		if(this.task != null){
-			paused = this.task.isPaused();
+		if(task != null){
+			paused = task.isPaused();
 		}
 
 		let done = false;
-		if(this.task != null){
-			done = this.task.isDone();
+		if(task != null){
+			done = task.isDone();
 		}
 
 		let previousready = false;
@@ -99,18 +108,27 @@ export default {
 
 		let startWeekDate = null;
 		let endWeekDate = null;
-		if(this.task != null){
-			startWeekDate = this.addDays(this.task.getStartDate(), -(this.task.getStartDate().getDay() - 1));
-			endWeekDate = this.addDays(this.task.getEndDate(), -(this.task.getEndDate().getDay() - 1));
+		let twoLineDates = null;
+		if(task != null){
+			startWeekDate = this.addDays(task.getStartDate(), -(task.getStartDate().getDay() - 1));
+			endWeekDate = this.addDays(task.getEndDate(), -(task.getEndDate().getDay() - 1));
+			twoLineDates = true || startWeekDate.getTime() !== endWeekDate.getTime();
 		}
 
 		let persons = {};
-		if(this.task != null){
-			const pers = this.task.getTaskTeam().getPersons();
+		let mn = 0;
+		let dr = 0;
+		if(task != null){
+			const pers = task.getTaskTeam().getPersons();
 			for(let p in pers){
 				persons[pers[p].getId()] = false;
 			}
+			mn = task.getWorkers();
+			dr =  task.getDuration();
 		}
+
+
+
 		return {
 			"selected" : false,
 			"state" :false,
@@ -157,32 +175,128 @@ export default {
 			endweek : endWeekDate,
 			openFlag : false,
 			persons : persons,
-
+			mn : mn,
+			actualassign : 0,
+			task : task,
+			model : model,
+			timeline : timeline,
+			duration : duration,
+			dr : dr,
+			modifymode : false,
+			twoLineDates : twoLineDates,
+			updateCalendars : 0,
+			pressed : false,
+			originalStartDate : null,
+			originalEndDate : null,
+			eventToRemove : [],
 		}
 	},
-	inject : [
-		'timeline',
-		'model',
-	],
 	props : [
 		"team",
 		"nth",
 		'time',
-		"task",
+		"taskid",
 		"color",
 		"isOpen",
 		"isopen",
 		"headerheight",
-		"properties"
+		"properties",
+		"teamuser",
+		"tasktablestart"
 	],
 	mounted: function(){
 		this.updateStateDiv();
 		this.watchResize();
+		const handler = (e)=>{
+			const offset = document.getElementById(this._uid + '-refmovetask');
+
+			if(this.pressed){
+				const elems = document.getElementsByClassName(this.task.getId() + "-formoving");
+
+				const possibilitiesLeft = [];
+				for(let i = this.tasktablestart ; i < this.tasktablestart + 6 ; i++){
+					possibilitiesLeft[i] = document.querySelector(".positiontask-" + i).getBoundingClientRect().left;
+				}
+				let distance = null;
+				for(let p in possibilitiesLeft){
+					const dist = Math.abs(possibilitiesLeft[p] - e.clientX);
+					if(distance == null || distance.distance > dist){
+						distance = {
+							distance : dist,
+							id : p,
+							newTime : this.tasktablestart + p,
+						};
+					}
+				}
+
+				if(this.task != null){
+					const possibilitiesTop = [];
+					for(let j = this.tasktablestart ; j < this.tasktablestart + 6 ; j++){
+						const elemss = document.querySelectorAll(".positiontask-" + j + ".equipetask-" + this.task.getTaskTeam().getId());
+						for(let i = 0 ; i < elemss.length ; i++){
+							if(possibilitiesTop.indexOf(elemss[i].getBoundingClientRect().top) == -1) possibilitiesTop.push(elemss[i].getBoundingClientRect().top);
+						}
+					}
+
+					let distance2 = null;
+					for(let p in possibilitiesTop){
+						const dist = Math.abs(possibilitiesTop[p] - e.clientY);
+						if(distance2 == null || distance2.distance > dist){
+							distance2 = {
+								distance : dist,
+								id : p,
+							};
+						}
+					}
+
+					for(let e in elems){
+						if(typeof elems[e].style != "undefined"){
+							elems[e].style.top = (possibilitiesTop[distance2.id] - offset.getBoundingClientRect().top) + "px";
+							elems[e].style.left = (possibilitiesLeft[distance.id] - offset.getBoundingClientRect().left) + "px";
+							elems[e].style.width = "100%";
+							elems[e].style.position = "absolute";
+							elems[e].style.zIndex = 3000;
+							elems[e].style.backgroundColor = "blue";
+							elems[e].style.borderRadius = "5px";
+							elems[e].style.filter = 'drop-shadow(2px 4px 4px rgba(0, 0, 0, 0.5))';
+
+						}
+					}
+
+					this.task.setStartDate(Utils.addDaysToDate(this.originalStartDate, (distance.newTime - this.time) * 7));
+					this.task.setEndDate(Utils.addDaysToDate(this.originalEndDate, (distance.newTime - this.time) * 7));
+				}
+
+				
+				
+			}
+
+		}
+
+		document.getElementById("planningFrame").addEventListener("touchmove", handler);
+		document.getElementById("planningFrame").addEventListener("mousemove", handler);
 		window.addEventListener('resize', this.watchResize);
+		this.eventToRemove = [handler, this.watchResize];
+
 	},
 	created: function(){
+
 		V_taskTableUtils.addTask(this);
 		if(this.task != null){
+			V_ModelUtils.addModelListener((model)=>{
+				this.model = model;
+				this.timeline = V_ModelUtils.getTimeline();
+				this.duration = this.model.getDuration();
+				this.task = model.getTask(this.taskid);
+				if(typeof this.task == "undefined") this.task = null;
+				if(this.task != null){
+					this.dr = this.task.getDuration();
+					this.startweek =  this.addDays(this.task.getStartDate(), -(this.task.getStartDate().getDay() - 1));
+					this.endweek = this.addDays(this.task.getEndDate(), -(this.task.getEndDate().getDay() - 1));
+					this.twoLineDates = true || this.startweek.getTime() !== this.endweek.getTime();
+					this.updateCalendars++;
+				}
+			});
 			this.selected = V_taskTableUtils.isTokenOwner(this);
 			//if(this.selected){
 				//V_socketUtils.highlightObject4D(this.task.getObject4D(), true);
@@ -190,6 +304,7 @@ export default {
 		}else{
 			this.selected = null;
 		}
+
 	},
 	updated: function(){
 		this.updateDatas();
@@ -206,7 +321,6 @@ export default {
 		}
 	},
 	computed:{
-
 		wrapclass : function(){
 			let result = "";
 			if(this.highlighted) result += "highlighted ";
@@ -219,9 +333,6 @@ export default {
 		},
 		tid : function(){
 			return this.task.getId();
-		},
-		dr : function(){
-			return this.task.getDuration();
 		},
 		svgcolor : function(){
 			return scssVariables[this.color.replace("BG_", "").toLowerCase()];
@@ -259,9 +370,6 @@ export default {
 					border : this.svgcolor
 				};
 			}
-		},
-		mn : function(){
-			return this.task.getWorkers();
 		},
 		taskname : function(){
 			const startWeek = this.timeline.getDateObject(this.time * 7);
@@ -389,16 +497,6 @@ export default {
 
 	},
 	watch:{
-		time : function(){
-			// if(this.task != null){
-			// 	this.selected = V_taskTableUtils.isTokenOwner(this);
-			// 	if(this.selected){
-			// 		V_socketUtils.highlightObject4D(this.task.getObject4D(), true);
-			// 	}
-			// }else{
-			// 	this.selected = null;
-			// }
-		},
 		ready : function(){
 			if(!this.ready){
 				this.done = false;
@@ -822,10 +920,12 @@ export default {
 			const persons = this.task.getPersons();
 			if(typeof persons[person.getId()] == "undefined"){
 				this.task.addPerson(person);
-				this.$set("persons", person.getId(), true);
+				this.$set(this.persons, person.getId(), true);
+				this.actualassign++;
 			}else{
 				this.task.removePerson(person);
-				this.$set("persons", person.getId(), false);
+				this.$set(this.persons, person.getId(), false);
+				this.actualassign--;
 			}
 		},
 
@@ -920,26 +1020,37 @@ export default {
 		getCalendarClass(i, startBool){
 			let comp = null; 
 			let comp2 = null;
-			if(this.timeline.isHoliday((this.time * 7) + (i-1))) return "holiday";
+			let comp3 = null;
+			if(this.timeline.isHoliday((this.time * 7) + (i-1))) return ["holiday", "#808080"];
 			if(startBool){
 				comp = this.addDays(this.startweek, (i-1));
 				comp2 = this.task.getStartDate();
+				comp3 = this.task.getEndDate();
 				if(comp.getTime() < comp2.getTime()){
-					return "previous";
+					return ["previous", "white"];
 				}else if(comp.getTime() == comp2.getTime()){
-					return "startTask";
+					return ["startTask", this.svgcolor];
+				}else if(comp.getTime() < comp3.getTime()){
+					return ["inTask", this.svgcolor];
+				}else if(comp.getTime() == comp3.getTime()){
+					return ["inTask", this.svgcolor];
 				}else{
-					return "inTask";
+					return ['next', 'white'];
 				}
 			}else{
 				comp = this.addDays(this.endweek, (i-1));
-				comp2 = this.task.getEndDate();
+				comp2 = this.task.getStartDate();
+				comp3 = this.task.getEndDate();
 				if(comp.getTime() < comp2.getTime()){
-					return "inTask";
-				}else if(comp.getTime() == comp2.getTime()){
-					return "endTask";
+					return ["previous", "white"];
+				}else if(comp.getTime() == comp2.getTime() && comp2.getTime() != comp3.getTime()){
+					return ["inTask", this.svgcolor];
+				}else if(comp.getTime() < comp3.getTime()){
+					return ["inTask", this.svgcolor];
+				}else if(comp.getTime() == comp3.getTime()){
+					return ["endTask", this.svgcolor];
 				}else{
-					return "next";
+					return ["next", "white"];;
 				}
 			}
 
@@ -951,146 +1062,228 @@ export default {
 			}
 		},
 
+		handleManChange(bool){
+			if(bool){
+				this.mn++;
+			}else{
+				this.mn--;
+			}
+			this.task.setWorkers(this.mn);
+		},
+
+		handleCalendarChange(bool){
+
+			if(!this.modifymode){
+				this.modifymode = true;
+				V_ModelUtils.setTemporaryMode(true);
+			}
+			if(bool){
+				this.task.setEndDate(this.timeline.addWorkingDaysToDate(this.task.getEndDate(), 1));
+			}else{
+				this.task.setEndDate(this.timeline.addWorkingDaysToDate(this.task.getEndDate(), -1));
+			}
+
+			V_ModelUtils.dispatchUpdate();
+
+		},
+		handleCalendarStartTap(i){
+			if(!this.modifymode){
+				this.modifymode = true;
+				V_ModelUtils.setTemporaryMode(true);
+			}
+			
+			this.task.setStartDate(Utils.addDaysToDate(this.startweek, i-1 ));
+
+			V_ModelUtils.dispatchUpdate();
+		},
+		handleCalendarEndTap(i){
+			if(!this.modifymode){
+				this.modifymode = true;
+				V_ModelUtils.setTemporaryMode(true);
+			}
+			
+			this.task.setEndDate(Utils.addDaysToDate(this.endweek, i-1 ));
+
+			V_ModelUtils.dispatchUpdate();
+		},
+
 		handleDoublePress(event){
-			console.log("doublepress", event);
-		}
+
+			this.pressed = event.type == "press";
+
+			if(this.pressed){
+				if(!this.modifymode){
+					this.originalStartDate = this.task.getStartDate();
+					this.originalEndDate = this.task.getEndDate();
+					this.modifymode = true;
+					V_ModelUtils.setTemporaryMode(true);
+				}
+			}else{
+
+				const elems = document.getElementsByClassName(this.task.getId() + "-formoving");
+				for(let e in elems){
+					if(typeof elems[e].style != "undefined"){
+						elems[e].style.top = this.mouseTop;
+						elems[e].style.left = this.mouseLeft;
+						elems[e].style.width = "100%";
+						elems[e].style.position = "initial";
+						elems[e].style.zIndex = 0;
+						elems[e].style.backgroundColor = "rgba(0,0,0,0)";
+						elems[e].style.borderRadius = "0px";
+						elems[e].style.filter = '';
+					}
+				}
+
+				this.modifymode = false;
+				const temp = V_ModelUtils.getModel();
+				V_ModelUtils.setTemporaryMode(false);
+				V_ModelUtils.setModel(temp);
+
+				V_ModelUtils.dispatchUpdate();
+			}
+
+		},
 
 	},
 
 	template : `
 	<div v-tap="handleOpen" class="taskWrapper" v-bind:class='wrapclass'>
-		<div v-doublepress="handleDoublePress" class="task">
+		<div v-doublepress="handleDoublePress" v-bind:class="[ task != null ? 'task positiontask-' + time + ' equipetask-' + task.getTaskTeam().getId() : 'task positiontask-' + time]" v-bind:id="_uid + '-refmovetask'">
 			
-			<div v-if="notEmpty" v-bind:id="_uid + '-task'" v-bind:style="[!isOpen ? { pointerEvents : 'none'} : {}]">
+			<div v-bind:id="_uid + '-movetask'" v-bind:class="taskid + '-formoving'">
 
-				<div v-press="handleTap" class="taskHeader" v-bind:style="{ height : headerheight }">
-					<div>
+				<div v-if="notEmpty" v-bind:id="_uid + '-task'" v-bind:style="[!isOpen ? { pointerEvents : 'none'} : {}] ">
+
+					<div v-press="handleTap" class="taskHeader" v-bind:style="{ height : headerheight }">
+						<div>
+							<!-- man face -->
+							<div v-if="manFace" v-bind:style="{backgroundColor : headercolors.body, borderColor : headercolors.border}" >
+								<p v-tap="handleIdTap" v-bind:style="{ color : idcolor }" v-html="'#' + task.getId()"></p>
+							</div>
+
+							<!-- calendar face -->
+							<div v-else-if="calFace" v-bind:style="{backgroundColor : headercolors.body, borderColor : headercolors.border}" >
+								<p v-tap="handleIdTap" v-bind:style="{ color : idcolor }" v-html="'#' + task.getId()"></p>
+							</div>
+
+							<!-- description face -->
+							<div v-else-if="descriptionFace" v-bind:style="{backgroundColor : headercolors.body, borderColor : headercolors.border}" >
+								<p v-tap="handleIdTap" v-bind:style="{ color : idcolor }" v-html="'#' + task.getId()"></p>
+							</div>
+							<!-- lps face -->
+							<div v-else-if="lpsFace" v-bind:style="{backgroundColor : headercolors.body, borderColor : headercolors.border}" >
+								<p v-tap="handleIdTap" v-bind:style="{ color : idcolor }" v-html="'#' + task.getId()"></p>
+								<p v-tap="handleLpsTap" v-html="tasksSVG2">` + `</p>
+							</div>
+							<!-- id face -->
+							<div v-else-if="idFace" v-bind:style="{backgroundColor : headercolors.body, borderColor : headercolors.border}" >
+								<p v-tap="handleIdTap" v-bind:style="{ color : idcolor }" v-html="'#' + task.getId()"></p>
+								<p v-bind:id="'lpsRequirements-' + _uid" v-tap="handleLpsTap" v-html="tasksSVG"></p>
+							</div>
+							<!-- home face -->
+							<div v-else v-bind:style="{backgroundColor : headercolors.body, borderColor : headercolors.border}" >
+								<p v-tap="handleIdTap"v-bind:style="{ color : idcolor }" v-html="'#' + task.getId()"></p>
+								<p v-tap="handleLpsTap" v-html="tasksSVG"></p>
+							</div>
+
+
+
+						</div>
+					</div>
+
+					<div v-if="isOpen" class="taskContent" v-bind:style="{ height : (taskHeight - parseFloat(headerheight.replace('px', '')))  + 'px'}">
+						
 						<!-- man face -->
-						<div v-if="manFace" v-bind:style="{backgroundColor : headercolors.body, borderColor : headercolors.border}" >
-							<p v-tap="handleIdTap" v-bind:style="{ color : idcolor }" v-html="'#' + task.getId()"></p>
+						<div v-if="manFace" class="manFaceFrame">
+							<div v-press="handleTap" v-bind:style="{ height : '80%'}" class="body">
+								<div v-for=" person in task.getTaskTeam().getPersons()">
+									<p v-tap="()=>{handleCheckPerson(person)}">
+										<span class="checkbox" v-bind:style="[persons[person.getId()] ? { backgroundColor : svgcolor} : '']"></span>
+										<span v-if="teamuser != null && teamuser.toLowerCase() == team.getName().toLowerCase()" v-html="person.getName()"></span>
+										<span v-else v-html="'worker id : ' + person.getId()"></span>
+									</p>
+								</div>
+							</div>
+							<div v-press="handleTap" v-bind:style="{ height : '20%'}" class="manFaceFooter">
+								<p></p>
+								<div>
+									<p v-tap="()=>{handleManChange(false)}" v-bind:style="{ backgroundColor : svgcolor}" >-</p>
+									<p v-tap="()=>{handleManChange(true)}" v-bind:style="{ backgroundColor : svgcolor}" >+</p>
+								</div>
+								<p v-tap="handleManTap" >` + manIcon + `<span v-bind:style="[ actualassign != mn ? { color : 'red'} :{}]" v-html="actualassign + '/' + mn"></span></p>
+							</div>
 						</div>
 
 						<!-- calendar face -->
-						<div v-else-if="calFace" v-bind:style="{backgroundColor : headercolors.body, borderColor : headercolors.border}" >
-							<p v-tap="handleIdTap" v-bind:style="{ color : idcolor }" v-html="'#' + task.getId()"></p>
+						<div v-press="handleTap" v-else-if="calFace" class="calendarFaceFrame">
+							<div class="calendarFaceContent">
+								<p>Début : <span v-html="task.getStartDate().getDate() + ' ' + getMonthAbr(task.getStartDate().getMonth()) + ' ' + task.getStartDate().getFullYear()" ></span></p>
+								<div class="calendarWeek" :key="updateCalendars">
+									<p v-for="i in 7" v-tap="()=>{ handleCalendarStartTap(i)}" v-bind:class="getCalendarClass(i, true)[0]" v-bind:style="{ backgroundColor : getCalendarClass(i, true)[1]}" ><span v-html="addDays(startweek, (i-1)).getDate()"></span></p>
+								</div>
+								<div v-if="twoLineDates" class="calendarWeek" :key="updateCalendars + '2'">
+									<p v-for="i in 7" v-tap="()=>{ handleCalendarEndTap(i)}" v-bind:class="getCalendarClass(i, false)[0]" v-bind:style="{ backgroundColor : getCalendarClass(i, false)[1]}"><span v-html="addDays(endweek, (i-1)).getDate()"></span></p>
+								</div>
+								<p>Fin : <span v-html="task.getEndDate().getDate() + ' ' + getMonthAbr(task.getEndDate().getMonth()) + ' ' + task.getEndDate().getFullYear()" ></span></p>
+							</div>
+							<!--footer-->
+							<div class="calendarFaceFooter">
+								<p v-tap="()=>{handleCalendarChange(false)}" v-bind:style="{ backgroundColor : svgcolor}" >-</p>
+								<p  v-tap="handleCalendarTap"><span>` + calendarIcon + `</span><span v-html="dr"></span></p>
+								<p v-tap="()=>{handleCalendarChange(true)}" v-bind:style="{ backgroundColor : svgcolor}" >+</p>
+							</div>
 						</div>
 
 						<!-- description face -->
-						<div v-else-if="descriptionFace" v-bind:style="{backgroundColor : headercolors.body, borderColor : headercolors.border}" >
-							<p v-tap="handleIdTap" v-bind:style="{ color : idcolor }" v-html="'#' + task.getId()"></p>
+						<div v-tap="handleDescriptionTap" v-else-if="descriptionFace" class="descriptionFaceFrame">
+							<div class="descriptionTask">
+								<div class="descriptionTitle"><p v-html="task.getName()"></p></div>
+								<div class="descriptionDescription"><p v-html="task.getDescription()"></p></div>
+							</div>
+							<div class="descriptionInfos"><p><span v-show="task.getZone().getValue() != ''" v-bind:style="{ color : svgcolor}">Zone </span><span v-html="task.getZone().getValue()"></span></p><p><span v-bind:style="{ color : svgcolor}">Type </span><span v-html="_properties"></span></p></div>
 						</div>
+
 						<!-- lps face -->
-						<div v-else-if="lpsFace" v-bind:style="{backgroundColor : headercolors.body, borderColor : headercolors.border}" >
-							<p v-tap="handleIdTap" v-bind:style="{ color : idcolor }" v-html="'#' + task.getId()"></p>
-							<p v-tap="handleLpsTap" v-html="tasksSVG2">` + `</p>
+						<div v-press="handleTap" v-else-if="lpsFace" class="lpsFaceFrame">
+							<div>` + arrowL + `<p v-html="lpsList[lpsIndex]"></p>` + arrowR + `</div>
 						</div>
+
 						<!-- id face -->
-						<div v-else-if="idFace" v-bind:style="{backgroundColor : headercolors.body, borderColor : headercolors.border}" >
-							<p v-tap="handleIdTap" v-bind:style="{ color : idcolor }" v-html="'#' + task.getId()"></p>
-							<p v-bind:id="'lpsRequirements-' + _uid" v-tap="handleLpsTap" v-html="tasksSVG"></p>
+						<div v-press="handleTap" v-else-if="idFace" class="idFaceFrame">
+							<div id="goIcon" class="icon"><p v-tap="handleGoTap">` + goIcon + `Launch</p></div>
+							<div id="doneIcon" class="icon"><p v-tap="handleDoneTap">` + doneIcon + `Done</p></div>
+							<div id="pauseIcon" class="icon"><p v-tap="handlePauseTap">` + pauseIcon + `Pause</p></div>
 						</div>
+
 						<!-- home face -->
-						<div v-else v-bind:style="{backgroundColor : headercolors.body, borderColor : headercolors.border}" >
-							<p v-tap="handleIdTap"v-bind:style="{ color : idcolor }" v-html="'#' + task.getId()"></p>
-							<p v-tap="handleLpsTap" v-html="tasksSVG"></p>
-						</div>
+						<div v-else>
+							<div v-if="taskname != ''">
+								<div v-press="handleTap" v-tap="handleDescriptionTap" class="main" v-bind:style="{ height : ((taskHeight - parseFloat(headerheight.replace('px', ''))) * 0.7)  + 'px'}">
+									<p class="taskDescription" v-html="taskname"></p>
+								</div>
+								<div class="footer" v-bind:style="{ height : ((taskHeight - parseFloat(headerheight.replace('px', ''))) * 0.3)  + 'px'}">
+									<p v-press="handlePress" >
 
+									<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<g v-if="previousTask != null">
+											<rect width="28" height="20" rx="2" x="2" v-bind:fill="previousfill" stroke-width="4" v-bind:stroke="previousborder" y="5"></rect>
+											<path d="M15 10L9 15L15 20" v-bind:stroke="previousarrow" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+											<path d="M23 10L17 15L23 20" v-bind:stroke="previousarrow" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+										</g>
+									</svg>
+									</p>
 
-
-					</div>
-				</div>
-
-				<div v-if="isOpen" class="taskContent" v-bind:style="{ height : (taskHeight - parseFloat(headerheight.replace('px', '')))  + 'px'}">
-					
-					<!-- man face -->
-					<div v-if="manFace" class="manFaceFrame">
-						<div v-press="handleTap" v-bind:style="{ height : 'calc( 100% - ' + ((taskHeight - parseFloat(headerheight.replace('px', ''))) * 0.3)  + 'px)'}" class="body">
-							<div v-for=" person in task.getTaskTeam().getPersons()">
-								<p v-tap="()=>{handleCheckPerson(person)}">
-									<span class="checkbox" v-bind:class="[persons[person.getId()] ? 'checked' : '']"></span>
-									<span v-html="person.getName()"></span>
-								</p>
+									<p v-press="handleTap" v-tap="handleCalendarTap">` + calendarIcon + `<span v-html="dr"></span></p>
+									<p v-press="handleTap" v-tap="handleManTap" >` + manIcon + `<span v-bind:style="[ actualassign != mn ? { color : 'red'} :{}]" v-html="mn"></span></p>
+								</div>
 							</div>
 						</div>
-						<div v-press="handleTap" v-bind:style="{ height : ((taskHeight - parseFloat(headerheight.replace('px', ''))) * 0.3)  + 'px'}" class="manFaceFooter">
-							<p></p>
-							<div>
-								<p v-tap="" v-bind:style="{ backgroundColor : svgcolor}" >-</p>
-								<p v-bind:style="{ backgroundColor : svgcolor}" >+</p>
-							</div>
-							<p v-tap="handleManTap" >` + manIcon + `<span v-html="mn"></span></p>
-						</div>
-					</div>
 
-					<!-- calendar face -->
-					<div v-press="handleTap" v-else-if="calFace" class="calendarFaceFrame">
-						<div class="calendarFaceContent">
-							<p>Début : <span v-html="task.getStartDate().getDate() + ' ' + getMonthAbr(task.getStartDate().getMonth()) + ' ' + task.getStartDate().getFullYear()" ></span></p>
-							<div class="calendarWeek">
-								<p v-for="i in 7" v-bind:class="getCalendarClass(i, true)" v-html="addDays(startweek, (i-1)).getDate()"></p>
-							</div>
-							<div v-if="startweek.getTime() !== endweek.getTime()" class="calendarWeek">
-								<p v-for="i in 7" v-bind:class="getCalendarClass(i, false)" v-html="addDays(endweek, (i-1)).getDate()"></p>
-							</div>
-							<p>Fin : <span v-html="task.getEndDate().getDate() + ' ' + getMonthAbr(task.getEndDate().getMonth()) + ' ' + task.getEndDate().getFullYear()" ></span></p>
-						</div>
-						<!--footer-->
-						<div class="calendarFaceFooter">
-							<p v-bind:style="{ backgroundColor : svgcolor}" >-</p>
-							<p  v-tap="handleCalendarTap"><span>` + calendarIcon + `</span><span v-html="task.getDuration()"></span></p>
-							<p v-bind:style="{ backgroundColor : svgcolor}" >+</p>
-						</div>
-					</div>
 
-					<!-- description face -->
-					<div v-tap="handleDescriptionTap" v-else-if="descriptionFace" class="descriptionFaceFrame">
-						<div class="descriptionTask">
-							<div class="descriptionTitle"><p v-html="task.getName()"></p></div>
-							<div class="descriptionDescription"><p v-html="task.getDescription()"></p></div>
-						</div>
-						<div class="descriptionInfos"><p><span v-show="task.getZone().getValue() != ''" v-bind:style="{ color : svgcolor}">Zone </span><span v-html="task.getZone().getValue()"></span></p><p><span v-bind:style="{ color : svgcolor}">Type </span><span v-html="_properties"></span></p></div>
-					</div>
-
-					<!-- lps face -->
-					<div v-press="handleTap" v-else-if="lpsFace" class="lpsFaceFrame">
-						<div>` + arrowL + `<p v-html="lpsList[lpsIndex]"></p>` + arrowR + `</div>
-					</div>
-
-					<!-- id face -->
-					<div v-press="handleTap" v-else-if="idFace" class="idFaceFrame">
-						<div id="goIcon" class="icon"><p v-tap="handleGoTap">` + goIcon + `Launch</p></div>
-						<div id="doneIcon" class="icon"><p v-tap="handleDoneTap">` + doneIcon + `Done</p></div>
-						<div id="pauseIcon" class="icon"><p v-tap="handlePauseTap">` + pauseIcon + `Pause</p></div>
-					</div>
-
-					<!-- home face -->
-					<div v-else>
-						<div v-if="taskname != ''">
-							<div v-press="handleTap" v-tap="handleDescriptionTap" class="main" v-bind:style="{ height : ((taskHeight - parseFloat(headerheight.replace('px', ''))) * 0.7)  + 'px'}">
-								<p class="taskDescription" v-html="taskname"></p>
-							</div>
-							<div class="footer" v-bind:style="{ height : ((taskHeight - parseFloat(headerheight.replace('px', ''))) * 0.3)  + 'px'}">
-								<p v-press="handlePress" >
-
-								<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-									<g v-if="previousTask != null">
-										<rect width="28" height="20" rx="2" x="2" v-bind:fill="previousfill" stroke-width="4" v-bind:stroke="previousborder" y="5"></rect>
-										<path d="M15 10L9 15L15 20" v-bind:stroke="previousarrow" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-										<path d="M23 10L17 15L23 20" v-bind:stroke="previousarrow" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-									</g>
-								</svg>
-								</p>
-
-								<p v-press="handleTap" v-tap="handleCalendarTap">` + calendarIcon + `<span v-html="dr"></span></p>
-								<p v-press="handleTap" v-tap="handleManTap" >` + manIcon + `<span v-html="mn"></span></p>
-							</div>
-						</div>
 					</div>
 
 
 				</div>
-
-
 			</div>
 		</div>
 	</div>`,

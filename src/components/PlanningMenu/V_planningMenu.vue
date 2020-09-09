@@ -8,6 +8,7 @@ import milestone from "./assets/Milestone.svg";
 import phases from "./assets/Phases.svg";
 import weeks from "./assets/Weeks.svg";
 import week from "./assets/Week.svg";
+import gantt from "./assets/GanttChart.svg";
 
 export default {
 	data : function(){
@@ -70,7 +71,9 @@ export default {
 						<div v-tap="()=>handleMenuTap(0)" v-bind:class='[ milestoneDisplay ? "shown" : "hide"]'><p>` + milestone + `Milestones</p></div>
 						<div v-tap="()=>handleMenuTap(1)" v-bind:class='[ phasesDisplay ? "shown" : "hide"]'><p>` + phases + `Phases</p></div>
 						<div v-tap="()=>handleMenuTap(2)" v-bind:class='[ weeksDisplay ? "shown" : "hide"]'><p>` + weeks + `6 Weeks</p></div>
-						<div v-tap="()=>handleMenuTap(3)" v-bind:class='[ weekDisplay ? "shown" : "hide"]'><p>` + week + `Gantt</p></div>
+						<div class="hide"><p>` + week + `Week*</p></div>
+						<div v-tap="()=>handleMenuTap(3)" v-bind:class='[ weekDisplay ? "shown" : "hide"]'><p>` + gantt + `Gantt</p></div>
+
 					</div>
 				</div>
 			`+ PlanningBar + `

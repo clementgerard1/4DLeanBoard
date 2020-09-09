@@ -3,6 +3,7 @@ import TimelineUtils from "../Utils/V_timelineUtils.class.js";
 import V_socketUtils from "../Utils/V_socketUtils.class.js";
 import Utils from "../../class/Utils.class.js";
 import V_6Wrow_header_date from "./V_6Wrow_header_date.vue";
+import V_ModelUtils from "../Utils/V_ModelUtils.class.js";
 import Larrow from "./assets/WeekSwitcher.svg";
 import Rarrow from "./assets/WeekSwitcherR.svg";
 import LarrowClicked from "./assets/WeekSwitcherOnClick.svg";
@@ -13,25 +14,26 @@ export default {
 		"heightt" : "0px",
 	},
 	data: function(){
+
+		const model = V_ModelUtils.getModel();
+		const duration = model.getDuration();
+
 		return {
 			"Larrow" : Larrow,
-			"Rarrow" : Rarrow
+			"Rarrow" : Rarrow,
+			"duration" : duration
 		}
 	},
 	props:[
 		'time',
 		'tasktablestart',
 		"tasksize",
-		"duration"
 	],
-	inject : [
-		'timeline',
-		'model',
-	],
-	provide : [
-		'timeline',
-		'model',
-	],
+	created : function(){
+		V_ModelUtils.addModelListener((model)=>{
+			this.duration = model.getDuration();
+		});
+	},
 	methods: {
 		clearSelection : function(){
 			V_socketUtils.clearHighlighting();

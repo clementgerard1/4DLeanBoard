@@ -469,6 +469,20 @@ export default {
 				<stop offset="1" stop-color="white" stop-opacity="0"/>
 				</linearGradient>
 
+				<pattern id="pattern0_ganttimage" patternContentUnits="objectBoundingBox" width="1" height="1">
+				<use xlink:href="#image0_ganttimage" transform="scale(0.0333333)"/>
+				</pattern>
+				<image id="image0_ganttimage" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAq0lEQVRIS+2WUQ5AMBBEX++B8ziJQ3ER5+EgpB8Skk1b3Y0S9dnIvjUzlXEUelwhLhXsle+BCWiMbFiBAZjP8ySpF6A1gh5jPLyLgbcA9Lzo8V7OmRiuCray+5InKVwhqTVLJIOl0Ehg83D9D6zxM2bJ7XusWUYVLivfg1+cmtaYrNKv9Z1gjZ8xFb4drpzAmXj8fXCx6uPL3mjYu5LLnvU1EufVQv+IzB6yA9e0QB/gTnt0AAAAAElFTkSuQmCC"/>
+
+				<linearGradient id="paint0_linear_ifcicon" x1="12" y1="0" x2="12" y2="32" gradientUnits="userSpaceOnUse">
+				<stop stop-color="#D9D9D9"/>
+				<stop offset="1" stop-color="#F7F7F7"/>
+				</linearGradient>
+				<linearGradient id="paint1_linear_ifcicon" x1="12" y1="15" x2="12" y2="28" gradientUnits="userSpaceOnUse">
+				<stop stop-color="#D9D9D9"/>
+				<stop offset="1" stop-color="#F7F7F7"/>
+				</linearGradient>
+
 			</defs>
 		</svg>
 

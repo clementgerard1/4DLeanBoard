@@ -603,11 +603,22 @@ class Timeline{
 	}
 
 	addWorkingDaysToDate(date, days){
-		let toAdd = 0;
-		for(let i = 1 ; i <= (days + toAdd) ; i++){
-			if(this.isHoliday(parseInt(this.getTime(Utils.addDaysToDate(date, i))))) toAdd++;
+		if(days > 0){
+			let toAdd = 0;
+			for(let i = 1 ; i <= (days + toAdd) ; i++){
+				if(this.isHoliday(parseInt(this.getTime(Utils.addDaysToDate(date, i))))) toAdd++;
+			}
+			return Utils.addDaysToDate(date, days + toAdd);
+		}else{
+			let toRemove = 0;
+			for(let i = days ; i < toRemove ; i++){
+				if(this.isHoliday(parseInt(this.getTime(Utils.addDaysToDate(date, i))))){
+					toRemove--;
+					i--; i--;
+				}
+			}
+			return Utils.addDaysToDate(date, days + toRemove);
 		}
-		return Utils.addDaysToDate(date, days + toAdd);
 	}
 
 }
