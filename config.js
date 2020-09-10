@@ -24,6 +24,8 @@ module.exports = {
 			clientId : null,
 			clientSecret : null,
 		}
-	}
+	},
+
+	"licorne" : 5, //minutes
 
 }

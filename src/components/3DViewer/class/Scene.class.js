@@ -6,6 +6,8 @@ import scssVariables from "../../SixWeekView/assets/_variables.scss";
 
 import styles3D from "../assets/styles3D.csv";
 
+import V_licorneUtils from "../../Utils/V_licorneUtils.class";
+
 class Scene{
 
 	#id;
@@ -271,7 +273,10 @@ class Scene{
 		that.#viewer.setFocalLength(19);
 		// to disable auto highlighting when mouse over an object
 		//that.#viewer.disableHighlight(true);
-	    that.#initInfos.callback();
+
+		V_licorneUtils.init(container);
+
+	  that.#initInfos.callback();
 
 	}
 
