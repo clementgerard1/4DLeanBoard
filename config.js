@@ -19,10 +19,6 @@ module.exports = {
 		"clement" : {
 			clientId : "XWL5ytY1an8Adj0jIC3gS2PYZlNamuGT",
 			clientSecret : "0yEFdwlXiJt7X94U",
-		},
-		"antoine" : {
-			clientId : null,
-			clientSecret : null,
 		}
 	},
 
@@ -37,38 +33,83 @@ module.exports = {
 
 	//Properties which will not displayed
 	"propertiesHidden" : [
-		"parent",
-		"Icon",
-		"Type",
-		"Hidden",
-		"Required",
-		"Source File",
-		"Ambient.Red",
-		"Ambient.Green",
-		"Ambient.Blue",
-		"Diffuse.Red",
-		"Diffuse.Green",
-		"Diffuse.Blue",
-		"Specular.Red",
-		"Specular.Green",
-		"Specular.Blue",
-		"Emissive.Red",
-		"Emissive.Green",
-		"Emissive.Blue",
-		"Shininess",
-		"Transparency",
-		"ext-'Site web'",
-		"ext-'IsExternal'",
+		"OBJECTTYPE",
+		"LoadBearing",
+		"Slope",
+		"Reference",
+		"Span",
+		"FireRating",
+		"EnvironmentalClass",
+		"LifeCycleEnvironmentalLoad",
+		"DimensionalAccuracyClass",
+		"ConstructionToleranceClass",
+		"ConstructionType",
+		"Color",
+		"BarCode",
+		"SerialNumber",
+		"ModelReference",
+		"Category",
+		"Host",
+		"AssetIdentifier",
+		"Family",
+		"Family and Type",
+		"InstallationDate",
+		"TagNumber",
+		"Type Id",
+		"WarrantyStartDate",
+		"Rebar Cover",
+		"Default Elevation",
+		"EdgeDetails",
+		"EnvironmentalProductDeclaration",
+		"Author",
+		"BIMObjectName",
+		"ManufacturerURL",
+		"NBSCertification" ,
+		"NBSDescription" ,
+		"NBSNote" ,
+		"NBSOfficeMasterTag" ,
+		"NBSReference" ,
+		"NBSTypeID" ,
+		"ProductInformation" ,
+		"Revision" ,
+		"Uniclass2015Code" ,
+		"Uniclass2015Title" ,
+		"Uniclass2015Version" ,
+		"Version" ,
+		"AccessibilityPerformance" ,
+		"AssetType" ,
+		"CodePerformance" ,
+		"Constituents" ,
+		"DurationUnit" ,
+		"ExpectedLife" ,
+		"Family Name" ,
+		"Features" ,
+		"Finish" ,
+		"Grade" ,
+		"ModelNumber" ,
+		"SustainabilityPerformance" ,
+		"WarrantyDescription" ,
+		"WarrantyDurationLabor" ,
+		"WarrantyDurationParts" ,
+		"WarrantyDurationUnit" ,
+		"WarrantyGuarantorLabor" ,
+		"WarrantyGuarantorParts" ,
+		"PREDEFINEDTYPE" ,
+		"parent" ,
+
 	],
 
-	
 
+
+	
 	"propertiesNameConversion" : {
 		"viewable_in" : "IFC file",
 		"Layer" : "Etage",
 		"ext-'Renovation Status'" : "Status"
 
 	},
-	"licorne" : 5, //minutes
+
+
+	"licorne" : 2, //minutes
 
 }

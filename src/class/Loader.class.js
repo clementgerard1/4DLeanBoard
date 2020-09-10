@@ -417,6 +417,7 @@ class Loader{
 				if(tasksForPreviousNext[actualTask.getId()].previous != 0 && tasksForPreviousNext[actualTask.getId()].previous != null && tasksForPreviousNext[actualTask.getId()].previous != ""){
 					const mults = tasksForPreviousNext[actualTask.getId()].previous.split(",");
 					for(let m in mults){
+						console.log(mults[m]);
 						actualTask.addPreviousTask(tasksCollection[mults[m]]);
 						tasksCollection[mults[m]].addFollowingTask(actualTask);
 					}
@@ -429,6 +430,7 @@ class Loader{
 			if(phasesForPreviousNext[actualPhase.getNum()].previous != 0 && phasesForPreviousNext[actualPhase.getNum()].previous != null && phasesForPreviousNext[actualPhase.getNum()].previous != ""){
 				const mults = phasesForPreviousNext[actualPhase.getNum()].previous.split(",");
 				for(let m in mults){
+					console.log("aurevoir")
 					actualPhase.addPreviousPhase(phasesCollection[mults[m]]);
 					phasesCollection[mults[m]].addFollowingPhase(actualPhase);
 				}
@@ -603,7 +605,7 @@ class Loader{
 			const tasks = phases[p].getTasks();
 			for(let t in tasks){
 				const actualTask = tasks[t];
-
+				console.log("NON")
 				if(tasksForPreviousNext[actualTask.getId()].previous != 0) actualTask.addPreviousTask(tasksCollection[tasksForPreviousNext[actualTask.getId()].previous]);
 				if(tasksForPreviousNext[actualTask.getId()].next != 0) actualTask.addFollowingTask(tasksCollection[tasksForPreviousNext[actualTask.getId()].next]);
 			}
@@ -709,6 +711,7 @@ class Loader{
 				if(nextTask != null) actualTask.addFollowingTask(nextTask);
 
 				const nextTask = phase.getTask(tasks[t]["next"]);
+				console.log("OUI")
 				if(previousTask != null) actualTask.addPreviousTask(previousTask);
 			}
 		}
@@ -808,6 +811,7 @@ class Loader{
 				if(nextTask != null) actualTask.addFollowingTask(nextTask);
 
 				const nextTask = phase.getTask(tasks[t]["next"]);
+				console.log("VRPUM")
 				if(previousTask != null) actualTask.addPreviousTask(previousTask);
 			}
 		}

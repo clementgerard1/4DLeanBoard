@@ -65,6 +65,7 @@ export default {
 			if(this.time != time || forced){
 
 				this.time = time;
+
 				//State
 				const startActualWeek = this.time * 7;
 				const start6Weeks = (Math.floor((this.time - this.offset) / 6) * 6 + this.offset) * 7;
@@ -164,6 +165,9 @@ export default {
 					const objF = Memory.getForgeObject(selection[s].selection, selection[s].model);
 					if(objF != null){
 						const properties = objF.getProperties();
+						this.ifcPropertiesDisplayed.push({ key : "Phase", value: objF.getObject3D().getParent().getTask().getParentPhase().getName()});
+						this.ifcPropertiesDisplayed.push({ key : "Tâche", value: objF.getObject3D().getParent().getTask().getName()});
+						this.ifcPropertiesDisplayed.push({ key : "Equipe", value: objF.getObject3D().getParent().getTask().getTaskTeam().getName()});
 						for(let p in properties){
 							if(typeof properties[p].getInfo() == "object"){
 								this.ifcPropertiesDisplayed.push({ key : properties[p].getName(), value: properties[p].getInfo().displayValue});
@@ -171,6 +175,7 @@ export default {
 								this.ifcPropertiesDisplayed.push({ key : properties[p].getName(), value: properties[p].getInfo()});
 							}
 						}
+
 					}
 					
 				}
@@ -462,14 +467,11 @@ export default {
 			this.loadingText = Memory.getLoadCounter() + " / " + (Memory.getNbStyles() * Memory.getNb3DModels());
 		});
 
-		console.log(Memory.getNbStyles(), Memory.getNb3DModels());
-
 		this.scene.init(this.oauth, this.urns, this.objs, this.ifcProperties, ()=>{
 			console.log("init done");
 			this.layers = Memory.getLayers();
 			this.scene.getViewer().utilities.autocam.shotParams.duration = 2;
 			this.scene.getViewer().setUsePivotAlways(true);
-			console.log(this.scene.getViewer());
 			this.scene.getViewer().utilities.autocam.homeVector = {
 	            position: new THREE.Vector3(68.02633925341685, -98.55161393828413, 49.90499151685977),
 	                  up: new THREE.Vector3(-0.31805582789506753, 0.3562710279069489, 0.8785849105329031),
@@ -481,11 +483,11 @@ export default {
 	        };
 
 			this.scene.addListener(Autodesk.Viewing.CAMERA_CHANGE_EVENT, (e)=>{
-				// console.log("position", e.camera.position);
-				// console.log("target", e.camera.target);
-				// console.log("up", e.camera.up);
-				// console.log("pivot", e.camera.pivot);
-				// console.log("worldup", e.camera.worldup);
+				console.log("position", e.camera.position);
+				console.log("target", e.camera.target);
+				console.log("up", e.camera.up);
+				console.log("pivot", e.camera.pivot);
+				console.log("worldup", e.camera.worldup);
 				if(!this.nextCameraUpdate){
 					V_socketUtils.setCamera({
 						position : {
@@ -577,7 +579,6 @@ export default {
 
 			//Properties extension
 			for(let i = 0 ; i < (Memory.getNbStyles() * Memory.getNb3DModels()); i++){
-				console.log(Memory.getNbStyles());
 				if((i % Memory.getNbStyles()) != 0){
 					const style = document.createElement('style');
 					style.innerHTML = '[lmv-modelid="' + (i + 1)  +  '"] { display : none }';
@@ -619,7 +620,8 @@ export default {
 		<div id="forgeV">
 			<div id="ifcStructures"></div>
 		</div>
-
-		<filterPanel id="filterPanel" v-bind:layers="layers" v-bind:model="_model"></filterPanel>
+		<div id="filterPanelWrapper">
+			<filterPanel id="filterPanel" v-bind:layers="layers" v-bind:model="_model"></filterPanel>
+		</div>
 	</div>`,
 }

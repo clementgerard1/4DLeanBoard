@@ -1,14 +1,15 @@
 #ifcPropertiesPanel{
+	overflow: scroll;
 	width : 40%;
 	height : 40%;
 	background-color : rgba(255,255,255,0.7);
 	position : absolute;
-	bottom : 0px;
+	bottom : 78px;
 	right : 0px;
-	font-family: Oswald;
+	font-family: Roboto Condensed;
 	font-style: normal;
 	font-weight: 500;
-	font-size: 1rem;
+	font-size: 1.1rem;
 	text-indent: 3px;
 	border-radius : 5px 0px 0px 0px;
 	padding : 1%;

@@ -483,6 +483,17 @@ export default {
 				<stop offset="1" stop-color="#F7F7F7"/>
 				</linearGradient>
 
+				<filter id="filter0_b_filtMenu" x="-10" y="-10" width="340" height="52" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+				<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+				<feGaussianBlur in="BackgroundImage" stdDeviation="5"/>
+				<feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur"/>
+				<feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur" result="shape"/>
+				</filter>
+				<linearGradient id="paint0_linear_filtMenu" x1="160" y1="16" x2="160" y2="16" gradientUnits="userSpaceOnUse">
+				<stop stop-color="#D9D9D9"/>
+				<stop offset="1" stop-color="#F7F7F7"/>
+				</linearGradient>
+
 			</defs>
 		</svg>
 

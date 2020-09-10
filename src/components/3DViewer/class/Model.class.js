@@ -190,7 +190,7 @@ class Model{
 											 that.#dbObjects[dbObjects[d].dbId].addProperty(property);
 										}
 									}else{
-										console.log(tag);
+										//console.log(tag);
 									}
 									//console.log(prop);
 

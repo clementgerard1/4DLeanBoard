@@ -1,3 +1,20 @@
+#filterPanelWrapper{
+	position: absolute;
+	bottom: 15px;
+	width : 100%;
+	display : flex;
+	justify-content: center;
+}
+
+#filterPanel{
+	width:fit-content;
+	padding-left : 10%;
+	padding-right : 10%;
+	background-color : rgba(255,255,255,0.5);
+	border-radius : 5px;
+	box-shadow: 1px 3px 10px 0 rgba(0,0,0,0.5);
+}
+
 .adsk-viewing-viewer{
 	position:initial;
 }
@@ -30,6 +47,18 @@
 #forgeV{
 	width : 100%;
 	height: 100%;
+}
+
+.adsk-viewing-viewer.dark-theme .adsk-control-group{
+	background-color: rgba(255,255,255,0.5) !important;
+}
+
+.visibility{
+	display : none;
+}
+
+#ViewerModelStructurePanel-scroll-container *{
+	color : white !important;
 }
 
 #loadFrame{

@@ -80,25 +80,34 @@ class ForgeObject{
 	}
 
 	addProperty(property){
- 
+
+		// console.log(this.#id, property.getName(), property.getInfo().displayValue, property.getInfo());
+
 		this.#properties[property.getName()] = property;
-		if(property.getName() == "ext-'Renovation Status'"){
-			const info = property.getInfo();
+		if(property.getName() == "Comments"){
+			const info = property.getInfo().displayValue;
 			switch (info){
-				case "'New'" : 
+				case "ThisIsNew" : 
 					if(this.#constructionState == null) this.#constructionState = 1;
 					break;
-				case "'To Be Demolished'" : 
+				case "ThisIsDemolition" : 
 					this.#constructionState = 2;
 					break;
-				case "'Existing'" :
+				case "ThisIsDemolishion" : 
+					this.#constructionState = 2;
+					break;
+				case "ThisIsTemporary" : 
+					this.#constructionState = 3;
+					break;
+				case "ThisIsExisting" :
 					this.#constructionState = 0;
 					break;
 
 			}
-		}else if(property.getName() == "ext-'ConstructionType'" && property.getInfo() == "'Temporary'"){
-			this.#constructionState = 3;
 		}
+		// }else if(property.getName() == "ext-'ConstructionType'" && property.getInfo() == "'Temporary'"){
+		// 	this.#constructionState = 3;
+		// }
 	}
 
 	getProperties(){
@@ -241,7 +250,11 @@ class ForgeObject{
 		if(this.#selectmode){
 			selected = this.#selected;
 		}
-		const styles = Memory.getSceneObject().getStyle(this.#timeState, constrType, selected, visible, filterMode);
+		const styles = Memory.getSceneObject().getStyle(/*this.#timeState*/0, constrType, selected, visible, filterMode);
+
+		if(this.#object3D != null) console.log(this.#timeState, constrType, selected, visible, filterMode, styles)
+		this.#timeState 
+
 
 		if(typeof styles != "undefined"){
 

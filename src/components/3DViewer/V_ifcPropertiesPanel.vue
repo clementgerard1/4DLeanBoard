@@ -20,6 +20,6 @@ export default {
 	},
 	template : `
 	<div v-if="displayed.length != 0" id="ifcPropertiesPanel">
-		<p v-for="prop in displayed" v-html="prop.key + ' : ' + prop.value"></p>
+		<p v-for="prop in displayed"><span v-html="prop.key"></span> : <span style="font-style : italic" v-html="prop.value"></span></p>
 	</div>`,
 }

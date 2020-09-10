@@ -1,5 +1,9 @@
 .filterPanel{
 
+	display: flex;
+    align-items: left;
+    flex-direction: column;
+
 	label{
 		border : 1px solid black;
 		padding : 5px;
@@ -19,6 +23,7 @@
 	.mainMenu{
 
 		display : flex;
+    	min-height : 50px;
 
 		.filterMenu{
 			width : 40px;
@@ -41,13 +46,12 @@
 
 		.menuItem{
 			width : 40px;
+			filter: invert(1);
 		}
 
 	}
 
 	.subMenuContainer{
-		display:flex;
-		padding-top: 10px;
 
 		.offset3D{
 			width : 60px;

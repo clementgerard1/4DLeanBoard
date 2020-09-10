@@ -29,12 +29,6 @@ body{
 		height : 100vh;
 		max-height: 100vh;
 
-		#filterPanel{
-			position: absolute;
-			z-index:10;
-			bottom:0px;
-		}
-
 		#forgeViewer{
 			height : 100vh;
 			overflow: hidden;
@@ -53,6 +47,7 @@ body{
 	}
 
 	#copyright{
+		z-index: 3200;
 		position : absolute;
 		top : 0px;
 		right : 0px;

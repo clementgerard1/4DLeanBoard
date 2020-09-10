@@ -62,7 +62,7 @@ export default {
 			checkboxes : [],
 			teamSelected : "all",
 			teams : teams,
-			menuOpen : false,
+			menuOpen : true,
 			menuDisplayOpen : false,
 			menuDisplayLayersOpen : false,
 			menuDisplayZoneOpen : false,
@@ -360,9 +360,6 @@ export default {
 
 		</div>
 		<div class="mainMenu">
-			<div v-tap="handleMenuTap" class="filterMenu">
-				` + MenuVertical +  `
-			</div>
 			<div class="itemContainer" v-if="menuOpen">
 				<div class="menuItem" v-tap="handleDisplayTap">
 					` + ColorPalette +  `

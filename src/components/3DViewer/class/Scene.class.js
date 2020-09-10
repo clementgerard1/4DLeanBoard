@@ -53,34 +53,34 @@ class Scene{
 			//Position accueil
 			{
 				//position
-				position : {x: 68.02633925341685, y: -98.55161393828413, z: 49.90499151685977},
-				target : {x: 20.10941642912082, y: -44.87735347360224, z: 10.793415509800447},
-				up : {x: -0.31805582789506753, y: 0.3562710279069489, z: 0.8785849105329031},
-				pivot : {x: 0, y: 0, z: 0},
+				position : {x: 86729.71082741537, y: -53884.4601793942, z: 3217.519672602425},
+				target : {x: 86673.27328635493, y: -53825.538036205435, z: 3210.472821658088},
+				up : {x: -0.05952094693305486, y: 0.062141292693332656, z: 0.9962909798942245},
+				pivot : {x: 68305, y: 19102.5, z: 3595},
 				world : {x: 0, y: 0, z: 1}
 			},
 			//Position top, ABCD
 			{
-				position : {x: -154.9668077607862, y: -74.3660765066464, z: 164.31020652559766},
-				target : {x: -97.58105627734194, y: -51.91659205167039, z: 110.36978307970458},
-				up : {x: 0.6133927226021029, y: 0.23996114078638597, z: 0.752441372314997},
-				pivot : {x: 0, y: 0, z: 0},
+				position : {x: -14103.452050840744, y: -25073.064177452994, z: 143921.91511488016},
+				target : {x: -14088.27604407857, y: -25055.660779965834, z: 143843.34359534664},
+				up : {x: 0.6305627775354197, y: 0.7231108176232357, z: 0.2819598003671316},
+				pivot : {x: 68305, y: 19102.5, z: 3595},
 				world : {x: 0, y: 0, z: 1}
 			},
 			//Position A
 			{
-				position : {x: 9.223389039290321, y: -54.01896386105711, z: 11.71775901546539},
-				target : {x: -25.258608411304944, y: -4.856835912459893, z: -43.966620612208864},
-				up : {x: -0.39044872498148153, y: 0.556675703094308, z: 0.7332543588310904},
-				pivot : {x: 0, y: 0, z: 0},
+				position : {x: -22304.91720040413, y: 65275.17283272142, z: 16702.929485461893},
+				target : {x: -22256.8599516523, y: 65220.20939844723, z: 16665.832385274185},
+				up : {x: 0.29816880807730506, y: -0.3410178924309363, z: 0.8915167743411908},
+				pivot : {x: 68305, y: 19102.5, z: 3595},
 				world : {x: 0, y: 0, z: 1}
 			},
 			//Position B
 			{
-				position : {x: -15.394322745046646, y: 0.24477469090506773, z: 21.942441990088277},
-				target : {x: 64.88447775379392, y: -2.9957277961861495, z: 6.0841179539690415},
-				up : {x: 0.19348628689559694, y: -0.00781019135820668, z: 0.981071892214991},
-				pivot : {x: 0, y: 0, z: 0},
+				position : {x: 6123.948236567281, y: -68167.73216222311, z: 12571.954688327052},
+				target : {x: 6156.809213259141, y: -68099.02017433409, z: 12541.863293571345},
+				up : {x: 0.15852983423703346, y: 0.3314843667700388, z: 0.9300464538096175},
+				pivot : {x: 68305, y: 19102.5, z: 3595},
 				world : {x: 0, y: 0, z: 1}
 			},
 			//Position C
@@ -208,10 +208,10 @@ class Scene{
 	    that.#documents.push(docObj);
 
 		if(that.#modelInitLoaded < that.#initInfos.urns.length){
+
 			Autodesk.Viewing.Document.load("urn:" + that.#initInfos.urns[that.#modelInitLoaded], (document) => {that._onDocumentLoaded(document, that)} , (event)=>{console.log(console.error('Failed fetching Forge manifest'))});
 			return;
 		}
-
 	   	that.#documents[0].loadModels(that.#viewer, that.#initInfos.objs, that.#initInfos.properties, ()=>{that._onModelLoaded(that)});
 
 	}
@@ -226,6 +226,22 @@ class Scene{
 	}
 
 	_endOfInit(that){
+
+
+	that.#viewer.forEachExtension((ext)=>{
+		if(ext.name == "modelstructure"){
+			// let models = ext._modelstructure._pendingModels;
+			// for( let m in models){
+			// 	ext._modelstructure.unloadModel(models[m])
+			// }
+			const models = that.#viewer.impl.modelQueue().getModels();
+			for(let m in models){
+				if(!Number.isInteger(((models[m].id-1)  / Memory.getNbStyles()))) ext._modelstructure.unloadModel(models[m]);
+			}
+			 
+		}
+	});
+
 
 	let section = null;
 	let hierarchie = null;
