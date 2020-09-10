@@ -679,6 +679,7 @@ export default {
 			if(this.task != null){
 				V_socketUtils.highlightObject4D(this.task.getObject4D(), display);
 			}
+
 			// }else{
 			// 	this.constraintTap = false;
 			// }
@@ -860,11 +861,18 @@ export default {
 		handleIdTap(){
 
 			if(!this.openFlag && this.isOpen && this.taskname != ""){
+				const temp = this.calFace;
 				this.idFace = !this.idFace;
 				this.lpsFace = false;
 				this.manFace = false;
 				this.descriptionFace = false;
 				this.calFace = false;
+
+				if(this.calFace != temp){
+					const temp = V_ModelUtils.getModel();
+					V_ModelUtils.setTemporaryMode(false);
+					V_ModelUtils.setModel(temp);
+				}
 			}
 
 			this.openFlag = false;
@@ -903,6 +911,11 @@ export default {
 				this.lpsFace = false;
 				this.manFace = false;
 				this.calFace = !this.calFace;
+				if(!this.calFace){
+					const temp = V_ModelUtils.getModel();
+					V_ModelUtils.setTemporaryMode(false);
+					V_ModelUtils.setModel(temp);
+				}
 			}
 		},
 

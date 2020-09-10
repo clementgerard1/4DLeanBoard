@@ -225,8 +225,6 @@ class Scene{
 
 	_endOfInit(that){
 
-	console.log(Autodesk.ModelStructure);
-
 	let section = null;
 	let hierarchie = null;
 	  const toolbar = that.#viewer.getToolbar();
@@ -258,9 +256,6 @@ class Scene{
 
 		const panel = new Autodesk.Viewing.UI.DockingPanel(document.getElementById("ifcStructures"), "ifcStructPanel", "IFC Structure");
 		that.#viewer.addPanel(panel);
-		panel.setVisible(true);
-		panel.createTitleBar("BONJOUR");
-
 
 		that.#viewer.setGroundShadow(false);
 		that.#viewer.setEnvMapBackground(true);
