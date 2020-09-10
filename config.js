@@ -68,6 +68,7 @@ module.exports = {
 		"Layer" : "Etage",
 		"ext-'Renovation Status'" : "Status"
 
-	}
+	},
+	"licorne" : 5, //minutes
 
 }
