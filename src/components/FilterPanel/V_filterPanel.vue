@@ -4,11 +4,23 @@ import V_filterMenuUtils from "../Utils/V_filterMenuUtils.class.js";
 import MenuStart from "./assets/MenuStart.svg";
 import Menu3D from "./assets/Menu3D.svg";
 import MenuVertical from "./assets/MenuVertical.svg";
-import ColorPalette from "./assets/ColorPalette.svg";
-import ConstructionState from "./assets/Layers.svg";
+import ColorPalette from "./assets/ColorPalette2.svg";
+import ViewLock from "./assets/ViewLock.svg";
+import PrivateLock from "./assets/PrivateLock.svg";
+import ConstructionState from "./assets/Construction.svg";
+import BlackAndWhite from "./assets/BlackAndWhite.svg";
 import Layers from "./assets/Layers.svg";
-import Zones from "./assets/Layers.svg";
+import Zones from "./assets/ZonesIcon.svg";
+import Zone from "./assets/Zone.svg";
 import scssVariables from "../SixWeekView/assets/_variables.scss";
+
+import Existant from "./assets/Existant.svg";
+import Temporaire from "./assets/Temporaire.svg";
+import Nouveau from "./assets/Nouveau.svg";
+import Demolition from "./assets/Demolition.svg";
+import SafetyHat from "./assets/SafetyHat.svg";
+
+import Layer from "./assets/Layer.svg";
 
 import temp from "./assets/temp.svg";
 
@@ -142,6 +154,16 @@ export default {
 				this.menuDisplayZoneOpen = false;
 				this.menuDisplayConstructionStateOpen = false;
 			}
+			this.handleTeamDisplay();
+		},
+		handleDisplayTap2 : function(e){
+			this.menuDisplayOpen = false
+			if(this.menuDisplayOpen){
+				this.menuDisplayLayersOpen = false;
+				this.menuDisplayZoneOpen = false;
+				this.menuDisplayConstructionStateOpen = false;
+			}
+			this.handleBasicDisplay();
 		},
 
 		handleLayerTap : function(e){
@@ -211,18 +233,16 @@ export default {
 			this.cameraLocked = bool;
 		},
 
-		handleTeamSelected : function(e){
-			const team = this.model.getTaskTeamById(parseInt(e.target.id.replace("teamitem-", "")));
+		handleTeamSelected : function(teamId){
+			const team = this.model.getTaskTeamById(teamId);
 			V_socketUtils.setTeamDisplayed(team, !this.colorTeams[team.getId()].display);
 		},
 
-		handleZoneSelected : function(e){
-			 const zone = e.target.id.replace("zoneitem-", "");
+		handleZoneSelected : function(zone){
 			 V_socketUtils.setZoneDisplayed(zone, !this.zonesArray[zone].display);
 		},
 
-		handleConstructSelected : function(e){
-			const state = e.target.id.replace("constructitem-", "");
+		handleConstructSelected : function(state){
 			let toReturn = 0;
 			switch(state){
 				case "Existant" : toReturn = 0; break;
@@ -233,14 +253,12 @@ export default {
 			V_socketUtils.setConstructionStateDisplayed(toReturn, !this.constructionTypes[toReturn].display);
 		},
 
-		handleLayerSelected : function(e){
-			const layer = e.target.id.replace("layeritem-", "");
-			V_socketUtils.setLayerDisplayed(layer, !this.layersArray[layer].display);
+		handleLayerSelected : function(layer){
+			console.log(this.layersArray, layer.replace(" ", ""), this.layersArray[layer.replace(" ", "")]);
+			V_socketUtils.setLayerDisplayed(layer.replace(" ", ""), !(this.layersArray[layer.replace(" ", "")].display));
 		},
 
 		setLayerDisplayed : function(layer, bool){
-
-			console.log(this.layersArray, layer, bool);
 			this.layersArray[layer].display = bool;
 		},
 
@@ -295,6 +313,15 @@ export default {
 					this.layersArray[l].display = true;
 				}
 			}
+		},
+
+		getConstructionIcon : function(name){
+			switch(name){
+				case "Existant" : return Existant;
+				case "Démolition" : return Demolition;
+				case "Temporaire" : return Temporaire;
+				case "Nouveau" : return Nouveau;
+			}
 		}
 
 	},
@@ -313,47 +340,56 @@ export default {
 	},*/
 	template : `
 	<div class="filterPanel">
-		<div class="subMenuContainer">
+		<div v-if="menuDisplayConstructionStateOpen || menuDisplayLayersOpen || menuDisplayZoneOpen || menuDisplayOpen" class="subMenuContainer">
 			<div v-bind:class="offsetclass"></div>
 				
 			<div key="menuDisplayConstruct" class="menuDisplayConstruct" v-if="menuDisplayConstructionStateOpen">
-				<div v-tap="handleConstructSelected" class="constructsItems" v-for="construct in constructionTypes" :key="construct.name">
-					<standardbutton v-bind:id="'constructitem-' + construct.name.replace(' ', '')" v-bind:condition="construct.display"></standardbutton>
-					<p v-html="construct.name"></p>
+				<div>
+					<div class="offsetConstructDisplay"></div>
+					<div>
+						<div class="constructsItems" v-for="construct in constructionTypes" :key="construct.name" v-tap="()=>{handleConstructSelected(construct.name)}" >
+							<div v-bind:style="[ construct.display ? { opacity : 1} : { opacity : 0.5} ]" v-html="getConstructionIcon(construct.name)"></div>
+							<p v-bind:style="[ construct.display ? { opacity : 1} : { opacity : 0.5} ]" v-html="construct.name"></p>
+						</div>
+					</div>
 				</div>
 			</div>
 
 			<div key="menuDisplayLayer" class="menuDisplayLayer" v-if="menuDisplayLayersOpen">
-				<div v-tap="handleLayerSelected" class="layersItems" v-for="layer in layersArray" :key="layer.name">
-					<standardbutton v-bind:id="'layeritem-' + layer.name.replace(' ', '')" v-bind:condition="layer.display"></standardbutton>
-					<p v-html="layer.name"></p>
+				<div>
+					<div class="offsetLayerDisplay"></div>
+					<div>
+						<div class="layersItems" v-for="layer in layersArray" :key="layer.name" v-tap="()=>{handleLayerSelected(layer.name)}" >
+							<div v-bind:style="[ layer.display ? { opacity : 1} : { opacity : 0.5} ]" >` + Layer + `</div>
+							<p v-bind:style="[ layer.display ? { opacity : 1} : { opacity : 0.5} ]" v-html="layer.name"></p>
+						</div>
+					</div>
 				</div>
 			</div>
 
 			<div key="menuDisplayZone" class="menuDisplayZone" v-if="menuDisplayZoneOpen">
-				<div v-tap="handleZoneSelected" class="zonesItems" v-for="zone in zonesArray" :key="zone.name">
-					<standardbutton v-bind:id="'zoneitem-' + zone.name.replace(' ', '')" v-bind:condition="zone.display"></standardbutton>
-					<p v-html="zone.name"></p>
+				<div>
+					<div class="offsetZoneDisplay"></div>
+					<div>
+						<div class="zonesItems" v-for="zone in zonesArray" :key="zone.name" v-tap="()=>{handleZoneSelected(zone.name.replace(' ',''))}">
+							<div v-bind:style="[ zone.display ? { opacity : 1} : { opacity : 0.5} ]" >` + Zone + `</div>
+							<p v-bind:style="[ zone.display ? { opacity : 1} : { opacity : 0.5} ]" v-html="zone.name"></p>
+						</div>
+					</div>
 				</div>
 			</div>
+
+
 
 			<div key="menuDisplay" class="menuDisplay" v-if="menuDisplayOpen">
 				<div v-if="teamdisplaycond">
 					<div class="offsetTeamDisplay"></div>
 					<div>
-						<div v-tap="handleTeamSelected" class="teamItems" v-for="team in colorTeams" v-bind:id="'teamitem-' + team.team.getId()" :key="'teamDisplay' + team.team.getId()">
-							<standardbutton v-bind:color="team.color" v-bind:id="'teamitem-' + team.team.getId()" v-bind:condition="team.display"></standardbutton>
+						<div class="teamItems" v-for="team in colorTeams" v-bind:id="'teamitem-' + team.team.getId()" :key="'teamDisplay' + team.team.getId()" v-tap="()=>handleTeamSelected(team.team.getId())" >
+							<div v-bind:style="[ team.display ? { opacity : 1, backgroundColor : team.color} : { opacity : 0.5, backgroundColor : team.color} ]" >` + SafetyHat + `</div>
 							<p v-bind:id="'teamitem-' + team.team.getId()" v-html="team.team.getName()"></p>
 						</div>
 					</div>
-				</div>
-				<div key="menuDisplayTeam" v-tap="handleTeamDisplay">
-					<standardbutton v-bind:condition="teamdisplaycond"></standardbutton>
-					<p>Firm colors</p>
-				</div>
-				<div key="menuDisplayBasic" v-tap="handleBasicDisplay">
-					<standardbutton v-bind:condition="basicdisplaycond"></standardbutton>
-					<p>Basic colors</p>
 				</div>
 			</div>
 			
@@ -361,10 +397,22 @@ export default {
 		</div>
 		<div class="mainMenu">
 			<div class="itemContainer" v-if="menuOpen">
-				<div class="menuItem" v-tap="handleDisplayTap">
+				<div v-bind:style="[ !teamdisplaycond ? { opacity : 1} : { opacity : 0.5} ]" class="menuItem" v-tap="handleDisplayTap2">
+					` + BlackAndWhite +  `
+				</div>
+			</div>
+			<div class="itemContainer" v-if="menuOpen">
+				<div v-bind:style="[ teamdisplaycond ? { opacity : 1} : { opacity : 0.5} ]" class="menuItem" v-tap="handleDisplayTap">
 					` + ColorPalette +  `
 				</div>
 			</div>
+
+			<div class="itemContainer" v-if="menuOpen">
+				<div v-bind:style="[ cameraLocked ? { opacity : 1} : { opacity : 0.5} ]" class="menuItem" v-tap="handleLockCameraDisplay">
+					` + PrivateLock +  `
+				</div>
+			</div>
+
 			<div class="itemContainer" v-if="menuOpen">
 				<div class="menuItem" v-tap="handleLayerTap">
 					` + Layers +  `
@@ -378,11 +426,6 @@ export default {
 			<div class="itemContainer" v-if="menuOpen">
 				<div class="menuItem" v-tap="handleZoneTap">
 					` + Zones +  `
-				</div>
-			</div>
-			<div class="itemContainer" v-if="menuOpen">
-				<div class="menuItem" v-tap="handleLockCameraDisplay">
-					` + temp +  `
 				</div>
 			</div>
 		</div>

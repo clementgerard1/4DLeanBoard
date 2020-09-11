@@ -227,10 +227,11 @@ function updateForge(){
 						  		if(files[f].charAt(0) != "."){
 								  	Utils.createForgeBucket(oAuth, files[f].split('.').slice(0, -1).join('.'))
 										.then( oAuth => {
-
+											console.log("hey");
 											return Utils.uploadIFCFileToForge(oAuth, files[f].split('.').slice(0, -1).join('.'), __dirname + '/models/ifc_modified' + '/' + files[f].split('.').slice(0, -1).join('.') + ".ifc");
 										})
 										.then( datas => {
+											console.log("hoy");
 											urns[files[f].replace(".ifc", "")] = datas.manifest.urn;
 										}).catch( error => {
 											console.error(error);

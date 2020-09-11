@@ -20,6 +20,21 @@
 		margin : 5px;
 	}
 
+
+	.zonesItems > div{
+		width :38px;
+	}
+
+	.constructsItems > div,  .layersItems > div, .teamItems > div{
+		width : 30px;
+		margin-right : 5px;
+	}
+
+	.teamItems > div{
+		margin-bottom : 5px;
+		border-radius : 5px;
+	}
+
 	.mainMenu{
 
 		display : flex;
@@ -44,6 +59,11 @@
 			align-items:center;
 		}
 
+		.itemContainer:nth-child(2), .itemContainer:nth-child(3){
+			margin-right : 30px;
+		}
+
+
 		.menuItem{
 			width : 40px;
 			filter: invert(1);
@@ -52,6 +72,7 @@
 	}
 
 	.subMenuContainer{
+		margin-top : 20px;
 
 		.offset3D{
 			width : 60px;
@@ -79,7 +100,34 @@
 			}
 
 			.offsetTeamDisplay{
-				width : 20px;
+				width : 44px;
+			}
+
+			.offsetConstructDisplay{
+				width : 50%;
+			}
+
+			.offsetZoneDisplay{
+				width : 50%;
+			}
+
+			.offsetLayerDisplay{
+				width : 50%;
+			}
+
+			.offsetZoneDisplay ~ div{
+				position :relative; 
+				left : 40%;
+			}
+
+			.offsetLayerDisplay ~ div{
+				position :relative; 
+				left : 14%;
+			}
+
+			.offsetConstructDisplay ~ div{
+				position :relative; 
+				left : 28%;
 			}
 
 			.teamItems{
@@ -88,7 +136,7 @@
 				margin-right:10px;
 			}
 
-			.layersItems{
+			.layersItems, .constructsItems, .zonesItems{
 				display : flex;
 				align-items: center;
 				margin-right:10px;
