@@ -122,10 +122,34 @@ export default {
 			const layers = this.layers;
 			const layersArray = {};
 			for(let l in layers){
-				layersArray[layers[l].replace(' ', '')] = {
-					name : layers[l],
-					display : true,
-				};
+				if(layers[l] != "Fille 0"){
+					if(layers[l] == "R-1"){
+						layersArray[layers[l].replace(' ', '')] = {
+							name : layers[l],
+							display : true,
+							nth : 1
+						};
+					}else if(layers[l] == "RDC"){
+						layersArray[layers[l].replace(' ', '')] = {
+							name : layers[l],
+							display : true,
+							nth : 3
+						};
+					}else if(layers[l] == "R+1"){
+						layersArray[layers[l].replace(' ', '')] = {
+							name : layers[l],
+							display : true,
+							nth : 4
+						};
+					}else if(layers[l] == "R+2"){
+						layersArray[layers[l].replace(' ', '')] = {
+							name : layers[l],
+							display : true,
+							nth : 5
+						};
+					}
+				}
+				
 			}
 			this.layersArray = layersArray;
 		}
@@ -358,8 +382,8 @@ export default {
 			<div key="menuDisplayLayer" class="menuDisplayLayer" v-if="menuDisplayLayersOpen">
 				<div>
 					<div class="offsetLayerDisplay"></div>
-					<div>
-						<div class="layersItems" v-for="layer in layersArray" :key="layer.name" v-tap="()=>{handleLayerSelected(layer.name)}" >
+					<div style="display: flex; flex-direction: column-reverse;">
+						<div class="layersItems" v-for="layer in layersArray" style="order: layer.nth" :key="layer.name" v-tap="()=>{handleLayerSelected(layer.name)}" >
 							<div v-bind:style="[ layer.display ? { opacity : 1} : { opacity : 0.5} ]" >` + Layer + `</div>
 							<p v-bind:style="[ layer.display ? { opacity : 1} : { opacity : 0.5} ]" v-html="layer.name"></p>
 						</div>

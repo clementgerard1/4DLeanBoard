@@ -19,5 +19,11 @@ class V_playerUtils{
 		}
 	}
 
+	static displayMilestoneInfo(milestoneId, bool){
+		for(let p in this.players){
+			this.players[p].displayMilestoneInfo(milestoneId, bool);
+		}
+	}
+
 }
 export default V_playerUtils;

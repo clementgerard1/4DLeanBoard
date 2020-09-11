@@ -187,12 +187,16 @@ export default {
 			this.descriptionTimeout = setTimeout(()=>{
 				this.descriptionShown = false;
 				this.descriptionTimeout = null;
-			}, 5000)
+			}, 5000);
+			V_socketUtils.triggerPhaseDescription(this.phase);
 		},
 		trigger3DPhase : function(event){
 			const display = event.type == "press";
 			this.pressed = display;
 			V_socketUtils.triggerPhaseDisplay(this.phase , display);
+		},
+		setPressed : function(bool){
+			this.pressed = bool;
 		},
 		handlePanLeft : function(event){
 			if(event.type == "panstart"){

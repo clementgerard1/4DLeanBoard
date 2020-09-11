@@ -252,7 +252,6 @@ class ForgeObject{
 		}
 		const styles = Memory.getSceneObject().getStyle(/*this.#timeState*/0, constrType, selected, visible, filterMode);
 
-		if(this.#object3D != null) console.log(this.#timeState, constrType, selected, visible, filterMode, styles)
 		this.#timeState 
 
 
@@ -268,6 +267,7 @@ class ForgeObject{
 			let intensity = "100%";
 
 			const regex = RegExp('team');
+			console.log(materialStyle);
 			if(regex.test(styles.material)){
 				materialStyle = scssVariables[this.#object3D.getParent().getTask().getTaskTeam().getColorClass().replace("BG_", "").toLowerCase()];
 				intensity = parseInt(styles.material.slice(5, 8));
@@ -402,10 +402,13 @@ class ForgeObject{
 	}
 
 	setLayerDisplayed(layer, bool){
-		 if(this.#properties["Layer"].getInfo().displayValue.replace(" ", "") == layer) {
-		 	this.#layerVisible = bool;
-		 }
-		this.updateMaterial();
+		if(typeof this.#properties["Layer"] != "undefined"){
+			if(this.#properties["Layer"].getInfo().displayValue.replace(" ", "") == layer) {
+			 	this.#layerVisible = bool;
+			 }
+			this.updateMaterial();
+		}
+		
 	}
 
 }

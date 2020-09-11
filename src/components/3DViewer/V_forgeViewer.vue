@@ -374,6 +374,12 @@ export default {
 			Memory.refresh();
 		},
 
+		triggerPhaseDisplayById(phaseId, bool){
+			const phase = this.model.getPhase(phaseId);
+			Memory.triggerPhaseDisplay(phase, bool);
+			Memory.refresh();
+		},
+
 		triggerTeamDisplay(team, bool){
 			Memory.triggerTeamDisplay(team, bool);
 			Memory.refresh();
@@ -483,11 +489,11 @@ export default {
 	        };
 
 			this.scene.addListener(Autodesk.Viewing.CAMERA_CHANGE_EVENT, (e)=>{
-				console.log("position", e.camera.position);
-				console.log("target", e.camera.target);
-				console.log("up", e.camera.up);
-				console.log("pivot", e.camera.pivot);
-				console.log("worldup", e.camera.worldup);
+				// console.log("position", e.camera.position);
+				// console.log("target", e.camera.target);
+				// console.log("up", e.camera.up);
+				// console.log("pivot", e.camera.pivot);
+				// console.log("worldup", e.camera.worldup);
 				if(!this.nextCameraUpdate){
 					V_socketUtils.setCamera({
 						position : {

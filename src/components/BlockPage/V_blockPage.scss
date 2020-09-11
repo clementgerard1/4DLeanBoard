@@ -1,8 +1,10 @@
+@use "../SixWeekView/assets/variables" as v;
+
 #blockPage{
 	position : absolute;
 	width : 100vw;
 	height : 100vh;
 	z-index: 300;
-	border : 10px solid red;
+	border : 10px solid v.$greenbluish_light;
 	box-sizing: border-box;
 }

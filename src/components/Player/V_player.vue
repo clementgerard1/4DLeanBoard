@@ -111,6 +111,13 @@ export default {
 			}else{
 				this.highlighted = [];
 			}
+		},
+		displayMilestoneInfo : function(milestoneId, display){
+			if(display){
+				this.milestoneSelected = this.model.getMilestoneById(milestoneId);
+			}else{
+				this.milestoneSelected = null;
+			}
 		}
 	},
 	computed:{

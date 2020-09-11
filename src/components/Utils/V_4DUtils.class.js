@@ -145,6 +145,16 @@ class V_4DUtils{
 		}
 	}
 
+	static triggerPhaseDisplayById(phaseId, bool){
+
+		if(this.viewer != null){
+			this.viewer.triggerPhaseDisplayById(phaseId, bool);
+		}/*else{
+			this.waitViewer.ifcs = ifcs;
+			this.needInit = true;
+		}*/
+	}
+
 	static triggerPhaseDisplay(phase, bool){
 		if(this.viewer != null){
 			this.viewer.triggerPhaseDisplay(phase, bool);

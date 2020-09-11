@@ -47,7 +47,8 @@ class Loader{
 		"IFCFOOTING", // Pas sur
 		"IFCBUILDINGELEMENTCOMPONENT", // Pas sur
 		"IFCPLATE", // Pas sur
-		"IFCSTAIR"
+		"IFCSTAIR",
+		"IFCFURNISHINGELEMENT",
 	]
 
 	/**
@@ -244,7 +245,7 @@ class Loader{
 		}
 
 		const infos = JSON.parse(json);
-
+		console.log(infos);
 		const model = new Model();
 
 		const contractors = [];
@@ -417,7 +418,6 @@ class Loader{
 				if(tasksForPreviousNext[actualTask.getId()].previous != 0 && tasksForPreviousNext[actualTask.getId()].previous != null && tasksForPreviousNext[actualTask.getId()].previous != ""){
 					const mults = tasksForPreviousNext[actualTask.getId()].previous.split(",");
 					for(let m in mults){
-						console.log(mults[m]);
 						actualTask.addPreviousTask(tasksCollection[mults[m]]);
 						tasksCollection[mults[m]].addFollowingTask(actualTask);
 					}
@@ -430,7 +430,6 @@ class Loader{
 			if(phasesForPreviousNext[actualPhase.getNum()].previous != 0 && phasesForPreviousNext[actualPhase.getNum()].previous != null && phasesForPreviousNext[actualPhase.getNum()].previous != ""){
 				const mults = phasesForPreviousNext[actualPhase.getNum()].previous.split(",");
 				for(let m in mults){
-					console.log("aurevoir")
 					actualPhase.addPreviousPhase(phasesCollection[mults[m]]);
 					phasesCollection[mults[m]].addFollowingPhase(actualPhase);
 				}
@@ -711,7 +710,6 @@ class Loader{
 				if(nextTask != null) actualTask.addFollowingTask(nextTask);
 
 				const nextTask = phase.getTask(tasks[t]["next"]);
-				console.log("OUI")
 				if(previousTask != null) actualTask.addPreviousTask(previousTask);
 			}
 		}
@@ -811,7 +809,6 @@ class Loader{
 				if(nextTask != null) actualTask.addFollowingTask(nextTask);
 
 				const nextTask = phase.getTask(tasks[t]["next"]);
-				console.log("VRPUM")
 				if(previousTask != null) actualTask.addPreviousTask(previousTask);
 			}
 		}
@@ -957,16 +954,18 @@ class Loader{
 				}else{
 					 const relDef3 = /(IFCELEMENTQUANTITY)\(([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([,/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*)\)/g;
 					 const res3 = relDef3.exec(n);
-						infos[t]["desc"] = res3[4];
-						const n2s = res3[7].replace("(", "").replace(")", "").split(",");
-						for(let s in n2s){
-							const n2 = tab[n2s[s].replace("#", "")];
-							const relDef4 = /(IFC[A-Z]*)\(([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*)\)/g;
-							const res4 = relDef4.exec(n2);
-							infos[t][s] = [];
-							infos[t][s][0] = res4[1];
-							infos[t][s][1] = res4[2];
-							infos[t][s][2] = res4[5];
+						if(res3 != null){
+							infos[t]["desc"] = res3[4];
+							const n2s = res3[7].replace("(", "").replace(")", "").split(",");
+							for(let s in n2s){
+								const n2 = tab[n2s[s].replace("#", "")];
+								const relDef4 = /(IFC[A-Z]*)\(([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*)\)/g;
+								const res4 = relDef4.exec(n2);
+								infos[t][s] = [];
+								infos[t][s][0] = res4[1];
+								infos[t][s][1] = res4[2];
+								infos[t][s][2] = res4[5];
+							}
 						}
 				}
 
@@ -976,34 +975,36 @@ class Loader{
 					const n2 = tab[n2ss[s].replace("#", "")];
 					const relDef5 = /(IFC[A-Z]*)\(([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\ \-'_:$#A-Z0-9a-z]*)/g;
 					const res5 = relDef5.exec(n2);
-					infos[t].objs3D = [];
-					infos[t].objs3D[infos[t].objs3D.length] = {};
-					//console.log(res5);
-					// switch(res5[1]){
-						// case 'IFCWALLSTANDARDCASE' : 
-						// 	infos[t].objs3D[infos[t].objs3D.length - 1].name = res5[4].slice(1, -1);
-						// 	infos[t].objs3D[infos[t].objs3D.length - 1].tag = res5[9].slice(1, -1);
-						// 	break;
-						// case 'IFCDOOR' : 
-						// 	console.log(res5, res5[9]);
-						// 	infos[t].objs3D[infos[t].objs3D.length - 1].name = res5[4].slice(1, -1);
-						// 	infos[t].objs3D[infos[t].objs3D.length - 1].tag = res5[9].slice(1, -1);
-						// 	break;
-						// case 'IFCCOLUMN' : 
-						// 	infos[t].objs3D[infos[t].objs3D.length - 1].name = res5[4].slice(1, -1);
-						// 	infos[t].objs3D[infos[t].objs3D.length - 1].tag = res5[9].slice(1, -1);
-						// 	break;
-						// case 'IFCPLATE' : 
-						// 	infos[t].objs3D[infos[t].objs3D.length - 1].name = res5[4].slice(1, -1);
-						// 	infos[t].objs3D[infos[t].objs3D.length - 1].tag = res5[9].slice(1, -1);
-						// 	break;
-						// case 'IFCWINDOW' : 
-						// 	infos[t].objs3D[infos[t].objs3D.length - 1].name = res5[4].slice(1, -1);
-						// 	infos[t].objs3D[infos[t].objs3D.length - 1].tag = res5[9].slice(1, -1);
-						// 	break;
-						// default : 
+					if(res5 != null){
+						infos[t].objs3D = [];
+						infos[t].objs3D[infos[t].objs3D.length] = {};
+						//console.log(res5);
+						// switch(res5[1]){
+							// case 'IFCWALLSTANDARDCASE' : 
+							// 	infos[t].objs3D[infos[t].objs3D.length - 1].name = res5[4].slice(1, -1);
+							// 	infos[t].objs3D[infos[t].objs3D.length - 1].tag = res5[9].slice(1, -1);
+							// 	break;
+							// case 'IFCDOOR' : 
+							// 	console.log(res5, res5[9]);
+							// 	infos[t].objs3D[infos[t].objs3D.length - 1].name = res5[4].slice(1, -1);
+							// 	infos[t].objs3D[infos[t].objs3D.length - 1].tag = res5[9].slice(1, -1);
+							// 	break;
+							// case 'IFCCOLUMN' : 
+							// 	infos[t].objs3D[infos[t].objs3D.length - 1].name = res5[4].slice(1, -1);
+							// 	infos[t].objs3D[infos[t].objs3D.length - 1].tag = res5[9].slice(1, -1);
+							// 	break;
+							// case 'IFCPLATE' : 
+							// 	infos[t].objs3D[infos[t].objs3D.length - 1].name = res5[4].slice(1, -1);
+							// 	infos[t].objs3D[infos[t].objs3D.length - 1].tag = res5[9].slice(1, -1);
+							// 	break;
+							// case 'IFCWINDOW' : 
+							// 	infos[t].objs3D[infos[t].objs3D.length - 1].name = res5[4].slice(1, -1);
+							// 	infos[t].objs3D[infos[t].objs3D.length - 1].tag = res5[9].slice(1, -1);
+							// 	break;
+							// default : 
 							infos[t].objs3D[infos[t].objs3D.length - 1].name = res5[4].slice(1, -1);
 							infos[t].objs3D[infos[t].objs3D.length - 1].tag = res5[9].slice(1, -1);
+						}
 					// }
 
 					//console.log(res5[1], infos[t].objs3D[infos[t].objs3D.length - 1].tag);

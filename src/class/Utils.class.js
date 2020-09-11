@@ -316,7 +316,7 @@ class Utils{
   	temp[2] = n[3];
   	switch(n[2]){
   		case "janvier" : temp[1] = '01'; break;
-  		case "février" : temp[1] = '02'; break;
+  		case "fevrier" : temp[1] = '02'; break;
   		case "mars" : temp[1] = '03'; break;
   		case "avril" : temp[1] = '04'; break;
   		case "mai" : temp[1] = '05'; break;
@@ -326,7 +326,7 @@ class Utils{
   		case "septembre" : temp[1] = '09'; break;
   		case "octobre" : temp[1] = '10'; break;
   		case "novembre" : temp[1] = '11'; break;
-  		case "décembre" : temp[1] = '12'; break;
+  		case "decembre" : temp[1] = '12'; break;
   	}
   	if(temp[0].length == 1){
   		temp[0] = "0" + temp[0];

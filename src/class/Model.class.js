@@ -90,6 +90,12 @@ class Model{
 		return this.#milestones;
 	}
 
+	getMilestoneById(id){
+		for(let m in this.#milestones){
+			if(this.#milestones[m].getId() == id) return this.#milestones[m];
+		}
+	}
+
 	/*
 		Get dayWorked Array
 		@returns {Array}
@@ -770,13 +776,15 @@ class Model{
 		// Persons
 		const persons = this.getPersons();
 		for(let p in persons){
-			const person = {
-				id : persons[p].getId(),
-				name : persons[p].getName(),
-				email : persons[p].getEmail(),
-				phone : persons[p].getPhone(),
-			};
-			jsonObj.persons.push(person);
+			if(persons[p] != null){
+				const person = {
+					id : persons[p].getId(),
+					name : persons[p].getName(),
+					email : persons[p].getEmail(),
+					phone : persons[p].getPhone(),
+				};
+				jsonObj.persons.push(person);
+			}
 		}
 
 		//taskTeams
@@ -795,18 +803,21 @@ class Model{
 			for(let p in pp){
 				persons.push(pp[p].getId());
 			}
+			console.log("bonjour" + t.getName() + "aurevoire");
+		  if(t.getName() != "" && t.getName() != " "){
+				const taskTeam = {
+					id : t.getId(),
+					name : t.getName(),
+					abr : t.getAbr(),
+					operationUnits : operationUnits,
+					color : t.getColorClass(),
+					boss : t.getBoss().getId(),
+					persons : persons,
+				}
 
-			const taskTeam = {
-				id : t.getId(),
-				name : t.getName(),
-				abr : t.getAbr(),
-				operationUnits : operationUnits,
-				color : t.getColorClass(),
-				boss : t.getBoss().getId(),
-				persons : persons,
+				jsonObj.taskTeams.push(taskTeam);
 			}
 
-			jsonObj.taskTeams.push(taskTeam);
 		}
 
 		//operationUnits

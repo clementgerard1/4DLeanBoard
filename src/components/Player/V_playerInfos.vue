@@ -120,6 +120,7 @@ export default {
 			if(event.target.localName == "rect" && event.target.classList.item(0) != null){
 				let milestone = null;
 				for(let m in this.milestones){
+					
 					if(this.milestones[m].getId() == parseInt(event.target.classList.item(0).replace("milestone-", ""))){
 						milestone = this.milestones[m];
 					}
@@ -129,6 +130,7 @@ export default {
 
 				this.$parent.milestoneSelected = milestone;
 				event.target.style.filter = "drop-shadow(1px 1px 15px #97D7C7)";
+				V_socketUtils.displayMilestone(milestone, true);
 
 				if(this.milestoneTimeout.milestoneId != milestone.getId()){
 
@@ -139,6 +141,7 @@ export default {
 				}
 				this.milestoneTimeout.timeout = setTimeout( ()=>{
 					this.$parent.milestoneSelected = null;
+					V_socketUtils.displayMilestone(null, false);
 				}, 2000);
 				return;
 			}
@@ -170,12 +173,14 @@ export default {
 							milestone = this.milestones[m];
 						}
 					}
+					V_socketUtils.displayMilestone(milestone, true);
 					if(milestone == null) return;
 					this.$parent.milestoneSelected = milestone;
 				}
 				
 				if(event.type == "pressup"){
 					this.$parent.milestoneSelected = null;
+					V_socketUtils.displayMilestone(null, false);
 				}
 			}
 		}

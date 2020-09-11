@@ -211,6 +211,11 @@ io.on("connection", function(client){
         //client.broadcast.emit("clearHighlighting", datas);
     })
 
+    client.on("displayMilestone", (datas) => {
+        broadcast(client, modelName, "displayMilestone", datas);
+        //client.broadcast.emit("clearHighlighting", datas);
+    })
+
 
     client.on("updateIfcMenu", (datas) => {
         models[modelName].ifcmenu = datas.ifcs;
@@ -227,6 +232,17 @@ io.on("connection", function(client){
         broadcast(client, modelName, "updateDisplayMenu", datas);
         //client.broadcast.emit("clearHighlighting", datas);
     })
+
+    client.on("triggerPhaseDisplay", (datas) => {
+        broadcast(client, modelName, "triggerPhaseDisplay", datas);
+        //client.broadcast.emit("clearHighlighting", datas);
+    })
+
+    client.on("triggerPhaseDescription", (datas) => {
+        broadcast(client, modelName, "triggerPhaseDescription", datas);
+        //client.broadcast.emit("clearHighlighting", datas);
+    })
+
     client.on("updateTeamDisplayed", (datas) => {
         if(datas.value && !models[modelName].teamDisplayed.includes(datas.team)){
             models[modelName].teamDisplayed[datas.team] = true;

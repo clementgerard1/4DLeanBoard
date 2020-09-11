@@ -39,6 +39,22 @@ class V_phasesUtils{
 		}
 	}
 
+	static setPhasePressed(phaseId, bool){
+		for(let i in this.items){
+			if(this.items[i].phase.getId() == phaseId){
+					this.items[i].setPressed(bool);
+			}
+		}
+	}
+
+	static triggerPhaseDescription(phaseId){
+		for(let i in this.items){
+			if(this.items[i].phase.getId() == phaseId){
+					this.items[i].handleDescription();
+			}
+		}
+	}
+
 	/**
 		Set contractor displayed by id on Forge Viewer
 		@param {string} Object4Did id of Object4D to hightlight

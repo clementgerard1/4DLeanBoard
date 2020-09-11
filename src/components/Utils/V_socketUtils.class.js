@@ -160,6 +160,7 @@ class V_socketUtils{
 		});	
 
 		this.socket.on("updateTeamDisplayed", (datas) => {
+			console.log(datas);
 			V_4DUtils.setTeamDisplayedById(datas.team, datas.value);
 			V_filterMenuUtils.setTeamDisplayedById(datas.team, datas.value);
 			V_taskTableUtils.setTeamDisplayedById(datas.team, datas.value);
@@ -208,6 +209,19 @@ class V_socketUtils{
 			V_taskTableUtils.setPlanningDisplay(datas.choices[0], datas.choices[1], datas.choices[2], datas.choices[3]);
 			V_playerUtils.displayMilestones(datas.choices[0]);
 			V_phasesUtils.displayed(datas.choices[1]);
+		});
+
+		this.socket.on("triggerPhaseDisplay", (datas) => {
+			V_4DUtils.triggerPhaseDisplayById(datas.phaseId, datas.value);
+			V_phasesUtils.setPhasePressed(datas.phaseId, datas.value);
+		});
+
+		this.socket.on("triggerPhaseDescription", (datas) => {
+			V_phasesUtils.triggerPhaseDescription(datas.phaseId);
+		});
+
+		this.socket.on("displayMilestone" , (datas) => {
+			V_playerUtils.displayMilestoneInfo(datas.milestoneId, datas.value);
 		});
 
 	}
@@ -350,6 +364,23 @@ class V_socketUtils{
 		}
 	}
 
+
+	/* PLAYER INTERACTION */
+	static displayMilestone(milestone, bool){
+		if(milestone != null){
+			this.socket.emit("displayMilestone", { 
+				milestoneId : milestone.getId(),
+				value : bool,
+			});
+		}else{
+			this.socket.emit("displayMilestone", { 
+				milestoneId : null,
+				value : bool,
+			});
+		}
+		
+	}
+
 	/* ---------------------------- W6 INTERACTIONS ---------------------------- */
 
 	/**
@@ -482,6 +513,12 @@ class V_socketUtils{
 		this.socket.emit("triggerPhaseDisplay", { 
 			phaseId : phase.getId(),
 			value : bool
+		});
+	}
+
+	static  triggerPhaseDescription(phase){
+		this.socket.emit("triggerPhaseDescription", { 
+			phaseId : phase.getId(),
 		});
 	}
 
