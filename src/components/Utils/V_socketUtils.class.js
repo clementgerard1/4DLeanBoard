@@ -177,8 +177,8 @@ class V_socketUtils{
 			V_4DUtils.clearHighlighting();
 		});
 		this.socket.on("setCameraLocked", (datas) => {
-			V_filterMenuUtils.setCameraLocked(datas.bool);
-			V_4DUtils.setCameraLocked(datas.bool);
+			V_filterMenuUtils.setCameraLocked(datas.value);
+			V_4DUtils.setCameraLocked(datas.value);
 		});
 		this.socket.on("updateIfcMenu", (datas) => {
 			V_4DUtils.setIfcMenuChange(datas.ifcs);
@@ -190,7 +190,19 @@ class V_socketUtils{
 		this.socket.on("setTeamOpening", (datas) => {
 			V_taskTableUtils.setTeamById(datas.teamId, datas.nth, datas.value);
 		});
+		this.socket.on("setLayerDisplayed", (datas) => {
+			V_filterMenuUtils.setLayerDisplayed(datas.layer, datas.value);
+			V_4DUtils.setLayerDisplayed(datas.layer, datas.value);
+		});
+		this.socket.on("setZoneDisplayed", (datas) => {
+			V_filterMenuUtils.setZoneDisplayed(datas.zone, datas.value);
+			V_4DUtils.setZoneDisplayed(datas.zone, datas.value);
+		});
 
+		this.socket.on("setConstructionStateDisplayed", (datas) => {
+			V_filterMenuUtils.setConstructionStateDisplayed(datas.state, datas.value);
+			V_4DUtils.setConstructionStateDisplayed(datas.state, datas.value);
+		});
 		this.socket.on("setPlanningDisplay", (datas) => {
 			V_planningMenuUtils.setPlanningMenuChange(datas.choices[0], datas.choices[1], datas.choices[2], datas.choices[3]);
 			V_taskTableUtils.setPlanningDisplay(datas.choices[0], datas.choices[1], datas.choices[2], datas.choices[3]);
@@ -287,11 +299,9 @@ class V_socketUtils{
 	static setLayerDisplayed(layer, bool){
 		V_filterMenuUtils.setLayerDisplayed(layer, bool);
 		V_4DUtils.setLayerDisplayed(layer, bool);
-		// if(layer != null){
-		// 	this.socket.emit("updateLayerDisplayed", { layer : layer, value : bool});
-		// }else{
-		// 	this.socket.emit("updateLayerDisplayed", { layer : null, value : null});
-		// }
+		if(layer != null){
+			this.socket.emit("setLayerDisplayed", { layer : layer, value : bool});
+		}
 	}
 
 	/**
@@ -302,11 +312,9 @@ class V_socketUtils{
 	static setZoneDisplayed(zone, bool){
 		V_filterMenuUtils.setZoneDisplayed(zone, bool);
 		V_4DUtils.setZoneDisplayed(zone, bool);
-		// if(layer != null){
-		// 	this.socket.emit("updateLayerDisplayed", { layer : layer, value : bool});
-		// }else{
-		// 	this.socket.emit("updateLayerDisplayed", { layer : null, value : null});
-		// }
+		if(zone != null){
+			this.socket.emit("setZoneDisplayed", { zone : zone, value : bool});
+		}
 	}
 
 	/**
@@ -317,11 +325,9 @@ class V_socketUtils{
 	static setConstructionStateDisplayed(constructionState, bool){
 		V_filterMenuUtils.setConstructionStateDisplayed(constructionState, bool);
 		V_4DUtils.setConstructionStateDisplayed(constructionState, bool);
-		// if(layer != null){
-		// 	this.socket.emit("updateLayerDisplayed", { layer : layer, value : bool});
-		// }else{
-		// 	this.socket.emit("updateLayerDisplayed", { layer : null, value : null});
-		// }
+		if(constructionState != null){
+			this.socket.emit("setConstructionStateDisplayed", { state : constructionState, value : bool});
+		}
 	}
 
 	/**

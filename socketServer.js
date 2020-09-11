@@ -150,6 +150,21 @@ io.on("connection", function(client){
         //client.broadcast.emit("setRequirement", datas);
     })
 
+    client.on("setLayerDisplayed", (datas) => {
+        broadcast(client, modelName, "setLayerDisplayed", datas);
+        //client.broadcast.emit("setRequirement", datas);
+    })
+
+    client.on("setZoneDisplayed", (datas) => {
+        broadcast(client, modelName, "setZoneDisplayed", datas);
+        //client.broadcast.emit("setRequirement", datas);
+    })
+
+    client.on("setConstructionStateDisplayed", (datas) => {
+        broadcast(client, modelName, "setConstructionStateDisplayed", datas);
+        //client.broadcast.emit("setRequirement", datas);
+    })
+
     client.on("setCamera", (datas) => {
         broadcast(client, modelName, "setCamera", datas);
         //client.broadcast.emit("setRequirement", datas);

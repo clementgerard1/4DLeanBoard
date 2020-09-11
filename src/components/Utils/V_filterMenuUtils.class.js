@@ -116,6 +116,7 @@ class V_filterMenuUtils{
 	}
 
 	static setZoneDisplayed(zone, bool){
+		console.log(zone, bool);
 		for(let f in this.filters){
 			this.filters[f].setZoneDisplayed(zone, bool);
 		}

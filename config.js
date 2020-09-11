@@ -110,6 +110,6 @@ module.exports = {
 	},
 
 
-	"licorne" : 2, //minutes
+	"licorne" : 5, //minutes
 
 }

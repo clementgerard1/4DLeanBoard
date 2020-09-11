@@ -31,7 +31,7 @@
 	}
 
 	.teamItems > div{
-		margin-bottom : 5px;
+		margin-bottom : 15px;
 		border-radius : 5px;
 	}
 
@@ -57,10 +57,11 @@
 		.itemContainer{
 			display: flex;
 			align-items:center;
+			margin-right : 32px;
 		}
 
 		.itemContainer:nth-child(2), .itemContainer:nth-child(3){
-			margin-right : 30px;
+			margin-right : 65px;
 		}
 
 
@@ -100,19 +101,19 @@
 			}
 
 			.offsetTeamDisplay{
-				width : 44px;
+				width : 15.5%;
 			}
 
 			.offsetConstructDisplay{
-				width : 50%;
+				width : 45%;
 			}
 
 			.offsetZoneDisplay{
-				width : 50%;
+				width : 47.5%;
 			}
 
 			.offsetLayerDisplay{
-				width : 50%;
+				width : 45%;
 			}
 
 			.offsetZoneDisplay ~ div{
@@ -140,6 +141,7 @@
 				display : flex;
 				align-items: center;
 				margin-right:10px;
+				margin-bottom : 5px;
 			}
 		}
 
