@@ -320,6 +320,7 @@ function init(){
  		mounted : function(){
  			V_socketUtils.setInitAppFlag(true);
  			V_socketUtils.initApp();
+ 			TouchGesturesUtils.initPressHandler();
  		},
  		template : `
  		<div>

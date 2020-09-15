@@ -69,6 +69,19 @@ class V_TouchGesturesUtils{
 		}
 	}
 
+	static initPressHandler(id){
+		const domObj = document.getElementById("content");
+		const handler = (e) => {
+			for(let t in this.touchObjects){
+				if(typeof this.touchObjects[t].handlers["pressup"] != "undefined") {
+					this.touchObjects[t].handlers["pressup"][0](e);
+				}
+			}
+		}
+		domObj.addEventListener("mouseup", handler);
+		domObj.addEventListener("pressend", handler);
+	}
+
 
 
 }
