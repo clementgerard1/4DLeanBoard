@@ -394,7 +394,7 @@ export default {
 					nbWeeks = Math.ceil((duration + initialOffset) / 7);
 				}
 				this.index = index;
-				if(index == 1 || ((this.time % 6) == 0)){
+				if(index == 1 || (((this.time - this.tasktablestart) % 6) == 0)){
 					return this.task.getName();
 					//return this.getTwoLineFormat(/*"(" + index +  "/" + nbWeeks + ")" + */this.task.getName());
 				}else{

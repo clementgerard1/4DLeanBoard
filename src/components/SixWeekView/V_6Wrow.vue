@@ -35,7 +35,9 @@ export default {
 			"model" : model,
 			"timeline" : timeline,
 			"duration" : duration,
-			"tasks" : tasks
+			"tasks" : tasks,
+			"updateTask" : 0,
+
 		}
 	},
 	props :[
@@ -83,7 +85,6 @@ export default {
 		}
 	},
 	created: function(){
-
 		V_ModelUtils.addModelListener((model)=>{
 			this.model = model;
 			this.timeline = V_ModelUtils.getTimeline();
@@ -92,9 +93,16 @@ export default {
 		});
 		V_taskTableUtils.addRow(this);
 	},
+
 	mounted : function(){
 		this.watchResize();
 		window.addEventListener('resize', this.watchResize);
+	},
+	watch : {
+		tasktablestart: function(){
+			this.tasks = this.timeline.getTasksByTaskTeamAndNthBetweenTwoDatesFromMemory(this.taskteam, this.nth, this.tasktablestart * 7, (this.tasktablestart + 6) * 7 - 1);
+			this.updateTask++;
+		}
 	},
 	methods: {
 		handleOpenPhase : function(event){
@@ -139,7 +147,7 @@ export default {
 		<taskline v-show="isVisible" class="phaseLine" v-bind:taskheight="headerHeight" v-doubletap="()=>{}" v-tap="handleOpenPhase" v-bind:time="_time" v-bind:nth="_nth" v-bind:team="_team" v-bind:class="color" v-bind:teamdescription="teamDescription" v-bind:style='zIndex'></taskline>
 
 		<!-- tasks -->
-		<div v-show="isVisible" class="tasksWrapper" v-bind:style="{ top : '-' + headerHeight, marginBottom : '-' + headerHeight} ">
+		<div v-bind:key="updateTask" v-show="isVisible" class="tasksWrapper" v-bind:style="{ top : '-' + headerHeight, marginBottom : '-' + headerHeight} ">
 			<task v-bind:teamuser="_teamuser" v-bind:headerheight="headerHeight" v-bind:color="color" v-bind:team="_team" nth=0 v-for="(task, i) in tasks.array" :key="i" v-bind:properties="getProperties(task)" v-bind:isopen="isOpen" v-bind:taskid="[typeof task != 'undefined' && task != null ? task.getId() : null]" v-bind:isOpen="isOpen" v-bind:tasktablestart="_tasktablestart" v-bind:time="_tasktablestart + i"  ></task>
 		</div>
 
