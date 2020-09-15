@@ -18,8 +18,10 @@ const ifcProperties = [];
 init();
 
 function init(){
-	getNewModels().then(getNewIfcFiles).then(updateForge).then(getSerializedModels).then(launchServer).catch(error => console.error(error));
-
+	console.log("Ce serveur s'autodétruira au terme de la phase 5, par chance cela n'a aucune chance d'arrivée ;)")
+	setTimeout(()=>{
+		getNewModels().then(getNewIfcFiles).then(updateForge).then(getSerializedModels).then(launchServer).catch(error => console.error(error));
+	},1000);
 }
 
 function getNewModels(){

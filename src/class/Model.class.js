@@ -803,7 +803,6 @@ class Model{
 			for(let p in pp){
 				persons.push(pp[p].getId());
 			}
-			console.log("bonjour" + t.getName() + "aurevoire");
 		  if(t.getName() != "" && t.getName() != " "){
 				const taskTeam = {
 					id : t.getId(),

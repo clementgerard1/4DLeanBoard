@@ -245,7 +245,6 @@ class Loader{
 		}
 
 		const infos = JSON.parse(json);
-		console.log(infos);
 		const model = new Model();
 
 		const contractors = [];
@@ -604,7 +603,6 @@ class Loader{
 			const tasks = phases[p].getTasks();
 			for(let t in tasks){
 				const actualTask = tasks[t];
-				console.log("NON")
 				if(tasksForPreviousNext[actualTask.getId()].previous != 0) actualTask.addPreviousTask(tasksCollection[tasksForPreviousNext[actualTask.getId()].previous]);
 				if(tasksForPreviousNext[actualTask.getId()].next != 0) actualTask.addFollowingTask(tasksCollection[tasksForPreviousNext[actualTask.getId()].next]);
 			}

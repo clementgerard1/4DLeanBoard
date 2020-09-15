@@ -12,6 +12,7 @@ import V_timelineUtils from "./components/Utils/V_timelineUtils.class.js";
 import V_taskTableUtils from "./components/Utils/V_taskTableUtils.class.js";
 import V_filterMenuUtils from "./components/Utils/V_filterMenuUtils.class.js";
 import V_blockPage from "./components/BlockPage/V_blockPage.vue";
+import V_ModelUtils from "./components/Utils/V_ModelUtils.class.js";
 //Hammer si already on viewer3D.min.js loaded on index.html
 //import Hammer from "hammerjs";
 
@@ -135,6 +136,7 @@ function init(){
 			forgeReady : false,
 			infoicon : infoIcon,
 			infoDisplay : false,
+			teamUser : null,
  		},
 		methods: {
 			findGetParameter : function(parameterName) {
@@ -166,7 +168,12 @@ function init(){
 				})
 				.then( datas => {
 						//Model Loaded
+						V_ModelUtils.setModel(datas.model);
 						this.model = datas.model;
+						const password = this.findGetParameter("password");
+						for(let p in Config.passwords){
+							if(Config.passwords[p] == password) this.teamUser = p;
+						}
 						//DataApi.postModel(mod, "testt");
 						if(this.model.getName() == "") this.model.setName("test");
 						this.timeline = new Timeline(this.model);

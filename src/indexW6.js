@@ -13,6 +13,7 @@ import openSocket from "socket.io-client";
 import V_timelineUtils from "./components/Utils/V_timelineUtils.class.js";
 import V_taskTableUtils from "./components/Utils/V_taskTableUtils.class.js";
 import V_blockPage from "./components/BlockPage/V_blockPage.vue";
+import V_ModelUtils from "./components/Utils/V_ModelUtils.class.js";
 
 
 import V_filterPanel from "./components/FilterPanel/V_filterPanel.vue";
@@ -194,6 +195,7 @@ function init(){
 			selectPanel : false,
 			infoicon : infoIcon,
 			infoDisplay : false,
+			teamUser : null,
  		},
  		methods:{
  			findGetParameter : function(parameterName) {
@@ -225,6 +227,12 @@ function init(){
 				})
 				.then( datas => {
 						//Model Loaded
+						V_ModelUtils.setModel(datas.model);
+						this.model = datas.model;
+						const password = this.findGetParameter("password");
+						for(let p in Config.passwords){
+							if(Config.passwords[p] == password) this.teamUser = p;
+						}
 						this.model = datas.model;
 						//DataApi.postModel(mod, "testt");
 						if(this.model.getName() == "") this.model.setName("test");
@@ -233,8 +241,8 @@ function init(){
 						V_taskTableUtils.setAllTasks(this.model.getTasks());
 						V_filterMenuUtils.setAllTeams(this.model.getTaskTeams());
 						V_timelineUtils.setTimeline(this.timeline);
-						const phase = this.timeline.getModel().getMilestones()[0].getPhases()[0];
-					  	this.duration = this.model.getDuration();
+
+					  this.duration = this.model.getDuration();
 
 					  	
 						this.ifcProperties = datas.ifcProperties;
@@ -293,9 +301,9 @@ function init(){
 
 	 			<div id="planningFrame"  v-if="model != null">
 	 				<planningmenu></planningmenu>
-	 				<tasktableframe v-bind:ifcProperties="ifcProperties" v-if="modelSelected" id="taskTableFrame" v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit" v-bind:duration="duration"></tasktableframe>
-	 				<phasesdisplay  v-bind:model="model" v-bind:timeline="timeline" class="phasesFrame" v-bind:duration="duration"></phasesdisplay>
-	 				<player id="mainPlayer" v-bind:duration="duration" v-bind:model="model" v-bind:timeline="timeline" v-bind:playerinit="playerinit"></player>
+	 				<tasktableframe v-bind:teamuser="teamUser" v-bind:ifcProperties="ifcProperties" v-if="modelSelected" id="taskTableFrame" v-bind:timeline="timeline" v-bind:playerinit="playerinit" v-bind:duration="duration"></tasktableframe>
+	 				<phasesdisplay  v-bind:timeline="timeline" class="phasesFrame" v-bind:duration="duration"></phasesdisplay>
+	 				<player id="mainPlayer" v-bind:duration="duration" v-bind:timeline="timeline" v-bind:playerinit="playerinit"></player>
 	 			</div>
 	 			
 	 			<div id="copyright">

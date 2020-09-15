@@ -71,7 +71,6 @@ io.on("connection", function(client){
                 teamOpen : teamOpen,
             };
 
-            console.log(modelName, models[modelName]);
             client.emit("sendInit", models[modelName]);
         }).catch(error => console.error(error));
 
