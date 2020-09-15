@@ -128,16 +128,34 @@ export default {
 					const obj = objs[o];
 					const properties = this.ifcProperties[obj.getIFCId()];
 					for(let p in properties){
-						if(properties[p][0][1] == "'Renovation Status'"){
+						if(properties[p][0][1] == "'Comments'"){
 							if(toReturn.indexOf(properties[p][0][2]) == -1) toReturn.push(properties[p][0][2]); 
-						} 
+						}
 					}
 				}
 				return toReturn;
 			}else{
 				return null;
 			}
-		}
+		},
+		getLevels(task){
+			if(task != null){
+				const toReturn = [];
+				const objs = task.getObject4D().getObjects3D();
+				for(let o in objs){
+					const obj = objs[o];
+					const properties = this.ifcProperties[obj.getIFCId()];
+					for(let p in properties){
+						if(properties[p][0][1] == "'Level'"){
+							if(toReturn.indexOf(properties[p][0][2]) == -1) toReturn.push(properties[p][0][2]); 
+						}
+					}
+				}
+				return toReturn;
+			}else{
+				return null;
+			}
+		},
 	}
 	,
 	template : `
@@ -148,7 +166,7 @@ export default {
 
 		<!-- tasks -->
 		<div v-bind:key="updateTask" v-show="isVisible" class="tasksWrapper" v-bind:style="{ top : '-' + headerHeight, marginBottom : '-' + headerHeight} ">
-			<task v-bind:teamuser="_teamuser" v-bind:headerheight="headerHeight" v-bind:color="color" v-bind:team="_team" nth=0 v-for="(task, i) in tasks.array" :key="i" v-bind:properties="getProperties(task)" v-bind:isopen="isOpen" v-bind:taskid="[typeof task != 'undefined' && task != null ? task.getId() : null]" v-bind:isOpen="isOpen" v-bind:tasktablestart="_tasktablestart" v-bind:time="_tasktablestart + i"  ></task>
+			<task v-bind:teamuser="_teamuser" v-bind:headerheight="headerHeight" v-bind:color="color" v-bind:team="_team" nth=0 v-for="(task, i) in tasks.array" :key="i" v-bind:properties="getProperties(task)" v-bind:levels="getLevels(task)" v-bind:isopen="isOpen" v-bind:taskid="[typeof task != 'undefined' && task != null ? task.getId() : null]" v-bind:isOpen="isOpen" v-bind:tasktablestart="_tasktablestart" v-bind:time="_tasktablestart + i"  ></task>
 		</div>
 
 		<!-- button -->

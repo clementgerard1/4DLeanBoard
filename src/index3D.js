@@ -137,6 +137,7 @@ function init(){
 			infoicon : infoIcon,
 			infoDisplay : false,
 			teamUser : null,
+			modifMode : false,
  		},
 		methods: {
 			findGetParameter : function(parameterName) {
@@ -171,6 +172,8 @@ function init(){
 						V_ModelUtils.setModel(datas.model);
 						this.model = datas.model;
 						const password = this.findGetParameter("password");
+						const modif = this.findGetParameter("modif");
+						if(modif == "true") this.modifMode = true;
 						for(let p in Config.passwords){
 							if(Config.passwords[p] == password) this.teamUser = p;
 						}

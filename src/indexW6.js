@@ -65,6 +65,37 @@ function init(){
 		}
 	});
 
+	Vue.directive("doublepress", {
+		bind: function(el, binding) 
+		{
+			if(el.getAttribute("hammerid") == null){
+				el.setAttribute("hammerid", Utils.getId("hammer"));
+			}
+			if (typeof binding.value === "function") {
+				let hammer = TouchGesturesUtils.getHammer(el);
+				if(hammer == null){
+					hammer = new Hammer(el);
+					TouchGesturesUtils.addHammer(el, hammer);
+				} 
+
+				const doubleTap = new Hammer.Tap(
+					{event: 'doublepress', pointers : 2}
+				);
+				doubleTap.recognizeWith(hammer.recognizers)
+				hammer.add(doubleTap);
+				hammer.on("tap2", binding.value);
+
+				hammer.on("press", binding.value);
+				hammer.on("pressup", binding.value);
+
+				TouchGesturesUtils.updateHammer(el);
+			}
+		},
+		unbind: function(el, binding){
+			TouchGesturesUtils.destroy(el);
+		}
+	});
+
 	//Touch gestures
 	Vue.directive("doubletap", {
 		bind: function(el, binding) 
@@ -196,6 +227,7 @@ function init(){
 			infoicon : infoIcon,
 			infoDisplay : false,
 			teamUser : null,
+			modifMode : false,
  		},
  		methods:{
  			findGetParameter : function(parameterName) {
@@ -230,6 +262,8 @@ function init(){
 						V_ModelUtils.setModel(datas.model);
 						this.model = datas.model;
 						const password = this.findGetParameter("password");
+						const modif = this.findGetParameter("modif");
+						if(modif == "true") this.modifMode = true;
 						for(let p in Config.passwords){
 							if(Config.passwords[p] == password) this.teamUser = p;
 						}

@@ -202,7 +202,8 @@ export default {
 		"headerheight",
 		"properties",
 		"teamuser",
-		"tasktablestart"
+		"tasktablestart",
+		"levels"
 	],
 	mounted: function(){
 		this.updateStateDiv();
@@ -490,10 +491,20 @@ export default {
 		_properties : function(){
 			let toReturn = '';
 			for(let p in this.properties){
-				toReturn += this.properties[p].replace("'New'", "Nouveau").replace("'Existing'", "Existant").replace("'Existing'", "Existant").replace("'To Be Demolished'", "Demolition");
+				this.properties[p] = this.properties[p].replace("IFCTEXT(", "").replace(")", "");
+				toReturn += this.properties[p].replace("'ThisIsNew'", "Nouveau").replace("'ThisIsExisting'", "Existant").replace("'ThisIsTemporary'", "Temporaire").replace("'ThisIsDemolition'", "Démolition").replace("'ThisIsDemolishion'", "Démolition");
+			}
+			return toReturn;
+		},
+		_layers : function(){
+			let toReturn = '';
+			for(let p in this.levels){
+				this.levels[p] = this.levels[p].replace("IFCTEXT(", "").replace(")", "");
+				toReturn += this.levels[p].replace("'Level: ", "").replace("'", "");
 			}
 			return toReturn;
 		}
+
 
 	},
 	watch:{
@@ -1122,37 +1133,41 @@ export default {
 
 		handleDoublePress(event){
 
-			this.pressed = event.type == "press";
+			if(this.$root.modifMode){
 
-			if(this.pressed){
-				if(!this.modifymode){
-					this.originalStartDate = this.task.getStartDate();
-					this.originalEndDate = this.task.getEndDate();
-					this.modifymode = true;
-					V_ModelUtils.setTemporaryMode(true);
-				}
-			}else{
+				this.pressed = event.type == "press";
 
-				const elems = document.getElementsByClassName(this.task.getId() + "-formoving");
-				for(let e in elems){
-					if(typeof elems[e].style != "undefined"){
-						elems[e].style.top = this.mouseTop;
-						elems[e].style.left = this.mouseLeft;
-						elems[e].style.width = "100%";
-						elems[e].style.position = "initial";
-						elems[e].style.zIndex = 0;
-						elems[e].style.backgroundColor = "rgba(0,0,0,0)";
-						elems[e].style.borderRadius = "0px";
-						elems[e].style.filter = '';
+				if(this.pressed){
+					if(!this.modifymode){
+						this.originalStartDate = this.task.getStartDate();
+						this.originalEndDate = this.task.getEndDate();
+						this.modifymode = true;
+						V_ModelUtils.setTemporaryMode(true);
 					}
+				}else{
+
+					const elems = document.getElementsByClassName(this.task.getId() + "-formoving");
+					for(let e in elems){
+						if(typeof elems[e].style != "undefined"){
+							elems[e].style.top = this.mouseTop;
+							elems[e].style.left = this.mouseLeft;
+							elems[e].style.width = "100%";
+							elems[e].style.position = "initial";
+							elems[e].style.zIndex = 0;
+							elems[e].style.backgroundColor = "rgba(0,0,0,0)";
+							elems[e].style.borderRadius = "0px";
+							elems[e].style.filter = '';
+						}
+					}
+
+					this.modifymode = false;
+					const temp = V_ModelUtils.getModel();
+					V_ModelUtils.setTemporaryMode(false);
+					V_ModelUtils.setModel(temp);
+
+					V_ModelUtils.dispatchUpdate();
 				}
 
-				this.modifymode = false;
-				const temp = V_ModelUtils.getModel();
-				V_ModelUtils.setTemporaryMode(false);
-				V_ModelUtils.setModel(temp);
-
-				V_ModelUtils.dispatchUpdate();
 			}
 
 		},
@@ -1208,7 +1223,7 @@ export default {
 						
 						<!-- man face -->
 						<div v-if="manFace" class="manFaceFrame">
-							<div v-press="handleTap" v-bind:style="{ height : '80%'}" class="body">
+							<div v-press="handleTap" v-bind:style="{ height : '73%'}" class="body">
 								<div v-for=" person in task.getTaskTeam().getPersons()">
 									<p v-tap="()=>{handleCheckPerson(person)}">
 										<span class="checkbox" v-bind:style="[persons[person.getId()] ? { backgroundColor : svgcolor} : '']"></span>
@@ -1217,7 +1232,7 @@ export default {
 									</p>
 								</div>
 							</div>
-							<div v-press="handleTap" v-bind:style="{ height : '20%'}" class="manFaceFooter">
+							<div v-press="handleTap" v-bind:style="{ height : '27%'}" class="manFaceFooter">
 								<p></p>
 								<div>
 									<p v-tap="()=>{handleManChange(false)}" v-bind:style="{ backgroundColor : svgcolor}" >-</p>
@@ -1241,9 +1256,9 @@ export default {
 							</div>
 							<!--footer-->
 							<div class="calendarFaceFooter">
-								<p v-tap="()=>{handleCalendarChange(false)}" v-bind:style="{ backgroundColor : svgcolor}" >-</p>
+								<p v-tap="()=>{handleCalendarChange(false)}" v-bind:style="[$root.modifMode ? { backgroundColor : svgcolor} : { visibility : 'hidden', backgroundColor : svgcolor}]" >-</p>
 								<p  v-tap="handleCalendarTap"><span>` + calendarIcon + `</span><span v-html="dr"></span></p>
-								<p v-tap="()=>{handleCalendarChange(true)}" v-bind:style="{ backgroundColor : svgcolor}" >+</p>
+								<p v-tap="()=>{handleCalendarChange(true)}" v-bind:style="[$root.modifMode ? { backgroundColor : svgcolor} : { visibility : 'hidden', backgroundColor : svgcolor}]" >+</p>
 							</div>
 						</div>
 
@@ -1253,7 +1268,7 @@ export default {
 								<div class="descriptionTitle"><p v-html="task.getName()"></p></div>
 								<div class="descriptionDescription"><p v-html="task.getDescription()"></p></div>
 							</div>
-							<div class="descriptionInfos"><p><span v-show="task.getZone().getValue() != ''" v-bind:style="{ color : svgcolor}">Zone </span><span v-html="task.getZone().getValue()"></span></p><p><span v-bind:style="{ color : svgcolor}">Type </span><span v-html="_properties"></span></p></div>
+							<div class="descriptionInfos"><p><span v-show="task.getZone().getValue() != ''" v-bind:style="{ color : svgcolor}">Zone </span><span v-html="task.getZone().getValue()"></span></p><p v-show=" _layers.length != 0"><span v-bind:style="{color : svgcolor}">Etage </span><span v-html="_layers"></span></p><p v-show="_properties.length != 0"><span v-bind:style="{ color : svgcolor}">Type </span><span v-html="_properties"></span></p></div>
 						</div>
 
 						<!-- lps face -->

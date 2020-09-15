@@ -105,6 +105,10 @@
 							left : 0px;
 						}
 
+						p:nth-child(2){
+							width : 100%; 
+							text-align : center;
+						}
 						p:last-child{
 							right : 0px
 						}
@@ -142,7 +146,7 @@
 								font-family: Roboto;
 								font-style: italic;
 								font-weight: normal;
-								font-size: 0.75rem;
+								font-size: 1rem;
 							}
 
 							.checkbox{
@@ -186,13 +190,32 @@
 								flex:1;
 								width : 25%;
 								border-radius: 100%;
+								margin-left: 10%;
+						    margin-right: 10%;
+						    margin-top: 12%;
+						    margin-bottom: 12%;
 							}
+						}
+
+						p:first-child{
+							padding-bottom: 3%;
+						}
+
+						p:first-child, p:nth-child(2){
+							color : white;
 						}
 
 						p:last-child{
 							display : flex;
+							align-items : center;
+							margin-right : 3%;
+							font-family: Oswald;
+					    font-style: normal;
+					    font-weight: 500;
+					    font-size: 1.5rem;
 
 							svg{
+								margin-left : 12%;
 								height : 50%;
 							}
 
@@ -207,7 +230,7 @@
 					background : v.$light;
 
 					.calendarFaceContent{
-						height : 77%;
+						height : 72.5%;
 						> p{
 							font-family: Oswald;
 							font-style: normal;
@@ -289,20 +312,26 @@
 							align-items : center;
 							border-radius : 100%;
 
-			   			  	font-family: Oswald;
+			   			 font-family: Oswald;
 							font-weight: normal;
 							font-size: 1.5rem;
+							margin-bottom : 0.5%;
+							margin-top : 0.5%;
 						}
 
 						p:nth-child(1){
-							margin-left : 15%;
-							margin-right : 3%;
+							margin-left : 20%;
+							padding-right : 3.5%;
+							padding-left : 5%;
+							margin-right : 5%;
 							padding-bottom : 3%;
 						}
 
 						p:nth-child(3){
-							margin-right : 15%;
-							margin-left : 3%;
+							margin-right : 20%;
+							padding-right : 3.5%;
+							padding-left : 5%;
+							margin-left : 5%;
 						}
 
 						p:nth-child(2){
@@ -313,12 +342,16 @@
 							font-family: Oswald;
 							font-style: normal;
 							font-weight: 500;
-							font-size: 2rem;
+							font-size: 1.5rem;
 							display: flex;
 							text-transform: capitalize;
 							flex:2;
+
+							span{
+								text-align : right;
+							}
 							svg{
-								width :  90%;
+								width :  100%;
 							}
 						}
 
@@ -369,12 +402,12 @@
 						margin-left : 10px;
 						margin-top : 10px;
 						overflow: hidden;
-		   			  	text-overflow: ellipsis;
-		   			  	overflow-wrap: anywhere;
-		   			  	font-family: Roboto Condensed;
+   			  	text-overflow: ellipsis;
+   			  	overflow-wrap: anywhere;
+   			  	font-family: Roboto Condensed;
 						font-style: italic;
 						font-weight: normal;
-						font-size: 1.1rem;
+						font-size: 1.4rem;
 						/* or 86% */
 
 						text-transform: capitalize;
@@ -395,6 +428,7 @@
 						display : flex;
 						flex : 1;
 						text-align : left;
+						align-items: center;
 
 						svg{
 							width : 70%;

@@ -42,6 +42,7 @@ export default {
 			duration : duration,
 			phases : phases,
 			nbJourGagne : 0,
+			modifMode : this.$root.modifMode,
 		}
 	},
 	watch : {
@@ -169,9 +170,9 @@ export default {
 		V_phasesUtils.addPhasePanel(this);
 	},
 	template : `
-	<div v-bind:doublepress="handleDoublePress" v-if="isDisplayed" id="phaseF" v-bind:style="{ height : ((phases.length * 36) + 7) + 'px' }">
+	<div v-if="isDisplayed" id="phaseF" v-bind:style="{ height : ((phases.length * 36) + 7) + 'px' }">
 		<!-- PhasesFrame -->
-		<div v-press="handleModifyMode" v-bind:style="[modifyMode ? {backgroundColor : '#00B9F6', height : '60px', opacity : 0.6, width : '60px'} : {backgroundColor : '#00B9F6', opacity : 0.6, height : '24px', width : '24px'}]" id="modifyPhaseButton"></div>
+		<div v-if="modifMode" v-press="handleModifyMode" v-bind:style="[modifyMode ? {backgroundColor : '#00B9F6', height : '60px', opacity : 0.6, width : '60px'} : {backgroundColor : '#00B9F6', opacity : 0.6, height : '24px', width : '24px'}]" id="modifyPhaseButton"></div>
 		<phasesbackground v-bind:style="[modifyMode ? {border : '5px solid rgba(0,185,246, 0.6)', width : 'calc(100% + 0px)'}: {border : '0px solid #00B9F6'}]" v-bind:highlighted="highlighted" v-bind:offset="offset" v-bind:time="time" v-bind:duration="duration"></phasesbackground>
 		<div class="playerLineWrapper">
 			<div v-pan="handlePan" class="playerLine" v-bind:style="{ left : playerWidth, width : width2, height : ((phases.length - 1) * 41 + 23) + 'px'}"></div>
