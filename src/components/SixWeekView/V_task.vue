@@ -1111,24 +1111,28 @@ export default {
 
 		},
 		handleCalendarStartTap(i){
-			if(!this.modifymode){
-				this.modifymode = true;
-				V_ModelUtils.setTemporaryMode(true);
-			}
-			
-			this.task.setStartDate(Utils.addDaysToDate(this.startweek, i-1 ));
+			if(!this.timeline.isHoliday((this.time * 7) + (i-1))){
+				if(!this.modifymode){
+					this.modifymode = true;
+					V_ModelUtils.setTemporaryMode(true);
+				}
+				
+				this.task.setStartDate(Utils.addDaysToDate(this.startweek, i-1 ));
 
-			V_ModelUtils.dispatchUpdate();
+				V_ModelUtils.dispatchUpdate();
+			}
 		},
 		handleCalendarEndTap(i){
-			if(!this.modifymode){
-				this.modifymode = true;
-				V_ModelUtils.setTemporaryMode(true);
-			}
-			
-			this.task.setEndDate(Utils.addDaysToDate(this.endweek, i-1 ));
+			if(!this.timeline.isHoliday((this.time * 7) + (i-1))){
+				if(!this.modifymode){
+					this.modifymode = true;
+					V_ModelUtils.setTemporaryMode(true);
+				}
+				
+				this.task.setEndDate(Utils.addDaysToDate(this.endweek, i-1 ));
 
-			V_ModelUtils.dispatchUpdate();
+				V_ModelUtils.dispatchUpdate();
+			}
 		},
 
 		handleDoublePress(event){
