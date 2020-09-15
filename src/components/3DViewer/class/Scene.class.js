@@ -228,6 +228,7 @@ class Scene{
 	_endOfInit(that){
 
 
+	//HACK ModelStructure Extension
 	that.#viewer.forEachExtension((ext)=>{
 		if(ext.name == "modelstructure"){
 			// let models = ext._modelstructure._pendingModels;
@@ -238,9 +239,39 @@ class Scene{
 			for(let m in models){
 				if(!Number.isInteger(((models[m].id-1)  / Memory.getNbStyles()))) ext._modelstructure.unloadModel(models[m]);
 			}
+
+			const temp = ext._modelstructure.createUI;
+			ext._modelstructure.createUI = function()
+			{    
+				temp.apply(ext._modelstructure);
+				ext._modelstructure.tree.iterate = function(delegate, node, callback) {
+
+				    // roodId === 0 is a valid root node
+				    if (node === undefined || node === null) {
+				        return;
+				    }
+
+				    if(typeof delegate == "undefined"){
+				    	return ;
+				    }
+
+				    if(!delegate.shouldCreateTreeNode(node)) {
+				        return;
+				    }
+
+				    if(!callback(node)) {
+				        return;
+				    }
+
+				    delegate.forEachChild(node, function(child) {
+				        ext._modelstructure.tree.iterate(delegate, child, callback);
+				    }.bind(ext._modelstructure.tree));
+				};
+			};
 			 
 		}
 	});
+	//END HACK
 
 
 	let section = null;
