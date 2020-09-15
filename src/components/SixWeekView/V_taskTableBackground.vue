@@ -8,6 +8,7 @@ export default {
 		return {
 			"heightcolumn" : scssVariables.taskSize,
 			"minheightcolumn" : "calc(100% - " + scssVariables.taskSize.replace("px", "") + "px)",
+			"requestFrame" : null,
 		}
 	},
 	props:[
@@ -16,11 +17,10 @@ export default {
 		"nbclosed",
 		"time",
 		"tasktablestart",
-		"tasksize"
+		"tasksize",
 	],
 	computed:{
 		lineplayed : function(){
-			this.handleResize();
 			return (this.time - this.tasktablestart) + 1;
 		}
 	},
@@ -36,7 +36,8 @@ export default {
 					}
 				}
 			}
-			this.heightcolumn = toReturn;
+			this.heightcolumn = toReturn + 20;
+  		this.requestFrame = requestAnimationFrame(this.handleResize);
 			/*padding-top : v.$taskSize;
 			padding-bottom : v.$taskSize;*/
 		},
@@ -46,20 +47,11 @@ export default {
 			}
 		}
 	},
-	watch:{
-		nbopened : function(){
-			this.handleResize();
-		},
-		nbclosed : function(){
-			this.handleResize();
-		},
-	},
 	mounted: function(){	//Calculate height of task
-		this.handleResize();
-		window.addEventListener("resize", this.handleResize);
+		requestAnimationFrame(this.handleResize);
 	},
 	destroyed() {
-	  window.removeEventListener("resize", this.handleResize);
+		if(this.requestFrame != null) window.cancelAnimationFrame(this.requestFrame);
 	},
 	template : `
 	<div>
