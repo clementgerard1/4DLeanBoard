@@ -70,6 +70,13 @@ export default {
 				if(count != teams.length) toReturn.push(this.phases[p]);
 			}
 			return toReturn;
+		},
+		_displayedPhases : function(){
+			if(this.displayPhase){
+				return this.displayedPhases;
+			}else{
+				return this.phases;
+			}
 		}
 	},
 	methods : {
@@ -169,7 +176,7 @@ export default {
 		<div class="playerLineWrapper">
 			<div v-pan="handlePan" class="playerLine" v-bind:style="{ left : playerWidth, width : width2, height : ((phases.length - 1) * 41 + 23) + 'px'}"></div>
 		</div>
-		<phaseitem v-bind:modifymode="modifyMode" v-bind:teamDisplayed="teamDisplayStatus" v-for="p in displayedPhases" :key="p.getId()" v-bind:time="time" v-bind:displayPhase="displayPhase" v-bind:phaseId="p.getId()" v-bind:duration="duration"></phaseitem>
+		<phaseitem v-bind:modifymode="modifyMode" v-bind:teamDisplayed="teamDisplayStatus" v-for="p in _displayedPhases" :key="p.getId()" v-bind:time="time" v-bind:displayPhase="displayPhase" v-bind:phaseId="p.getId()" v-bind:duration="duration"></phaseitem>
 		<div v-if="displayPopUp" class="popUpModif">
 			<p>Ces modifications vous font gagné <span v-html="nbJourGagne"></span> jours, voulez vous les valider <span v-tap="()=>handleModif(true)">Oui</span> <span v-tap="()=>handleModif(false)">Non</span></p>
 		</div>

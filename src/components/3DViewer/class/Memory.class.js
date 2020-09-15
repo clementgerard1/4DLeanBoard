@@ -158,7 +158,6 @@ class Memory{
 	}
 
 	static setState(forgeObject, state){
-		console.log(forgeObject, state);
 		forgeObject.setTimeState(state);
 	}
 

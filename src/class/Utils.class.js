@@ -2,6 +2,7 @@ import "regenerator-runtime/runtime";
 import ForgeSDK from 'forge-apis';
 import fs from 'fs';
 import btoa from 'btoa';
+import Config from '../../config.js';
 
 /**
  * @class Utils
@@ -10,8 +11,8 @@ import btoa from 'btoa';
  */
 class Utils{
 	
-	static forgeBucketName = 'veronikaa_4dlb';
-	static forgeFileName = 'veronikaa_4dlb';
+	static forgeBucketName = Config.forgeBucketPrefix;
+	static forgeFileName = Config.forgeBucketPrefix;
 	static ids = {
 		"default" : 0
 	}

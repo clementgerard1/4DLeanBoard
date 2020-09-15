@@ -81,14 +81,33 @@ class ForgeObject{
 
 	addProperty(property){
 
-		// console.log(this.#id, property.getName(), property.getInfo().displayValue, property.getInfo());
+		//ARCHICAD (old model)
+		this.#properties[property.getName()] = property;
+		if(property.getName() == "ext-'Renovation Status'"){
+			const info = property.getInfo();
+			switch (info){
+				case "'New'" : 
+					if(this.#constructionState == null) this.#constructionState = 1;
+					break;
+				case "'To Be Demolished'" : 
+					this.#constructionState = 2;
+					break;
+				case "'Existing'" :
+					this.#constructionState = 0;
+					break;
+
+			}
+		}else if(property.getName() == "ext-'ConstructionType'" && property.getInfo() == "'Temporary'"){
+			this.#constructionState = 3;
+		}
+		//End Archicad
 
 		this.#properties[property.getName()] = property;
 		if(property.getName() == "Comments"){
 			const info = property.getInfo().displayValue;
 			switch (info){
 				case "ThisIsNew" : 
-					if(this.#constructionState == null) this.#constructionState = 1;
+					this.#constructionState = 1;
 					break;
 				case "ThisIsDemolition" : 
 					this.#constructionState = 2;
@@ -105,9 +124,7 @@ class ForgeObject{
 
 			}
 		}
-		// }else if(property.getName() == "ext-'ConstructionType'" && property.getInfo() == "'Temporary'"){
-		// 	this.#constructionState = 3;
-		// }
+
 	}
 
 	getProperties(){
@@ -250,10 +267,7 @@ class ForgeObject{
 		if(this.#selectmode){
 			selected = this.#selected;
 		}
-		const styles = Memory.getSceneObject().getStyle(/*this.#timeState*/0, constrType, selected, visible, filterMode);
-
-		this.#timeState 
-
+		const styles = Memory.getSceneObject().getStyle(this.#timeState, constrType, selected, visible, filterMode);
 
 		if(typeof styles != "undefined"){
 
@@ -267,7 +281,6 @@ class ForgeObject{
 			let intensity = "100%";
 
 			const regex = RegExp('team');
-			console.log(materialStyle);
 			if(regex.test(styles.material)){
 				materialStyle = scssVariables[this.#object3D.getParent().getTask().getTaskTeam().getColorClass().replace("BG_", "").toLowerCase()];
 				intensity = parseInt(styles.material.slice(5, 8));
@@ -283,7 +296,6 @@ class ForgeObject{
 
 				this.#started = true;
 			}
-
 
 			viewer.setThemingColor(this.#id, color, this.#model);
 			if(styles.transparent == "TRUE"){

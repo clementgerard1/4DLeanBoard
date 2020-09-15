@@ -72,6 +72,7 @@ class V_socketUtils{
 			V_filterMenuUtils.setDisplayMenuChange(this.initDatas.teamdisplay);
 			V_4DUtils.setTeamDisplayMode(this.initDatas.teamdisplay == 2);
 			V_phasesUtils.setTeamDisplayMode(this.initDatas.teamdisplay == 2);
+			V_phasesUtils.setTeamDisplayMode(this.initDatas.teamdisplay == 2);
 			//Teams	
 			for(let d in this.initDatas.teamDisplayed){
 				V_filterMenuUtils.setTeamDisplayedById(d, this.initDatas.teamDisplayed[d]);

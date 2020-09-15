@@ -4,21 +4,32 @@ module.exports = {
 	"socketConsoleIP" : "localhost",
 	"socketConsolePort" : 3002,
 	//
-
 	"forgeRenderer" : false,
 
-	"socketServerIp" : "localhost", //"194.199.221.148",//"194.199.221.139", 
-	"socketServerPort" : 3001,
+	//En local (serveur directement sur l'ordinateur)
+	"socketServerIp" : "localhost",
+	"dataServerIp" : "localhost",
+	//Sur le Server
+	//"socketServerIp" : "194.199.221.148"
+	//"dataServerIp" : "194.199.221.148",
 
-	"dataServerIp" : "localhost", ////"194.199.221.139", 
+
+	"socketServerPort" : 3001,
 	"dataServerPort" : 3003,
 
 	"autoDeskAccount" : "clement",
 
 	"autoDeskForgeSettings" : {
 		"clement" : {
-			clientId : "XWL5ytY1an8Adj0jIC3gS2PYZlNamuGT",
-			clientSecret : "0yEFdwlXiJt7X94U",
+			//Compte clément de test post stage
+			clientId : "R1cqNLAzGrZJmSLB9ALu5ml3cCXWYzAW", 
+			clientSecret : "20NDKn0iDDIvN793", 
+			forgeBucketPrefix : "veronikaa_4dlbbb" 
+
+			//Compte du stage
+			// clientId : "XWL5ytY1an8Adj0jIC3gS2PYZlNamuGT",
+			// clientSecret : "0yEFdwlXiJt7X94U",
+			// forgeBucketPrefix : "veronikaa_4dlb"
 		}
 	},
 
