@@ -48,8 +48,10 @@ export default {
 		},
 		trigger3DTeam : function(event){
 			const display = event.type == "press";
-			this.pressed = display;
-			V_socketUtils.triggerTeamDisplay(this.team , display);
+			if(this.pressed != display){
+				this.pressed = display;
+				V_socketUtils.triggerTeamDisplay(this.team , display);	
+			}
 
 		}
 	},

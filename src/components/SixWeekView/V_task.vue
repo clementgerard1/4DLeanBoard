@@ -189,6 +189,7 @@ export default {
 			originalStartDate : null,
 			originalEndDate : null,
 			eventToRemove : [],
+			tapPress : false,
 		}
 	},
 	props : [
@@ -686,9 +687,13 @@ export default {
 		},
 		handleTap: function(event){
 			const display = event.type == "press";
-			// if(!this.constraintTap){
-			if(this.task != null){
-				V_socketUtils.highlightObject4D(this.task.getObject4D(), display);
+
+			if(this.tapPress != display){
+				this.tapPress = display;
+				// if(!this.constraintTap){
+				if(this.task != null){
+					V_socketUtils.highlightObject4D(this.task.getObject4D(), display);
+				}
 			}
 
 			// }else{
@@ -1139,37 +1144,43 @@ export default {
 
 			if(this.$root.modifMode){
 
-				this.pressed = event.type == "press";
+				const bool = event.type == "press";
 
-				if(this.pressed){
-					if(!this.modifymode){
-						this.originalStartDate = this.task.getStartDate();
-						this.originalEndDate = this.task.getEndDate();
-						this.modifymode = true;
-						V_ModelUtils.setTemporaryMode(true);
-					}
-				}else{
+				if(bool != this.pressed){
 
-					const elems = document.getElementsByClassName(this.task.getId() + "-formoving");
-					for(let e in elems){
-						if(typeof elems[e].style != "undefined"){
-							elems[e].style.top = this.mouseTop;
-							elems[e].style.left = this.mouseLeft;
-							elems[e].style.width = "100%";
-							elems[e].style.position = "initial";
-							elems[e].style.zIndex = 0;
-							elems[e].style.backgroundColor = "rgba(0,0,0,0)";
-							elems[e].style.borderRadius = "0px";
-							elems[e].style.filter = '';
+					this.pressed = bool;
+
+					if(this.pressed){
+						if(!this.modifymode){
+							this.originalStartDate = this.task.getStartDate();
+							this.originalEndDate = this.task.getEndDate();
+							this.modifymode = true;
+							V_ModelUtils.setTemporaryMode(true);
 						}
+					}else{
+
+						const elems = document.getElementsByClassName(this.task.getId() + "-formoving");
+						for(let e in elems){
+							if(typeof elems[e].style != "undefined"){
+								elems[e].style.top = this.mouseTop;
+								elems[e].style.left = this.mouseLeft;
+								elems[e].style.width = "100%";
+								elems[e].style.position = "initial";
+								elems[e].style.zIndex = 0;
+								elems[e].style.backgroundColor = "rgba(0,0,0,0)";
+								elems[e].style.borderRadius = "0px";
+								elems[e].style.filter = '';
+							}
+						}
+
+						this.modifymode = false;
+						const temp = V_ModelUtils.getModel();
+						V_ModelUtils.setTemporaryMode(false);
+						V_ModelUtils.setModel(temp);
+
+						V_ModelUtils.dispatchUpdate();
 					}
 
-					this.modifymode = false;
-					const temp = V_ModelUtils.getModel();
-					V_ModelUtils.setTemporaryMode(false);
-					V_ModelUtils.setModel(temp);
-
-					V_ModelUtils.dispatchUpdate();
 				}
 
 			}

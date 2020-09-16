@@ -278,7 +278,6 @@ export default {
 		},
 
 		handleLayerSelected : function(layer){
-			console.log(this.layersArray, layer.replace(" ", ""), this.layersArray[layer.replace(" ", "")]);
 			V_socketUtils.setLayerDisplayed(layer.replace(" ", ""), !(this.layersArray[layer.replace(" ", "")].display));
 		},
 

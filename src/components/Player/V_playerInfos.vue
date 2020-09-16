@@ -178,7 +178,7 @@ export default {
 					this.$parent.milestoneSelected = milestone;
 				}
 				
-				if(event.type == "pressup"){
+				if(this.$parent.milestoneSelected == null && event.type == "pressup"){
 					this.$parent.milestoneSelected = null;
 					V_socketUtils.displayMilestone(null, false);
 				}

@@ -206,6 +206,8 @@ export default {
 		},
 
 		select(object4D, bool){
+			throw new Error();
+			console.log(object4D, bool);
 			const toFit = [];
 			const objs = object4D.getObjects3D();
 			for(let o in objs){
