@@ -176,6 +176,9 @@ class V_4DUtils{
 	static setCameraLocked(bool){
 		if(this.viewer != null){
 			this.viewer.setCameraLocked(bool);
+		}else{
+			this.waitViewer.cameraLocked = bool;
+			this.needInit = true;
 		}
 	}
 

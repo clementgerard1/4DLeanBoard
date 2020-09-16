@@ -80,6 +80,24 @@ class V_socketUtils{
 				V_phasesUtils.setTeamDisplayedById(d, this.initDatas.teamDisplayed[d]);
 			}
 
+
+			V_filterMenuUtils.setCameraLocked(this.initDatas.cameraLocked);
+			V_4DUtils.setCameraLocked(this.initDatas.cameraLocked);
+
+			for(let l in this.initDatas.layerDisplayed){
+				V_filterMenuUtils.setLayerDisplayed(l, this.initDatas.layerDisplayed[l])
+			}
+			for(let z in this.initDatas.zoneDisplayed){
+				V_filterMenuUtils.setZoneDisplayed(z, this.initDatas.zoneDisplayed[z])
+			}
+			for(let s in this.initDatas.stateDisplayed){
+				V_filterMenuUtils.setConstructionStateDisplayed(s, this.initDatas.stateDisplayed[s])
+			}
+
+			for(let t in this.initDatas.taskDisplayStatus){
+				V_taskTableUtils.setTaskDisplayMode(t, this.initDatas.taskDisplayStatus[t]);
+			}
+
 		}
 	}
 
@@ -221,6 +239,31 @@ class V_socketUtils{
 
 		this.socket.on("displayMilestone" , (datas) => {
 			V_playerUtils.displayMilestoneInfo(datas.milestoneId, datas.value);
+		});
+
+		this.socket.on("setLpsDisplayed" , (datas) => {
+			V_taskTableUtils.setLpsDisplayed(datas.taskId, datas.value);
+		});
+		this.socket.on("setDescriptionDisplayed" , (datas) => {
+			V_taskTableUtils.setDescriptionDisplayed(datas.taskId, datas.value);
+		});
+		this.socket.on("setIdDisplayed" , (datas) => {
+			V_taskTableUtils.setIdDisplayed(datas.taskId, datas.value);
+		});
+		this.socket.on("setManDisplayed" , (datas) => {
+			V_taskTableUtils.setManDisplayed(datas.taskId, datas.value);
+		});
+		this.socket.on("setCalendarDisplayed" , (datas) => {
+			V_taskTableUtils.setCalendarDisplayed(datas.taskId, datas.value);
+		});
+		this.socket.on("setLpsIndex" , (datas) => {
+			V_taskTableUtils.setLpsIndex(datas.taskId, datas.value);
+		});
+		this.socket.on("setPerson" , (datas) => {
+			V_taskTableUtils.setPerson(datas.taskId, datas.personId, datas.value);
+		});
+		this.socket.on("setWorkers" , (datas) => {
+			V_taskTableUtils.setWorkers(datas.taskId, datas.value);
 		});
 
 	}
@@ -464,6 +507,70 @@ class V_socketUtils{
 			teamId : team.getId(),
 			value : bool
 		});
+	}
+
+	static setIdDisplayed(taskId, bool){
+		V_taskTableUtils.setIdDisplayed(taskId, bool);
+		this.socket.emit("setIdDisplayed", { 
+			taskId : taskId,
+			value : bool
+		});
+	}
+
+	static setLpsDisplayed(taskId, bool){
+		V_taskTableUtils.setLpsDisplayed(taskId, bool);
+		this.socket.emit("setLpsDisplayed", { 
+			taskId : taskId,
+			value : bool
+		});
+	}
+
+	static setDescriptionDisplayed(taskId, bool){
+		V_taskTableUtils.setDescriptionDisplayed(taskId, bool);
+		this.socket.emit("setDescriptionDisplayed", { 
+			taskId : taskId,
+			value : bool
+		});
+	}
+
+	static setCalendarDisplayed(taskId, bool){
+		V_taskTableUtils.setCalendarDisplayed(taskId, bool);
+		this.socket.emit("setCalendarDisplayed", { 
+			taskId : taskId,
+			value : bool
+		});
+	}
+
+	static setManDisplayed(taskId, bool){
+		V_taskTableUtils.setManDisplayed(taskId, bool);
+		this.socket.emit("setManDisplayed", { 
+			taskId : taskId,
+			value : bool
+		});
+	}
+
+	static setLpsIndex(taskId, index){
+		this.socket.emit("setLpsIndex", { 
+			taskId : taskId,
+			value : index
+		});
+	}
+
+	static setPerson(model, taskId, personId, bool){
+		this.socket.emit("setPerson", { 
+			taskId : taskId,
+			personId : personId,
+			value : bool
+		});
+		DataApi.patchPerson(model, taskId, personId, bool);
+	}
+
+	static setWorkers(model, taskId, workers){
+		this.socket.emit("setWorkers", { 
+			taskId : taskId,
+			value : workers
+		});
+		DataApi.patchWorkers(model, taskId, workers);
 	}
 
 	/* ---------------------------- FILTER MENU INTERACTIONS ---------------------------- */

@@ -259,6 +259,16 @@ class Model{
 		return toReturn;
 	}
 
+	getPerson(id){
+		const teams = this.getTaskTeams();
+		for(let t in teams){
+			const persons = teams[t].getPersons();
+			for(let p in persons){
+				if(persons[p].getId() == id) return persons[p];
+			}
+		}
+	}
+
 	/**
 		get all operationUnits of the model
 		@returns {Array(OperationUnit)} return null if no operationUnit exist
@@ -695,6 +705,12 @@ class Model{
 				operationIds.push(operations[o].getId());
 			}
 
+			const persons = t.getPersons();
+			const personsIds = [];
+			for(let p in persons){
+				personsIds.push(persons[p].getId());
+			}
+
 			const task = {
 				id : t.getId(),
 				name : t.getName(),
@@ -710,7 +726,8 @@ class Model{
 				paused : t.isPaused(),
 				go : t.isGo(),
 				description : t.getDescription(),
-				workers : t.getWorkers()
+				workers : t.getWorkers(),
+				persons :  personsIds,
 			}
 
 			jsonObj.tasks.push(task);
@@ -1117,6 +1134,9 @@ class Model{
 			}
 			for(let o in infos.operations){
 				phase.addOperation(operations[infos.operations[o]]);
+			}
+			for(let p in infos.persons){
+				task.addPerson(persons[infos.persons[p]]);
 			}
 			for(let p in infos.properties){
 				const property = properties[infos.properties[p]];

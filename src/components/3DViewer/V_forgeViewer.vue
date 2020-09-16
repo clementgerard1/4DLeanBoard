@@ -41,6 +41,7 @@ export default {
 			layers : [],
 			loadingText : "Initialisation",
 			loaded : false,
+			initLayers : {},
 		}
 	},
 	props : [

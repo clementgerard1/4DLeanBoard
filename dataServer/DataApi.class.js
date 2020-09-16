@@ -52,11 +52,19 @@ class DataApi{
 	}
 
 	static async patchTaskState(model, task){
-		return axios.patch(DataApi.serverUrl + '/task/state?modelname=' + model.getName() + "&taskid=" + task.getId() + "&paused=" + task.isPaused() + "&done=" + task.isDone());
+		return axios.patch(DataApi.serverUrl + '/task/state?modelname=' + model.getName() + "&taskid=" + task.getId() + "&paused=" + task.isPaused() + "&done=" + task.isDone() + "&go=" + task.isGo());
 	}
 
 	static async patchRequirement(model, requirement){
 		return axios.patch(DataApi.serverUrl + '/requirement/?modelname=' + model.getName() + "&requirementid=" + requirement.getId() + "&requirementvalue=" + requirement.getValue());
+	}
+
+	static async patchPerson(model, taskId, personId, bool){
+		return axios.patch(DataApi.serverUrl + '/person/?modelname=' + model.getName() + "&taskid=" + taskId + "&personid=" + personId + "&value=" + bool);
+	}
+
+	static async patchWorkers(model, taskId, workers){
+		return axios.patch(DataApi.serverUrl + '/workers/?modelname=' + model.getName() + "&taskid=" + taskId + "&value=" + workers);
 	}
 
 	static async isAvailable(){

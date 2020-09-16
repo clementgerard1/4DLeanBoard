@@ -57,25 +57,7 @@ class V_filterMenuUtils{
 		}
 	}
 
-	/**
-		Add layer displayed to the list
-		@param {TaskTeam} team  
-		@param {bool}
-		@static
-	*/
-	static setLayerDisplayed(layer, bool){
-		if(bool){
-			this.layersDisplayed[layer] = {
-				layer : layer,
-			};
-		}else{
-			delete this.layersDisplayed[layer];
-		}
-		for(let f in this.filters){
-			this.filters[f].setLayersSelected(this.layersDisplayed);
-		}
-		
-	}
+
 
 	/**
 		Change menu ifc choices

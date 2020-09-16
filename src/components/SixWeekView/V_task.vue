@@ -109,22 +109,30 @@ export default {
 		let startWeekDate = null;
 		let endWeekDate = null;
 		let twoLineDates = null;
-		if(task != null){
-			startWeekDate = this.addDays(task.getStartDate(), -(task.getStartDate().getDay() - 1));
-			endWeekDate = this.addDays(task.getEndDate(), -(task.getEndDate().getDay() - 1));
-			twoLineDates = true || startWeekDate.getTime() !== endWeekDate.getTime();
-		}
+		let actualAssign = 0;
 
 		let persons = {};
 		let mn = 0;
 		let dr = 0;
 		if(task != null){
 			const pers = task.getTaskTeam().getPersons();
+
 			for(let p in pers){
 				persons[pers[p].getId()] = false;
 			}
 			mn = task.getWorkers();
 			dr =  task.getDuration();
+		}
+
+		if(task != null){
+			const persss = task.getPersons();
+			actualAssign = Object.keys(persss).length;
+			for(let p in persss){
+				persons[persss[p].getId()] = true;
+			}
+			startWeekDate = this.addDays(task.getStartDate(), -(task.getStartDate().getDay() - 1));
+			endWeekDate = this.addDays(task.getEndDate(), -(task.getEndDate().getDay() - 1));
+			twoLineDates = true || startWeekDate.getTime() !== endWeekDate.getTime();
 		}
 
 
@@ -176,7 +184,7 @@ export default {
 			openFlag : false,
 			persons : persons,
 			mn : mn,
-			actualassign : 0,
+			actualassign : actualAssign,
 			task : task,
 			model : model,
 			timeline : timeline,
@@ -290,9 +298,12 @@ export default {
 				this.timeline = V_ModelUtils.getTimeline();
 				this.duration = this.model.getDuration();
 				this.task = model.getTask(this.taskid);
+				this.actualassign = Object.keys(this.task.getPersons()).length;
+						
 				if(typeof this.task == "undefined") this.task = null;
 				if(this.task != null){
 					this.dr = this.task.getDuration();
+					this.mn = this.task.getWorkers();
 					this.startweek =  this.addDays(this.task.getStartDate(), -(this.task.getStartDate().getDay() - 1));
 					this.endweek = this.addDays(this.task.getEndDate(), -(this.task.getEndDate().getDay() - 1));
 					this.twoLineDates = true || this.startweek.getTime() !== this.endweek.getTime();
@@ -700,6 +711,16 @@ export default {
 			// 	this.constraintTap = false;
 			// }
 		},
+		setTaskDisplayMode : function(infos){
+			if(this.taskname != ""){
+				this.idFace = infos.id;
+				this.lpsFace = infos.lps;
+				this.manFace = infos.man;
+				this.descriptionFace = infos.description;
+				this.calFace = infos.calendar;
+				this.lpsIndex = infos.lpsIndex;
+			}
+		},
 		handleReadyTap: function(event){
 			this.constraintTap = true;
 			this.task.setDone(false);
@@ -785,18 +806,6 @@ export default {
 				this.paused = this.task.isPaused();
 				this.done = this.task.isDone();
 				this.go = this.task.isGo();
-
-				if(this.paused){
-					document.getElementById("pauseIcon").style.color = "red";
-				}else{
-					document.getElementById("pauseIcon").style.color = "black";
-				}
-
-				if(this.go){
-					document.getElementById("goIcon").style.color = scssVariables["greenbluish_light"];
-				}else{
-					document.getElementById("goIcon").style.color = "black";
-				}
 			}
 		},
 		updateRequirements(){
@@ -874,11 +883,10 @@ export default {
 			}
 		},
 
-		handleIdTap(){
-
+		setIdDisplayed(bool){
 			if(!this.openFlag && this.isOpen && this.taskname != ""){
 				const temp = this.calFace;
-				this.idFace = !this.idFace;
+				this.idFace = bool;
 				this.lpsFace = false;
 				this.manFace = false;
 				this.descriptionFace = false;
@@ -894,13 +902,9 @@ export default {
 			this.openFlag = false;
 		},
 
-		handleLpsTap(event){
+		setLpsDisplayed(bool){
 			if(!this.openFlag && this.isOpen && this.taskname != ""){
-				if(event.target.classList.contains("lpsSelected")){
-					this.handleLpsButtonTap();
-					return;
-				}
-				this.lpsFace = !this.lpsFace;
+				this.lpsFace = bool;
 				this.idFace = false;
 				this.manFace = false;
 				this.descriptionFace = false;
@@ -910,9 +914,9 @@ export default {
 			this.openFlag = false;
 		},
 
-		handleDescriptionTap(){
+		setDescriptionDisplayed(bool){
 			if(this.isOpen && this.taskname != ""){
-				this.descriptionFace = !this.descriptionFace;
+				this.descriptionFace = bool;
 				this.idFace = false;
 				this.lpsFace = false;
 				this.manFace = false;
@@ -920,13 +924,13 @@ export default {
 			}
 		},
 
-		handleCalendarTap(){
+		setCalendarDisplayed(bool){
 			if(this.isOpen && this.taskname != ""){
 				this.descriptionFace = false;
 				this.idFace = false;
 				this.lpsFace = false;
 				this.manFace = false;
-				this.calFace = !this.calFace;
+				this.calFace = bool;
 				if(!this.calFace){
 					const temp = V_ModelUtils.getModel();
 					V_ModelUtils.setTemporaryMode(false);
@@ -935,31 +939,77 @@ export default {
 			}
 		},
 
-		handleManTap(){
+		setManDisplayed(bool){
 			if(this.isOpen && this.taskname != ""){
 				this.descriptionFace = false;
 				this.idFace = false;
 				this.lpsFace = false;
-				this.manFace = !this.manFace;
+				this.manFace = bool;
 				this.calFace = false;
 			}
 		},
 
+		handleIdTap(){
+			V_socketUtils.setIdDisplayed(this.task.getId(), !this.idFace);
+		},
+
+		handleLpsTap(event){
+			if(event.target.classList.contains("lpsSelected")){
+				this.handleLpsButtonTap();
+				return;
+			}
+			V_socketUtils.setLpsDisplayed(this.task.getId(), !this.lpsFace);
+		},
+
+		handleDescriptionTap(){
+			V_socketUtils.setDescriptionDisplayed(this.task.getId(), !this.descriptionFace);
+		},
+
+		handleCalendarTap(){
+			V_socketUtils.setCalendarDisplayed(this.task.getId(), !this.calFace);
+		},
+
+		handleManTap(){
+			V_socketUtils.setManDisplayed(this.task.getId(), !this.manFace);
+		},
+
 		handleCheckPerson(person){
-			const persons = this.task.getPersons();
-			if(typeof persons[person.getId()] == "undefined"){
+			if(this.teamuser != null && this.teamuser.toLowerCase() == this.team.getName().toLowerCase()){
+				const persons = this.task.getPersons();
+				if(typeof persons[person.getId()] == "undefined"){
+					this.task.addPerson(person);
+					this.$set(this.persons, person.getId(), true);
+					this.actualassign++;
+					V_socketUtils.setPerson(this.model, this.task.getId(), person.getId(), true);
+				}else{
+					this.task.removePerson(person);
+					this.$set(this.persons, person.getId(), false);
+					this.actualassign--;
+					V_socketUtils.setPerson(this.model, this.task.getId(), person.getId(), true);
+				}
+			}
+		},
+
+		setPerson(personId, bool){
+			const person = this.model.getPerson(personId);
+			if(bool){
 				this.task.addPerson(person);
-				this.$set(this.persons, person.getId(), true);
+				this.$set(this.persons, personId , true);
 				this.actualassign++;
 			}else{
 				this.task.removePerson(person);
-				this.$set(this.persons, person.getId(), false);
+				this.$set(this.persons, personId, false);
 				this.actualassign--;
 			}
 		},
 
+		setLpsIndex(lpsIndex){
+			this.lpsIndex = lpsIndex;
+		},
+
 		handleLpsPlus(){
-			this.lpsIndex = (this.lpsIndex + 1) % 7
+			this.lpsIndex = (this.lpsIndex + 1) % 7;
+			V_socketUtils.setLpsIndex(this.task.getId(), this.lpsIndex);
 		},
 
 		handleLpsMinus(){
@@ -1092,12 +1142,20 @@ export default {
 		},
 
 		handleManChange(bool){
-			if(bool){
-				this.mn++;
-			}else{
-				this.mn--;
+			if(this.teamuser != null && this.teamuser.toLowerCase() == this.team.getName().toLowerCase()){
+				if(bool){
+					this.mn++;
+				}else{
+					this.mn--;
+				}
+				this.task.setWorkers(this.mn);
+				V_socketUtils.setWorkers(this.model, this.task.getId(), this.mn);
 			}
-			this.task.setWorkers(this.mn);
+		},
+
+		setWorkers(i){
+			this.task.setWorkers(i);
+			this.mn = i;
 		},
 
 		handleCalendarChange(bool){
@@ -1116,27 +1174,31 @@ export default {
 
 		},
 		handleCalendarStartTap(i){
-			if(!this.timeline.isHoliday((this.time * 7) + (i-1))){
-				if(!this.modifymode){
-					this.modifymode = true;
-					V_ModelUtils.setTemporaryMode(true);
-				}
-				
-				this.task.setStartDate(Utils.addDaysToDate(this.startweek, i-1 ));
+			if(this.$root.modifMode){
+				if(!this.timeline.isHoliday((this.time * 7) + (i-1))){
+					if(!this.modifymode){
+						this.modifymode = true;
+						V_ModelUtils.setTemporaryMode(true);
+					}
+					
+					this.task.setStartDate(Utils.addDaysToDate(this.startweek, i-1 ));
 
-				V_ModelUtils.dispatchUpdate();
+					V_ModelUtils.dispatchUpdate();
+				}
 			}
 		},
 		handleCalendarEndTap(i){
-			if(!this.timeline.isHoliday((this.time * 7) + (i-1))){
-				if(!this.modifymode){
-					this.modifymode = true;
-					V_ModelUtils.setTemporaryMode(true);
-				}
-				
-				this.task.setEndDate(Utils.addDaysToDate(this.endweek, i-1 ));
+			if(this.$root.modifMode){
+				if(!this.timeline.isHoliday((this.time * 7) + (i-1))){
+					if(!this.modifymode){
+						this.modifymode = true;
+						V_ModelUtils.setTemporaryMode(true);
+					}
+					
+					this.task.setEndDate(Utils.addDaysToDate(this.endweek, i-1 ));
 
-				V_ModelUtils.dispatchUpdate();
+					V_ModelUtils.dispatchUpdate();
+				}
 			}
 		},
 

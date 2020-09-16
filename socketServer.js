@@ -46,11 +46,11 @@ io.on("connection", function(client){
 
             }
 
-            const selected = timeline.getTasksBetweenTwoDates(0 * 7, (0 * 7) + 6);
+            // const selected = timeline.getTasksBetweenTwoDates(0 * 7, (0 * 7) + 6);
             let sel = [];
-            for(let s in selected){
-                sel.push(selected[s].getId());
-            }
+            // for(let s in selected){
+            //     sel.push(selected[s].getId());
+            // }
 
             const ifcmenu = [];
             for(let i = 0 ; i < data.urns.length ; i++){
@@ -69,6 +69,11 @@ io.on("connection", function(client){
                 teamDisplayed : teamDisplayed,
                 teamInfosDisplayed : teamInfosDisplayed,
                 teamOpen : teamOpen,
+                cameraLocked : false,
+                layerDisplayed : {},
+                zoneDisplayed : {},
+                stateDisplayed : {},
+                taskDisplayStatus : {}
             };
 
             client.emit("sendInit", models[modelName]);
@@ -132,13 +137,13 @@ io.on("connection", function(client){
 
     client.on("setTime", (datas) => {
         models[modelName].playerTime = datas.time;
-        models[modelName].taskSelected = [];
-        const model = models[modelName].model;
-        const timeline = models[modelName].timeline;
-        const selected = timeline.getTasksBetweenTwoDates(datas.time * 7, (datas.time * 7) + 6);
-        for(let s in selected){
-            models[modelName].taskSelected.push(selected[s].getId());
-        }
+        // models[modelName].taskSelected = [];
+        // const model = models[modelName].model;
+        // const timeline = models[modelName].timeline;
+        // const selected = timeline.getTasksBetweenTwoDates(datas.time * 7, (datas.time * 7) + 6);
+        // for(let s in selected){
+        //     models[modelName].taskSelected.push(selected[s].getId());
+        // }
 
         broadcast(client, modelName, "setTime", datas);
         //client.broadcast.emit("setTime", datas);
@@ -150,16 +155,31 @@ io.on("connection", function(client){
     })
 
     client.on("setLayerDisplayed", (datas) => {
+        if(datas.value){
+            models[modelName].layerDisplayed[datas.layer] = true;
+        }else if(!datas.value){
+            models[modelName].layerDisplayed[datas.layer] = false;
+        }
         broadcast(client, modelName, "setLayerDisplayed", datas);
         //client.broadcast.emit("setRequirement", datas);
     })
 
     client.on("setZoneDisplayed", (datas) => {
+        if(datas.value){
+            models[modelName].zoneDisplayed[datas.zone] = true;
+        }else if(!datas.value){
+            models[modelName].zoneDisplayed[datas.zone] = false;
+        }
         broadcast(client, modelName, "setZoneDisplayed", datas);
         //client.broadcast.emit("setRequirement", datas);
     })
 
     client.on("setConstructionStateDisplayed", (datas) => {
+        if(datas.value){
+            models[modelName].stateDisplayed[datas.state] = true;
+        }else if(!datas.value){
+            models[modelName].stateDisplayed[datas.state] = false;
+        }
         broadcast(client, modelName, "setConstructionStateDisplayed", datas);
         //client.broadcast.emit("setRequirement", datas);
     })
@@ -170,6 +190,11 @@ io.on("connection", function(client){
     })
 
     client.on("setCameraLocked", (datas) => {
+        if(datas.value){
+            models[modelName].cameraLocked = true;
+        }else if(!datas.value){
+            models[modelName].cameraLocked = false;
+        }
         broadcast(client, modelName, "setCameraLocked", datas);
         //client.broadcast.emit("setRequirement", datas);
     })
@@ -215,6 +240,121 @@ io.on("connection", function(client){
         //client.broadcast.emit("clearHighlighting", datas);
     })
 
+    client.on("setLpsDisplayed", (datas) => {
+        if(typeof models[modelName].taskDisplayStatus[datas.taskId] == "undefined"){
+            models[modelName].taskDisplayStatus[datas.taskId] = {
+                lps : false,
+                description : false,
+                id : false,
+                calendar : false,
+                man : false,
+                lpsIndex : 0,
+            }
+        }
+        models[modelName].taskDisplayStatus[datas.taskId].lps = datas.value;
+        models[modelName].taskDisplayStatus[datas.taskId].description = false;
+        models[modelName].taskDisplayStatus[datas.taskId].id = false;
+        models[modelName].taskDisplayStatus[datas.taskId].calendar = false;
+        models[modelName].taskDisplayStatus[datas.taskId].man = false;
+        broadcast(client, modelName, "setLpsDisplayed", datas);
+        //client.broadcast.emit("clearHighlighting", datas);
+    })
+
+    client.on("setDescriptionDisplayed", (datas) => {
+        if(typeof models[modelName].taskDisplayStatus[datas.taskId] == "undefined"){
+            models[modelName].taskDisplayStatus[datas.taskId] = {
+                lps : false,
+                description : false,
+                id : false,
+                calendar : false,
+                man : false,
+                lpsIndex : 0,
+            }
+        }
+        models[modelName].taskDisplayStatus[datas.taskId].description = datas.value;
+         models[modelName].taskDisplayStatus[datas.taskId].lps = false;
+        models[modelName].taskDisplayStatus[datas.taskId].id = false;
+        models[modelName].taskDisplayStatus[datas.taskId].calendar = false;
+        models[modelName].taskDisplayStatus[datas.taskId].man = false;
+        broadcast(client, modelName, "setDescriptionDisplayed", datas);
+        //client.broadcast.emit("clearHighlighting", datas);
+    })
+
+    client.on("setIdDisplayed", (datas) => {
+        if(typeof models[modelName].taskDisplayStatus[datas.taskId] == "undefined"){
+            models[modelName].taskDisplayStatus[datas.taskId] = {
+                lps : false,
+                description : false,
+                id : false,
+                calendar : false,
+                man : false,
+                lpsIndex : 0,
+            }
+        }
+        models[modelName].taskDisplayStatus[datas.taskId].id = datas.value;
+         models[modelName].taskDisplayStatus[datas.taskId].description = false;
+        models[modelName].taskDisplayStatus[datas.taskId].lps = false;
+        models[modelName].taskDisplayStatus[datas.taskId].calendar = false;
+        models[modelName].taskDisplayStatus[datas.taskId].man = false;
+        broadcast(client, modelName, "setIdDisplayed", datas);
+        //client.broadcast.emit("clearHighlighting", datas);
+    })
+
+    client.on("setCalendarDisplayed", (datas) => {
+        if(typeof models[modelName].taskDisplayStatus[datas.taskId] == "undefined"){
+            models[modelName].taskDisplayStatus[datas.taskId] = {
+                lps : false,
+                description : false,
+                id : false,
+                calendar : false,
+                man : false,
+                lpsIndex : 0,
+            }
+        }
+        models[modelName].taskDisplayStatus[datas.taskId].calendar = datas.value;
+         models[modelName].taskDisplayStatus[datas.taskId].description = false;
+        models[modelName].taskDisplayStatus[datas.taskId].id = false;
+        models[modelName].taskDisplayStatus[datas.taskId].lps = false;
+        models[modelName].taskDisplayStatus[datas.taskId].man = false;
+        broadcast(client, modelName, "setCalendarDisplayed", datas);
+        //client.broadcast.emit("clearHighlighting", datas);
+    })
+
+    client.on("setLpsIndex", (datas) => {
+        if(typeof models[modelName].taskDisplayStatus[datas.taskId] == "undefined"){
+            models[modelName].taskDisplayStatus[datas.taskId] = {
+                lps : false,
+                description : false,
+                id : false,
+                calendar : false,
+                man : false,
+                lpsIndex : 0,
+            }
+        }
+        models[modelName].taskDisplayStatus[datas.taskId].lpsIndex = datas.value;
+        broadcast(client, modelName, "setLpsIndex", datas);
+        //client.broadcast.emit("clearHighlighting", datas);
+    })
+
+    client.on("setManDisplayed", (datas) => {
+        if(typeof models[modelName].taskDisplayStatus[datas.taskId] == "undefined"){
+            models[modelName].taskDisplayStatus[datas.taskId] = {
+                lps : false,
+                description : false,
+                id : false,
+                calendar : false,
+                man : false,
+                lpsIndex : 0,
+            }
+        }
+        models[modelName].taskDisplayStatus[datas.taskId].man = datas.value;
+         models[modelName].taskDisplayStatus[datas.taskId].description = false;
+        models[modelName].taskDisplayStatus[datas.taskId].id = false;
+        models[modelName].taskDisplayStatus[datas.taskId].calendar = false;
+        models[modelName].taskDisplayStatus[datas.taskId].lps = false;
+        broadcast(client, modelName, "setManDisplayed", datas);
+        //client.broadcast.emit("clearHighlighting", datas);
+    })
 
     client.on("updateIfcMenu", (datas) => {
         models[modelName].ifcmenu = datas.ifcs;
@@ -239,6 +379,16 @@ io.on("connection", function(client){
 
     client.on("triggerPhaseDescription", (datas) => {
         broadcast(client, modelName, "triggerPhaseDescription", datas);
+        //client.broadcast.emit("clearHighlighting", datas);
+    })
+
+    client.on("setPerson", (datas) => {
+        broadcast(client, modelName, "setPerson", datas);
+        //client.broadcast.emit("clearHighlighting", datas);
+    })
+
+    client.on("setWorkers", (datas) => {
+        broadcast(client, modelName, "setWorkers", datas);
         //client.broadcast.emit("clearHighlighting", datas);
     })
 

@@ -122,36 +122,35 @@ export default {
 			const layers = this.layers;
 			const layersArray = {};
 			for(let l in layers){
-				if(layers[l] != "Fille 0"){
+				if(layers[l] != "Fille 0" && typeof this.layersArray[layers[l].replace(' ', '')] == "undefined"){
 					if(layers[l] == "R-1"){
-						layersArray[layers[l].replace(' ', '')] = {
+						this.$set(this.layersArray, layers[l].replace(' ', ''), {
 							name : layers[l],
 							display : true,
 							nth : 1
-						};
+						});
 					}else if(layers[l] == "RDC"){
-						layersArray[layers[l].replace(' ', '')] = {
+						this.$set(this.layersArray, layers[l].replace(' ', ''), {
 							name : layers[l],
 							display : true,
 							nth : 3
-						};
+						});
 					}else if(layers[l] == "R+1"){
-						layersArray[layers[l].replace(' ', '')] = {
+						this.$set(this.layersArray, layers[l].replace(' ', ''), {
 							name : layers[l],
 							display : true,
 							nth : 4
-						};
+						});
 					}else if(layers[l] == "R+2"){
-						layersArray[layers[l].replace(' ', '')] = {
+						this.$set(this.layersArray, layers[l].replace(' ', ''), {
 							name : layers[l],
 							display : true,
 							nth : 5
-						};
+						});
 					}
 				}
 				
 			}
-			this.layersArray = layersArray;
 		}
 	},
 	created: function(){
@@ -282,6 +281,35 @@ export default {
 		},
 
 		setLayerDisplayed : function(layer, bool){
+			if(typeof this.layersArray[layer] == "undefined"){
+				if(layer != "Fille 0"){
+					if(layer == "R-1"){
+						this.layersArray[layer] = {
+							name : layer,
+							display : true,
+							nth : 1
+						};
+					}else if(layer == "RDC"){
+						this.layersArray[layer] = {
+							name : layer,
+							display : true,
+							nth : 3
+						};
+					}else if(layer == "R+1"){
+						this.layersArray[layer] = {
+							name : layer,
+							display : true,
+							nth : 4
+						};
+					}else if(layer == "R+2"){
+						this.layersArray[layer] = {
+							name : layer,
+							display : true,
+							nth : 5
+						};
+					}
+				}
+			} 
 			this.layersArray[layer].display = bool;
 		},
 

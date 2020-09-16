@@ -119,7 +119,6 @@ class V_taskTableUtils{
 		@static
 	*/
 	static setToken(task, bool){
-
 		for(let tt in this.tokens){
 			for(let t in this.tasks){
 				if(this.tasks[t].task == this.tokens[tt].task && this.tasks[t].vTask != null){
@@ -312,8 +311,6 @@ class V_taskTableUtils{
 		}
 	}
 
-	static update
-
 	/**
 		Set taskteam displayed on Forge Viewer
 		@param {uid} taskTeam id
@@ -323,6 +320,80 @@ class V_taskTableUtils{
 		for(let f in this.frames){
 			this.frames[f].setTeamDisplayed(taskTeam.getId(), bool);
 		}
+	}
+
+	static setIdDisplayed(taskId, bool){
+		for( let t in this.tasks){
+			if(this.tasks[t].task != null && this.tasks[t].task.getId() == taskId){
+				this.tasks[t].vTask.setIdDisplayed(bool);
+			}
+		}
+	}
+
+	static setLpsDisplayed(taskId, bool){
+		for( let t in this.tasks){
+			if(this.tasks[t].task != null && this.tasks[t].task.getId() == taskId){
+				this.tasks[t].vTask.setLpsDisplayed(bool);
+			}
+		}
+	}
+
+	static setLpsIndex(taskId, value){
+		for( let t in this.tasks){
+			if(this.tasks[t].task != null && this.tasks[t].task.getId() == taskId){
+				this.tasks[t].vTask.setLpsIndex(value);
+			}
+		}
+	}
+
+	static setDescriptionDisplayed(taskId, bool){
+		for( let t in this.tasks){
+			if(this.tasks[t].task != null && this.tasks[t].task.getId() == taskId){
+				this.tasks[t].vTask.setDescriptionDisplayed(bool);
+			}
+		}
+	}
+
+	static setCalendarDisplayed(taskId, bool){
+		for( let t in this.tasks){
+			if(this.tasks[t].task != null && this.tasks[t].task.getId() == taskId){
+				this.tasks[t].vTask.setCalendarDisplayed(bool);
+			}
+		}
+	}
+
+	static setManDisplayed(taskId, bool){
+		for( let t in this.tasks){
+			if(this.tasks[t].task != null && this.tasks[t].task.getId() == taskId){
+				this.tasks[t].vTask.setManDisplayed(bool);
+			}
+		}
+	}
+
+	static setPerson(taskId, personId, bool){
+		for( let t in this.tasks){
+			if(this.tasks[t].task != null && this.tasks[t].task.getId() == taskId){
+				this.tasks[t].vTask.setPerson(personId, bool);
+			}
+		}	
+	}
+
+	static setWorkers(taskId, workers){
+		for( let t in this.tasks){
+			if(this.tasks[t].task != null && this.tasks[t].task.getId() == taskId){
+				this.tasks[t].vTask.setWorkers(workers);
+			}
+		}	
+	}	
+
+	static setTaskDisplayMode(taskId, infos){
+		setTimeout(()=>{
+			for( let t in this.tasks){
+				if(this.tasks[t].task != null && this.tasks[t].task.getId() == taskId){
+					this.tasks[t].vTask.setTaskDisplayMode(infos);
+				}
+			}	
+		}, 1000);
 	}
 
 }

@@ -354,6 +354,27 @@ function launchServer(){
 		res.send('Requirement updated');
 	});
 
+	app.patch("/person", (req, res)=>{
+		const model = models[req.query.modelname];
+		const task = model.getTask(req.query.taskid);
+		const person = model.getPerson(req.query.personid);
+		if(req.query.value){
+			task.addPerson(person);
+		}else{
+			task.removePerson(person);
+		}
+		saveModel(req.query.modelname, model.serialize());
+		res.send('Requirement updated');
+	});
+
+	app.patch("/workers", (req, res)=>{
+		const model = models[req.query.modelname];
+		const task = model.getTask(req.query.taskid);
+		task.setWorkers(req.query.value);
+		saveModel(req.query.modelname, model.serialize());
+		res.send('Requirement updated');
+	});
+
 	app.patch("/task/state", (req, res)=>{
 		const model = models[req.query.modelname];
 		const tasks = model.getTasks();
@@ -361,6 +382,7 @@ function launchServer(){
 			if(tasks[t].getId() == req.query.taskid){
 				tasks[t].setDone(req.query.done === "true");
 				tasks[t].setPaused(req.query.paused === "true");
+				tasks[t].setGo(req.query.go === "true");
 			}
 		}
 		saveModel(req.query.modelname, model.serialize());
