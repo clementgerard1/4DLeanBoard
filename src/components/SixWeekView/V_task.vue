@@ -1238,7 +1238,7 @@ export default {
 						
 						<!-- man face -->
 						<div v-if="manFace" class="manFaceFrame">
-							<div v-press="handleTap" v-bind:style="{ height : '73%'}" class="body">
+							<div v-press="handleTap" v-bind:style="{ height : '67%'}" class="body">
 								<div v-for=" person in task.getTaskTeam().getPersons()">
 									<p v-tap="()=>{handleCheckPerson(person)}">
 										<span class="checkbox" v-bind:style="[persons[person.getId()] ? { backgroundColor : svgcolor} : '']"></span>

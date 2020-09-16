@@ -148,7 +148,7 @@ class V_socketUtils{
 		});
 
 		this.socket.on("setTaskState", (datas) => {
-			V_taskTableUtils.setTaskStateByIdAndUpdate(datas.taskId, datas.done, datas.paused);
+			V_taskTableUtils.setTaskStateByIdAndUpdate(datas.taskId, datas.done, datas.paused, datas.go);
 		});
 
 		this.socket.on("updateStateDisplay", (datas) => {
@@ -418,7 +418,8 @@ class V_socketUtils{
 		this.socket.emit("setTaskState", { 
 			taskId : task.getId(),
 			done : task.isDone(),
-			paused : task.isPaused()
+			paused : task.isPaused(),
+			go : task.isGo(),
 		});
 	}
 

@@ -69,7 +69,7 @@ class V_TouchGesturesUtils{
 		}
 	}
 
-	static initPressHandler(id){
+	static initPressHandler(){
 		const domObj = document.getElementById("content");
 		const handler = (e) => {
 			for(let t in this.touchObjects){
@@ -78,8 +78,54 @@ class V_TouchGesturesUtils{
 				}
 			}
 		}
-		domObj.addEventListener("mouseup", handler);
-		domObj.addEventListener("pressend", handler);
+		if(domObj != null){
+			domObj.addEventListener("mouseup", handler);
+			domObj.addEventListener("touchend", handler);
+		}
+	}
+
+	static initTapHandler(){
+		const domObj = document.getElementById("taskTableFrame");
+		const domObj2 = document.querySelector("#forgeV canvas");
+		const domObj3 = document.getElementById("filterPanelWrapper");
+		const domObj4 = document.getElementById("phaseF");
+		const domObj5 = document.getElementById("mainPlayer");
+		const handler = (e) => {
+			for(let t in this.touchObjects){
+				if(typeof this.touchObjects[t].handlers["tap1"] != "undefined") {
+					if(this.touchObjects[t].input.target.id == "ifcMenuId"){
+						if(document.querySelector(".ifcMenu") != null){
+							this.touchObjects[t].handlers["tap1"][0](e);
+						}
+					}else if(this.touchObjects[t].input.target.id == "planningMenuId"){
+						if(document.querySelector(".modelName") != null){
+							this.touchObjects[t].handlers["tap1"][0](e);
+						}
+					}
+
+				}
+			}
+		}
+		if(domObj != null){
+			domObj.addEventListener("mousedown", handler);
+			domObj.addEventListener("touchstart", handler);
+		}
+		if(domObj2 != null){
+			domObj2.addEventListener("mousedown", handler);
+			domObj2.addEventListener("touchstart", handler);
+		}
+		if(domObj3 != null){
+			domObj3.addEventListener("mousedown", handler);
+			domObj3.addEventListener("touchstart", handler);
+		}
+		if(domObj4 != null){
+			domObj4.addEventListener("mousedown", handler);
+			domObj4.addEventListener("touchstart", handler);
+		}
+		if(domObj5 != null){
+			domObj5.addEventListener("mousedown", handler);
+			domObj5.addEventListener("touchstart", handler);
+		}
 	}
 
 

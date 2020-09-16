@@ -128,7 +128,7 @@ export default {
 					const obj = objs[o];
 					const properties = this.ifcProperties[obj.getIFCId()];
 					for(let p in properties){
-						if(properties[p][0][1] == "'Comments'"){
+						if(typeof properties[p][0] != "undefined" && properties[p][0][1] == "'Comments'"){
 							if(toReturn.indexOf(properties[p][0][2]) == -1) toReturn.push(properties[p][0][2]); 
 						}
 					}
@@ -146,7 +146,7 @@ export default {
 					const obj = objs[o];
 					const properties = this.ifcProperties[obj.getIFCId()];
 					for(let p in properties){
-						if(properties[p][0][1] == "'Level'"){
+						if(typeof properties[p][0] != "undefined" && properties[p][0][1] == "'Level'"){
 							if(toReturn.indexOf(properties[p][0][2]) == -1) toReturn.push(properties[p][0][2]); 
 						}
 					}

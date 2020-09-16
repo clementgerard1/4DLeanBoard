@@ -420,7 +420,7 @@ export default {
 		</div>
 		<div class="mainMenu">
 			<div class="itemContainer" v-if="menuOpen">
-				<div v-bind:style="[ !teamdisplaycond ? { opacity : 1} : { opacity : 0.5} ]" class="menuItem" v-tap="handleDisplayTap2">
+				<div v-bind:style="[ !teamdisplaycond ? { opacity : 1} : { opacity : 0.5} ]" class="menuItem" id="filterMenuTapId" v-tap="handleDisplayTap2">
 					` + BlackAndWhite +  `
 				</div>
 			</div>

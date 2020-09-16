@@ -203,6 +203,10 @@ function init(){
 						this.ifcProperties = datas.ifcProperties;
 						this.oauth = datas.oAuth;
 						this.forgeReady = true;
+			 			setTimeout(()=>{
+							TouchGesturesUtils.initPressHandler();
+				 			TouchGesturesUtils.initTapHandler();
+						}, 300);
 
 				})
 				.catch( error => console.error(error));
@@ -236,7 +240,6 @@ function init(){
  		mounted : function(){
  			V_socketUtils.setInitAppFlag(true);
  			V_socketUtils.initApp();
- 			TouchGesturesUtils.initPressHandler();
  		},
  		template : `
  		<div>

@@ -107,7 +107,7 @@
 			background: linear-gradient(180deg, rgba(196, 196, 196, 0) 0%, #FFFFFF 100%);
     		backdrop-filter: blur(2px);
 
-			.modelName{
+			.ifcName{
 				margin : 10px;
 				font-family: Oswald;
 				font-style: normal;
@@ -125,7 +125,7 @@
 
 			}
 
-			.modelName.shown{
+			.ifcName.shown{
 
 				.fileButton{
 					background: #FFFFFF;
@@ -158,7 +158,7 @@
 
 			}
 
-			.modelName.hide{
+			.ifcName.hide{
 
 				.fileButton{
 					/* Blackish */

@@ -284,6 +284,10 @@ function init(){
 						const socket = openSocket("http://" + Config.socketServerIp + ":" + Config.socketServerPort + "?model=" + this.model.getName());
 						V_socketUtils.setSocket(socket);
 						this.modelSelected = true;
+			 			setTimeout(()=>{
+							TouchGesturesUtils.initPressHandler();
+				 			TouchGesturesUtils.initTapHandler();
+						}, 300);
 				})
 				.catch( error => console.error(error));
  			},
@@ -316,7 +320,6 @@ function init(){
  		mounted : function(){
  			V_socketUtils.setInitAppFlag(true);
  			V_socketUtils.initApp();
- 			TouchGesturesUtils.initPressHandler();
  		},
  		template : `
  		<div>

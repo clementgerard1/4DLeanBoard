@@ -615,8 +615,8 @@ export default {
 		<div id="modelMenu"> 
 			
 			<div class="openMenu" >
-				<div v-if="menuopen">
-					<div class="modelName" v-for="model in modelShown" v-tap="() => handleMenuChange(model.id)" v-bind:class='[ model.shown ? "shown" : "hide"]'> 
+				<div v-if="menuopen" class="ifcMenu">
+					<div class="ifcName" v-for="model in modelShown" v-tap="() => handleMenuChange(model.id)" v-bind:class='[ model.shown ? "shown" : "hide"]'> 
 						<a class="ifcIcon">` + ifcIcon + `</a> 
 						<p v-html="model.name"></p>
 					</div>

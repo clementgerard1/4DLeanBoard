@@ -192,7 +192,7 @@ export default {
 		},
 		trigger3DPhase : function(event){
 			const display = event.type == "press";
-			if(display != pressed){
+			if(display != this.pressed){
 				this.pressed = display;
 				V_socketUtils.triggerPhaseDisplay(this.phase , display);
 			}

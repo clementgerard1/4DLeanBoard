@@ -544,6 +544,17 @@ export default {
 				</pattern>
 				<image id="image0_safetyHat" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAABF0lEQVRIie3VPUoDURSG4Sem8afQBajrEFF0A3YSBDdg5RZsbGwEdxBEdCFi6Sa0FowIEQwZCzMkXjIzmfFetMgHX3W4573nnPvDXP9YD8gC39dN0moAzmLkWmgAjqJZwBvo1sjZHa35lTro+dnecL7ZlPgrDptCTzAsSFwFzkZrT+tCOwE0ww52S8DT4kM1Kt80bm8M98w485uI0NzXVdB1DBKAB2HV4XU6Rrtqdw3UxlEZeD8BNNdeWfBZ/DbnfpoEhe9rH4uNaypXH8tF4KIPIJYKP5KwPdupdjB5uNYq4sl0Jt3B+sQjDkLoRUJo6HPGw37HStNW1dQbVvMZXuEDd9jyfaVakbw0ynmLF1wmL22uuf5EX1umyMTIcipBAAAAAElFTkSuQmCC"/>
 
+				<filter id="filter0_b_pppp" x="-10" y="-10" width="340" height="52" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+				<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+				<feGaussianBlur in="BackgroundImage" stdDeviation="5"/>
+				<feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur"/>
+				<feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur" result="shape"/>
+				</filter>
+				<linearGradient id="paint0_linear_pppp" x1="160" y1="16" x2="160" y2="16" gradientUnits="userSpaceOnUse">
+				<stop stop-color="#D9D9D9"/>
+				<stop offset="1" stop-color="#F7F7F7"/>
+				</linearGradient>
+
 			</defs>
 		</svg>
 

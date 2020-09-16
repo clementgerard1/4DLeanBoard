@@ -260,11 +260,12 @@ class V_taskTableUtils{
 		}
 	}
 
-	static setTaskStateByIdAndUpdate(taskId, done, paused){
+	static setTaskStateByIdAndUpdate(taskId, done, paused, go){
 		for( let t in this.tasks){
 			if(this.tasks[t].task != null && this.tasks[t].task.getId() == taskId){
 				this.tasks[t].task.setPaused(paused);
 				this.tasks[t].task.setDone(done);
+				this.tasks[t].task.setGo(go);
 				V_taskTableUtils.updateTaskState(this.tasks[t].task);
 				V_taskTableUtils.updateRequirements(this.tasks[t].task);
 			} 
