@@ -47,7 +47,8 @@ export default {
 		"nth",
 		"tasksize",
 		"ifcProperties",
-		"teamuser"
+		"teamuser",
+		"teamvisibility"
 	],
 	computed:{
 		_teamuser : function(){
@@ -159,7 +160,7 @@ export default {
 	}
 	,
 	template : `
-	<div v-if="teamDisplayed" class="phaserow" v-bind:style="[ isVisible ? { paddingBottom : (parseFloat(headerHeight.replace('px', '')) / 3)+ 'px' } : {paddingBottom : '0px', height : '0px' }]">
+	<div v-if="teamvisibility" class="phaserow" v-bind:style="[ isVisible ? { paddingBottom : (parseFloat(headerHeight.replace('px', '')) / 3)+ 'px' } : {paddingBottom : '0px', height : '0px' }]">
 
 		<!-- line -->
 		<taskline v-show="isVisible" class="phaseLine" v-bind:taskheight="headerHeight" v-doubletap="()=>{}" v-tap="handleOpenPhase" v-bind:time="_time" v-bind:nth="_nth" v-bind:team="_team" v-bind:class="color" v-bind:teamdescription="teamDescription" v-bind:style='zIndex'></taskline>

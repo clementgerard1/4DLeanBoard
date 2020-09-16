@@ -160,7 +160,6 @@ class V_socketUtils{
 		});	
 
 		this.socket.on("updateTeamDisplayed", (datas) => {
-			console.log(datas);
 			V_4DUtils.setTeamDisplayedById(datas.team, datas.value);
 			V_filterMenuUtils.setTeamDisplayedById(datas.team, datas.value);
 			V_taskTableUtils.setTeamDisplayedById(datas.team, datas.value);

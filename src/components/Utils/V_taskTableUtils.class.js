@@ -10,6 +10,7 @@ class V_taskTableUtils{
 	static frames = [];
 	static lines = [];
 	static infosLines = [];
+	static filterTeamInfos = [];
 	
 
 	static setAllTasks(tasks){
@@ -306,12 +307,12 @@ class V_taskTableUtils{
 		@static
 	*/
 	static setTeamDisplayedById(teamId, bool){
-		for(let r in this.rows){
-			if(this.rows[r].taskteam.getId() == teamId){
-				this.rows[r].teamDisplayed = bool;
-			}
+		for(let f in this.frames){
+			this.frames[f].setTeamDisplayed(teamId, bool);
 		}
 	}
+
+	static update
 
 	/**
 		Set taskteam displayed on Forge Viewer
@@ -319,10 +320,8 @@ class V_taskTableUtils{
 		@static
 	*/
 	static setTeamDisplayed(taskTeam, bool){
-		for(let r in this.rows){
-			if(this.rows[r].taskteam.getId() == taskTeam.getId()){
-				this.rows[r].teamDisplayed = bool;
-			}
+		for(let f in this.frames){
+			this.frames[f].setTeamDisplayed(taskTeam.getId(), bool);
 		}
 	}
 

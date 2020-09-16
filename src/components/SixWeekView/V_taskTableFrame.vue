@@ -37,6 +37,9 @@ export default {
 			this.ganttBool = week;
 			this.weeksBool = weeks;
 			this.phasesDisplayed = phases;
+		},
+		setTeamDisplayed : function(teamId, bool){
+			this.$set(this.teamvisibility, teamId, bool);
 		}
 	},
 	created : function(){
@@ -73,13 +76,15 @@ export default {
 			const lines = [];
 			const taskTeams = model.getTaskTeams();
 
-
+			const teamVisibility = {};
 
 			for(let t in taskTeams){
 				lines[lines.length] = {
 					taskteam : taskTeams[t],
 					nb : timeline.getMaxSimultaneousTasksByTaskTeamBetweenTwoDates(taskTeams[t], 0, duration - 1)
 				}
+
+				teamVisibility[taskTeams[t].getId()] = true;
 				for( let n = 0 ; n < lines[lines.length - 1].nb ; n++){
 					V_taskTableUtils.setTeam(taskTeams[t], n);
 				}
@@ -99,6 +104,7 @@ export default {
 				offset : 0,
 				model : model,
 				timeline : timeline,
+				teamvisibility : teamVisibility
 			};
 	},	
 	computed : {
@@ -151,7 +157,7 @@ export default {
 				<tasktablebackground v-if="weeksBool" v-bind:tasksize="tasksize" v-bind:tasktablestart="tasktablestart" v-bind:time="time" v-bind:nbopened="nbopened" v-bind:nbclosed="nbclosed" id="taskTableBackground" v-bind:style="{paddingTop : '0px', paddingBottom : tasksize + 'px' }"></tasktablebackground>
 
 				<template v-if="weeksBool" v-for="line in lines">
-					<row6w v-bind:teamuser="_teamuser" v-bind:ifcProperties="_ifcProperties" v-bind:tasksize="tasksize" v-bind:tasktablestart="tasktablestart" v-bind:time="time" v-for="i in line.nb" :key="line.taskteam.getId() + '-' + (tasktablestart + i)" v-bind:taskteam="line.taskteam" v-bind:nth="i-1"></row6w>
+					<row6w v-bind:teamuser="_teamuser" v-bind:ifcProperties="_ifcProperties" v-bind:tasksize="tasksize" v-bind:tasktablestart="tasktablestart" v-bind:time="time" v-for="i in line.nb" :key="line.taskteam.getId() + '-' + (tasktablestart + i)" v-bind:taskteam="line.taskteam" v-bind:teamvisibility="teamvisibility[line.taskteam.getId()]" v-bind:nth="i-1"></row6w>
 				</template>
 
 				<ganttdisplay v-if="ganttBool" ></ganttdisplay>
