@@ -437,6 +437,7 @@ class Timeline{
 			let count = 0;
 			const temp = [];
 			for(let j = (i * 7) ; j < ((i+1) * 7) ; j++){
+				if(typeof this.#steps[j] != "undefined"){
 					const tasks = this.#steps[j].tasks;
 					for(let t in tasks){
 						if(!temp.includes(tasks[t].getId()) && tasks[t].getTaskTeam() == taskTeam){
@@ -444,6 +445,7 @@ class Timeline{
 							count++
 						}
 					}
+				}
 			}
 
 			if(max < count) max = count;

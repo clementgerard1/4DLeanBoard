@@ -204,8 +204,10 @@ function init(){
 						this.oauth = datas.oAuth;
 						this.forgeReady = true;
 			 			setTimeout(()=>{
-							TouchGesturesUtils.initPressHandler();
-				 			TouchGesturesUtils.initTapHandler();
+							if(!this.modifMode){
+								TouchGesturesUtils.initPressHandler();
+					 			TouchGesturesUtils.initTapHandler();
+							}
 						}, 300);
 
 				})

@@ -80,6 +80,7 @@ class V_ModelUtils{
 			difference +=  Math.trunc((startAfter.getTime() - startBefore.getTime()) / (1000 * 3600 * 24));
 			const endBefore = this.model.getEndDate();	
 			const endAfter = this.temporaryModel.getEndDate();
+			return this.model.getDuration() - this.temporaryModel.getDuration();
 			difference -=  Math.trunc((endAfter.getTime() - endBefore.getTime()) / (1000 * 3600 * 24));
 		//
 

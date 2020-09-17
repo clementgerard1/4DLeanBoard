@@ -4,6 +4,8 @@ import V_socketUtils from "../Utils/V_socketUtils.class.js";
 import V_phasesUtils from "../Utils/V_phasesUtils.class.js";
 import V_timelineUtils from "../Utils/V_timelineUtils.class.js";
 import V_ModelUtils from "../Utils/V_ModelUtils.class.js";
+import EditLeft from "./assets/EditingPhaseIndcatorLeft.svg"
+import EditRight from "./assets/EditingPhaseIndcatorRight.svg"
 
 export default {
 	data : function(){
@@ -24,6 +26,8 @@ export default {
 			pressed : false,
 			modifyleft : "",
 			modifyright : "",
+			deltaleft : 0,
+			deltaright : 0,
 			panleftstart : 0,
 			panrightstart : 0,
 			originalStart : null,
@@ -68,22 +72,14 @@ export default {
 		temporaryleft : function(){
 			this.temp;
 			if(this.model != null && this.timeline != null){
-				if(this.modifyleft != ""){
-					return ((this.timeline.getTime(this.timeline.addWorkingDaysToDate(this.originalStart, parseInt(this.modifyleft))) / this.duration) * 100) + "%";
-				}else{
-					return ((this.timeline.getTime(this.originalStart) / this.duration) * 100) + "%";
-				}
+				return ((this.timeline.getTime(this.phase.getStartDate()) / this.duration) * 100) + "%";
 			}
 		},
 		temporarywidth : function(){
 			this.temp;
-			let modifyleft = this.modifyleft;
-			let modifyright = this.modifyright;
-			if(modifyleft == "") modifyleft = 0;
-			if(modifyright == "") modifyright = 0;
 			if(this.model != null && this.timeline != null){
-				const left = this.timeline.getTime(this.timeline.addWorkingDaysToDate(this.originalStart, parseInt(modifyleft))) / this.duration;
-				const right = this.timeline.getTime(this.timeline.addWorkingDaysToDate(this.originalEnd, parseInt(modifyright))) / this.duration;
+				const left = this.timeline.getTime(this.phase.getStartDate()) / this.duration;
+				const right = this.timeline.getTime(this.phase.getEndDate()) / this.duration;
 				return ((right - left) * 100) + "%";
 			}
 		},
@@ -202,6 +198,17 @@ export default {
 		},
 		handlePanLeft : function(event){
 			if(event.type == "panstart"){
+
+				this.originalStart = this.phase.getStartDate();
+				this.originalEnd = this.phase.getEndDate();
+				this.originalDuration = this.model.getDuration();
+				const nexts = this.phase.getFollowingPhases();
+				for(let n in nexts){
+					this.updateNextOriginalDates(nexts[n]);
+				}
+				this.deltaleft = 0;
+				this.deltaright = 0;
+
 				if(this.modifyleft == ""){
 					this.panleftstart = 0;
 				} else{
@@ -211,15 +218,15 @@ export default {
 			if(this.modifymode){
 				if((this.panleftstart + Math.trunc(event.deltaX / 20)) > 0){
 					this.modifyleft = '+' + (this.panleftstart + Math.trunc(event.deltaX / 20));
+					this.deltaleft = Math.trunc(event.deltaX / 20);
 				}else{
 					this.modifyleft = (this.panleftstart + Math.trunc(event.deltaX / 20));
+					this.deltaleft = Math.trunc(event.deltaX / 20);
 				}
 			} 
 
-			let modifyleft = this.modifyleft;
-			if(this.modifyleft == "") modifyleft = 0;
-			let modifyright = this.modifyright;
-			if(this.modifyright == "") modifyright = 0;
+			let modifyleft = this.deltaleft;
+			let modifyright = this.deltaright;
 
 			this.phase.setStartDate(this.timeline.addWorkingDaysToDate(this.originalStart, parseInt(modifyleft)));
 			this.phase.setEndDate(this.timeline.addWorkingDaysToDate(this.originalEnd, parseInt(modifyright)));
@@ -237,6 +244,16 @@ export default {
 			if(this.modifymode){
 				
 				if(event.type == "panstart"){
+
+					this.originalStart = this.phase.getStartDate();
+					this.originalEnd = this.phase.getEndDate();
+					this.originalDuration = this.model.getDuration();
+					const nexts = this.phase.getFollowingPhases();
+					for(let n in nexts){
+						this.updateNextOriginalDates(nexts[n]);
+					}
+					this.deltaleft = 0;
+					this.deltaright = 0;
 					if(this.modifyright == ""){
 						this.panrightstart = 0;
 					} else{
@@ -246,8 +263,10 @@ export default {
 
 				if((this.panrightstart + Math.trunc(event.deltaX / 20)) > 0){
 					this.modifyright = '+' + (this.panrightstart + Math.trunc(event.deltaX / 20));
+					this.deltaright = Math.trunc(event.deltaX / 20);
 				}else{
 					this.modifyright = (this.panrightstart + Math.trunc(event.deltaX / 20));
+					this.deltaright = Math.trunc(event.deltaX / 20);
 				}
 
 			}
@@ -257,10 +276,8 @@ export default {
 				this.updateNext(nexts[n]);
 			}
 
-			let modifyleft = this.modifyleft;
-			if(this.modifyleft == "") modifyleft = 0;
-			let modifyright = this.modifyright;
-			if(this.modifyright == "") modifyright = 0;
+			let modifyleft = this.deltaleft;
+			let modifyright = this.deltaright;
 
 			this.phase.setStartDate(this.timeline.addWorkingDaysToDate(this.originalStart, parseInt(modifyleft)));
 			this.phase.setEndDate(this.timeline.addWorkingDaysToDate(this.originalEnd, parseInt(modifyright)));
@@ -278,13 +295,12 @@ export default {
 
 			const item = V_phasesUtils.getItemPhaseByPhaseId(phase.getId());
 
-			let modifyleft = this.modifyleft;
-			if(this.modifyleft == "") modifyleft = 0;
-			let modifyright = this.modifyright;
-			if(this.modifyright == "") modifyright = 0;
+			let modifyleft = this.deltaleft;
+			let modifyright = this.deltaright;
+			this.temp++;
 
-			const originalStartDate = V_ModelUtils.getMainModel().getPhase(phase.getId()).getStartDate();
-			const originalEndDate = V_ModelUtils.getMainModel().getPhase(phase.getId()).getEndDate();
+			const originalStartDate = item.originalStartDate;
+			const originalEndDate = item.originalEndDate;
 
 			phase.setStartDate(this.timeline.addWorkingDaysToDate(originalStartDate, parseInt(modifyright)));
 			phase.setEndDate(this.timeline.addWorkingDaysToDate(originalEndDate, parseInt(modifyright)));
@@ -298,6 +314,16 @@ export default {
 				phase.getParent().setEndDate(phase.getEndDate());
 			}
 
+		},
+
+		updateNextOriginalDates : function(phase){
+			const item = V_phasesUtils.getItemPhaseByPhaseId(phase.getId());
+			item.originalStartDate = item.phase.getStartDate();
+			item.originalEndDate = item.phase.getEndDate();
+			const nexts = phase.getFollowingPhases();
+			for(let n in nexts){
+				this.updateNextOriginalDates(nexts[n]);
+			}
 		}
 
 	},
@@ -321,8 +347,14 @@ export default {
 			<p v-press="trigger3DPhase" v-tap="handleDescription" class="phaseItemNameRight" v-bind:style="{ left : left}" v-html="phase.getName()"></p>
 			<div v-press="trigger3DPhase" v-tap="handleDescription" v-if="!(completion == '0%')" v-bind:style="{ left : left, width : pourcent}" class="phaseItemFilled"></div>
 			<div v-press="trigger3DPhase" v-tap="handleDescription" v-if="!(completion == '100%')" v-bind:style="{ left : lleft, width : antipourcent}" class="phaseItemNotFilled"></div>
-			<div v-if="modifymode" v-pan="handlePanLeft" class="phaseItemLeftPan" v-bind:style="{ left : temporaryleft}"><p v-html="modifyleft"></p></div>
-			<div v-if="modifymode" v-pan="handlePanRight" class="phaseItemRightPan" v-bind:style="{ left : 'calc(' + temporaryleft + ' + ' + temporarywidth + ' - 30px)'}"><p v-html="modifyright"></p></div>
+			<div v-if="modifymode" v-pan="handlePanLeft" class="phaseItemLeftPan" v-bind:style="{ left : temporaryleft}">
+				` + EditLeft + `
+				<p v-html="modifyleft"></p>
+			</div>
+			<div v-if="modifymode" v-pan="handlePanRight" class="phaseItemRightPan" v-bind:style="{ left : 'calc(' + temporaryleft + ' + ' + temporarywidth + ' - 30px)'}">
+				` + EditRight + `
+				<p v-html="modifyright"></p>
+			</div>
 
 			<!-- temporary display on modify mode-->
 			<!--<div v-if="modifymode" class="temporaryPhase" v-bind:style="{ left : temporaryleft, width : temporarywidth}"></div>-->
@@ -338,8 +370,14 @@ export default {
 			<p v-press="trigger3DPhase" v-tap="handleDescription" class="phaseItem" v-bind:style="[(!(completion == '0%') && !(completion == '100%')) ? {left : left, width : width, color : scssvariables['greenbluish_light']} : {left : left, width : width, color : 'black' }]" v-html="completion"></p>
 			<div v-press="trigger3DPhase" v-tap="handleDescription" v-if="!(completion == '0%')" v-bind:style="{ left : left, width : pourcent}" class="phaseItemFilled"></div>
 			<div v-press="trigger3DPhase" v-tap="handleDescription" v-if="!(completion == '100%')" v-bind:style="{ left : lleft, width : antipourcent}" class="phaseItemNotFilled"></div>
-			<div v-if="modifymode" v-pan="handlePanLeft" class="phaseItemLeftPan" v-bind:style="{ left : temporaryleft}"><p v-html="modifyleft"></p></div>
-			<div v-if="modifymode" v-pan="handlePanRight" class="phaseItemRightPan" v-bind:style="{ left : 'calc(' + temporaryleft + ' + ' + temporarywidth + ' - 30px)'}"><p v-html="modifyright"></p></div>
+			<div v-if="modifymode" v-pan="handlePanLeft" class="phaseItemLeftPan" v-bind:style="{ left : temporaryleft}">
+				` + EditLeft + `
+				<p v-html="modifyleft"></p>
+			</div>
+			<div v-if="modifymode" v-pan="handlePanRight" class="phaseItemRightPan" v-bind:style="{ left : 'calc(' + temporaryleft + ' + ' + temporarywidth + ' - 30px)'}">
+				` + EditRight + `
+				<p v-html="modifyright"></p>
+			</div>
 
 			<!-- temporary display on modify mode-->
 			<!--<div v-if="modifymode" class="temporaryPhase" v-bind:style="{ left : temporaryleft, width : temporarywidth}"></div>-->

@@ -285,8 +285,10 @@ function init(){
 						V_socketUtils.setSocket(socket);
 						this.modelSelected = true;
 			 			setTimeout(()=>{
-							TouchGesturesUtils.initPressHandler();
-				 			TouchGesturesUtils.initTapHandler();
+							if(!this.modifMode){
+								TouchGesturesUtils.initPressHandler();
+					 			TouchGesturesUtils.initTapHandler();
+							}
 						}, 300);
 				})
 				.catch( error => console.error(error));

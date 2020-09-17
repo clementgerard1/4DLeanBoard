@@ -47,12 +47,22 @@
 		justify-content : center;
 		align-items : center;
 		pointer-events : initial;
+    white-space: nowrap;
+    font-family: Oswald;
+    font-size: 24px;
 
 		p{
 			padding : 5%;
 			background-color : white;
 			border: 1px solid black;
 		}
+
+		span:nth-child(3), span:nth-child(4){
+			border : 1px solid black;
+			border-radius : 5px;
+			padding: 5px;
+		}
+
 	}
 
 

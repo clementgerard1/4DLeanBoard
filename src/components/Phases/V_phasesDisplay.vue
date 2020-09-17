@@ -78,6 +78,13 @@ export default {
 			}else{
 				return this.phases;
 			}
+		},
+		word : function(){
+			if(this.nbJourGagne < 0){
+				 return 'perdre ';
+			} else{
+				return 'gagner '
+			}
 		}
 	},
 	methods : {
@@ -179,7 +186,7 @@ export default {
 		</div>
 		<phaseitem v-bind:modifymode="modifyMode" v-bind:teamDisplayed="teamDisplayStatus" v-for="p in _displayedPhases" :key="p.getId()" v-bind:time="time" v-bind:displayPhase="displayPhase" v-bind:phaseId="p.getId()" v-bind:duration="duration"></phaseitem>
 		<div v-if="displayPopUp" class="popUpModif">
-			<p>Ces modifications vous font gagné <span v-html="nbJourGagne"></span> jours, voulez vous les valider <span v-tap="()=>handleModif(true)">Oui</span> <span v-tap="()=>handleModif(false)">Non</span></p>
+			<p>Ces modifications vous font <span v-html="word"></span><span v-html="Math.abs(nbJourGagne)"></span> jours, voulez vous les valider <span v-tap="()=>handleModif(true)">Oui</span> <span v-tap="()=>handleModif(false)">Non</span></p>
 		</div>
 	</div>`,
 }
