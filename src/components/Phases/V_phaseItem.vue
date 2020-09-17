@@ -348,11 +348,11 @@ export default {
 			<div v-press="trigger3DPhase" v-tap="handleDescription" v-if="!(completion == '0%')" v-bind:style="{ left : left, width : pourcent}" class="phaseItemFilled"></div>
 			<div v-press="trigger3DPhase" v-tap="handleDescription" v-if="!(completion == '100%')" v-bind:style="{ left : lleft, width : antipourcent}" class="phaseItemNotFilled"></div>
 			<div v-if="modifymode" v-pan="handlePanLeft" class="phaseItemLeftPan" v-bind:style="{ left : temporaryleft}">
-				` + EditLeft + `
+				<p>` + EditLeft + `</p>
 				<p v-html="modifyleft"></p>
 			</div>
 			<div v-if="modifymode" v-pan="handlePanRight" class="phaseItemRightPan" v-bind:style="{ left : 'calc(' + temporaryleft + ' + ' + temporarywidth + ' - 30px)'}">
-				` + EditRight + `
+				<p>` + EditRight + `</p>
 				<p v-html="modifyright"></p>
 			</div>
 
@@ -371,11 +371,11 @@ export default {
 			<div v-press="trigger3DPhase" v-tap="handleDescription" v-if="!(completion == '0%')" v-bind:style="{ left : left, width : pourcent}" class="phaseItemFilled"></div>
 			<div v-press="trigger3DPhase" v-tap="handleDescription" v-if="!(completion == '100%')" v-bind:style="{ left : lleft, width : antipourcent}" class="phaseItemNotFilled"></div>
 			<div v-if="modifymode" v-pan="handlePanLeft" class="phaseItemLeftPan" v-bind:style="{ left : temporaryleft}">
-				` + EditLeft + `
+				<p>` + EditLeft + `</p>
 				<p v-html="modifyleft"></p>
 			</div>
 			<div v-if="modifymode" v-pan="handlePanRight" class="phaseItemRightPan" v-bind:style="{ left : 'calc(' + temporaryleft + ' + ' + temporarywidth + ' - 30px)'}">
-				` + EditRight + `
+				<p>` + EditRight + `</p>
 				<p v-html="modifyright"></p>
 			</div>
 
