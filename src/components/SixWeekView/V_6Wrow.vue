@@ -92,6 +92,13 @@ export default {
 			this.duration = this.model.getDuration();
 			this.tasks = this.timeline.getTasksByTaskTeamAndNthBetweenTwoDatesFromMemory(this.taskteam, this.nth, this.tasktablestart * 7, (this.tasktablestart + 6) * 7 - 1);
 		});
+		V_ModelUtils.addTeamListener((model)=>{
+			this.model = model;
+			this.timeline = V_ModelUtils.getTimeline();
+			this.duration = this.model.getDuration();
+			this.tasks = this.timeline.getTasksByTaskTeamAndNthBetweenTwoDatesFromMemory(this.taskteam, this.nth, this.tasktablestart * 7, (this.tasktablestart + 6) * 7 - 1);
+			this.updateTask++;
+		});
 		V_taskTableUtils.addRow(this);
 	},
 

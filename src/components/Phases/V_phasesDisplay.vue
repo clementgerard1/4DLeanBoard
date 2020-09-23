@@ -138,14 +138,16 @@ export default {
 				this.highlighted = [];
 			}
 		},
-		handleModifyMode(event){
-			const display = event.type == "press";
-			if(display != this.modifyMode){
-				this.modifyMode = display;
-				if(this.modifyMode){
-					V_ModelUtils.setTemporaryMode(true);
-				}else{
-					this.displayPopUp = true;
+		handleModifyMode(event, where){
+			if(where != true){
+				const display = event.type == "press";
+				if(display != this.modifyMode){
+					this.modifyMode = display;
+					if(this.modifyMode){
+						V_ModelUtils.setTemporaryMode(true);
+					}else{
+						this.displayPopUp = true;
+					}
 				}
 			}
 		},

@@ -942,7 +942,7 @@ class Loader{
 					const n2s = res2[6].replace("(", "").replace(")", "").split(",");
 					for(let s in n2s){
 						const n2 = tab[n2s[s].replace("#", "")];
-						const relDef4 = /(IFCPROPERTYSINGLEVALUE)\(([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*)\)/g;
+						const relDef4 = /(IFCPROPERTYSINGLEVALUE)\(([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([,/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*),([,/\.=+\\\(\) \-'_:$#A-Z0-9a-z]*)\)/g;
 						const res3 = relDef4.exec(n2);
 						infos[t][s] = {};
 						infos[t][s][0] = 'IFCPROPERTYSINGLEVALUE';

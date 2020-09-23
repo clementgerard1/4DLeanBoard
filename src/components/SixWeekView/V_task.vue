@@ -219,6 +219,9 @@ export default {
 		this.watchResize();
 		const handler = (e)=>{
 			const offset = document.getElementById(this._uid + '-refmovetask');
+			if(this.task == null){
+				return;
+			}
 
 			if(this.pressed){
 				const elems = document.getElementsByClassName(this.task.getId() + "-formoving");
@@ -260,7 +263,7 @@ export default {
 					}
 
 					for(let e in elems){
-						if(typeof elems[e].style != "undefined"){
+						if(typeof elems[e].style != "undefined" && offset != null){
 							elems[e].style.top = (possibilitiesTop[distance2.id] - offset.getBoundingClientRect().top) + "px";
 							elems[e].style.left = (possibilitiesLeft[distance.id] - offset.getBoundingClientRect().left) + "px";
 							elems[e].style.width = "100%";
@@ -298,10 +301,11 @@ export default {
 				this.timeline = V_ModelUtils.getTimeline();
 				this.duration = this.model.getDuration();
 				this.task = model.getTask(this.taskid);
-				this.actualassign = Object.keys(this.task.getPersons()).length;
 						
 				if(typeof this.task == "undefined") this.task = null;
 				if(this.task != null){
+
+					this.actualassign = Object.keys(this.task.getPersons()).length;
 					this.dr = this.task.getDuration();
 					this.mn = this.task.getWorkers();
 					this.startweek =  this.addDays(this.task.getStartDate(), -(this.task.getStartDate().getDay() - 1));
@@ -1241,6 +1245,7 @@ export default {
 						V_ModelUtils.setModel(temp);
 
 						V_ModelUtils.dispatchUpdate();
+						V_ModelUtils.dispatchTeamUpdate();
 					}
 
 				}

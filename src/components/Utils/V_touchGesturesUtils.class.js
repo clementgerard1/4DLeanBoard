@@ -74,7 +74,7 @@ class V_TouchGesturesUtils{
 		const handler = (e) => {
 			for(let t in this.touchObjects){
 				if(typeof this.touchObjects[t].handlers["pressup"] != "undefined") {
-					this.touchObjects[t].handlers["pressup"][0](e);
+					this.touchObjects[t].handlers["pressup"][0](e, true);
 				}
 			}
 		}
@@ -95,11 +95,11 @@ class V_TouchGesturesUtils{
 				if(typeof this.touchObjects[t].handlers["tap1"] != "undefined") {
 					if(this.touchObjects[t].input.target.id == "ifcMenuId"){
 						if(document.querySelector(".ifcMenu") != null){
-							this.touchObjects[t].handlers["tap1"][0](e);
+							this.touchObjects[t].handlers["tap1"][0](e, true);
 						}
 					}else if(this.touchObjects[t].input.target.id == "planningMenuId"){
 						if(document.querySelector(".modelName") != null){
-							this.touchObjects[t].handlers["tap1"][0](e);
+							this.touchObjects[t].handlers["tap1"][0](e, true);
 						}
 					}
 

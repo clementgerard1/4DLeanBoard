@@ -5,6 +5,7 @@ class V_ModelUtils{
 	static model = null;
 	static timeline = null;
 	static listeners = [];
+	static teamListeners = [];
 	static temporary = false;
 	static temporaryModel = null;
 
@@ -38,6 +39,10 @@ class V_ModelUtils{
 		this.listeners.push(callback);
 	}
 
+	static addTeamListener(callback){
+		this.teamListeners.push(callback);
+	}
+
 	static dispatchUpdate(){
 		if(this.temporary){
 			for(let l in this.listeners){
@@ -46,6 +51,18 @@ class V_ModelUtils{
 		}else{
 			for(let l in this.listeners){
 				this.listeners[l](this.model);
+			}
+		}
+	}
+
+	static dispatchTeamUpdate(){
+		if(this.temporary){
+			for(let l in this.teamListeners){
+				this.teamListeners[l](this.temporaryModel);
+			}
+		}else{
+			for(let l in this.teamListeners){
+				this.teamListeners[l](this.model);
 			}
 		}
 	}
