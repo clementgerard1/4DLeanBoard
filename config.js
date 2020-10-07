@@ -10,7 +10,7 @@ module.exports = {
 	"socketServerIp" : "localhost",
 	"dataServerIp" : "localhost",
 	//Sur le Server
-	//"socketServerIp" : "194.199.221.148"
+	//"socketServerIp" : "194.199.221.148",
 	//"dataServerIp" : "194.199.221.148",
 
 
