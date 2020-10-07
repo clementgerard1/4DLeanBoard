@@ -11,8 +11,9 @@ import Config from '../../config.js';
  */
 class Utils{
 	
-	static forgeBucketName = Config.forgeBucketPrefix;
-	static forgeFileName = Config.forgeBucketPrefix;
+	static forgeBucketName = Config.autoDeskForgeSettings[Config.autoDeskAccount].forgeBucketPrefix;
+	static forgeFileName = Config.autoDeskForgeSettings[Config.autoDeskAccount].forgeBucketPrefix;
+
 	static ids = {
 		"default" : 0
 	}
@@ -109,7 +110,6 @@ class Utils{
 
 		await Utils.loadTextFile(url).then( file => {
 		  const objectsApi = new ForgeSDK.ObjectsApi();
-
 			return objectsApi.uploadObject(Utils.forgeBucketName + "-" + name, /*Utils.forgeFileName*/ name + ".ifc", file.length, file, {}, oAuth, oAuth.getCredentials())
 			.then(
 				response => {
@@ -171,7 +171,7 @@ class Utils{
 
 		await Utils.loadTextFile(url).then( file => {
 		  const objectsApi = new ForgeSDK.ObjectsApi();
-		  console.log(Utils.forgeBucketName + "-" + name, /*Utils.forgeFileName*/ name + ".rvt", file.length);
+		  console.log(Config.autoDeskForgeSettings[Config.autoDeskAccount].clientId.forgeBucketPrefix + "-" + name, /*Utils.forgeFileName*/ name + ".rvt", file.length);
 			return objectsApi.uploadObject(Utils.forgeBucketName + "-" + name, /*Utils.forgeFileName*/ name + ".rvt", file.length, file, {}, oAuth, oAuth.getCredentials())
 			.then(
 				response => {

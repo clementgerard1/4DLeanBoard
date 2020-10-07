@@ -22,14 +22,14 @@ module.exports = {
 	"autoDeskForgeSettings" : {
 		"clement" : {
 			//Compte clément de test post stage
-			clientId : "R1cqNLAzGrZJmSLB9ALu5ml3cCXWYzAW", 
-			clientSecret : "20NDKn0iDDIvN793", 
-			forgeBucketPrefix : "veronikaa_4dlbbb" 
+			//clientId : "XWL5ytY1an8Adj0jIC3gS2PYZlNamuGT", 
+			//clientSecret : "0yEFdwlXiJt7X94U", 
+			//forgeBucketPrefix : "veronikaa_4dlbbb" 
 
 			//Compte du stage
-			// clientId : "XWL5ytY1an8Adj0jIC3gS2PYZlNamuGT",
-			// clientSecret : "0yEFdwlXiJt7X94U",
-			// forgeBucketPrefix : "veronikaa_4dlb"
+			clientId : "XWL5ytY1an8Adj0jIC3gS2PYZlNamuGT",
+			clientSecret : "0yEFdwlXiJt7X94U",
+			forgeBucketPrefix : "veronikaa_4dlb_bonjourbonjour"
 		}
 	},
 
