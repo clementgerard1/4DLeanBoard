@@ -22,14 +22,14 @@ module.exports = {
 	"autoDeskForgeSettings" : {
 		"clement" : {
 			//Compte clément de test post stage
-			//clientId : "XWL5ytY1an8Adj0jIC3gS2PYZlNamuGT", 
-			//clientSecret : "0yEFdwlXiJt7X94U", 
-			//forgeBucketPrefix : "veronikaa_4dlbbb" 
+			clientId : "R1cqNLAzGrZJmSLB9ALu5ml3cCXWYzAW", 
+			clientSecret : "20NDKn0iDDIvN793", 
+			forgeBucketPrefix : "veronikaa_4dlbbbb" 
 
 			//Compte du stage
-			clientId : "XWL5ytY1an8Adj0jIC3gS2PYZlNamuGT",
-			clientSecret : "0yEFdwlXiJt7X94U",
-			forgeBucketPrefix : "veronikaa_4dlb_bonjourbonjour"
+			// clientId : "XWL5ytY1an8Adj0jIC3gS2PYZlNamuGT",
+			// clientSecret : "0yEFdwlXiJt7X94U",
+			// forgeBucketPrefix : "veronikaa_4dlb"
 		}
 	},
 
@@ -121,6 +121,6 @@ module.exports = {
 	},
 
 
-	"licorne" : 5, //minutes
+	"licorne" : 500, //minutes
 
 }

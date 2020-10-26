@@ -103,8 +103,33 @@ class ForgeObject{
 		//End Archicad
 
 		this.#properties[property.getName()] = property;
+
 		if(property.getName() == "Comments"){
 			const info = property.getInfo().displayValue;
+			switch (info){
+				case "ThisIsNew" : 
+					this.#constructionState = 1;
+					break;
+				case "ThisIsDemolition" : 
+					this.#constructionState = 2;
+					break;
+				case "ThisIsDemolishion" : 
+					this.#constructionState = 2;
+					break;
+				case "ThisIsTemporary" : 
+					this.#constructionState = 3;
+					break;
+				case "ThisIsExisting" :
+					this.#constructionState = 0;
+					break;
+
+			}
+		}else if(property.getName() == "ext-'Comments'"){
+			let info = property.getInfo();
+			info = info.replace("IFCTEXT(", "");
+			info = info.replace("'", "");
+			info = info.replace("'", "");
+			if(this.getObject3D() != null && this.getObject3D().getIFCId() == 575366) console.log(info);
 			switch (info){
 				case "ThisIsNew" : 
 					this.#constructionState = 1;
@@ -246,6 +271,7 @@ class ForgeObject{
 
 
 	updateMaterial(){
+
 		const viewer = Memory.getViewer();
 		let visible = this.#ifcVisible && this.#layerVisible && this.#stateVisible && this.#zoneVisible;
 		if((this.#teamDisplayed && !this.#teamSelected) || !this.#phaseVisible || !this.#teamVisible || (this.#selectmode && !this.#selected)){
